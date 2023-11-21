@@ -1,0 +1,524 @@
+<template>
+  <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="需求编号      " prop="requirementCode">
+        <el-input
+          v-model="queryParams.requirementCode"
+          placeholder="请输入需求编号      "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求创建人" prop="requirementCreator">
+        <el-input
+          v-model="queryParams.requirementCreator"
+          placeholder="请输入需求创建人"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求标题       " prop="requirementTitle">
+        <el-input
+          v-model="queryParams.requirementTitle"
+          placeholder="请输入需求标题       "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建部门        " prop="createDepartment">
+        <el-input
+          v-model="queryParams.createDepartment"
+          placeholder="请输入创建部门        "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求人      " prop="demander">
+        <el-input
+          v-model="queryParams.demander"
+          placeholder="请输入需求人      "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="   需求部门   " prop="demandDepartment">
+        <el-input
+          v-model="queryParams.demandDepartment"
+          placeholder="请输入   需求部门   "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label=" 公司ID" prop="companiesId1">
+        <el-input
+          v-model="queryParams.companiesId1"
+          placeholder="请输入 公司ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="预估总金额 " prop="totalAmount">
+        <el-input
+          v-model="queryParams.totalAmount"
+          placeholder="请输入预估总金额 "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="收货联系人ϵ  " prop="contactPerson">
+        <el-input
+          v-model="queryParams.contactPerson"
+          placeholder="请输入收货联系人ϵ  "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="费用部门" prop="expenseDepartment">
+        <el-input
+          v-model="queryParams.expenseDepartment"
+          placeholder="请输入费用部门"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="主要用途及说明;  ˵  " prop="description">
+        <el-input
+          v-model="queryParams.description"
+          placeholder="请输入主要用途及说明;  ˵  "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="地址ID" prop="addressId1">
+        <el-input
+          v-model="queryParams.addressId1"
+          placeholder="请输入地址ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="联系方式" prop="phone">
+        <el-input
+          v-model="queryParams.phone"
+          placeholder="请输入联系方式"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="附件" prop="annex">
+        <el-input
+          v-model="queryParams.annex"
+          placeholder="请输入附件"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="币种ID" prop="currencyId1">
+        <el-input
+          v-model="queryParams.currencyId1"
+          placeholder="请输入币种ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="相关项目" prop="relatedProjects">
+        <el-input
+          v-model="queryParams.relatedProjects"
+          placeholder="请输入相关项目"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求物料ID" prop="materialId1">
+        <el-input
+          v-model="queryParams.materialId1"
+          placeholder="请输入需求物料ID"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求物料数量     " prop="requiredMaterials">
+        <el-input
+          v-model="queryParams.requiredMaterials"
+          placeholder="请输入需求物料数量     "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="需求到货时间  " prop="deliveryTime">
+        <el-date-picker clearable
+          v-model="queryParams.deliveryTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择需求到货时间  ">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="自动分配  " prop="automaticAssign">
+        <el-input
+          v-model="queryParams.automaticAssign"
+          placeholder="请输入自动分配  "
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-row :gutter="10" class="mb8">
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['pms:requirement:add']"
+        >新增</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['pms:requirement:edit']"
+        >修改</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['pms:requirement:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['pms:requirement:export']"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row>
+
+    <el-table v-loading="loading" :data="requirementList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="需求申请ID        ID" align="center" prop="requirementId" />
+      <el-table-column label="需求编号      " align="center" prop="requirementCode" />
+      <el-table-column label="需求创建人" align="center" prop="requirementCreator" />
+      <el-table-column label="需求标题       " align="center" prop="requirementTitle" />
+      <el-table-column label="创建部门        " align="center" prop="createDepartment" />
+      <el-table-column label="需求人      " align="center" prop="demander" />
+      <el-table-column label="   需求部门   " align="center" prop="demandDepartment" />
+      <el-table-column label="   需求类型     " align="center" prop="requirementType" />
+      <el-table-column label=" 公司ID" align="center" prop="companiesId1" />
+      <el-table-column label="预估总金额 " align="center" prop="totalAmount" />
+      <el-table-column label="收货联系人ϵ  " align="center" prop="contactPerson" />
+      <el-table-column label="费用部门" align="center" prop="expenseDepartment" />
+      <el-table-column label="主要用途及说明;  ˵  " align="center" prop="description" />
+      <el-table-column label="地址ID" align="center" prop="addressId1" />
+      <el-table-column label="联系方式" align="center" prop="phone" />
+      <el-table-column label="附件" align="center" prop="annex" />
+      <el-table-column label="币种ID" align="center" prop="currencyId1" />
+      <el-table-column label="相关项目" align="center" prop="relatedProjects" />
+      <el-table-column label="需求物料ID" align="center" prop="materialId1" />
+      <el-table-column label="需求物料数量     " align="center" prop="requiredMaterials" />
+      <el-table-column label="需求到货时间  " align="center" prop="deliveryTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.deliveryTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="自动分配  " align="center" prop="automaticAssign" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['pms:requirement:edit']"
+          >修改</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['pms:requirement:remove']"
+          >删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
+
+    <!-- 添加或修改需求物料申请表对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="需求编号      " prop="requirementCode">
+          <el-input v-model="form.requirementCode" placeholder="请输入需求编号      " />
+        </el-form-item>
+        <el-form-item label="需求创建人" prop="requirementCreator">
+          <el-input v-model="form.requirementCreator" placeholder="请输入需求创建人" />
+        </el-form-item>
+        <el-form-item label="需求标题       " prop="requirementTitle">
+          <el-input v-model="form.requirementTitle" placeholder="请输入需求标题       " />
+        </el-form-item>
+        <el-form-item label="创建部门        " prop="createDepartment">
+          <el-input v-model="form.createDepartment" placeholder="请输入创建部门        " />
+        </el-form-item>
+        <el-form-item label="需求人      " prop="demander">
+          <el-input v-model="form.demander" placeholder="请输入需求人      " />
+        </el-form-item>
+        <el-form-item label="   需求部门   " prop="demandDepartment">
+          <el-input v-model="form.demandDepartment" placeholder="请输入   需求部门   " />
+        </el-form-item>
+        <el-form-item label=" 公司ID" prop="companiesId1">
+          <el-input v-model="form.companiesId1" placeholder="请输入 公司ID" />
+        </el-form-item>
+        <el-form-item label="预估总金额 " prop="totalAmount">
+          <el-input v-model="form.totalAmount" placeholder="请输入预估总金额 " />
+        </el-form-item>
+        <el-form-item label="收货联系人ϵ  " prop="contactPerson">
+          <el-input v-model="form.contactPerson" placeholder="请输入收货联系人ϵ  " />
+        </el-form-item>
+        <el-form-item label="费用部门" prop="expenseDepartment">
+          <el-input v-model="form.expenseDepartment" placeholder="请输入费用部门" />
+        </el-form-item>
+        <el-form-item label="主要用途及说明;  ˵  " prop="description">
+          <el-input v-model="form.description" placeholder="请输入主要用途及说明;  ˵  " />
+        </el-form-item>
+        <el-form-item label="地址ID" prop="addressId1">
+          <el-input v-model="form.addressId1" placeholder="请输入地址ID" />
+        </el-form-item>
+        <el-form-item label="联系方式" prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入联系方式" />
+        </el-form-item>
+        <el-form-item label="附件" prop="annex">
+          <el-input v-model="form.annex" placeholder="请输入附件" />
+        </el-form-item>
+        <el-form-item label="币种ID" prop="currencyId1">
+          <el-input v-model="form.currencyId1" placeholder="请输入币种ID" />
+        </el-form-item>
+        <el-form-item label="相关项目" prop="relatedProjects">
+          <el-input v-model="form.relatedProjects" placeholder="请输入相关项目" />
+        </el-form-item>
+        <el-form-item label="需求物料ID" prop="materialId1">
+          <el-input v-model="form.materialId1" placeholder="请输入需求物料ID" />
+        </el-form-item>
+        <el-form-item label="需求物料数量     " prop="requiredMaterials">
+          <el-input v-model="form.requiredMaterials" placeholder="请输入需求物料数量     " />
+        </el-form-item>
+        <el-form-item label="需求到货时间  " prop="deliveryTime">
+          <el-date-picker clearable
+            v-model="form.deliveryTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择需求到货时间  ">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="自动分配  " prop="automaticAssign">
+          <el-input v-model="form.automaticAssign" placeholder="请输入自动分配  " />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { listRequirement, getRequirement, delRequirement, addRequirement, updateRequirement } from "@/api/pms/requirement";
+
+export default {
+  name: "Requirement",
+  data() {
+    return {
+      // 遮罩层
+      loading: true,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
+      // 显示搜索条件
+      showSearch: true,
+      // 总条数
+      total: 0,
+      // 需求物料申请表表格数据
+      requirementList: [],
+      // 弹出层标题
+      title: "",
+      // 是否显示弹出层
+      open: false,
+      // 查询参数
+      queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        requirementCode: null,
+        requirementCreator: null,
+        requirementTitle: null,
+        createDepartment: null,
+        demander: null,
+        demandDepartment: null,
+        requirementType: null,
+        companiesId1: null,
+        totalAmount: null,
+        contactPerson: null,
+        expenseDepartment: null,
+        description: null,
+        addressId1: null,
+        phone: null,
+        annex: null,
+        currencyId1: null,
+        relatedProjects: null,
+        materialId1: null,
+        requiredMaterials: null,
+        deliveryTime: null,
+        automaticAssign: null
+      },
+      // 表单参数
+      form: {},
+      // 表单校验
+      rules: {
+      }
+    };
+  },
+  created() {
+    this.getList();
+  },
+  methods: {
+    /** 查询需求物料申请表列表 */
+    getList() {
+      this.loading = true;
+      listRequirement(this.queryParams).then(response => {
+        this.requirementList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    // 取消按钮
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
+    // 表单重置
+    reset() {
+      this.form = {
+        requirementId: null,
+        requirementCode: null,
+        requirementCreator: null,
+        requirementTitle: null,
+        createDepartment: null,
+        createTime: null,
+        demander: null,
+        demandDepartment: null,
+        requirementType: null,
+        companiesId1: null,
+        totalAmount: null,
+        contactPerson: null,
+        expenseDepartment: null,
+        description: null,
+        addressId1: null,
+        phone: null,
+        annex: null,
+        currencyId1: null,
+        relatedProjects: null,
+        materialId1: null,
+        requiredMaterials: null,
+        deliveryTime: null,
+        automaticAssign: null
+      };
+      this.resetForm("form");
+    },
+    /** 搜索按钮操作 */
+    handleQuery() {
+      this.queryParams.pageNum = 1;
+      this.getList();
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
+    },
+    // 多选框选中数据
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item.requirementId)
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
+    /** 新增按钮操作 */
+    handleAdd() {
+      this.reset();
+      this.open = true;
+      this.title = "添加需求物料申请表";
+    },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const requirementId = row.requirementId || this.ids
+      getRequirement(requirementId).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改需求物料申请表";
+      });
+    },
+    /** 提交按钮 */
+    submitForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (this.form.requirementId != null) {
+            updateRequirement(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            });
+          } else {
+            addRequirement(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            });
+          }
+        }
+      });
+    },
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const requirementIds = row.requirementId || this.ids;
+      this.$modal.confirm('是否确认删除需求物料申请表编号为"' + requirementIds + '"的数据项？').then(function() {
+        return delRequirement(requirementIds);
+      }).then(() => {
+        this.getList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('pms/requirement/export', {
+        ...this.queryParams
+      }, `requirement_${new Date().getTime()}.xlsx`)
+    }
+  }
+};
+</script>
