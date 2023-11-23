@@ -1,7 +1,9 @@
 package com.hh.pms.mapper;
 
+import java.util.Date;
 import java.util.List;
 import com.hh.pms.domain.OrderManager;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购订单管理Mapper接口
@@ -58,4 +60,12 @@ public interface OrderManagerMapper
      * @return 结果
      */
     public int deleteOrderManagerByOrderIds(Long[] orderIds);
+
+    /**
+     * 向订单表中查询是否存在某天
+     * @param orderTime
+     * @return
+     */
+    @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time")
+    String selectOrderCode(Date orderTime);
 }

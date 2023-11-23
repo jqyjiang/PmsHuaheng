@@ -42,6 +42,7 @@ public class OrderManagerController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(OrderManager orderManager)
     {
+
         startPage();
         List<OrderManager> list = orderManagerService.selectOrderManagerList(orderManager);
         return getDataTable(list);

@@ -34,7 +34,6 @@
     <sql id="selectOrderManagerVo">
         select order_id, order_code, company, order_type, order_source, pur_organization, annex, is_self_pickup, license_plate_number, concat_infomation, contract_code, contract_name, order_description, total_demand, purchaser, order_state, order_status, currency_id, supplier, contacts, phone, invoice_method, create_time, material_id from order_manager
     </sql>
-
     <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
         <include refid="selectOrderManagerVo"/>
         <where>

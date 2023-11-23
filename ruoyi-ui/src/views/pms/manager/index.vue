@@ -1,7 +1,22 @@
 <template>
   <div class="app-container">
-    <div ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_Row@di5qkc_div@qu6vnd" class="ant-row wea-new-top"><div style="padding-left: 20px; line-height: 50px;" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_TitleColCom@jkz6r1_Col@ffz3oe_div@qjebvs" class="ant-col-14"><div class="wea-new-top-title wea-f14"><div class="icon-circle-base" style="background: rgb(109, 60, 247);"><i class="icon-coms-Planning-tasks" style="color: rgb(255, 255, 255);"></i></div><span class="wea-new-top-title-breadcrumb" style="vertical-align: middle;" title="采购订单管理">采购订单管理</span></div></div><div style="text-align: right; line-height: 50px; padding-right: 14px; position: absolute; right: 0px; top: 0px; width: auto;" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_Col@3ss8sy_div@qjebvs" class="ant-col-10"><span style="display: inline-block; line-height: 28px; vertical-align: middle; margin-left: 10px;"><button ecid="_Route@9uoqid_Com@knmejd_Button@29zss0@57574_button@xq1ea3" type="button" class="ant-btn ant-btn-primary"><span>需求转订单</span></button></span><span style="display: inline-block; line-height: 28px; vertical-align: middle; margin-left: 10px;"><button ecid="_Route@9uoqid_Com@knmejd_Button@29zss0@57579_button@xq1ea3" type="button" class="ant-btn ant-btn-primary"><span>合同转订单</span></button></span><span style="display: inline-block; line-height: 28px; vertical-align: middle; margin-left: 10px;"><button ecid="_Route@9uoqid_Com@knmejd_Button@29zss0@57575_button@xq1ea3" type="button" class="ant-btn ant-btn-primary"><span>寻源转订单</span></button></span><span style="display: inline-block; line-height: 28px; vertical-align: middle; margin-left: 10px;"><button ecid="_Route@9uoqid_Com@knmejd_Button@29zss0@57889_button@xq1ea3" type="button" class="ant-btn ant-btn-primary"><span>关闭订单</span></button></span><span class="wea-new-top-drop-btn undefined" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_span_dropIcon@w5r91g"><i class="icon-button icon-New-Flow-menu"></i></span><div class="wea-new-top-drop-menu wea-right-menu" style="display: none;" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_span_showDrop@fre939"><span class="wea-new-top-drop-btn" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_span_dropBtn@dj5moj"><i class="icon-button icon-New-Flow-menu"></i></span><iframe class="wea-right-menu-iframe"></iframe><div class="wea-right-menu-icon-background"></div><ul class="ant-menu ant-menu-vertical  ant-menu-light ant-menu-root" role="menu" aria-activedescendant="" tabindex="0" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Menu@22357n_RcMenu@lxya8m_DOMWrap@4tb1gu_Tag@k32wx4"><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-search"></i></span><span unselectable="on" title="搜索">搜索</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="手工新建">手工新建</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="需求转订单">需求转订单</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="复制">复制</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="合同转订单">合同转订单</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="寻源转订单">寻源转订单</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-List-display"></i></span><span unselectable="on" title="关闭订单">关闭订单</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-export"></i></span><span unselectable="on" title="批量导入">批量导入</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-Batch-sharing"></i></span><span unselectable="on" title="批量共享">批量共享</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" aria-disabled="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-leading-in"></i></span><span unselectable="on" title="导出">导出</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="Icon-coms03-Sensitive-words"></i></span><span unselectable="on" title="上报敏感词">上报敏感词</span></li></li><li class="ant-menu-item text-elli" role="menuitem" aria-selected="false" ecid="_Route@9uoqid_Com@knmejd_WeaTop@8la4vq_RightColCom@a10dl7_RightMenu@22c195_Item@eu37n0_li@zyccqn"><li unselectable="on" class="wea-right-menu-item"><span unselectable="on" class="wea-right-menu-icon"><i class="icon-coms-help"></i></span><span unselectable="on" title="帮助">帮助</span></li></li></ul></div></div></div>
+    <!-- <div class="header_box" style="font-size: 20px; height: 50px; line-height: 50px; ">
+      
+      <img :src="headerImages" style="width: 40px;height: 40px;vertical-align: middle;margin-right: 10px;"/>
+    <span style="display: inline-block;">采购订单管理</span>
+
+    </div> -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
+      <el-form-item label="供应商名称:" prop="supplier">
+        <el-input
+          v-model="queryParams.supplier"
+          placeholder=""
+          clearable
+          @keyup.enter.native="handleQuery"
+          icon="el-icon-search"
+        />
+        <i class="el-icon-search" id="serachOne"></i>
+      </el-form-item>
       <el-form-item label="采购订单编号:" prop="orderCode">
         <el-input
           v-model="queryParams.orderCode"
@@ -23,21 +38,14 @@
       <el-form-item label="采购审批状态:" prop="orderState">
         <el-select v-model="queryParams.orderState" placeholder="请选择采购审批状态" clearable>
           <el-option
-            v-for="dict in dict.type.order_status"
+            v-for="dict in dict.type.order_state"
             :key="dict.value"
             :label="dict.label"
             :value="dict.value"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="供应商名称:" prop="supplier">
-        <el-input
-          v-model="queryParams.supplier"
-          placeholder="请输入供应商名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+    
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -92,7 +100,7 @@
 
     <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="采购订单id" align="center" prop="orderId" />
+      <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
       <el-table-column label="采购订单编号" align="center" prop="orderCode" />
       <el-table-column label="公司" align="center" prop="company" />
       <el-table-column label="订单来源" align="center" prop="orderSource">
@@ -105,7 +113,7 @@
       <el-table-column label="采购员" align="center" prop="purchaser" />
       <el-table-column label="采购审批状态" align="center" prop="orderState">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.order_status" :value="scope.row.orderState"/>
+          <dict-tag :options="dict.type.order_state" :value="scope.row.orderState"/>
         </template>
       </el-table-column>
       <el-table-column label="订单执行状态" align="center" prop="orderStatus" />
@@ -145,7 +153,7 @@
     />
 
     <!-- 添加或修改采购订单管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="采购订单编号" prop="orderCode">
           <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" />
@@ -213,7 +221,7 @@
         <el-form-item label="采购审批状态" prop="orderState">
           <el-select v-model="form.orderState" placeholder="请选择采购审批状态">
             <el-option
-              v-for="dict in dict.type.order_status"
+              v-for="dict in dict.type.order_state"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
@@ -233,7 +241,14 @@
           <el-input v-model="form.phone" placeholder="请输入联系电话" />
         </el-form-item>
         <el-form-item label="供应商发票方式" prop="invoiceMethod">
-          <el-input v-model="form.invoiceMethod" placeholder="请输入供应商发票方式" />
+          <el-select v-model="form.invoiceMethod" placeholder="请选择供应商发票方式">
+            <el-option
+              v-for="dict in dict.type.supplier_invoice"
+              :key="dict.value"
+              :label="dict.label"
+              :value="parseInt(dict.value)"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="物料信息ID" prop="materialId">
           <el-input v-model="form.materialId" placeholder="请输入物料信息ID" />
@@ -252,9 +267,10 @@ import { listManager, getManager, delManager, addManager, updateManager } from "
 
 export default {
   name: "Manager",
-  dicts: ['order_status', 'order_type', 'order_source'],
+  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source','supplier_invoice'],
   data() {
     return {
+      headerImages:require('../../../assets/images/order_main_header1.png'),
       // 遮罩层
       loading: true,
       // 选中数组
@@ -408,3 +424,10 @@ export default {
   }
 };
 </script>
+<style>
+#serachOne {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+</style>
