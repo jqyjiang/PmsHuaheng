@@ -15,7 +15,6 @@
         <module>ruoyi-file</module>
         <module>hh-demand</module>
         <module>hh-mast</module>
-        <module>hhx-hh-pms</module>
         <module>jqy-hh-supplier</module>
     </modules>
 
