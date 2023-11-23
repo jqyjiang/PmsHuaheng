@@ -15,6 +15,8 @@
         <module>ruoyi-file</module>
         <module>hh-pms</module>
         <module>hh-mast</module>
+        <module>hhx-hh-pms</module>
+        <module>jqy-hh-supplier</module>
     </modules>
 
     <artifactId>ruoyi-modules</artifactId>
