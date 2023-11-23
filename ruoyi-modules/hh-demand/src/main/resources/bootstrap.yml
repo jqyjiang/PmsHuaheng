@@ -1,0 +1,25 @@
+# Tomcat
+server:
+  port: 9206
+
+spring:
+  application:
+    # ????
+    name: hh-demand
+  profiles:
+    # ????
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        # ??????
+        server-addr: 127.0.0.1:8848
+      config:
+        # ??????
+        server-addr: 127.0.0.1:8848
+        # ??????
+        file-extension: yml
+        # ????
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
