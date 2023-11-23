@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.OrderManagerMapper">
+
+    <resultMap type="OrderManager" id="OrderManagerResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="orderCode"    column="order_code"    />
+        <result property="company"    column="company"    />
+        <result property="orderType"    column="order_type"    />
+        <result property="orderSource"    column="order_source"    />
+        <result property="purOrganization"    column="pur_organization"    />
+        <result property="annex"    column="annex"    />
+        <result property="isSelfPickup"    column="is_self_pickup"    />
+        <result property="licensePlateNumber"    column="license_plate_number"    />
+        <result property="concatInfomation"    column="concat_infomation"    />
+        <result property="contractCode"    column="contract_code"    />
+        <result property="contractName"    column="contract_name"    />
+        <result property="orderDescription"    column="order_description"    />
+        <result property="totalDemand"    column="total_demand"    />
+        <result property="purchaser"    column="purchaser"    />
+        <result property="orderState"    column="order_state"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="contacts"    column="contacts"    />
+        <result property="phone"    column="phone"    />
+        <result property="invoiceMethod"    column="invoice_method"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="materialId"    column="material_id"    />
+    </resultMap>
+
+    <sql id="selectOrderManagerVo">
+        select order_id, order_code, company, order_type, order_source, pur_organization, annex, is_self_pickup, license_plate_number, concat_infomation, contract_code, contract_name, order_description, total_demand, purchaser, order_state, order_status, currency_id, supplier, contacts, phone, invoice_method, create_time, material_id from order_manager
+    </sql>
+
+    <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
+        <include refid="selectOrderManagerVo"/>
+        <where>
+            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
+            <if test="orderSource != null  and orderSource != ''"> and order_source = #{orderSource}</if>
+            <if test="orderState != null "> and order_state = #{orderState}</if>
+            <if test="supplier != null "> and supplier = #{supplier}</if>
+        </where>
+    </select>
+
+    <select id="selectOrderManagerByOrderId" parameterType="Long" resultMap="OrderManagerResult">
+        <include refid="selectOrderManagerVo"/>
+        where order_id = #{orderId}
+    </select>
+
+    <insert id="insertOrderManager" parameterType="OrderManager" useGeneratedKeys="true" keyProperty="orderId">
+        insert into order_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">order_code,</if>
+            <if test="company != null">company,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderSource != null">order_source,</if>
+            <if test="purOrganization != null">pur_organization,</if>
+            <if test="annex != null">annex,</if>
+            <if test="isSelfPickup != null">is_self_pickup,</if>
+            <if test="licensePlateNumber != null">license_plate_number,</if>
+            <if test="concatInfomation != null">concat_infomation,</if>
+            <if test="contractCode != null">contract_code,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="orderDescription != null">order_description,</if>
+            <if test="totalDemand != null">total_demand,</if>
+            <if test="purchaser != null">purchaser,</if>
+            <if test="orderState != null">order_state,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="phone != null">phone,</if>
+            <if test="invoiceMethod != null">invoice_method,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="materialId != null">material_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="company != null">#{company},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderSource != null">#{orderSource},</if>
+            <if test="purOrganization != null">#{purOrganization},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="isSelfPickup != null">#{isSelfPickup},</if>
+            <if test="licensePlateNumber != null">#{licensePlateNumber},</if>
+            <if test="concatInfomation != null">#{concatInfomation},</if>
+            <if test="contractCode != null">#{contractCode},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="orderDescription != null">#{orderDescription},</if>
+            <if test="totalDemand != null">#{totalDemand},</if>
+            <if test="purchaser != null">#{purchaser},</if>
+            <if test="orderState != null">#{orderState},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="invoiceMethod != null">#{invoiceMethod},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="materialId != null">#{materialId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateOrderManager" parameterType="OrderManager">
+        update order_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="orderSource != null">order_source = #{orderSource},</if>
+            <if test="purOrganization != null">pur_organization = #{purOrganization},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="isSelfPickup != null">is_self_pickup = #{isSelfPickup},</if>
+            <if test="licensePlateNumber != null">license_plate_number = #{licensePlateNumber},</if>
+            <if test="concatInfomation != null">concat_infomation = #{concatInfomation},</if>
+            <if test="contractCode != null">contract_code = #{contractCode},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="orderDescription != null">order_description = #{orderDescription},</if>
+            <if test="totalDemand != null">total_demand = #{totalDemand},</if>
+            <if test="purchaser != null">purchaser = #{purchaser},</if>
+            <if test="orderState != null">order_state = #{orderState},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="invoiceMethod != null">invoice_method = #{invoiceMethod},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrderManagerByOrderId" parameterType="Long">
+        delete from order_manager where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteOrderManagerByOrderIds" parameterType="String">
+        delete from order_manager where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>
