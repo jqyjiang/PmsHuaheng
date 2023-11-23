@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.mast.mapper.MaterialMapper">
+
+    <resultMap type="Material" id="MaterialResult">
+        <result property="materialId"    column="material_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="calculationUnit"    column="calculation_unit"    />
+        <result property="purchaser"    column="purchaser"    />
+        <result property="lUpdated"    column="l_updated"    />
+        <result property="lUpdateTime"    column="l_update_time"    />
+        <result property="sourceSystem"    column="source_system"    />
+        <result property="enable"    column="enable"    />
+        <result property="mCategory"    column="m_category"    />
+        <result property="specifications"    column="specifications"    />
+        <result property="model"    column="model"    />
+        <result property="brand"    column="brand"    />
+        <result property="categoriesTaxes"    column="categories_taxes"    />
+        <result property="image"    column="image"    />
+        <result property="gWeight"    column="g_weight"    />
+        <result property="nWeight"    column="n_weight"    />
+        <result property="weight"    column="weight"    />
+        <result property="volume"    column="volume"    />
+        <result property="vUnit"    column="v_unit"    />
+        <result property="abcAttribute"    column="abc_attribute"    />
+        <result property="avoidInspect"    column="avoid_inspect"    />
+    </resultMap>
+
+    <sql id="selectMaterialVo">
+        select material_id, material_code, material_name, calculation_unit, purchaser, l_updated, l_update_time, source_system, enable, m_category, specifications, model, brand, categories_taxes, image, g_weight, n_weight, weight, volume, v_unit, abc_attribute, avoid_inspect from material
+    </sql>
+
+    <select id="selectMaterialList" parameterType="Material" resultMap="MaterialResult">
+        <include refid="selectMaterialVo"/>
+        <where>
+            <if test="materialCode != null  and materialCode != ''"> and material_code = #{materialCode}</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="enable != null "> and enable = #{enable}</if>
+        </where>
+    </select>
+
+    <select id="selectMaterialByMaterialId" parameterType="Long" resultMap="MaterialResult">
+        <include refid="selectMaterialVo"/>
+        where material_id = #{materialId}
+    </select>
+
+    <insert id="insertMaterial" parameterType="Material">
+        insert into material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">material_id,</if>
+            <if test="materialCode != null">material_code,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="calculationUnit != null">calculation_unit,</if>
+            <if test="purchaser != null">purchaser,</if>
+            <if test="lUpdated != null">l_updated,</if>
+            <if test="lUpdateTime != null">l_update_time,</if>
+            <if test="sourceSystem != null">source_system,</if>
+            <if test="enable != null">enable,</if>
+            <if test="mCategory != null">m_category,</if>
+            <if test="specifications != null">specifications,</if>
+            <if test="model != null">model,</if>
+            <if test="brand != null">brand,</if>
+            <if test="categoriesTaxes != null">categories_taxes,</if>
+            <if test="image != null">image,</if>
+            <if test="gWeight != null">g_weight,</if>
+            <if test="nWeight != null">n_weight,</if>
+            <if test="weight != null">weight,</if>
+            <if test="volume != null">volume,</if>
+            <if test="vUnit != null">v_unit,</if>
+            <if test="abcAttribute != null">abc_attribute,</if>
+            <if test="avoidInspect != null">avoid_inspect,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">#{materialId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="calculationUnit != null">#{calculationUnit},</if>
+            <if test="purchaser != null">#{purchaser},</if>
+            <if test="lUpdated != null">#{lUpdated},</if>
+            <if test="lUpdateTime != null">#{lUpdateTime},</if>
+            <if test="sourceSystem != null">#{sourceSystem},</if>
+            <if test="enable != null">#{enable},</if>
+            <if test="mCategory != null">#{mCategory},</if>
+            <if test="specifications != null">#{specifications},</if>
+            <if test="model != null">#{model},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="categoriesTaxes != null">#{categoriesTaxes},</if>
+            <if test="image != null">#{image},</if>
+            <if test="gWeight != null">#{gWeight},</if>
+            <if test="nWeight != null">#{nWeight},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="vUnit != null">#{vUnit},</if>
+            <if test="abcAttribute != null">#{abcAttribute},</if>
+            <if test="avoidInspect != null">#{avoidInspect},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaterial" parameterType="Material">
+        update material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="calculationUnit != null">calculation_unit = #{calculationUnit},</if>
+            <if test="purchaser != null">purchaser = #{purchaser},</if>
+            <if test="lUpdated != null">l_updated = #{lUpdated},</if>
+            <if test="lUpdateTime != null">l_update_time = #{lUpdateTime},</if>
+            <if test="sourceSystem != null">source_system = #{sourceSystem},</if>
+            <if test="enable != null">enable = #{enable},</if>
+            <if test="mCategory != null">m_category = #{mCategory},</if>
+            <if test="specifications != null">specifications = #{specifications},</if>
+            <if test="model != null">model = #{model},</if>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="categoriesTaxes != null">categories_taxes = #{categoriesTaxes},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="gWeight != null">g_weight = #{gWeight},</if>
+            <if test="nWeight != null">n_weight = #{nWeight},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="vUnit != null">v_unit = #{vUnit},</if>
+            <if test="abcAttribute != null">abc_attribute = #{abcAttribute},</if>
+            <if test="avoidInspect != null">avoid_inspect = #{avoidInspect},</if>
+        </trim>
+        where material_id = #{materialId}
+    </update>
+
+    <delete id="deleteMaterialByMaterialId" parameterType="Long">
+        delete from material where material_id = #{materialId}
+    </delete>
+
+    <delete id="deleteMaterialByMaterialIds" parameterType="String">
+        delete from material where material_id in
+        <foreach item="materialId" collection="array" open="(" separator="," close=")">
+            #{materialId}
+        </foreach>
+    </delete>
+</mapper>
