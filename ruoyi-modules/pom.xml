@@ -13,8 +13,9 @@
         <module>ruoyi-gen</module>
         <module>ruoyi-job</module>
         <module>ruoyi-file</module>
-        <module>hh-demand</module>
+        <module>hh-procure</module>
         <module>hh-mast</module>
+        <module>hh-pms</module>
         <module>jqy-hh-supplier</module>
     </modules>
 
