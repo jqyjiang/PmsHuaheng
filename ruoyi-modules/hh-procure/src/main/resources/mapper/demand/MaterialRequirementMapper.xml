@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.MaterialRequirementMapper">
+    
+    <resultMap type="MaterialRequirement" id="MaterialRequirementResult">
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="requirementCode"    column="requirement_code"    />
+        <result property="requirementCreator"    column="requirement_creator"    />
+        <result property="requirementTitle"    column="requirement_title"    />
+        <result property="createDepartment"    column="create_department"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="demander"    column="demander"    />
+        <result property="demandDepartment"    column="demand_department"    />
+        <result property="requirementType"    column="requirement_type"    />
+        <result property="companiesId"    column="companies_id"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="contactPerson"    column="contact_person"    />
+        <result property="expenseDepartment"    column="expense_department"    />
+        <result property="description"    column="description"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="annex"    column="annex"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="relatedProjects"    column="related_projects"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="requiredMaterials"    column="required_materials"    />
+        <result property="deliveryTime"    column="delivery_time"    />
+        <result property="automaticAssign"    column="automatic_assign"    />
+    </resultMap>
+
+    <sql id="selectMaterialRequirementVo">
+        select requirement_id, requirement_code, requirement_creator, requirement_title, create_department, create_time, demander, demand_department, requirement_type, companies_id, total_amount, contact_person, expense_department, description, address, phone, annex, currency_id, related_projects, material_id, required_materials, delivery_time, automatic_assign from material_requirement
+    </sql>
+
+    <select id="selectMaterialRequirementList" parameterType="MaterialRequirement" resultMap="MaterialRequirementResult">
+        <include refid="selectMaterialRequirementVo"/>
+        <where>  
+            <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
+            <if test="requirementCreator != null  and requirementCreator != ''"> and requirement_creator = #{requirementCreator}</if>
+            <if test="demandDepartment != null  and demandDepartment != ''"> and demand_department = #{demandDepartment}</if>
+        </where>
+    </select>
+    
+    <select id="selectMaterialRequirementByRequirementId" parameterType="Long" resultMap="MaterialRequirementResult">
+        <include refid="selectMaterialRequirementVo"/>
+        where requirement_id = #{requirementId}
+    </select>
+        
+    <insert id="insertMaterialRequirement" parameterType="MaterialRequirement" useGeneratedKeys="true" keyProperty="requirementId">
+        insert into material_requirement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requirementCode != null">requirement_code,</if>
+            <if test="requirementCreator != null">requirement_creator,</if>
+            <if test="requirementTitle != null">requirement_title,</if>
+            <if test="createDepartment != null">create_department,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="demander != null">demander,</if>
+            <if test="demandDepartment != null">demand_department,</if>
+            <if test="requirementType != null">requirement_type,</if>
+            <if test="companiesId != null">companies_id,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="contactPerson != null">contact_person,</if>
+            <if test="expenseDepartment != null">expense_department,</if>
+            <if test="description != null">description,</if>
+            <if test="address != null">address,</if>
+            <if test="phone != null">phone,</if>
+            <if test="annex != null">annex,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="relatedProjects != null">related_projects,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="requiredMaterials != null">required_materials,</if>
+            <if test="deliveryTime != null">delivery_time,</if>
+            <if test="automaticAssign != null">automatic_assign,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="requirementCode != null">#{requirementCode},</if>
+            <if test="requirementCreator != null">#{requirementCreator},</if>
+            <if test="requirementTitle != null">#{requirementTitle},</if>
+            <if test="createDepartment != null">#{createDepartment},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="demander != null">#{demander},</if>
+            <if test="demandDepartment != null">#{demandDepartment},</if>
+            <if test="requirementType != null">#{requirementType},</if>
+            <if test="companiesId != null">#{companiesId},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="contactPerson != null">#{contactPerson},</if>
+            <if test="expenseDepartment != null">#{expenseDepartment},</if>
+            <if test="description != null">#{description},</if>
+            <if test="address != null">#{address},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="relatedProjects != null">#{relatedProjects},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="requiredMaterials != null">#{requiredMaterials},</if>
+            <if test="deliveryTime != null">#{deliveryTime},</if>
+            <if test="automaticAssign != null">#{automaticAssign},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaterialRequirement" parameterType="MaterialRequirement">
+        update material_requirement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>
+            <if test="requirementCreator != null">requirement_creator = #{requirementCreator},</if>
+            <if test="requirementTitle != null">requirement_title = #{requirementTitle},</if>
+            <if test="createDepartment != null">create_department = #{createDepartment},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="demander != null">demander = #{demander},</if>
+            <if test="demandDepartment != null">demand_department = #{demandDepartment},</if>
+            <if test="requirementType != null">requirement_type = #{requirementType},</if>
+            <if test="companiesId != null">companies_id = #{companiesId},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="contactPerson != null">contact_person = #{contactPerson},</if>
+            <if test="expenseDepartment != null">expense_department = #{expenseDepartment},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="requiredMaterials != null">required_materials = #{requiredMaterials},</if>
+            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>
+            <if test="automaticAssign != null">automatic_assign = #{automaticAssign},</if>
+        </trim>
+        where requirement_id = #{requirementId}
+    </update>
+
+    <delete id="deleteMaterialRequirementByRequirementId" parameterType="Long">
+        delete from material_requirement where requirement_id = #{requirementId}
+    </delete>
+
+    <delete id="deleteMaterialRequirementByRequirementIds" parameterType="String">
+        delete from material_requirement where requirement_id in 
+        <foreach item="requirementId" collection="array" open="(" separator="," close=")">
+            #{requirementId}
+        </foreach>
+    </delete>
+</mapper>
