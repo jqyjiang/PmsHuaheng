@@ -92,8 +92,6 @@ public class OrderManager extends BaseEntity
     /** 联系电话 */
     private String phone;
 
-    /** 供应商发票方式 */
-    private Long invoiceMethod;
 
     @Override
     public String toString() {
@@ -104,7 +102,7 @@ public class OrderManager extends BaseEntity
                 ", orderType=" + orderType +
                 ", orderSource='" + orderSource + '\'' +
                 ", purOrganization=" + purOrganization +
-                ", annex=" + annex +
+                ", annex='" + annex + '\'' +
                 ", isSelfPickup=" + isSelfPickup +
                 ", licensePlateNumber='" + licensePlateNumber + '\'' +
                 ", concatInfomation='" + concatInfomation + '\'' +
@@ -119,15 +117,20 @@ public class OrderManager extends BaseEntity
                 ", supplier=" + supplier +
                 ", contacts='" + contacts + '\'' +
                 ", phone='" + phone + '\'' +
+                ", createTime=" + createTime +
                 ", invoiceMethod=" + invoiceMethod +
                 ", createTime=" + createTime +
                 ", materialId='" + materialId + '\'' +
                 '}';
     }
 
+
+    /** 供应商发票方式 */
+    private Long invoiceMethod;
+
     @Excel(name = "采购订单创建日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @Override

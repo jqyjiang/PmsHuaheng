@@ -5,6 +5,7 @@ import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 文件服务
@@ -13,7 +14,7 @@ import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
  */
 @EnableCustomConfig
 @EnableCustomSwagger2
-@EnableRyFeignClients
+@EnableRyFeignClients(basePackages = "com.hh.pms.model")
 @SpringBootApplication
 public class HhPmsApplication
 {

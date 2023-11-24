@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- <div class="header_box" style="font-size: 20px; height: 50px; line-height: 50px; ">
-      
+
       <img :src="headerImages" style="width: 40px;height: 40px;vertical-align: middle;margin-right: 10px;"/>
     <span style="display: inline-block;">采购订单管理</span>
 
@@ -9,13 +9,29 @@
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
       <el-form-item label="供应商名称:" prop="supplier">
         <el-input
-          v-model="queryParams.supplier"
+          v-model="squeryParams.supplier"
           placeholder=""
           clearable
           @keyup.enter.native="handleQuery"
           icon="el-icon-search"
         />
-        <i class="el-icon-search" id="serachOne"></i>
+        <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+        <el-dialog :visible.sync="dialogVisible" title="供应商名称">
+    <!-- 这里是弹窗的内容 -->
+    <el-table v-loading="loading" :data="detailsList" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+      <el-table-column label="供应商名称" align="center" prop="sbiName" />
+    </el-table>
+
+    <pagination
+      v-show="stotal>0"
+      :total="stotal"
+      :page.sync="squeryParams.pageNum"
+      :limit.sync="squeryParams.pageSize"
+      @pagination="getList1"
+    />
+  </el-dialog>
       </el-form-item>
       <el-form-item label="采购订单编号:" prop="orderCode">
         <el-input
@@ -45,7 +61,7 @@
           />
         </el-select>
       </el-form-item>
-    
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -143,7 +159,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -185,7 +201,7 @@
           <el-input v-model="form.purOrganization" placeholder="请输入采购组织" />
         </el-form-item>
         <el-form-item label="附件" prop="annex">
-          <el-input v-model="form.annex" placeholder="请输入附件" />
+          <file-upload v-model="form.annex"/>
         </el-form-item>
         <el-form-item label="是否自提" prop="isSelfPickup">
           <el-select v-model="form.isSelfPickup" placeholder="请选择是否自提">
@@ -263,7 +279,7 @@
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager,listSupplier } from "@/api/pms/manager";
 
 export default {
   name: "Manager",
@@ -285,6 +301,19 @@ export default {
       total: 0,
       // 采购订单管理表格数据
       managerList: [],
+      // 供应商列表表格数据
+      detailsList: [],
+      //供应商总条数
+      stotal:0,
+      //供应商查询参数
+      squeryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        orderCode: null,
+        orderSource: null,
+        orderState: null,
+        supplier: null,
+      },
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -302,7 +331,8 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      dialogVisible: false // 用于标记弹窗是否可见
     };
   },
   created() {
@@ -317,6 +347,22 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    /**
+     * 供应商列表
+     */
+    getList1() {
+      this.loading = true;
+      listSupplier().then(response => {
+        console.log(response.rows);
+        this.detailsList = response.rows;
+        this.stotal = response.total;
+        this.loading = false;
+      });
+    },
+    showDiagSupplie() {
+      this.dialogVisible = true;
+      this.getList1();
     },
     // 取消按钮
     cancel() {

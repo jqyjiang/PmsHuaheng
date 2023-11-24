@@ -42,3 +42,13 @@ export function delManager(orderId) {
     method: 'delete'
   })
 }
+
+
+// 查询供应商详细列表
+export function listSupplier() {
+  return request({
+    url: '/pms/manager/listSupplier',
+    method: 'get',
+
+  })
+}
