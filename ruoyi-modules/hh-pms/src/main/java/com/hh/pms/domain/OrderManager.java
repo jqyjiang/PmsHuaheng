@@ -42,7 +42,7 @@ public class OrderManager extends BaseEntity
     private Long purOrganization;
 
     /** 附件 */
-    private Long annex;
+    private String annex;
 
     /** 是否自提 */
     private Long isSelfPickup;
@@ -198,15 +198,15 @@ public class OrderManager extends BaseEntity
     {
         return purOrganization;
     }
-    public void setAnnex(Long annex)
-    {
+
+    public String getAnnex() {
+        return annex;
+    }
+
+    public void setAnnex(String annex) {
         this.annex = annex;
     }
 
-    public Long getAnnex()
-    {
-        return annex;
-    }
     public void setIsSelfPickup(Long isSelfPickup)
     {
         this.isSelfPickup = isSelfPickup;
