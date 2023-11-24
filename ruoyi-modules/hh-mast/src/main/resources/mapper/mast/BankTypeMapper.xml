@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.BankTypeMapper">
+
+    <resultMap type="BankType" id="BankTypeResult">
+        <result property="bankTypeId"    column="bank_type_id"    />
+        <result property="bankType"    column="bank_type"    />
+    </resultMap>
+
+    <sql id="selectBankTypeVo">
+        select bank_type_id, bank_type from bank_type
+    </sql>
+
+    <select id="selectBankTypeList" parameterType="BankType" resultMap="BankTypeResult">
+        <include refid="selectBankTypeVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectBankTypeByBankTypeId" parameterType="Long" resultMap="BankTypeResult">
+        <include refid="selectBankTypeVo"/>
+        where bank_type_id = #{bankTypeId}
+    </select>
+
+    <insert id="insertBankType" parameterType="BankType" useGeneratedKeys="true" keyProperty="bankTypeId">
+        insert into bank_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bankType != null">bank_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bankType != null">#{bankType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBankType" parameterType="BankType">
+        update bank_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankType != null">bank_type = #{bankType},</if>
+        </trim>
+        where bank_type_id = #{bankTypeId}
+    </update>
+
+    <delete id="deleteBankTypeByBankTypeId" parameterType="Long">
+        delete from bank_type where bank_type_id = #{bankTypeId}
+    </delete>
+
+    <delete id="deleteBankTypeByBankTypeIds" parameterType="String">
+        delete from bank_type where bank_type_id in
+        <foreach item="bankTypeId" collection="array" open="(" separator="," close=")">
+            #{bankTypeId}
+        </foreach>
+    </delete>
+</mapper>

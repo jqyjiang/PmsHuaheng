@@ -1,18 +1,26 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="物料编码" prop="materialCode">
+      <el-form-item label="品类代码" prop="categoryCode">
         <el-input
-          v-model="queryParams.materialCode"
-          placeholder="请输入物料编码"
+          v-model="queryParams.categoryCode"
+          placeholder="请输入品类代码"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="物料名称" prop="materialName">
+      <el-form-item label="品类名称" prop="categoryName">
         <el-input
-          v-model="queryParams.materialName"
-          placeholder="请输入物料名称"
+          v-model="queryParams.categoryName"
+          placeholder="请输入品类名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="上级品类" prop="superiorCategory">
+        <el-input
+          v-model="queryParams.superiorCategory"
+          placeholder="请输入上级品类"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -31,7 +39,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['mast:material:add']"
+          v-hasPermi="['mast:category:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -42,7 +50,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['mast:material:edit']"
+          v-hasPermi="['mast:category:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -53,7 +61,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['mast:material:remove']"
+          v-hasPermi="['mast:category:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -63,28 +71,31 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['mast:material:export']"
+          v-hasPermi="['mast:category:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="物料序号" align="center" prop="materialId" />
-      <el-table-column label="物料编码" align="center" prop="materialCode" />
-      <el-table-column label="物料名称" align="center" prop="materialName" />
-      <el-table-column label="基本计算单位" align="center" prop="calculationUnit" />
-      <el-table-column label="采购员" align="center" prop="purchaser" />
+      <el-table-column label="品类序号" align="center" prop="categoryid" />
+      <el-table-column label="品类代码" align="center" prop="categoryCode" />
+      <el-table-column label="品类名称" align="center" prop="categoryName" />
+      <el-table-column label="启用" align="center" prop="enable" />
+      <el-table-column label="允许超量送货" align="center" prop="isNo" />
+      <el-table-column label="上级品类" align="center" prop="superiorCategory" />
+      <el-table-column label="创建时间" align="center" prop="creationTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.creationTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="最后更新人" align="center" prop="lUpdated" />
       <el-table-column label="最后更新时间" align="center" prop="lUpdateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.lUpdateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="来源系统" align="center" prop="sourceSystem" />
-      <el-table-column label="是否启用" align="center" prop="enable" />
-      <el-table-column label="主品类" align="center" prop="mCategory" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -92,14 +103,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['mast:material:edit']"
+            v-hasPermi="['mast:category:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['mast:material:remove']"
+            v-hasPermi="['mast:category:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -113,20 +124,25 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改物料对话框 -->
+    <!-- 添加或修改品类对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="物料编码" prop="materialCode">
-          <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
+        <el-form-item label="品类代码" prop="categoryCode">
+          <el-input v-model="form.categoryCode" placeholder="请输入品类代码" />
         </el-form-item>
-        <el-form-item label="物料名称" prop="materialName">
-          <el-input v-model="form.materialName" placeholder="请输入物料名称" />
+        <el-form-item label="品类名称" prop="categoryName">
+          <el-input v-model="form.categoryName" placeholder="请输入品类名称" />
         </el-form-item>
-        <el-form-item label="基本计算单位" prop="calculationUnit">
-          <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />
+        <el-form-item label="上级品类" prop="superiorCategory">
+          <el-input v-model="form.superiorCategory" placeholder="请输入上级品类" />
         </el-form-item>
-        <el-form-item label="采购员" prop="purchaser">
-          <el-input v-model="form.purchaser" placeholder="请输入采购员" />
+        <el-form-item label="创建时间" prop="creationTime">
+          <el-date-picker clearable
+            v-model="form.creationTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择创建时间">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="最后更新人" prop="lUpdated">
           <el-input v-model="form.lUpdated" placeholder="请输入最后更新人" />
@@ -139,44 +155,17 @@
             placeholder="请选择最后更新时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="来源系统" prop="sourceSystem">
-          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
+        <el-form-item label="业务实体名称" prop="bEName">
+          <el-input v-model="form.bEName" placeholder="请输入业务实体名称" />
         </el-form-item>
-        <el-form-item label="主品类" prop="mCategory">
-          <el-input v-model="form.mCategory" placeholder="请输入主品类" />
+        <el-form-item label="公司" prop="company">
+          <el-input v-model="form.company" placeholder="请输入公司" />
         </el-form-item>
-        <el-form-item label="规格" prop="specifications">
-          <el-input v-model="form.specifications" placeholder="请输入规格" />
+        <el-form-item label="计量单位" prop="meteringUnit">
+          <el-input v-model="form.meteringUnit" placeholder="请输入计量单位" />
         </el-form-item>
-        <el-form-item label="型号" prop="model">
-          <el-input v-model="form.model" placeholder="请输入型号" />
-        </el-form-item>
-        <el-form-item label="品牌" prop="brand">
-          <el-input v-model="form.brand" placeholder="请输入品牌" />
-        </el-form-item>
-        <el-form-item label="默认税种/税率" prop="categoriesTaxes">
-          <el-input v-model="form.categoriesTaxes" placeholder="请输入默认税种/税率" />
-        </el-form-item>
-        <el-form-item label="物料图片" prop="image">
-          <image-upload v-model="form.image"/>
-        </el-form-item>
-        <el-form-item label="毛重" prop="gWeight">
-          <el-input v-model="form.gWeight" placeholder="请输入毛重" />
-        </el-form-item>
-        <el-form-item label="净重" prop="nWeight">
-          <el-input v-model="form.nWeight" placeholder="请输入净重" />
-        </el-form-item>
-        <el-form-item label="重量单位" prop="weight">
-          <el-input v-model="form.weight" placeholder="请输入重量单位" />
-        </el-form-item>
-        <el-form-item label="体积" prop="volume">
-          <el-input v-model="form.volume" placeholder="请输入体积" />
-        </el-form-item>
-        <el-form-item label="体积单位" prop="vUnit">
-          <el-input v-model="form.vUnit" placeholder="请输入体积单位" />
-        </el-form-item>
-        <el-form-item label="物料ABC属性" prop="abcAttribute">
-          <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
+        <el-form-item label="分配采购人" prop="assignPurchaser">
+          <el-input v-model="form.assignPurchaser" placeholder="请输入分配采购人" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -188,10 +177,10 @@
 </template>
 
 <script>
-import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial } from "@/api/mast/material";
+import { listCategory, getCategory, delCategory, addCategory, updateCategory } from "@/api/mast/category";
 
 export default {
-  name: "Material",
+  name: "Category",
   data() {
     return {
       // 遮罩层
@@ -206,8 +195,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 物料表格数据
-      materialList: [],
+      // 品类表格数据
+      categoryList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -216,9 +205,10 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        materialCode: null,
-        materialName: null,
+        categoryCode: null,
+        categoryName: null,
         enable: null,
+        superiorCategory: null,
       },
       // 表单参数
       form: {},
@@ -231,11 +221,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询物料列表 */
+    /** 查询品类列表 */
     getList() {
       this.loading = true;
-      listMaterial(this.queryParams).then(response => {
-        this.materialList = response.rows;
+      listCategory(this.queryParams).then(response => {
+        this.categoryList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -248,28 +238,21 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        materialId: null,
-        materialCode: null,
-        materialName: null,
-        calculationUnit: null,
-        purchaser: null,
+        categoryid: null,
+        categoryCode: null,
+        categoryName: null,
+        enable: null,
+        isNo: null,
+        superiorCategory: null,
+        creationTime: null,
         lUpdated: null,
         lUpdateTime: null,
+        bEName: null,
+        company: null,
+        meteringUnit: null,
         sourceSystem: null,
-        enable: null,
-        mCategory: null,
-        specifications: null,
-        model: null,
-        brand: null,
-        categoriesTaxes: null,
-        image: null,
-        gWeight: null,
-        nWeight: null,
-        weight: null,
-        volume: null,
-        vUnit: null,
-        abcAttribute: null,
-        avoidInspect: null
+        introductionRequirements: null,
+        assignPurchaser: null
       };
       this.resetForm("form");
     },
@@ -285,7 +268,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.materialId)
+      this.ids = selection.map(item => item.categoryid)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -293,30 +276,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加物料";
+      this.title = "添加品类";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const materialId = row.materialId || this.ids
-      getMaterial(materialId).then(response => {
+      const categoryid = row.categoryid || this.ids
+      getCategory(categoryid).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改物料";
+        this.title = "修改品类";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.materialId != null) {
-            updateMaterial(this.form).then(response => {
+          if (this.form.categoryid != null) {
+            updateCategory(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addMaterial(this.form).then(response => {
+            addCategory(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -327,9 +310,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const materialIds = row.materialId || this.ids;
-      this.$modal.confirm('是否确认删除物料编号为"' + materialIds + '"的数据项？').then(function() {
-        return delMaterial(materialIds);
+      const categoryids = row.categoryid || this.ids;
+      this.$modal.confirm('是否确认删除品类编号为"' + categoryids + '"的数据项？').then(function() {
+        return delCategory(categoryids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -337,9 +320,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('mast/material/export', {
+      this.download('mast/category/export', {
         ...this.queryParams
-      }, `material_${new Date().getTime()}.xlsx`)
+      }, `category_${new Date().getTime()}.xlsx`)
     }
   }
 };

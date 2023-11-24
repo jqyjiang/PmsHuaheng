@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.TaxRateMapper">
+
+    <resultMap type="TaxRate" id="TaxRateResult">
+        <result property="taxTypeId"    column="tax_type_id"    />
+        <result property="taxCode"    column="tax_code"    />
+        <result property="describes"    column="describes"    />
+        <result property="taxRate"    column="tax_rate"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectTaxRateVo">
+        select tax_type_id, tax_code, describes, tax_rate, enable from tax_rate
+    </sql>
+
+    <select id="selectTaxRateList" parameterType="TaxRate" resultMap="TaxRateResult">
+        <include refid="selectTaxRateVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectTaxRateByTaxTypeId" parameterType="Long" resultMap="TaxRateResult">
+        <include refid="selectTaxRateVo"/>
+        where tax_type_id = #{taxTypeId}
+    </select>
+
+    <insert id="insertTaxRate" parameterType="TaxRate" useGeneratedKeys="true" keyProperty="taxTypeId">
+        insert into tax_rate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taxCode != null">tax_code,</if>
+            <if test="describes != null">describes,</if>
+            <if test="taxRate != null">tax_rate,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taxCode != null">#{taxCode},</if>
+            <if test="describes != null">#{describes},</if>
+            <if test="taxRate != null">#{taxRate},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaxRate" parameterType="TaxRate">
+        update tax_rate
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taxCode != null">tax_code = #{taxCode},</if>
+            <if test="describes != null">describes = #{describes},</if>
+            <if test="taxRate != null">tax_rate = #{taxRate},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where tax_type_id = #{taxTypeId}
+    </update>
+
+    <delete id="deleteTaxRateByTaxTypeId" parameterType="Long">
+        delete from tax_rate where tax_type_id = #{taxTypeId}
+    </delete>
+
+    <delete id="deleteTaxRateByTaxTypeIds" parameterType="String">
+        delete from tax_rate where tax_type_id in
+        <foreach item="taxTypeId" collection="array" open="(" separator="," close=")">
+            #{taxTypeId}
+        </foreach>
+    </delete>
+</mapper>

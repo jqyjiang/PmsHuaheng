@@ -1,4 +1,4 @@
-package com.hh.mast.domain;
+package com.hh.pms.mast.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,9 +9,9 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 品类对象 category
- * 
+ *
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-24
  */
 public class Category extends BaseEntity
 {
@@ -26,19 +26,19 @@ public class Category extends BaseEntity
 
     /** 品类名称 */
     @Excel(name = "品类名称")
-    private Long categoryName;
+    private String categoryName;
 
-    /** 是否启用 */
-    @Excel(name = "是否启用")
+    /** 启用 */
+    @Excel(name = "启用")
     private Long enable;
 
-    /** 是否允许超量送货 */
-    @Excel(name = "是否允许超量送货")
+    /** 允许超量送货 */
+    @Excel(name = "允许超量送货")
     private Long isNo;
 
     /** 上级品类 */
     @Excel(name = "上级品类")
-    private String superiorCategory;
+    private Long superiorCategory;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -55,13 +55,13 @@ public class Category extends BaseEntity
     private Date lUpdateTime;
 
     /** 业务实体名称 */
-    private String bEName;
+    private Long bEName;
 
     /** 公司 */
-    private String company;
+    private Long company;
 
     /** 计量单位 */
-    private String meteringUnit;
+    private Long meteringUnit;
 
     /** 来源系统 */
     private String sourceSystem;
@@ -70,140 +70,140 @@ public class Category extends BaseEntity
     private String introductionRequirements;
 
     /** 分配采购人 */
-    private String assignPurchaser;
+    private Long assignPurchaser;
 
-    public void setCategoryid(Long categoryid) 
+    public void setCategoryid(Long categoryid)
     {
         this.categoryid = categoryid;
     }
 
-    public Long getCategoryid() 
+    public Long getCategoryid()
     {
         return categoryid;
     }
-    public void setCategoryCode(String categoryCode) 
+    public void setCategoryCode(String categoryCode)
     {
         this.categoryCode = categoryCode;
     }
 
-    public String getCategoryCode() 
+    public String getCategoryCode()
     {
         return categoryCode;
     }
-    public void setCategoryName(Long categoryName) 
+    public void setCategoryName(String categoryName)
     {
         this.categoryName = categoryName;
     }
 
-    public Long getCategoryName() 
+    public String getCategoryName()
     {
         return categoryName;
     }
-    public void setEnable(Long enable) 
+    public void setEnable(Long enable)
     {
         this.enable = enable;
     }
 
-    public Long getEnable() 
+    public Long getEnable()
     {
         return enable;
     }
-    public void setIsNo(Long isNo) 
+    public void setIsNo(Long isNo)
     {
         this.isNo = isNo;
     }
 
-    public Long getIsNo() 
+    public Long getIsNo()
     {
         return isNo;
     }
-    public void setSuperiorCategory(String superiorCategory) 
+    public void setSuperiorCategory(Long superiorCategory)
     {
         this.superiorCategory = superiorCategory;
     }
 
-    public String getSuperiorCategory() 
+    public Long getSuperiorCategory()
     {
         return superiorCategory;
     }
-    public void setCreationTime(Date creationTime) 
+    public void setCreationTime(Date creationTime)
     {
         this.creationTime = creationTime;
     }
 
-    public Date getCreationTime() 
+    public Date getCreationTime()
     {
         return creationTime;
     }
-    public void setlUpdated(String lUpdated) 
+    public void setlUpdated(String lUpdated)
     {
         this.lUpdated = lUpdated;
     }
 
-    public String getlUpdated() 
+    public String getlUpdated()
     {
         return lUpdated;
     }
-    public void setlUpdateTime(Date lUpdateTime) 
+    public void setlUpdateTime(Date lUpdateTime)
     {
         this.lUpdateTime = lUpdateTime;
     }
 
-    public Date getlUpdateTime() 
+    public Date getlUpdateTime()
     {
         return lUpdateTime;
     }
-    public void setbEName(String bEName) 
+    public void setbEName(Long bEName)
     {
         this.bEName = bEName;
     }
 
-    public String getbEName() 
+    public Long getbEName()
     {
         return bEName;
     }
-    public void setCompany(String company) 
+    public void setCompany(Long company)
     {
         this.company = company;
     }
 
-    public String getCompany() 
+    public Long getCompany()
     {
         return company;
     }
-    public void setMeteringUnit(String meteringUnit) 
+    public void setMeteringUnit(Long meteringUnit)
     {
         this.meteringUnit = meteringUnit;
     }
 
-    public String getMeteringUnit() 
+    public Long getMeteringUnit()
     {
         return meteringUnit;
     }
-    public void setSourceSystem(String sourceSystem) 
+    public void setSourceSystem(String sourceSystem)
     {
         this.sourceSystem = sourceSystem;
     }
 
-    public String getSourceSystem() 
+    public String getSourceSystem()
     {
         return sourceSystem;
     }
-    public void setIntroductionRequirements(String introductionRequirements) 
+    public void setIntroductionRequirements(String introductionRequirements)
     {
         this.introductionRequirements = introductionRequirements;
     }
 
-    public String getIntroductionRequirements() 
+    public String getIntroductionRequirements()
     {
         return introductionRequirements;
     }
-    public void setAssignPurchaser(String assignPurchaser) 
+    public void setAssignPurchaser(Long assignPurchaser)
     {
         this.assignPurchaser = assignPurchaser;
     }
 
-    public String getAssignPurchaser() 
+    public Long getAssignPurchaser()
     {
         return assignPurchaser;
     }

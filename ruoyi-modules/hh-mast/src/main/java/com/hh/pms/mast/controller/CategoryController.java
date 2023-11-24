@@ -1,4 +1,4 @@
-package com.hh.mast.controller;
+package com.hh.pms.mast.controller;
 
 import java.util.List;
 import java.io.IOException;
@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.hh.mast.domain.Category;
-import com.hh.mast.service.ICategoryService;
+import com.hh.pms.mast.domain.Category;
+import com.hh.pms.mast.service.ICategoryService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
@@ -24,9 +24,9 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 品类Controller
- * 
+ *
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-24
  */
 @RestController
 @RequestMapping("/category")

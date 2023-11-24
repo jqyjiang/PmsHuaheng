@@ -1,7 +1,6 @@
-package com.hh.mast.controller;
+package com.hh.pms.mast.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.hh.mast.domain.Material;
-import com.hh.mast.service.IMaterialService;
+import com.hh.pms.mast.domain.Material;
+import com.hh.pms.mast.service.IMaterialService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
@@ -24,9 +23,9 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 物料Controller
- * 
+ *
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-23
  */
 @RestController
 @RequestMapping("/material")

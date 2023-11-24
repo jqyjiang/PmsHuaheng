@@ -1,4 +1,4 @@
-package com.hh.mast.domain;
+package com.hh.pms.mast.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -10,9 +10,9 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 物料对象 material
- * 
+ *
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-23
  */
 public class Material extends BaseEntity
 {
@@ -94,201 +94,201 @@ public class Material extends BaseEntity
     /** 是否免检 */
     private Long avoidInspect;
 
-    public void setMaterialId(Long materialId) 
+    public void setMaterialId(Long materialId)
     {
         this.materialId = materialId;
     }
 
-    public Long getMaterialId() 
+    public Long getMaterialId()
     {
         return materialId;
     }
-    public void setMaterialCode(String materialCode) 
+    public void setMaterialCode(String materialCode)
     {
         this.materialCode = materialCode;
     }
 
-    public String getMaterialCode() 
+    public String getMaterialCode()
     {
         return materialCode;
     }
-    public void setMaterialName(String materialName) 
+    public void setMaterialName(String materialName)
     {
         this.materialName = materialName;
     }
 
-    public String getMaterialName() 
+    public String getMaterialName()
     {
         return materialName;
     }
-    public void setCalculationUnit(String calculationUnit) 
+    public void setCalculationUnit(String calculationUnit)
     {
         this.calculationUnit = calculationUnit;
     }
 
-    public String getCalculationUnit() 
+    public String getCalculationUnit()
     {
         return calculationUnit;
     }
-    public void setPurchaser(String purchaser) 
+    public void setPurchaser(String purchaser)
     {
         this.purchaser = purchaser;
     }
 
-    public String getPurchaser() 
+    public String getPurchaser()
     {
         return purchaser;
     }
-    public void setlUpdated(String lUpdated) 
+    public void setlUpdated(String lUpdated)
     {
         this.lUpdated = lUpdated;
     }
 
-    public String getlUpdated() 
+    public String getlUpdated()
     {
         return lUpdated;
     }
-    public void setlUpdateTime(Date lUpdateTime) 
+    public void setlUpdateTime(Date lUpdateTime)
     {
         this.lUpdateTime = lUpdateTime;
     }
 
-    public Date getlUpdateTime() 
+    public Date getlUpdateTime()
     {
         return lUpdateTime;
     }
-    public void setSourceSystem(String sourceSystem) 
+    public void setSourceSystem(String sourceSystem)
     {
         this.sourceSystem = sourceSystem;
     }
 
-    public String getSourceSystem() 
+    public String getSourceSystem()
     {
         return sourceSystem;
     }
-    public void setEnable(Long enable) 
+    public void setEnable(Long enable)
     {
         this.enable = enable;
     }
 
-    public Long getEnable() 
+    public Long getEnable()
     {
         return enable;
     }
-    public void setmCategory(String mCategory) 
+    public void setmCategory(String mCategory)
     {
         this.mCategory = mCategory;
     }
 
-    public String getmCategory() 
+    public String getmCategory()
     {
         return mCategory;
     }
-    public void setSpecifications(String specifications) 
+    public void setSpecifications(String specifications)
     {
         this.specifications = specifications;
     }
 
-    public String getSpecifications() 
+    public String getSpecifications()
     {
         return specifications;
     }
-    public void setModel(String model) 
+    public void setModel(String model)
     {
         this.model = model;
     }
 
-    public String getModel() 
+    public String getModel()
     {
         return model;
     }
-    public void setBrand(String brand) 
+    public void setBrand(String brand)
     {
         this.brand = brand;
     }
 
-    public String getBrand() 
+    public String getBrand()
     {
         return brand;
     }
-    public void setCategoriesTaxes(BigDecimal categoriesTaxes) 
+    public void setCategoriesTaxes(BigDecimal categoriesTaxes)
     {
         this.categoriesTaxes = categoriesTaxes;
     }
 
-    public BigDecimal getCategoriesTaxes() 
+    public BigDecimal getCategoriesTaxes()
     {
         return categoriesTaxes;
     }
-    public void setImage(String image) 
+    public void setImage(String image)
     {
         this.image = image;
     }
 
-    public String getImage() 
+    public String getImage()
     {
         return image;
     }
-    public void setgWeight(BigDecimal gWeight) 
+    public void setgWeight(BigDecimal gWeight)
     {
         this.gWeight = gWeight;
     }
 
-    public BigDecimal getgWeight() 
+    public BigDecimal getgWeight()
     {
         return gWeight;
     }
-    public void setnWeight(BigDecimal nWeight) 
+    public void setnWeight(BigDecimal nWeight)
     {
         this.nWeight = nWeight;
     }
 
-    public BigDecimal getnWeight() 
+    public BigDecimal getnWeight()
     {
         return nWeight;
     }
-    public void setWeight(String weight) 
+    public void setWeight(String weight)
     {
         this.weight = weight;
     }
 
-    public String getWeight() 
+    public String getWeight()
     {
         return weight;
     }
-    public void setVolume(BigDecimal volume) 
+    public void setVolume(BigDecimal volume)
     {
         this.volume = volume;
     }
 
-    public BigDecimal getVolume() 
+    public BigDecimal getVolume()
     {
         return volume;
     }
-    public void setvUnit(String vUnit) 
+    public void setvUnit(String vUnit)
     {
         this.vUnit = vUnit;
     }
 
-    public String getvUnit() 
+    public String getvUnit()
     {
         return vUnit;
     }
-    public void setAbcAttribute(String abcAttribute) 
+    public void setAbcAttribute(String abcAttribute)
     {
         this.abcAttribute = abcAttribute;
     }
 
-    public String getAbcAttribute() 
+    public String getAbcAttribute()
     {
         return abcAttribute;
     }
-    public void setAvoidInspect(Long avoidInspect) 
+    public void setAvoidInspect(Long avoidInspect)
     {
         this.avoidInspect = avoidInspect;
     }
 
-    public Long getAvoidInspect() 
+    public Long getAvoidInspect()
     {
         return avoidInspect;
     }
