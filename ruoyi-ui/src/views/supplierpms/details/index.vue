@@ -10,11 +10,9 @@
       <el-form-item label="供应商名称" prop="sbiName">
         <el-input v-model="queryParams.sbiName" placeholder="请输入供应商名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-
       <el-form-item label="注册状态" prop="sdStatus">
         <el-select v-model="queryParams.sdStatus" placeholder="请选择注册状态" clearable>
-          <el-option v-for="dict in dict.type.registration_status" :key="dict.value" :label="dict.label"
-            :value="dict.value" />
+          <el-option v-for="dict in dict.type.registration" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="注册时间" prop="sdRt">
@@ -27,11 +25,16 @@
       </el-form-item>
     </el-form>
 
+    <!-- 展示信息 -->
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
           v-hasPermi="['supplierpms:supplier:add']">新增</el-button>
       </el-col>
+      <!-- <el-col :span="1.5">
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['supplierpms:supplier:edit']">修改</el-button>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
           v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
@@ -47,7 +50,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="邀请时间" align="center" prop="sdTime" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.sdTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.sdTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column label="供应商名称" align="center" prop="sbiName" />
@@ -55,15 +58,12 @@
       <el-table-column label="行业" align="center" prop="sdIndustry" />
       <el-table-column label="服务范围" align="center" prop="sbiServe">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_service_range"
-            :value="scope.row.sbiServe ? scope.row.sbiServe.split(',') : []" />
+          <dict-tag :options="dict.type.service_scope" :value="scope.row.sbiServe ? scope.row.sbiServe.split(',') : []" />
         </template>
       </el-table-column>
-
-
       <el-table-column label="注册时间" align="center" prop="sdRt" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.sdRt, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.sdRt, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
       <el-table-column label="注册状态" align="center" prop="sdStatus">
@@ -74,8 +74,14 @@
       <el-table-column label="负责人" align="center" prop="sdHead" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+
+          <el-button v-if="scope.row.sdStatus === '0'" size="mini" type="text" @click="authentication(scope.row)"
+            icon="el-icon-coordinate" v-hasPermi="['supplierpms:supplier:remove']">企业认证</el-button>
+          <!-- <el-button v-if="scope.row.sdStatus === '0'" type="text" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['supplierpms:details:edit']">修改</el-button> -->
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
             v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -87,7 +93,8 @@
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="150px">
         <el-form-item label="邀请时间" prop="sdTime">
-          <el-date-picker clearable v-model="form.sdTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择邀请时间">
+          <el-date-picker clearable v-model="form.sdTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择邀请时间"
+            disabled>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="供应商详细编码" prop="sdCode">
@@ -101,7 +108,7 @@
         </el-form-item>
         <el-form-item label="服务范围" prop="sbiServe">
           <el-checkbox-group v-model="form.sbiServe">
-            <el-checkbox v-for="dict in dict.type.sys_service_range" :key="dict.value" :label="dict.value">
+            <el-checkbox v-for="dict in dict.type.service_scope" :key="dict.value" :label="dict.value">
               {{ dict.label }}
             </el-checkbox>
           </el-checkbox-group>
@@ -130,12 +137,17 @@
         <el-form-item label="主要联系人手机号" prop="sdPcp">
           <el-input v-model="form.sdPcp" placeholder="请输入主要联系人手机号" />
         </el-form-item>
-        <el-link type="info" @click="toggleDropdown" class="dropbtn" style="margin-bottom: 20px;">更多信息(选填点我)</el-link>
+        <el-link type="info" @click="toggleDropdown" class="dropbtn" style="margin-bottom: 20px">更多信息(选填点我)</el-link>
         <div v-show="dropdownOpen" class="dropdown-content">
           <!-- <ul>
             <li v-for="item in tableData" :key="item.name">{{ item.name }}</li>
           </ul> -->
-
+          <el-form-item label="主要联系人性别" prop="sdPcg">
+            <el-input v-model="form.sdPcg" placeholder="请输入主要联系人性别" />
+          </el-form-item>
+          <el-form-item label="主要联系人职务" prop="sdMct">
+            <el-input v-model="form.sdMct" placeholder="请输入主要联系人职务" />
+          </el-form-item>
           <el-form-item label="国家地区" prop="sdCountry">
             <el-input v-model="form.sdCountry" placeholder="请输入国家地区" />
           </el-form-item>
@@ -187,13 +199,6 @@
           <el-form-item label="区(县)" prop="sdCounty">
             <el-input v-model="form.sdCounty" placeholder="请输入区(县)" />
           </el-form-item>
-
-          <el-form-item label="主要联系人性别" prop="sdPcg">
-            <el-input v-model="form.sdPcg" placeholder="请输入主要联系人性别" />
-          </el-form-item>
-          <el-form-item label="主要联系人职务" prop="sdMct">
-            <el-input v-model="form.sdMct" placeholder="请输入主要联系人职务" />
-          </el-form-item>
           <el-form-item label="结算方式" prop="sdSm">
             <el-input v-model="form.sdSm" placeholder="请输入结算方式" />
           </el-form-item>
@@ -206,48 +211,89 @@
           <el-form-item label="账号" prop="sdAccount">
             <el-input v-model="form.sdAccount" placeholder="请输入账号" />
           </el-form-item>
-          <el-form-item label="证件编码" prop="idCode">
+          <!-- <el-form-item label="证件编码" prop="idCode">
             <el-input v-model="form.idCode" placeholder="请输入证件编码" />
           </el-form-item>
           <el-form-item label="证件名称" prop="certificateName">
             <el-input v-model="form.certificateName" placeholder="请输入证件名称" />
-          </el-form-item>
-          <el-form-item label="存档日期" prop="filingDate">
+          </el-form-item> -->
+          <!-- <el-form-item label="存档日期" prop="filingDate">
             <el-date-picker clearable v-model="form.filingDate" type="date" value-format="yyyy-MM-dd"
               placeholder="请选择存档日期">
             </el-date-picker>
-          </el-form-item>
-          <el-form-item label="文件" prop="filing">
-            <file-upload v-model="form.filing" />
-          </el-form-item>
-          <el-form-item label="数据状态" prop="dataTatus">
+          </el-form-item> -->
+          <!-- <el-form-item label="营业执照" prop="filing">
+            <image-upload v-model="form.filing" />
+          </el-form-item> -->
+          <!-- <el-form-item label="数据状态" prop="dataTatus">
             <el-input v-model="form.dataTatus" placeholder="请输入数据状态" />
-          </el-form-item>
+          </el-form-item> -->
         </div>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <!-- <el-button type="primary" >企业认证</el-button> -->
-        <el-button @click="drawer = true" type="primary" style="margin-left: 16px;">
+        <!-- <el-button @click=" drawer = true" type="primary" style="margin-left: 16px">
           企业认证
-        </el-button>
+        </el-button> -->
         <el-button type="primary" @click="submitForm">保 存</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-
     </el-dialog>
-    <el-drawer title="我是标题" :visible.sync="drawer" :with-header="false">
-        <span>我来啦!</span>
+    <el-drawer title="企业认证" :visible.sync="drawer" :with-header="false">
+      <div class="your-container">
+        <el-form id="dd" :rules="rules" ref="form" :model="form" label-width="120px">
+          <el-form-item label="企业名称">
+            <el-input v-model="form.sbiName"></el-input>
+          </el-form-item>
+          <el-form-item label="联系人">
+            <el-input v-model="form.sdPcn"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话">
+            <el-input v-model="form.sdPcp"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱">
+            <el-input v-model="form.sdPce"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="文件" prop="filing">
+            <file-upload v-model="form.filing" />
+          </el-form-item> -->
+          <!-- <el-table-column label="营业执照" align="center" prop="filing" width="100">
+            <template slot-scope="scope">
+              <image-preview :src="scope.row.filing" :width="50" :height="50" />
+            </template>
+          </el-table-column> -->
+          <el-form-item label="营业执照" prop="filing">
+            <image-upload v-model="form.filing" />
+          </el-form-item>
+          <!-- <el-form-item label="营业执照">
+            <el-upload action="/api/upload" :on-success="handleUploadSuccess" :before-upload="beforeUpload"
+              :file-list="fileList" list-type="picture-card" :limit="1">
+              <i class="el-icon-plus"></i>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+            </el-upload>
+          </el-form-item> -->
+          <el-form-item>
+            <el-button type="primary" @click="authentications">提交认证</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-drawer>
   </div>
 </template>
 
 <script>
-import { listSupplier, getSupplier, delSupplier, addSupplier, updateSupplier } from "@/api/supplierpms/supplier";
+import {
+  listDetails,
+  getDetails,
+  delDetails,
+  addDetails,
+  updateDetails,
+} from "@/api/supplierpms/details";
 
 export default {
   name: "Supplier",
-  dicts: ['sys_service_range', 'registration_status'],
+  dicts: ["service_scope", "registration"],
   data() {
     return {
       //展示
@@ -315,49 +361,76 @@ export default {
         certificateName: null,
         filingDate: null,
         filing: null,
-        dataTatus: null
+        dataTatus: null,
       },
+      fileList: [],
       // 表单参数
-      form: {},
+      form: {
+        companyName: '',
+        contact: '',
+        phone: '',
+        email: '',
+        businessLicense: ''
+      },
+
       // 表单校验
       rules: {
-        sdTime: [
-          { required: true, message: "邀请时间不能为空", trigger: "blur" }
-        ],
+        // sdTime: [
+        //   { required: true, message: "邀请时间不能为空", trigger: "blur" },
+        // ],
         // sdCode: [
         //   { required: true, message: "供应商详细编码不能为空", trigger: "blur" }
         // ],
         sbiName: [
-          { required: true, message: "供应商名称不能为空", trigger: "blur" }
+          { required: true, message: "供应商名称不能为空", trigger: "blur" },
         ],
         sbiServe: [
-          { required: true, message: "服务范围不能为空", trigger: "blur" }
+          { required: true, message: "服务范围不能为空", trigger: "blur" },
         ],
         sdIndustry: [
-          { required: true, message: "行业不能为空", trigger: "blur" }
+          { required: true, message: "行业不能为空", trigger: "blur" },
         ],
         sdHead: [
-          { required: true, message: "负责人不能为空", trigger: "blur" }
+          { required: true, message: "负责人不能为空", trigger: "blur" },
         ],
         sdHeadPhone: [
-          { required: true, message: "负责人手机不能为空", trigger: "blur" }
+          { required: true, message: "负责人手机不能为空", trigger: "blur" },
         ],
         sdUscc: [
-          { required: true, message: "统一社会信用代码不能为空", trigger: "blur" }
+          {
+            required: true,
+            message: "统一社会信用代码不能为空",
+            trigger: "blur",
+          },
         ],
         sdEn: [
-          { required: true, message: "企业性质不能为空", trigger: "blur" }
+          { required: true, message: "企业性质不能为空", trigger: "blur" },
         ],
         sdPcn: [
-          { required: true, message: "主要联系人姓名不能为空", trigger: "blur" }
+          {
+            required: true,
+            message: "主要联系人姓名不能为空",
+            trigger: "blur",
+          },
         ],
         sdPce: [
-          { required: true, message: "主要联系人邮箱不能为空", trigger: "blur" }
+          {
+            required: true,
+            message: "主要联系人邮箱不能为空",
+            trigger: "blur",
+          },
         ],
         sdPcp: [
-          { required: true, message: "主要联系人手机号不能为空", trigger: "blur" }
+          {
+            required: true,
+            message: "主要联系人手机号不能为空",
+            trigger: "blur",
+          },
         ],
-      }
+        filing: [
+          { required: true, message: "文件不能为空", trigger: "blur" }
+        ],
+      },
     };
   },
   created() {
@@ -371,7 +444,7 @@ export default {
     /** 查询供应商详细列表 */
     getList() {
       this.loading = true;
-      listSupplier(this.queryParams).then(response => {
+      listDetails(this.queryParams).then((response) => {
         this.supplierList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -425,7 +498,7 @@ export default {
         certificateName: null,
         filingDate: null,
         filing: null,
-        dataTatus: null
+        dataTatus: null,
       };
       this.resetForm("form");
     },
@@ -441,9 +514,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.sdId)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.sdId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -452,29 +525,54 @@ export default {
       this.title = "添加供应商详细";
     },
     /** 修改按钮操作 */
-    handleUpdate(row) {
+    // handleUpdate(row) {
+    //   this.reset();
+    //   const sdId = row.sdId || this.ids;
+    //   getDetails(sdId).then((response) => {
+    //     this.form = response.data;
+    //     this.form.sbiServe = this.form.sbiServe.split(",");
+    //     this.open = true;
+    //     this.title = "修改供应商详细";
+    //   });
+    // },
+    /** 企业认证按钮 */
+    authentication(row) {
+      // this.$refs["companyForm"].validate((valid) => {});
+      this.drawer = true;
       this.reset();
-      const sdId = row.sdId || this.ids
-      getSupplier(sdId).then(response => {
+      const sdId = row.sdId || this.ids;
+      //this.form.sdId=row.sdId;
+      getDetails(sdId).then((response) => {
         this.form = response.data;
-        this.form.sbiServe = this.form.sbiServe.split(",");
-        this.open = true;
-        this.title = "修改供应商详细";
+      });
+    },
+    authentications() {
+      this.$refs["form"].validate((valid) => {
+        console.log("ggg"+valid);
+        if (valid) {
+          this.form.sdStatus="1";
+          this.form.sdRt = new Date();
+          updateDetails(this.form).then((response) => {
+            this.$modal.msgSuccess("提交成功");
+            this.drawer = false;
+            this.getList();
+          });
+        }
       });
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           this.form.sbiServe = this.form.sbiServe.join(",");
           if (this.form.sdId != null) {
-            updateSupplier(this.form).then(response => {
+            updateDetails(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addSupplier(this.form).then(response => {
+            addDetails(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -486,25 +584,64 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const sdIds = row.sdId || this.ids;
-      this.$modal.confirm('是否确认删除供应商详细编号为"' + sdIds + '"的数据项？').then(function () {
-        return delSupplier(sdIds);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => { });
+      this.$modal
+        .confirm('是否确认删除供应商详细编号为"' + sdIds + '"的数据项？')
+        .then(function () {
+          return delDetails(sdIds);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('supplierpms/supplier/export', {
-        ...this.queryParams
-      }, `supplier_${new Date().getTime()}.xlsx`)
+      this.download(
+        "supplierpms/supplier/export",
+        {
+          ...this.queryParams,
+        },
+        `supplier_${new Date().getTime()}.xlsx`
+      );
+    },
+    beforeUpload(file) {
+      const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!(isJPG || isPNG)) {
+        this.$message.error('只能上传jpg/png文件');
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error('文件大小不能超过2MB');
+        return false;
+      }
+      return true;
+    },
+    handleUploadSuccess(response, file) {
+      this.form.businessLicense = response.url;
+    },
+    submitCertification() {
+      if (this.form.sdId != null) {
+        updateDetails(this.form).then((response) => {
+          this.$modal.msgSuccess("修改成功");
+          this.open = false;
+          this.getList();
+        });
+      }
     }
-  }
+    // submitForm() {
+    //   this.$refs.companyForm.validate(valid => {
+    //     if (valid) {
+    //       // 发送认证请求
+    //       console.log(this.form);
+    //     } else {
+    //       console.log('表单验证失败');
+    //     }
+    //   });
+    // }
+  },
 };
 </script>
-<style>
-.dropdown {
-  /* position: relative; */
-  display: inline-block;
-}
-</style>

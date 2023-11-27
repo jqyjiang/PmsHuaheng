@@ -1,7 +1,10 @@
 package com.hh.pms.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,47 +19,48 @@ import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
- * 供应商详细Controller
+ * 供应商列表Controller
  * 
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-24
  */
 @RestController
-@RequestMapping("/supplier")
+@RequestMapping("/details")
 public class SupplierDetailsController extends BaseController
 {
     @Autowired
     private ISupplierDetailsService supplierDetailsService;
 
     /**
-     * 查询供应商详细列表
+     * 查询供应商列表列表
      */
-    @RequiresPermissions("supplier:supplier:list")
+    @RequiresPermissions("supplierpms:details:list")
     @RequestMapping(method = RequestMethod.GET,value = "/list")
     public TableDataInfo list(SupplierDetails supplierDetails)
     {
+
         startPage();
         List<SupplierDetails> list = supplierDetailsService.selectSupplierDetailsList(supplierDetails);
         return getDataTable(list);
     }
 
     /**
-     * 导出供应商详细列表
+     * 导出供应商列表列表
      */
-    @RequiresPermissions("supplier:supplier:export")
-    @Log(title = "供应商详细", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("supplierpms:details:export")
+    @Log(title = "供应商列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, SupplierDetails supplierDetails)
     {
         List<SupplierDetails> list = supplierDetailsService.selectSupplierDetailsList(supplierDetails);
         ExcelUtil<SupplierDetails> util = new ExcelUtil<SupplierDetails>(SupplierDetails.class);
-        util.exportExcel(response, list, "供应商详细数据");
+        util.exportExcel(response, list, "供应商列表数据");
     }
 
     /**
-     * 获取供应商详细详细信息
+     * 获取供应商列表详细信息
      */
-    @RequiresPermissions("supplier:supplier:query")
+    @RequiresPermissions("supplierpms:details:query")
     @GetMapping(value = "/{sdId}")
     public AjaxResult getInfo(@PathVariable("sdId") Long sdId)
     {
@@ -64,10 +68,10 @@ public class SupplierDetailsController extends BaseController
     }
 
     /**
-     * 新增供应商详细
+     * 新增供应商列表
      */
-    @RequiresPermissions("supplier:supplier:add")
-    @Log(title = "供应商详细", businessType = BusinessType.INSERT)
+    @RequiresPermissions("supplierpms:details:add")
+    @Log(title = "供应商列表", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SupplierDetails supplierDetails)
     {
@@ -79,17 +83,21 @@ public class SupplierDetailsController extends BaseController
         int   hour_of_day   =   c.get(Calendar.HOUR_OF_DAY);
         int   minute   =   c.get(Calendar.MINUTE);
         String nowTime = year+""+ (month+1)+""+date+""+hour_of_day+""+minute;
-        System.out.println(nowTime);
-        System.out.println("GYS"+nowTime+Math.round(Math.random()*10000));
+        //System.out.println(nowTime);
+        //System.out.println("GYS"+nowTime+Math.round(Math.random()*10000));
+        Date day = new Date();
+        //System.out.println(day);
+        supplierDetails.setSdTime(day);
+        supplierDetails.setSdStatus("0");
         supplierDetails.setSdCode("GYS"+nowTime+Math.round(Math.random()*10000));
         return toAjax(supplierDetailsService.insertSupplierDetails(supplierDetails));
     }
 
     /**
-     * 修改供应商详细
+     * 修改供应商列表
      */
-    @RequiresPermissions("supplier:supplier:edit")
-    @Log(title = "供应商详细", businessType = BusinessType.UPDATE)
+    @RequiresPermissions("supplierpms:details:edit")
+    @Log(title = "供应商列表", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SupplierDetails supplierDetails)
     {
@@ -97,10 +105,10 @@ public class SupplierDetailsController extends BaseController
     }
 
     /**
-     * 删除供应商详细
+     * 删除供应商列表
      */
-    @RequiresPermissions("supplier:supplier:remove")
-    @Log(title = "供应商详细", businessType = BusinessType.DELETE)
+    @RequiresPermissions("supplierpms:details:remove")
+    @Log(title = "供应商列表", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{sdIds}")
     public AjaxResult remove(@PathVariable Long[] sdIds)
     {

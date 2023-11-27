@@ -8,10 +8,10 @@ import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
- * 供应商详细对象 supplier_details
+ * 供应商列表对象 supplier_details
  * 
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-24
  */
 public class SupplierDetails extends BaseEntity
 {
@@ -33,6 +33,10 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "供应商名称")
     private String sbiName;
 
+    /** 统一社会信用代码 */
+    @Excel(name = "统一社会信用代码")
+    private String sdUscc;
+
     /** 简称 */
     @Excel(name = "简称")
     private String sbiAbbreviation;
@@ -44,6 +48,43 @@ public class SupplierDetails extends BaseEntity
     /** 行业 */
     @Excel(name = "行业")
     private String sdIndustry;
+
+    /** 企业性质 */
+    @Excel(name = "企业性质")
+    private String sdEn;
+
+    /** 注册时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "注册时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date sdRt;
+
+    /** 负责人 */
+    @Excel(name = "负责人")
+    private String sdHead;
+
+    /** 负责人手机 */
+    @Excel(name = "负责人手机")
+    private String sdHeadPhone;
+
+    /** 主要联系人姓名 */
+    @Excel(name = "主要联系人姓名")
+    private String sdPcn;
+
+    /** 主要联系人手机号 */
+    @Excel(name = "主要联系人手机号")
+    private String sdPcp;
+
+    /** 主要联系人邮箱 */
+    @Excel(name = "主要联系人邮箱")
+    private String sdPce;
+
+    /** 主要联系人性别 */
+    @Excel(name = "主要联系人性别")
+    private String sdPcg;
+
+    /** 主要联系人职务 */
+    @Excel(name = "主要联系人职务")
+    private String sdMct;
 
     /** 国家地区 */
     @Excel(name = "国家地区")
@@ -77,11 +118,6 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "注册资本")
     private String sdRc;
 
-    /** 注册时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "注册时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date sdRt;
-
     /** 注册状态 */
     @Excel(name = "注册状态")
     private String sdStatus;
@@ -109,42 +145,6 @@ public class SupplierDetails extends BaseEntity
     /** 区(县) */
     @Excel(name = "区(县)")
     private String sdCounty;
-
-    /** 负责人 */
-    @Excel(name = "负责人")
-    private String sdHead;
-
-    /** 负责人手机 */
-    @Excel(name = "负责人手机")
-    private String sdHeadPhone;
-
-    /** 统一社会信用代码 */
-    @Excel(name = "统一社会信用代码")
-    private String sdUscc;
-
-    /** 企业性质 */
-    @Excel(name = "企业性质")
-    private String sdEn;
-
-    /** 主要联系人姓名 */
-    @Excel(name = "主要联系人姓名")
-    private String sdPcn;
-
-    /** 主要联系人性别 */
-    @Excel(name = "主要联系人性别")
-    private String sdPcg;
-
-    /** 主要联系人职务 */
-    @Excel(name = "主要联系人职务")
-    private String sdMct;
-
-    /** 主要联系人邮箱 */
-    @Excel(name = "主要联系人邮箱")
-    private String sdPce;
-
-    /** 主要联系人手机号 */
-    @Excel(name = "主要联系人手机号")
-    private String sdPcp;
 
     /** 结算方式 */
     @Excel(name = "结算方式")
@@ -219,6 +219,15 @@ public class SupplierDetails extends BaseEntity
     {
         return sbiName;
     }
+    public void setSdUscc(String sdUscc) 
+    {
+        this.sdUscc = sdUscc;
+    }
+
+    public String getSdUscc() 
+    {
+        return sdUscc;
+    }
     public void setSbiAbbreviation(String sbiAbbreviation) 
     {
         this.sbiAbbreviation = sbiAbbreviation;
@@ -245,6 +254,87 @@ public class SupplierDetails extends BaseEntity
     public String getSdIndustry() 
     {
         return sdIndustry;
+    }
+    public void setSdEn(String sdEn) 
+    {
+        this.sdEn = sdEn;
+    }
+
+    public String getSdEn() 
+    {
+        return sdEn;
+    }
+    public void setSdRt(Date sdRt) 
+    {
+        this.sdRt = sdRt;
+    }
+
+    public Date getSdRt() 
+    {
+        return sdRt;
+    }
+    public void setSdHead(String sdHead) 
+    {
+        this.sdHead = sdHead;
+    }
+
+    public String getSdHead() 
+    {
+        return sdHead;
+    }
+    public void setSdHeadPhone(String sdHeadPhone) 
+    {
+        this.sdHeadPhone = sdHeadPhone;
+    }
+
+    public String getSdHeadPhone() 
+    {
+        return sdHeadPhone;
+    }
+    public void setSdPcn(String sdPcn) 
+    {
+        this.sdPcn = sdPcn;
+    }
+
+    public String getSdPcn() 
+    {
+        return sdPcn;
+    }
+    public void setSdPcp(String sdPcp) 
+    {
+        this.sdPcp = sdPcp;
+    }
+
+    public String getSdPcp() 
+    {
+        return sdPcp;
+    }
+    public void setSdPce(String sdPce) 
+    {
+        this.sdPce = sdPce;
+    }
+
+    public String getSdPce() 
+    {
+        return sdPce;
+    }
+    public void setSdPcg(String sdPcg) 
+    {
+        this.sdPcg = sdPcg;
+    }
+
+    public String getSdPcg() 
+    {
+        return sdPcg;
+    }
+    public void setSdMct(String sdMct) 
+    {
+        this.sdMct = sdMct;
+    }
+
+    public String getSdMct() 
+    {
+        return sdMct;
     }
     public void setSdCountry(String sdCountry) 
     {
@@ -318,15 +408,6 @@ public class SupplierDetails extends BaseEntity
     {
         return sdRc;
     }
-    public void setSdRt(Date sdRt) 
-    {
-        this.sdRt = sdRt;
-    }
-
-    public Date getSdRt() 
-    {
-        return sdRt;
-    }
     public void setSdStatus(String sdStatus) 
     {
         this.sdStatus = sdStatus;
@@ -389,87 +470,6 @@ public class SupplierDetails extends BaseEntity
     public String getSdCounty() 
     {
         return sdCounty;
-    }
-    public void setSdHead(String sdHead) 
-    {
-        this.sdHead = sdHead;
-    }
-
-    public String getSdHead() 
-    {
-        return sdHead;
-    }
-    public void setSdHeadPhone(String sdHeadPhone) 
-    {
-        this.sdHeadPhone = sdHeadPhone;
-    }
-
-    public String getSdHeadPhone() 
-    {
-        return sdHeadPhone;
-    }
-    public void setSdUscc(String sdUscc) 
-    {
-        this.sdUscc = sdUscc;
-    }
-
-    public String getSdUscc() 
-    {
-        return sdUscc;
-    }
-    public void setSdEn(String sdEn) 
-    {
-        this.sdEn = sdEn;
-    }
-
-    public String getSdEn() 
-    {
-        return sdEn;
-    }
-    public void setSdPcn(String sdPcn) 
-    {
-        this.sdPcn = sdPcn;
-    }
-
-    public String getSdPcn() 
-    {
-        return sdPcn;
-    }
-    public void setSdPcg(String sdPcg) 
-    {
-        this.sdPcg = sdPcg;
-    }
-
-    public String getSdPcg() 
-    {
-        return sdPcg;
-    }
-    public void setSdMct(String sdMct) 
-    {
-        this.sdMct = sdMct;
-    }
-
-    public String getSdMct() 
-    {
-        return sdMct;
-    }
-    public void setSdPce(String sdPce) 
-    {
-        this.sdPce = sdPce;
-    }
-
-    public String getSdPce() 
-    {
-        return sdPce;
-    }
-    public void setSdPcp(String sdPcp) 
-    {
-        this.sdPcp = sdPcp;
-    }
-
-    public String getSdPcp() 
-    {
-        return sdPcp;
     }
     public void setSdSm(String sdSm) 
     {
@@ -560,9 +560,19 @@ public class SupplierDetails extends BaseEntity
             .append("sdTime", getSdTime())
             .append("sdCode", getSdCode())
             .append("sbiName", getSbiName())
+            .append("sdUscc", getSdUscc())
             .append("sbiAbbreviation", getSbiAbbreviation())
             .append("sbiServe", getSbiServe())
             .append("sdIndustry", getSdIndustry())
+            .append("sdEn", getSdEn())
+            .append("sdRt", getSdRt())
+            .append("sdHead", getSdHead())
+            .append("sdHeadPhone", getSdHeadPhone())
+            .append("sdPcn", getSdPcn())
+            .append("sdPcp", getSdPcp())
+            .append("sdPce", getSdPce())
+            .append("sdPcg", getSdPcg())
+            .append("sdMct", getSdMct())
             .append("sdCountry", getSdCountry())
             .append("sdRegion", getSdRegion())
             .append("sdWebsite", getSdWebsite())
@@ -571,7 +581,6 @@ public class SupplierDetails extends BaseEntity
             .append("sdRi", getSdRi())
             .append("sdBr", getSdBr())
             .append("sdRc", getSdRc())
-            .append("sdRt", getSdRt())
             .append("sdStatus", getSdStatus())
             .append("sdPhone", getSdPhone())
             .append("sdEmail", getSdEmail())
@@ -579,15 +588,6 @@ public class SupplierDetails extends BaseEntity
             .append("sdSave", getSdSave())
             .append("sdCity", getSdCity())
             .append("sdCounty", getSdCounty())
-            .append("sdHead", getSdHead())
-            .append("sdHeadPhone", getSdHeadPhone())
-            .append("sdUscc", getSdUscc())
-            .append("sdEn", getSdEn())
-            .append("sdPcn", getSdPcn())
-            .append("sdPcg", getSdPcg())
-            .append("sdMct", getSdMct())
-            .append("sdPce", getSdPce())
-            .append("sdPcp", getSdPcp())
             .append("sdSm", getSdSm())
             .append("sdBank", getSdBank())
             .append("sdCurrency", getSdCurrency())
