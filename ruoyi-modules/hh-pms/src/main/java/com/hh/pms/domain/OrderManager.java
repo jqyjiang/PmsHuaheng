@@ -2,6 +2,7 @@ package com.hh.pms.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -77,7 +78,7 @@ public class OrderManager extends BaseEntity
 
     /** 订单执行状态 */
     @Excel(name = "订单执行状态")
-    private Long orderStatus;
+    private Long orId;
 
     /** 币种 */
     private Long currencyId;
@@ -112,13 +113,15 @@ public class OrderManager extends BaseEntity
                 ", totalDemand=" + totalDemand +
                 ", purchaser=" + purchaser +
                 ", orderState=" + orderState +
-                ", orderStatus=" + orderStatus +
+                ", orId=" + orId +
                 ", currencyId=" + currencyId +
                 ", supplier=" + supplier +
                 ", contacts='" + contacts + '\'' +
                 ", phone='" + phone + '\'' +
-                ", createTime=" + createTime +
                 ", invoiceMethod=" + invoiceMethod +
+                ", orderMaterialList=" + orderMaterialList +
+                ", supplierDetails=" + supplierDetails +
+                ", orderTypeRunning=" + orderTypeRunning +
                 ", createTime=" + createTime +
                 ", materialId='" + materialId + '\'' +
                 '}';
@@ -127,6 +130,46 @@ public class OrderManager extends BaseEntity
 
     /** 供应商发票方式 */
     private Long invoiceMethod;
+
+    /** 订单物料明细信息 */
+    private List<OrderMaterial> orderMaterialList;
+
+    private SupplierDetails supplierDetails;
+
+    private OrderTypeRunning orderTypeRunning;
+
+
+    public List<OrderMaterial> getOrderMaterialList() {
+        return orderMaterialList;
+    }
+
+    public void setOrderMaterialList(List<OrderMaterial> orderMaterialList) {
+        this.orderMaterialList = orderMaterialList;
+    }
+
+    public SupplierDetails getSupplierDetails() {
+        return supplierDetails;
+    }
+
+    public void setSupplierDetails(SupplierDetails supplierDetails) {
+        this.supplierDetails = supplierDetails;
+    }
+
+    public OrderTypeRunning getOrderTypeRunning() {
+        return orderTypeRunning;
+    }
+
+    public void setOrderTypeRunning(OrderTypeRunning orderTypeRunning) {
+        this.orderTypeRunning = orderTypeRunning;
+    }
+
+    public Long getOrId() {
+        return orId;
+    }
+
+    public void setOrId(Long orId) {
+        this.orId = orId;
+    }
 
     @Excel(name = "采购订单创建日期")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -291,15 +334,7 @@ public class OrderManager extends BaseEntity
     {
         return orderState;
     }
-    public void setOrderStatus(Long orderStatus)
-    {
-        this.orderStatus = orderStatus;
-    }
 
-    public Long getOrderStatus()
-    {
-        return orderStatus;
-    }
     public void setCurrencyId(Long currencyId)
     {
         this.currencyId = currencyId;

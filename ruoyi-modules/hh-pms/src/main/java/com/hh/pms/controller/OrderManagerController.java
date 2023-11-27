@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.domain.SupplierDetails;
+import com.hh.pms.model.MaterialClient;
 import com.hh.pms.model.SupplierClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,20 +32,34 @@ public class OrderManagerController extends BaseController
     @Autowired
     private IOrderManagerService orderManagerService;
 
-    private final SupplierClient supplierClient;
+    @Autowired
+    private  SupplierClient supplierClient;
 
     @Autowired
-    public OrderManagerController(SupplierClient supplierClient) {
-        this.supplierClient = supplierClient;
-    }
+    private  MaterialClient materialClient;
+
+//    @Autowired
+//    public OrderManagerController(SupplierClient supplierClient) {
+//        this.supplierClient = supplierClient;
+//    }
+//
+//    @Autowired
+//    public OrderManagerController(MaterialClient materialClient) {
+//        this.materialClient = materialClient;
+//    }
 
     /**
      * 查询供应商列表
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listSupplier")
-    public TableDataInfo listSupplier(SupplierDetails supplierDetails){
-        return supplierClient.list(supplierDetails);
+    public TableDataInfo listSupplier(){
+        return supplierClient.list();
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
+    public TableDataInfo listMaterial(){
+        return materialClient.list();
     }
 
     /**

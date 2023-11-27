@@ -38,7 +38,6 @@ public class SupplierDetailsController extends BaseController
     @RequestMapping(method = RequestMethod.GET,value = "/list")
     public TableDataInfo list(SupplierDetails supplierDetails)
     {
-
         startPage();
         List<SupplierDetails> list = supplierDetailsService.selectSupplierDetailsList(supplierDetails);
         return getDataTable(list);

@@ -8,7 +8,7 @@ import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
- * 文件服务
+ * 采购执行模块
  * 
  * @author ruoyi
  */

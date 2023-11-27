@@ -52,3 +52,12 @@ export function listSupplier() {
 
   })
 }
+
+// 查询物料列表
+export function listMaterial(query) {
+  return request({
+    url: '/pms/manager/listMaterial',
+    method: 'get',
+    params: query
+  })
+}
