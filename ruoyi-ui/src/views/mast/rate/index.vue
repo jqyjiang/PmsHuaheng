@@ -55,11 +55,15 @@
 
     <el-table v-loading="loading" :data="rateList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="税种序号" align="center" prop="taxTypeId" />
+      <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
       <el-table-column label="税种代码" align="center" prop="taxCode" />
       <el-table-column label="描述" align="center" prop="describes" />
       <el-table-column label="税率" align="center" prop="taxRate" />
-      <el-table-column label="是否启用" align="center" prop="enable" />
+      <el-table-column label="是否启用" align="center">
+        <template   prop="enable">
+  <el-checkbox v-model="checked"></el-checkbox>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -116,6 +120,7 @@ export default {
   name: "Rate",
   data() {
     return {
+      checked: true,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -246,3 +251,4 @@ export default {
   }
 };
 </script>
+

@@ -1,6 +1,22 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="币种编码" prop="currencyCode">
+        <el-input
+          v-model="queryParams.currencyCode"
+          placeholder="请输入币种编码"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="币种名称" prop="currencyName">
+        <el-input
+          v-model="queryParams.currencyName"
+          placeholder="请输入币种名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -15,7 +31,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['mast:bank:add']"
+          v-hasPermi="['mast:currency:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -26,7 +42,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['mast:bank:edit']"
+          v-hasPermi="['mast:currency:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -37,7 +53,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['mast:bank:remove']"
+          v-hasPermi="['mast:currency:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -47,28 +63,22 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['mast:bank:export']"
+          v-hasPermi="['mast:currency:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="bankList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="currencyList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="银行序号" align="center" prop="bankId" />
-      <el-table-column label="银行编码" align="center" prop="bankCode" />
-      <el-table-column label="银行名称" align="center" prop="bankName" />
-      <el-table-column label="银行简称" align="center" prop="bankAbbreviation" />
-      <el-table-column label="银行类型" align="center" prop="bankType" >
-        <template slot-scope="scope">
-          <span v-for="item in bank_typeList" :key="index">
-            <template v-if="scope.row.bankType===item.bankTypeId">
-              {{item.bankType}}
-            </template>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="是否启用" align="center" prop="enable" />
+      <!-- <el-table-column label="币种ID" align="center" prop="currencyId" /> -->
+      <el-table-column label="币种编码" align="center" prop="currencyCode" />
+      <el-table-column label="币种名称" align="center" prop="currencyName" />
+      <el-table-column label="国家/地区" align="center" prop="countryRegion" />
+      <el-table-column label="财务精度" align="center" prop="financialAccuracy" />
+      <el-table-column label="精度" align="center" prop="accuracy" />
+      <el-table-column label="货币符号" align="center" prop="currencySymbol" />
+      <el-table-column label="启用" align="center" prop="enable" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -76,14 +86,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['mast:bank:edit']"
+            v-hasPermi="['mast:currency:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['mast:bank:remove']"
+            v-hasPermi="['mast:currency:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -97,17 +107,26 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改银行对话框 -->
+    <!-- 添加或修改币种对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="银行编码" prop="bankCode">
-          <el-input v-model="form.bankCode" placeholder="请输入银行编码" />
+        <el-form-item label="币种编码" prop="currencyCode">
+          <el-input v-model="form.currencyCode" placeholder="请输入币种编码" />
         </el-form-item>
-        <el-form-item label="银行名称" prop="bankName">
-          <el-input v-model="form.bankName" placeholder="请输入银行名称" />
+        <el-form-item label="币种名称" prop="currencyName">
+          <el-input v-model="form.currencyName" placeholder="请输入币种名称" />
         </el-form-item>
-        <el-form-item label="银行简称" prop="bankAbbreviation">
-          <el-input v-model="form.bankAbbreviation" placeholder="请输入银行简称" />
+        <el-form-item label="国家/地区" prop="countryRegion">
+          <el-input v-model="form.countryRegion" placeholder="请输入国家/地区" />
+        </el-form-item>
+        <el-form-item label="财务精度" prop="financialAccuracy">
+          <el-input v-model="form.financialAccuracy" placeholder="请输入财务精度" />
+        </el-form-item>
+        <el-form-item label="精度" prop="accuracy">
+          <el-input v-model="form.accuracy" placeholder="请输入精度" />
+        </el-form-item>
+        <el-form-item label="货币符号" prop="currencySymbol">
+          <el-input v-model="form.currencySymbol" placeholder="请输入货币符号" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -119,10 +138,10 @@
 </template>
 
 <script>
-import { listBank, getBank, delBank, addBank, updateBank,listBank_type } from "@/api/mast/bank";
+import { listCurrency, getCurrency, delCurrency, addCurrency, updateCurrency } from "@/api/mast/currency";
 
 export default {
-  name: "Bank",
+  name: "Currency",
   data() {
     return {
       // 遮罩层
@@ -137,9 +156,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 银行表格数据
-      bankList: [],
-      bank_typeList: [],
+      // 币种表格数据
+      currencyList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -148,6 +166,8 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        currencyCode: null,
+        currencyName: null,
       },
       // 表单参数
       form: {},
@@ -158,24 +178,15 @@ export default {
   },
   created() {
     this.getList();
-    this.getList1();
   },
   methods: {
-    /** 查询银行列表 */
+    /** 查询币种列表 */
     getList() {
       this.loading = true;
-      listBank(this.queryParams).then(response => {
-        this.bankList = response.rows;
+      listCurrency(this.queryParams).then(response => {
+        this.currencyList = response.rows;
         this.total = response.total;
         this.loading = false;
-      });
-    },
-    /** 查询银行类型列表 */
-    getList1() {
-      listBank_type().then(response => {
-        this.bank_typeList = response.rows;
-        console.log(response.rows)
-        this.total = response.total;
       });
     },
     // 取消按钮
@@ -186,11 +197,13 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        bankId: null,
-        bankCode: null,
-        bankName: null,
-        bankAbbreviation: null,
-        bankType: null,
+        currencyId: null,
+        currencyCode: null,
+        currencyName: null,
+        countryRegion: null,
+        financialAccuracy: null,
+        accuracy: null,
+        currencySymbol: null,
         enable: null
       };
       this.resetForm("form");
@@ -207,7 +220,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.bankId)
+      this.ids = selection.map(item => item.currencyId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -215,30 +228,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加银行";
+      this.title = "添加币种";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const bankId = row.bankId || this.ids
-      getBank(bankId).then(response => {
+      const currencyId = row.currencyId || this.ids
+      getCurrency(currencyId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改银行";
+        this.title = "修改币种";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.bankId != null) {
-            updateBank(this.form).then(response => {
+          if (this.form.currencyId != null) {
+            updateCurrency(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addBank(this.form).then(response => {
+            addCurrency(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -249,9 +262,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const bankIds = row.bankId || this.ids;
-      this.$modal.confirm('是否确认删除银行编号为"' + bankIds + '"的数据项？').then(function() {
-        return delBank(bankIds);
+      const currencyIds = row.currencyId || this.ids;
+      this.$modal.confirm('是否确认删除币种编号为"' + currencyIds + '"的数据项？').then(function() {
+        return delCurrency(currencyIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -259,9 +272,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('mast/bank/export', {
+      this.download('mast/currency/export', {
         ...this.queryParams
-      }, `bank_${new Date().getTime()}.xlsx`)
+      }, `currency_${new Date().getTime()}.xlsx`)
     }
   }
 };
