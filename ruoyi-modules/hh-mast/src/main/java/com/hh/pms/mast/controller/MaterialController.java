@@ -42,6 +42,7 @@ public class MaterialController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Material material)
     {
+        System.out.println("传递的对象:"+material);
         startPage();
         List<Material> list = materialService.selectMaterialList(material);
         return getDataTable(list);

@@ -1,13 +1,14 @@
 package com.hh.pms.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.domain.SupplierDetails;
+import com.hh.pms.mast.domain.Material;
 import com.hh.pms.model.MaterialClient;
 import com.hh.pms.model.SupplierClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
@@ -27,6 +28,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/manager")
+
 public class OrderManagerController extends BaseController
 {
     @Autowired
@@ -53,13 +55,17 @@ public class OrderManagerController extends BaseController
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listSupplier")
-    public TableDataInfo listSupplier(){
-        return supplierClient.list();
+    public TableDataInfo listSupplier(SupplierDetails supplierDetails, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
+        return supplierClient.list(supplierDetails,pageNum,pageSize);
     }
 
+    @RequiresPermissions("mast:material:list")
     @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
-    public TableDataInfo listMaterial(){
-        return materialClient.list();
+    public TableDataInfo listMaterial(Material material,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
+//        System.out.println("传递的对象:"+material);
+//        System.out.println("那一页:"+pageNum);
+//        System.out.println("多少行:"+pageSize);
+        return materialClient.list(material,pageNum,pageSize);
     }
 
     /**
@@ -67,7 +73,7 @@ public class OrderManagerController extends BaseController
      */
     @RequiresPermissions("pms:manager:list")
     @GetMapping("/list")
-    public TableDataInfo list( OrderManager orderManager)
+    public TableDataInfo list(OrderManager orderManager)
     {
         startPage();
         List<OrderManager> list = orderManagerService.selectOrderManagerList(orderManager);

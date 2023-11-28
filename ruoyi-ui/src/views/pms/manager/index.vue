@@ -370,6 +370,8 @@ export default {
       mqueryParams: {
         pageNum: 1,
         pageSize: 10,
+        materialCode: null,
+        materialName: null,
       },
       //添加物料基本信息
       materialInfo: [],
@@ -429,7 +431,7 @@ export default {
      */
     getList1() {
       this.loading = true;
-      listSupplier().then(response => {
+      listSupplier(this.squeryParams).then(response => {
         this.detailsList = response.rows;
         this.stotal = response.total;
         this.loading = false;
@@ -440,7 +442,7 @@ export default {
      */
     getList2() {
       this.loading = true;
-      listMaterial().then(response => {
+      listMaterial(this.mqueryParams).then(response => {
         this.materialList = response.rows;
         this.mtotal = response.total;
         this.loading = false;
@@ -559,10 +561,11 @@ export default {
         this.title = "修改采购订单管理";
       });
     },
-    /** 提交按钮 */
-    submitForm() {
+   /** 提交按钮 */
+   submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.orderMaterialList = this.orderMaterialList;
           if (this.form.orderId != null) {
             updateManager(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

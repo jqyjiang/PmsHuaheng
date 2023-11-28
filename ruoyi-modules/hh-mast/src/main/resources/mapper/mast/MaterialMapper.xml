@@ -1,44 +1,68 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mast.mapper.MaterialMapper">
 
     <resultMap type="Material" id="MaterialResult">
-        <result property="materialId"    column="material_id"    />
-        <result property="materialCode"    column="material_code"    />
-        <result property="materialName"    column="material_name"    />
-        <result property="calculationUnit"    column="calculation_unit"    />
-        <result property="purchaser"    column="purchaser"    />
-        <result property="lUpdated"    column="l_updated"    />
-        <result property="lUpdateTime"    column="l_update_time"    />
-        <result property="sourceSystem"    column="source_system"    />
-        <result property="enable"    column="enable"    />
-        <result property="mCategory"    column="m_category"    />
-        <result property="specifications"    column="specifications"    />
-        <result property="model"    column="model"    />
-        <result property="brand"    column="brand"    />
-        <result property="categoriesTaxes"    column="categories_taxes"    />
-        <result property="image"    column="image"    />
-        <result property="gWeight"    column="g_weight"    />
-        <result property="nWeight"    column="n_weight"    />
-        <result property="weight"    column="weight"    />
-        <result property="volume"    column="volume"    />
-        <result property="vUnit"    column="v_unit"    />
-        <result property="abcAttribute"    column="abc_attribute"    />
-        <result property="avoidInspect"    column="avoid_inspect"    />
+        <result property="materialId" column="material_id"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialName" column="material_name"/>
+        <result property="calculationUnit" column="calculation_unit"/>
+        <result property="purchaser" column="purchaser"/>
+        <result property="lUpdated" column="l_updated"/>
+        <result property="lUpdateTime" column="l_update_time"/>
+        <result property="sourceSystem" column="source_system"/>
+        <result property="enable" column="enable"/>
+        <result property="mCategory" column="m_category"/>
+        <result property="specifications" column="specifications"/>
+        <result property="model" column="model"/>
+        <result property="brand" column="brand"/>
+        <result property="categoriesTaxes" column="categories_taxes"/>
+        <result property="image" column="image"/>
+        <result property="gWeight" column="g_weight"/>
+        <result property="nWeight" column="n_weight"/>
+        <result property="weight" column="weight"/>
+        <result property="volume" column="volume"/>
+        <result property="vUnit" column="v_unit"/>
+        <result property="abcAttribute" column="abc_attribute"/>
+        <result property="avoidInspect" column="avoid_inspect"/>
     </resultMap>
 
     <sql id="selectMaterialVo">
-        select material_id, material_code, material_name, calculation_unit, purchaser, l_updated, l_update_time, source_system, enable, m_category, specifications, model, brand, categories_taxes, image, g_weight, n_weight, weight, volume, v_unit, abc_attribute, avoid_inspect from material
+        select material_id,
+               material_code,
+               material_name,
+               calculation_unit,
+               purchaser,
+               l_updated,
+               l_update_time,
+               source_system,
+               enable,
+               m_category,
+               specifications,
+               model,
+               brand,
+               categories_taxes,
+               image,
+               g_weight,
+               n_weight,
+               weight,
+               volume,
+               v_unit,
+               abc_attribute,
+               avoid_inspect
+        from material
     </sql>
 
     <select id="selectMaterialList" parameterType="Material" resultMap="MaterialResult">
         <include refid="selectMaterialVo"/>
         <where>
-            <if test="materialCode != null  and materialCode != ''"> and material_code = #{materialCode}</if>
-            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
-            <if test="enable != null "> and enable = #{enable}</if>
+            <if test="materialCode != null  and materialCode != ''">and material_code = #{materialCode}</if>
+            <if test="materialName != null  and materialName != ''">and material_name like concat('%', #{materialName},
+                '%')
+            </if>
+            <if test="enable != null ">and enable = #{enable}</if>
         </where>
     </select>
 
@@ -71,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vUnit != null">v_unit,</if>
             <if test="abcAttribute != null">abc_attribute,</if>
             <if test="avoidInspect != null">avoid_inspect,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="materialCode != null">#{materialCode},</if>
             <if test="materialName != null">#{materialName},</if>
@@ -94,7 +118,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="vUnit != null">#{vUnit},</if>
             <if test="abcAttribute != null">#{abcAttribute},</if>
             <if test="avoidInspect != null">#{avoidInspect},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateMaterial" parameterType="Material">
@@ -126,7 +150,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteMaterialByMaterialId" parameterType="Long">
-        delete from material where material_id = #{materialId}
+        delete
+        from material
+        where material_id = #{materialId}
     </delete>
 
     <delete id="deleteMaterialByMaterialIds" parameterType="String">

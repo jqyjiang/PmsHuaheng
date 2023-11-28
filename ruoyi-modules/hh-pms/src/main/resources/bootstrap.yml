@@ -10,6 +10,8 @@ spring:
   profiles:
     # 环境配置
     active: dev
+  main:
+    allow-bean-definition-overriding: true
   cloud:
     nacos:
       discovery:
@@ -26,5 +28,3 @@ spring:
 logging:
   level:
     com.example.feign: DEBUG
-  main:
-    allow-bean-definition-overriding: true
