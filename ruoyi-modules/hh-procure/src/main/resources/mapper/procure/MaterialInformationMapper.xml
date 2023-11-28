@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.MaterialInformationMapper">
+    
+    <resultMap type="MaterialInformation" id="MaterialInformationResult">
+        <result property="miId"    column="mi_id"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="mustNumber"    column="must_number"    />
+        <result property="mustDate"    column="must_date"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="referenceDate"    column="reference_date"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="rateValue"    column="rate_value"    />
+        <result property="budgetAmount"    column="budget_amount"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="annex"    column="annex"    />
+    </resultMap>
+
+    <sql id="selectMaterialInformationVo">
+        select mi_id, material_id, must_number, must_date, currency_id, reference_date, unit_price, rate_value, budget_amount, remarks, annex from material_information
+    </sql>
+
+    <select id="selectMaterialInformationList" parameterType="MaterialInformation" resultMap="MaterialInformationResult">
+        <include refid="selectMaterialInformationVo"/>
+        <where>  
+            <if test="materialId != null "> and material_id = #{materialId}</if>
+            <if test="mustNumber != null "> and must_number = #{mustNumber}</if>
+            <if test="mustDate != null "> and must_date = #{mustDate}</if>
+            <if test="currencyId != null "> and currency_id = #{currencyId}</if>
+            <if test="referenceDate != null "> and reference_date = #{referenceDate}</if>
+            <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="rateValue != null  and rateValue != ''"> and rate_value = #{rateValue}</if>
+            <if test="budgetAmount != null  and budgetAmount != ''"> and budget_amount = #{budgetAmount}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="annex != null  and annex != ''"> and annex = #{annex}</if>
+        </where>
+    </select>
+    
+    <select id="selectMaterialInformationByMiId" parameterType="Integer" resultMap="MaterialInformationResult">
+        <include refid="selectMaterialInformationVo"/>
+        where mi_id = #{miId}
+    </select>
+        
+    <insert id="insertMaterialInformation" parameterType="MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
+        insert into material_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">material_id,</if>
+            <if test="mustNumber != null">must_number,</if>
+            <if test="mustDate != null">must_date,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="referenceDate != null">reference_date,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="rateValue != null">rate_value,</if>
+            <if test="budgetAmount != null">budget_amount,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="annex != null">annex,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">#{materialId},</if>
+            <if test="mustNumber != null">#{mustNumber},</if>
+            <if test="mustDate != null">#{mustDate},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="referenceDate != null">#{referenceDate},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="rateValue != null">#{rateValue},</if>
+            <if test="budgetAmount != null">#{budgetAmount},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="annex != null">#{annex},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaterialInformation" parameterType="MaterialInformation">
+        update material_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="mustNumber != null">must_number = #{mustNumber},</if>
+            <if test="mustDate != null">must_date = #{mustDate},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="referenceDate != null">reference_date = #{referenceDate},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="rateValue != null">rate_value = #{rateValue},</if>
+            <if test="budgetAmount != null">budget_amount = #{budgetAmount},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="annex != null">annex = #{annex},</if>
+        </trim>
+        where mi_id = #{miId}
+    </update>
+
+    <delete id="deleteMaterialInformationByMiId" parameterType="Integer">
+        delete from material_information where mi_id = #{miId}
+    </delete>
+
+    <delete id="deleteMaterialInformationByMiIds" parameterType="String">
+        delete from material_information where mi_id in 
+        <foreach item="miId" collection="array" open="(" separator="," close=")">
+            #{miId}
+        </foreach>
+    </delete>
+</mapper>
