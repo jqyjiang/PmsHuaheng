@@ -59,10 +59,14 @@
       <el-table-column label="税种代码" align="center" prop="taxCode" />
       <el-table-column label="描述" align="center" prop="describes" />
       <el-table-column label="税率" align="center" prop="taxRate" />
-      <el-table-column label="是否启用" align="center">
-        <template   prop="enable">
-  <el-checkbox v-model="checked"></el-checkbox>
-        </template>
+      <el-table-column label="是否启用" align="center" prop="enable">
+        <template slot-scope="scope">
+          <el-checkbox
+            v-model="scope.row.enable"
+            :disabled="true"
+            :checked="scope.row.enable === 1"
+          ></el-checkbox>
+      </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -120,7 +124,7 @@ export default {
   name: "Rate",
   data() {
     return {
-      checked: true,
+      checked: false, // 初始化为未选中状态
       // 遮罩层
       loading: true,
       // 选中数组

@@ -71,7 +71,7 @@
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="物料序号" align="center" prop="materialId" />
+      <!-- <el-table-column label="物料序号" align="center" prop="materialId" /> -->
       <el-table-column label="物料编码" align="center" prop="materialCode" />
       <el-table-column label="物料名称" align="center" prop="materialName" />
       <el-table-column label="基本计算单位" align="center" prop="calculationUnit" />
@@ -83,8 +83,32 @@
         </template>
       </el-table-column>
       <el-table-column label="来源系统" align="center" prop="sourceSystem" />
-      <el-table-column label="是否启用" align="center" prop="enable" />
+      <el-table-column label="是否启用" align="center" prop="enable">
+        <template slot-scope="scope">
+          <el-checkbox
+            v-model="scope.row.enable"
+            :disabled="true"
+            :checked="scope.row.enable === 1"
+          ></el-checkbox>
+      </template>
+      </el-table-column>
       <el-table-column label="主品类" align="center" prop="mCategory" />
+      <!-- <el-table-column label="规格" align="center" prop="specifications" /> -->
+      <!-- <el-table-column label="型号" align="center" prop="model" />
+      <el-table-column label="品牌" align="center" prop="brand" />
+      <el-table-column label="默认税种/税率" align="center" prop="categoriesTaxes" />
+      <el-table-column label="物料图片" align="center" prop="image" width="100">
+        <template slot-scope="scope">
+          <image-preview :src="scope.row.image" :width="50" :height="50"/>
+        </template>
+      </el-table-column>
+      <el-table-column label="毛重" align="center" prop="gWeight" />
+      <el-table-column label="净重" align="center" prop="nWeight" />
+      <el-table-column label="重量单位" align="center" prop="weight" />
+      <el-table-column label="体积" align="center" prop="volume" />
+      <el-table-column label="体积单位" align="center" prop="vUnit" />
+      <el-table-column label="物料ABC属性" align="center" prop="abcAttribute" />
+      <el-table-column label="是否免检" align="center" prop="avoidInspect" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

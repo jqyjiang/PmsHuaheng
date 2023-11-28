@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.UnitOfAccountMapper">
+
+    <resultMap type="UnitOfAccount" id="UnitOfAccountResult">
+        <result property="unitId"    column="unit_id"    />
+        <result property="unitTypeName"    column="unit_type_name"    />
+        <result property="calculationUnitCode"    column="calculation_unit_code"    />
+        <result property="meteringUnit"    column="metering_unit"    />
+        <result property="sourceSystem"    column="source_system"    />
+        <result property="unitConversionRate"    column="unit_conversion_rate"    />
+        <result property="accuracy"    column="accuracy"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectUnitOfAccountVo">
+        select unit_id, unit_type_name, calculation_unit_code, metering_unit, source_system, unit_conversion_rate, accuracy, enable from unit_of_account
+    </sql>
+
+    <select id="selectUnitOfAccountList" parameterType="UnitOfAccount" resultMap="UnitOfAccountResult">
+        <include refid="selectUnitOfAccountVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectUnitOfAccountByUnitId" parameterType="Long" resultMap="UnitOfAccountResult">
+        <include refid="selectUnitOfAccountVo"/>
+        where unit_id = #{unitId}
+    </select>
+
+    <insert id="insertUnitOfAccount" parameterType="UnitOfAccount" useGeneratedKeys="true" keyProperty="unitId">
+        insert into unit_of_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitTypeName != null">unit_type_name,</if>
+            <if test="calculationUnitCode != null">calculation_unit_code,</if>
+            <if test="meteringUnit != null">metering_unit,</if>
+            <if test="sourceSystem != null">source_system,</if>
+            <if test="unitConversionRate != null">unit_conversion_rate,</if>
+            <if test="accuracy != null">accuracy,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="unitTypeName != null">#{unitTypeName},</if>
+            <if test="calculationUnitCode != null">#{calculationUnitCode},</if>
+            <if test="meteringUnit != null">#{meteringUnit},</if>
+            <if test="sourceSystem != null">#{sourceSystem},</if>
+            <if test="unitConversionRate != null">#{unitConversionRate},</if>
+            <if test="accuracy != null">#{accuracy},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUnitOfAccount" parameterType="UnitOfAccount">
+        update unit_of_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="unitTypeName != null">unit_type_name = #{unitTypeName},</if>
+            <if test="calculationUnitCode != null">calculation_unit_code = #{calculationUnitCode},</if>
+            <if test="meteringUnit != null">metering_unit = #{meteringUnit},</if>
+            <if test="sourceSystem != null">source_system = #{sourceSystem},</if>
+            <if test="unitConversionRate != null">unit_conversion_rate = #{unitConversionRate},</if>
+            <if test="accuracy != null">accuracy = #{accuracy},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where unit_id = #{unitId}
+    </update>
+
+    <delete id="deleteUnitOfAccountByUnitId" parameterType="Long">
+        delete from unit_of_account where unit_id = #{unitId}
+    </delete>
+
+    <delete id="deleteUnitOfAccountByUnitIds" parameterType="String">
+        delete from unit_of_account where unit_id in
+        <foreach item="unitId" collection="array" open="(" separator="," close=")">
+            #{unitId}
+        </foreach>
+    </delete>
+</mapper>

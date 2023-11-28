@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.CalculationUnitTypeMapper">
+
+    <resultMap type="CalculationUnitType" id="CalculationUnitTypeResult">
+        <result property="unitTypeId"    column="unit_type_id"    />
+        <result property="unitTypeCode"    column="unit_type_code"    />
+        <result property="unitTypeName"    column="unit_type_name"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectCalculationUnitTypeVo">
+        select unit_type_id, unit_type_code, unit_type_name, enable from calculation_unit_type
+    </sql>
+
+    <select id="selectCalculationUnitTypeList" parameterType="CalculationUnitType" resultMap="CalculationUnitTypeResult">
+        <include refid="selectCalculationUnitTypeVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectCalculationUnitTypeByUnitTypeId" parameterType="Long" resultMap="CalculationUnitTypeResult">
+        <include refid="selectCalculationUnitTypeVo"/>
+        where unit_type_id = #{unitTypeId}
+    </select>
+
+    <insert id="insertCalculationUnitType" parameterType="CalculationUnitType" useGeneratedKeys="true" keyProperty="unitTypeId">
+        insert into calculation_unit_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="unitTypeCode != null">unit_type_code,</if>
+            <if test="unitTypeName != null">unit_type_name,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="unitTypeCode != null">#{unitTypeCode},</if>
+            <if test="unitTypeName != null">#{unitTypeName},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCalculationUnitType" parameterType="CalculationUnitType">
+        update calculation_unit_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="unitTypeCode != null">unit_type_code = #{unitTypeCode},</if>
+            <if test="unitTypeName != null">unit_type_name = #{unitTypeName},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where unit_type_id = #{unitTypeId}
+    </update>
+
+    <delete id="deleteCalculationUnitTypeByUnitTypeId" parameterType="Long">
+        delete from calculation_unit_type where unit_type_id = #{unitTypeId}
+    </delete>
+
+    <delete id="deleteCalculationUnitTypeByUnitTypeIds" parameterType="String">
+        delete from calculation_unit_type where unit_type_id in
+        <foreach item="unitTypeId" collection="array" open="(" separator="," close=")">
+            #{unitTypeId}
+        </foreach>
+    </delete>
+</mapper>

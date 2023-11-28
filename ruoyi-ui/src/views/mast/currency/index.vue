@@ -78,7 +78,15 @@
       <el-table-column label="财务精度" align="center" prop="financialAccuracy" />
       <el-table-column label="精度" align="center" prop="accuracy" />
       <el-table-column label="货币符号" align="center" prop="currencySymbol" />
-      <el-table-column label="启用" align="center" prop="enable" />
+      <el-table-column label="是否启用" align="center" prop="enable">
+        <template slot-scope="scope">
+          <el-checkbox
+            v-model="scope.row.enable"
+            :disabled="true"
+            :checked="scope.row.enable === 1"
+          ></el-checkbox>
+      </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

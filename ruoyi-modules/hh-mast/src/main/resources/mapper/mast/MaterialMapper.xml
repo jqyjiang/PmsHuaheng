@@ -47,10 +47,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where material_id = #{materialId}
     </select>
 
-    <insert id="insertMaterial" parameterType="Material">
+    <insert id="insertMaterial" parameterType="Material" useGeneratedKeys="true" keyProperty="materialId">
         insert into material
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="materialId != null">material_id,</if>
             <if test="materialCode != null">material_code,</if>
             <if test="materialName != null">material_name,</if>
             <if test="calculationUnit != null">calculation_unit,</if>
@@ -74,7 +73,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="avoidInspect != null">avoid_inspect,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="materialId != null">#{materialId},</if>
             <if test="materialCode != null">#{materialCode},</if>
             <if test="materialName != null">#{materialName},</if>
             <if test="calculationUnit != null">#{calculationUnit},</if>

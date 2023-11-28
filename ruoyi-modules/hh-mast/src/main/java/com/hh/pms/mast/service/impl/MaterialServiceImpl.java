@@ -1,28 +1,27 @@
 package com.hh.pms.mast.service.impl;
 
 import java.util.List;
-
-import com.hh.pms.mast.service.IMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mast.mapper.MaterialMapper;
 import com.hh.pms.mast.domain.Material;
+import com.hh.pms.mast.service.IMaterialService;
 
 /**
  * 物料Service业务层处理
- *
+ * 
  * @author ruoyi
- * @date 2023-11-23
+ * @date 2023-11-28
  */
 @Service
-public class MaterialServiceImpl implements IMaterialService
+public class MaterialServiceImpl implements IMaterialService 
 {
     @Autowired
     private MaterialMapper materialMapper;
 
     /**
      * 查询物料
-     *
+     * 
      * @param materialId 物料主键
      * @return 物料
      */
@@ -34,7 +33,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 查询物料列表
-     *
+     * 
      * @param material 物料
      * @return 物料
      */
@@ -46,7 +45,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 新增物料
-     *
+     * 
      * @param material 物料
      * @return 结果
      */
@@ -58,7 +57,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 修改物料
-     *
+     * 
      * @param material 物料
      * @return 结果
      */
@@ -70,7 +69,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 批量删除物料
-     *
+     * 
      * @param materialIds 需要删除的物料主键
      * @return 结果
      */
@@ -82,7 +81,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 删除物料信息
-     *
+     * 
      * @param materialId 物料主键
      * @return 结果
      */

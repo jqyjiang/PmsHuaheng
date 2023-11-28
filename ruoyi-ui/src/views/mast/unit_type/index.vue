@@ -15,7 +15,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['mast:bank:add']"
+          v-hasPermi="['mast:unit_type:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -26,7 +26,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['mast:bank:edit']"
+          v-hasPermi="['mast:unit_type:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -37,7 +37,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['mast:bank:remove']"
+          v-hasPermi="['mast:unit_type:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -47,33 +47,24 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['mast:bank:export']"
+          v-hasPermi="['mast:unit_type:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="bankList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="unit_typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="银行序号" align="center" prop="bankId" />
-      <el-table-column label="银行编码" align="center" prop="bankCode" />
-      <el-table-column label="银行名称" align="center" prop="bankName" />
-      <el-table-column label="银行简称" align="center" prop="bankAbbreviation" />
-      <el-table-column label="银行类型" align="center" prop="bankType" >
-        <template slot-scope="scope">
-          <span v-for="item in bank_typeList" :key="index">
-            <template v-if="scope.row.bankType===item.bankTypeId">
-              {{item.bankType}}
-            </template>
-          </span>
-        </template>
-      </el-table-column>
+      <!-- <el-table-column label="单位类型ID" align="center" prop="unitTypeId" /> -->
+      <el-table-column label="单位类型代码" align="center" prop="unitTypeCode" />
+      <el-table-column label="单位类型名称" align="center" prop="unitTypeName" />
       <el-table-column label="是否启用" align="center" prop="enable">
         <template slot-scope="scope">
           <el-checkbox
             v-model="scope.row.enable"
             :disabled="true"
-            :checked="scope.row.enable === 1"/>
+            :checked="scope.row.enable === 1"
+          ></el-checkbox>
       </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -83,14 +74,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['mast:bank:edit']"
+            v-hasPermi="['mast:unit_type:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['mast:bank:remove']"
+            v-hasPermi="['mast:unit_type:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -104,17 +95,14 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改银行对话框 -->
+    <!-- 添加或修改计量单位类型定义对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="银行编码" prop="bankCode">
-          <el-input v-model="form.bankCode" placeholder="请输入银行编码" />
+        <el-form-item label="单位类型代码" prop="unitTypeCode">
+          <el-input v-model="form.unitTypeCode" placeholder="请输入单位类型代码" />
         </el-form-item>
-        <el-form-item label="银行名称" prop="bankName">
-          <el-input v-model="form.bankName" placeholder="请输入银行名称" />
-        </el-form-item>
-        <el-form-item label="银行简称" prop="bankAbbreviation">
-          <el-input v-model="form.bankAbbreviation" placeholder="请输入银行简称" />
+        <el-form-item label="单位类型名称" prop="unitTypeName">
+          <el-input v-model="form.unitTypeName" placeholder="请输入单位类型名称" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -126,10 +114,10 @@
 </template>
 
 <script>
-import { listBank, getBank, delBank, addBank, updateBank,listBank_type } from "@/api/mast/bank";
+import { listUnit_type, getUnit_type, delUnit_type, addUnit_type, updateUnit_type } from "@/api/mast/unit_type";
 
 export default {
-  name: "Bank",
+  name: "Unit_type",
   data() {
     return {
       // 遮罩层
@@ -144,9 +132,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 银行表格数据
-      bankList: [],
-      bank_typeList: [],
+      // 计量单位类型定义表格数据
+      unit_typeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -165,24 +152,15 @@ export default {
   },
   created() {
     this.getList();
-    this.getList1();
   },
   methods: {
-    /** 查询银行列表 */
+    /** 查询计量单位类型定义列表 */
     getList() {
       this.loading = true;
-      listBank(this.queryParams).then(response => {
-        this.bankList = response.rows;
+      listUnit_type(this.queryParams).then(response => {
+        this.unit_typeList = response.rows;
         this.total = response.total;
         this.loading = false;
-      });
-    },
-    /** 查询银行类型列表 */
-    getList1() {
-      listBank_type().then(response => {
-        this.bank_typeList = response.rows;
-        console.log(response.rows)
-        this.total = response.total;
       });
     },
     // 取消按钮
@@ -193,11 +171,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        bankId: null,
-        bankCode: null,
-        bankName: null,
-        bankAbbreviation: null,
-        bankType: null,
+        unitTypeId: null,
+        unitTypeCode: null,
+        unitTypeName: null,
         enable: null
       };
       this.resetForm("form");
@@ -214,7 +190,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.bankId)
+      this.ids = selection.map(item => item.unitTypeId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -222,30 +198,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加银行";
+      this.title = "添加计量单位类型定义";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const bankId = row.bankId || this.ids
-      getBank(bankId).then(response => {
+      const unitTypeId = row.unitTypeId || this.ids
+      getUnit_type(unitTypeId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改银行";
+        this.title = "修改计量单位类型定义";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.bankId != null) {
-            updateBank(this.form).then(response => {
+          if (this.form.unitTypeId != null) {
+            updateUnit_type(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addBank(this.form).then(response => {
+            addUnit_type(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -256,9 +232,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const bankIds = row.bankId || this.ids;
-      this.$modal.confirm('是否确认删除银行编号为"' + bankIds + '"的数据项？').then(function() {
-        return delBank(bankIds);
+      const unitTypeIds = row.unitTypeId || this.ids;
+      this.$modal.confirm('是否确认删除计量单位类型定义编号为"' + unitTypeIds + '"的数据项？').then(function() {
+        return delUnit_type(unitTypeIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -266,9 +242,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('mast/bank/export', {
+      this.download('mast/unit_type/export', {
         ...this.queryParams
-      }, `bank_${new Date().getTime()}.xlsx`)
+      }, `unit_type_${new Date().getTime()}.xlsx`)
     }
   }
 };
