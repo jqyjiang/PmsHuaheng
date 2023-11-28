@@ -134,7 +134,10 @@ public class OrderManagerServiceImpl implements IOrderManagerService
                 return code;
             }
 
+        }else {
+            //如果今天时间不存在
+            String code = "PO" + newBidDate + "001";
+            return code;
         }
-        return null;
     }
 }

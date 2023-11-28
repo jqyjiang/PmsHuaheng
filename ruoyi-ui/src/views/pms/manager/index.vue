@@ -139,10 +139,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="自提车牌号" prop="licensePlateNumber">
-          <el-input v-model="form.licensePlateNumber" placeholder="请输入自提车牌号" />
+          <el-input v-model="form.licensePlateNumber" placeholder="请输入自提车牌号" :disabled="!isSelfPickupSelected" />
         </el-form-item>
         <el-form-item label="自提司机联系方式" prop="concatInfomation">
-          <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" />
+          <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" :disabled="!isSelfPickupSelected" />
         </el-form-item>
         <el-form-item label="关联合同编号" prop="contractCode">
           <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" />
@@ -154,7 +154,7 @@
           <el-input v-model="form.orderDescription" placeholder="请输入订单说明" />
         </el-form-item>
         <el-form-item label="需求总数量" prop="totalDemand">
-          <el-input v-model="totalDemand" placeholder="请输入需求总数量" />
+          <el-input :value="totalDemand" disabled placeholder="请输入需求总数量" />
         </el-form-item>
         <el-form-item label="采购员" prop="purchaser">
           <el-input v-model="form.purchaser" placeholder="请输入采购员" />
@@ -170,6 +170,7 @@
         </el-form-item>
         <el-form-item label="供应商名称" prop="supplier">
           <el-input v-model="form.supplier" placeholder="请输入供应商名称" />
+          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
         </el-form-item>
         <el-form-item label="联系人" prop="contacts">
           <el-input v-model="form.contacts" placeholder="请输入联系人" />
@@ -203,7 +204,7 @@
             <template slot-scope="scope">
               <el-input v-model="scope.row.orCode" placeholder="" />
               <i class="el-icon-search" id="serachOne1" @click="showMaterial()"></i>
-              <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框">
+              <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
                 <!-- 这里是物料管理的内容 -->
                 <el-table v-loading="loading" :data="materialList" @row-click="handleRowClickMaterial">
                   <el-table-column type="selection" width="55" align="center" />
@@ -212,7 +213,7 @@
                 </el-table>
 
                 <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="mqueryParams.pageNum"
-                  :limit.sync="squeryParams.pageSize" @pagination="getList2" />
+                  :limit.sync="mqueryParams.pageSize" @pagination="getList2" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogMaterial = false">取消</el-button>
                 </div>
@@ -350,7 +351,6 @@ export default {
       managerList: [],
       // 供应商列表表格数据
       detailsList: [],
-      totalDemand: 0, // 需求总数量
       // 订单物料明细表格数据
       orderMaterialList: [],
       // 物料基本信息
@@ -400,22 +400,19 @@ export default {
   created() {
     this.getList();
   },
-  watch: {
-    orderMaterialList: {
-      deep: true,     // 深度监听，可以监听数组内部对象的变化
-      handler() {
-        this.calculateTotalDemand()
-      }
-    }
-  },
   computed: {
     totalDemand() {
-      let total = '';
-      for (let i = 0; i < this.orderMaterialList.length; i++) {
-        total += this.orderMaterialList[i].requireNumber;
-      }
-      return total;
+      let sum = 0;
+      this.orderMaterialList.forEach(item => {
+        if (item.requireNumber !== '') {
+          sum += parseFloat(item.requireNumber);
+        }
+      });
+      return isNaN(sum) ? 0.00 : sum.toFixed(2);
     },
+    isSelfPickupSelected() {
+      return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
+    }
   },
   methods: {
     /** 查询采购订单管理列表 */
@@ -493,16 +490,6 @@ export default {
       this.orderMaterialList = [];
       this.resetForm("form");
     },
-    calculateTotalDemand() {
-      let totalDemand = 0
-      for (let i = 0; i < this.orderMaterialList.length; i++) {
-        totalDemand += this.orderMaterialList[i].requireNumber
-        console.log('Current totalDemand:', totalDemand) // 添加输出语句
-      }
-      this.totalDemand = totalDemand
-      console.log('Total demand:', this.form.totalDemand) // 添加输出语句
-    },
-  
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -534,11 +521,28 @@ export default {
         materialCategory: row.mCategory,
         // tax: row.tax,
       };
-
-      this.orderMaterialList.unshift(data); // 将新的数据对象添加到orderMaterialList数组的开头
+      let index = this.orderMaterialList.length;
+      if (this.orderMaterialList.length === 1) {
+        // 修改第一条数据的属性值
+        this.orderMaterialList[0].orCode = row.materialCode;
+        this.orderMaterialList[0].orName = row.materialName;
+        this.orderMaterialList[0].categoryCode = row.categoryCode;
+        this.orderMaterialList[0].materialCategory = row.mCategory;
+        this.orderMaterialList[0].materialSpecification = row.specifications;
+        this.orderMaterialList[0].materialModel = row.model;
+        this.orderMaterialList[0].materialUnit = row.calculationUnit;
+      } else {
+        this.orderMaterialList[index - 1].orCode = row.materialCode;
+        this.orderMaterialList[index - 1].orName = row.materialName;
+        this.orderMaterialList[index - 1].categoryCode = row.categoryCode;
+        this.orderMaterialList[index - 1].materialCategory = row.mCategory;
+        this.orderMaterialList[index - 1].materialSpecification = row.specifications;
+        this.orderMaterialList[index - 1].materialModel = row.model;
+        this.orderMaterialList[index - 1].materialUnit = row.calculationUnit;
+      }
       this.dialogMaterial = false; // 关闭对话框
-
     },
+
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();

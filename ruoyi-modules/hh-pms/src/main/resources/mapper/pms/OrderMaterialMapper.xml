@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.OrderMaterialMapper">
+    
+    <resultMap type="OrderMaterial" id="OrderMaterialResult">
+        <result property="orId"    column="or_id"    />
+        <result property="orCode"    column="or_code"    />
+        <result property="orName"    column="or_name"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="materialCategory"    column="material_category"    />
+        <result property="materialSpecification"    column="material_specification"    />
+        <result property="materialModel"    column="material_model"    />
+        <result property="materialUnit"    column="material_unit"    />
+        <result property="requireNumber"    column="require_number"    />
+        <result property="requireTime"    column="require_time"    />
+        <result property="lowerPrice"    column="lower_price"    />
+        <result property="newPrice"    column="new_price"    />
+        <result property="noTaxPrice"    column="no_tax_price"    />
+        <result property="taxCode"    column="tax_code"    />
+        <result property="tax"    column="tax"    />
+        <result property="taxPrice"    column="tax_price"    />
+        <result property="lineTaxAmount"    column="line_tax_amount"    />
+        <result property="consignee"    column="consignee"    />
+        <result property="receivingPhone"    column="receiving_phone"    />
+        <result property="receivingAddress"    column="receiving_address"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectOrderMaterialVo">
+        select or_id, or_code, or_name, category_code, material_category, material_specification, material_model, material_unit, require_number, require_time, lower_price, new_price, no_tax_price, tax_code, tax, tax_price, line_tax_amount, consignee, receiving_phone, receiving_address, remarks from order_material
+    </sql>
+
+    <select id="selectOrderMaterialList" parameterType="OrderMaterial" resultMap="OrderMaterialResult">
+        <include refid="selectOrderMaterialVo"/>
+        <where>  
+            <if test="orCode != null  and orCode != ''"> and or_code = #{orCode}</if>
+            <if test="orName != null  and orName != ''"> and or_name like concat('%', #{orName}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
+            <if test="materialCategory != null  and materialCategory != ''"> and material_category = #{materialCategory}</if>
+            <if test="materialSpecification != null  and materialSpecification != ''"> and material_specification = #{materialSpecification}</if>
+            <if test="materialModel != null  and materialModel != ''"> and material_model = #{materialModel}</if>
+            <if test="materialUnit != null  and materialUnit != ''"> and material_unit = #{materialUnit}</if>
+            <if test="requireNumber != null "> and require_number = #{requireNumber}</if>
+            <if test="requireTime != null "> and require_time = #{requireTime}</if>
+            <if test="lowerPrice != null "> and lower_price = #{lowerPrice}</if>
+            <if test="newPrice != null "> and new_price = #{newPrice}</if>
+            <if test="noTaxPrice != null "> and no_tax_price = #{noTaxPrice}</if>
+            <if test="taxCode != null  and taxCode != ''"> and tax_code = #{taxCode}</if>
+            <if test="tax != null "> and tax = #{tax}</if>
+            <if test="taxPrice != null "> and tax_price = #{taxPrice}</if>
+            <if test="lineTaxAmount != null "> and line_tax_amount = #{lineTaxAmount}</if>
+            <if test="consignee != null "> and consignee = #{consignee}</if>
+            <if test="receivingPhone != null  and receivingPhone != ''"> and receiving_phone = #{receivingPhone}</if>
+            <if test="receivingAddress != null  and receivingAddress != ''"> and receiving_address = #{receivingAddress}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderMaterialByOrId" parameterType="Long" resultMap="OrderMaterialResult">
+        <include refid="selectOrderMaterialVo"/>
+        where or_id = #{orId}
+    </select>
+        
+    <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">
+        insert into order_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orCode != null">or_code,</if>
+            <if test="orName != null">or_name,</if>
+            <if test="categoryCode != null">category_code,</if>
+            <if test="materialCategory != null">material_category,</if>
+            <if test="materialSpecification != null">material_specification,</if>
+            <if test="materialModel != null">material_model,</if>
+            <if test="materialUnit != null">material_unit,</if>
+            <if test="requireNumber != null">require_number,</if>
+            <if test="requireTime != null">require_time,</if>
+            <if test="lowerPrice != null">lower_price,</if>
+            <if test="newPrice != null">new_price,</if>
+            <if test="noTaxPrice != null">no_tax_price,</if>
+            <if test="taxCode != null">tax_code,</if>
+            <if test="tax != null">tax,</if>
+            <if test="taxPrice != null">tax_price,</if>
+            <if test="lineTaxAmount != null">line_tax_amount,</if>
+            <if test="consignee != null">consignee,</if>
+            <if test="receivingPhone != null">receiving_phone,</if>
+            <if test="receivingAddress != null">receiving_address,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orCode != null">#{orCode},</if>
+            <if test="orName != null">#{orName},</if>
+            <if test="categoryCode != null">#{categoryCode},</if>
+            <if test="materialCategory != null">#{materialCategory},</if>
+            <if test="materialSpecification != null">#{materialSpecification},</if>
+            <if test="materialModel != null">#{materialModel},</if>
+            <if test="materialUnit != null">#{materialUnit},</if>
+            <if test="requireNumber != null">#{requireNumber},</if>
+            <if test="requireTime != null">#{requireTime},</if>
+            <if test="lowerPrice != null">#{lowerPrice},</if>
+            <if test="newPrice != null">#{newPrice},</if>
+            <if test="noTaxPrice != null">#{noTaxPrice},</if>
+            <if test="taxCode != null">#{taxCode},</if>
+            <if test="tax != null">#{tax},</if>
+            <if test="taxPrice != null">#{taxPrice},</if>
+            <if test="lineTaxAmount != null">#{lineTaxAmount},</if>
+            <if test="consignee != null">#{consignee},</if>
+            <if test="receivingPhone != null">#{receivingPhone},</if>
+            <if test="receivingAddress != null">#{receivingAddress},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrderMaterial" parameterType="OrderMaterial">
+        update order_material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orCode != null">or_code = #{orCode},</if>
+            <if test="orName != null">or_name = #{orName},</if>
+            <if test="categoryCode != null">category_code = #{categoryCode},</if>
+            <if test="materialCategory != null">material_category = #{materialCategory},</if>
+            <if test="materialSpecification != null">material_specification = #{materialSpecification},</if>
+            <if test="materialModel != null">material_model = #{materialModel},</if>
+            <if test="materialUnit != null">material_unit = #{materialUnit},</if>
+            <if test="requireNumber != null">require_number = #{requireNumber},</if>
+            <if test="requireTime != null">require_time = #{requireTime},</if>
+            <if test="lowerPrice != null">lower_price = #{lowerPrice},</if>
+            <if test="newPrice != null">new_price = #{newPrice},</if>
+            <if test="noTaxPrice != null">no_tax_price = #{noTaxPrice},</if>
+            <if test="taxCode != null">tax_code = #{taxCode},</if>
+            <if test="tax != null">tax = #{tax},</if>
+            <if test="taxPrice != null">tax_price = #{taxPrice},</if>
+            <if test="lineTaxAmount != null">line_tax_amount = #{lineTaxAmount},</if>
+            <if test="consignee != null">consignee = #{consignee},</if>
+            <if test="receivingPhone != null">receiving_phone = #{receivingPhone},</if>
+            <if test="receivingAddress != null">receiving_address = #{receivingAddress},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where or_id = #{orId}
+    </update>
+
+    <delete id="deleteOrderMaterialByOrId" parameterType="Long">
+        delete from order_material where or_id = #{orId}
+    </delete>
+
+    <delete id="deleteOrderMaterialByOrIds" parameterType="String">
+        delete from order_material where or_id in 
+        <foreach item="orId" collection="array" open="(" separator="," close=")">
+            #{orId}
+        </foreach>
+    </delete>
+</mapper>
