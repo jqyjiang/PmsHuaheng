@@ -3,15 +3,12 @@ package com.hh.pms.controller;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.hh.pms.domain.SupplierDetails;
+import com.hh.pms.model.MaterialClient;
+import com.hh.pms.model.SupplierClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
@@ -35,14 +32,43 @@ public class OrderManagerController extends BaseController
     @Autowired
     private IOrderManagerService orderManagerService;
 
+    @Autowired
+    private  SupplierClient supplierClient;
+
+    @Autowired
+    private  MaterialClient materialClient;
+
+//    @Autowired
+//    public OrderManagerController(SupplierClient supplierClient) {
+//        this.supplierClient = supplierClient;
+//    }
+//
+//    @Autowired
+//    public OrderManagerController(MaterialClient materialClient) {
+//        this.materialClient = materialClient;
+//    }
+
+    /**
+     * 查询供应商列表
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET,value = "/listSupplier")
+    public TableDataInfo listSupplier(){
+        return supplierClient.list();
+    }
+
+    @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
+    public TableDataInfo listMaterial(){
+        return materialClient.list();
+    }
+
     /**
      * 查询采购订单管理列表
      */
     @RequiresPermissions("pms:manager:list")
     @GetMapping("/list")
-    public TableDataInfo list(OrderManager orderManager)
+    public TableDataInfo list( OrderManager orderManager)
     {
-
         startPage();
         List<OrderManager> list = orderManagerService.selectOrderManagerList(orderManager);
         return getDataTable(list);

@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.SupplierDetailsMapper">
-    
+
     <resultMap type="SupplierDetails" id="SupplierDetailsResult">
         <result property="sdId"    column="sd_id"    />
         <result property="sdTime"    column="sd_time"    />
         <result property="sdCode"    column="sd_code"    />
         <result property="sbiName"    column="sbi_name"    />
+        <result property="sdUscc"    column="sd_uscc"    />
         <result property="sbiAbbreviation"    column="sbi_abbreviation"    />
         <result property="sbiServe"    column="sbi_serve"    />
         <result property="sdIndustry"    column="sd_industry"    />
+        <result property="sdEn"    column="sd_en"    />
+        <result property="sdRt"    column="sd_rt"    />
+        <result property="sdHead"    column="sd_head"    />
+        <result property="sdHeadPhone"    column="sd_head_phone"    />
+        <result property="sdPcn"    column="sd_pcn"    />
+        <result property="sdPce"    column="sd_pce"    />
+        <result property="sdPcp"    column="sd_pcp"    />
+        <result property="sdPcg"    column="sd_pcg"    />
+        <result property="sdMct"    column="sd_mct"    />
         <result property="sdCountry"    column="sd_country"    />
         <result property="sdRegion"    column="sd_region"    />
+        <result property="sdClass"    column="sd_class"    />
         <result property="sdWebsite"    column="sd_website"    />
         <result property="sdBrief"    column="sd_brief"    />
         <result property="sdLegal"    column="sd_legal"    />
         <result property="sdRi"    column="sd_ri"    />
         <result property="sdBr"    column="sd_br"    />
         <result property="sdRc"    column="sd_rc"    />
-        <result property="sdRt"    column="sd_rt"    />
         <result property="sdStatus"    column="sd_status"    />
         <result property="sdPhone"    column="sd_phone"    />
         <result property="sdEmail"    column="sd_email"    />
@@ -28,15 +38,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sdSave"    column="sd_save"    />
         <result property="sdCity"    column="sd_city"    />
         <result property="sdCounty"    column="sd_county"    />
-        <result property="sdHead"    column="sd_head"    />
-        <result property="sdHeadPhone"    column="sd_head_phone"    />
-        <result property="sdUscc"    column="sd_uscc"    />
-        <result property="sdEn"    column="sd_en"    />
-        <result property="sdPcn"    column="sd_pcn"    />
-        <result property="sdPcg"    column="sd_pcg"    />
-        <result property="sdMct"    column="sd_mct"    />
-        <result property="sdPce"    column="sd_pce"    />
-        <result property="sdPcp"    column="sd_pcp"    />
         <result property="sdSm"    column="sd_sm"    />
         <result property="sdBank"    column="sd_bank"    />
         <result property="sdCurrency"    column="sd_currency"    />
@@ -49,27 +50,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSupplierDetailsVo">
-        select sd_id, sd_time, sd_code, sbi_name, sbi_abbreviation, sbi_serve, sd_industry, sd_country, sd_region, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_rt, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_head, sd_head_phone, sd_uscc, sd_en, sd_pcn, sd_pcg, sd_mct, sd_pce, sd_pcp, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details
+        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details
     </sql>
 
     <select id="selectSupplierDetailsList" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
-        <where>  
+        <where>
             <if test="sdTime != null "> and sd_time = #{sdTime}</if>
             <if test="sdCode != null  and sdCode != ''"> and sd_code = #{sdCode}</if>
             <if test="sbiName != null  and sbiName != ''"> and sbi_name like concat('%', #{sbiName}, '%')</if>
+            <if test="sdUscc != null  and sdUscc != ''"> and sd_uscc = #{sdUscc}</if>
             <if test="sbiAbbreviation != null  and sbiAbbreviation != ''"> and sbi_abbreviation = #{sbiAbbreviation}</if>
             <if test="sbiServe != null  and sbiServe != ''"> and sbi_serve = #{sbiServe}</if>
             <if test="sdIndustry != null  and sdIndustry != ''"> and sd_industry = #{sdIndustry}</if>
+            <if test="sdEn != null  and sdEn != ''"> and sd_en = #{sdEn}</if>
+            <if test="sdRt != null "> and sd_rt = #{sdRt}</if>
+            <if test="sdHead != null  and sdHead != ''"> and sd_head = #{sdHead}</if>
+            <if test="sdHeadPhone != null  and sdHeadPhone != ''"> and sd_head_phone = #{sdHeadPhone}</if>
+            <if test="sdPcn != null  and sdPcn != ''"> and sd_pcn = #{sdPcn}</if>
+            <if test="sdPce != null  and sdPce != ''"> and sd_pce = #{sdPce}</if>
+            <if test="sdPcp != null  and sdPcp != ''"> and sd_pcp = #{sdPcp}</if>
+            <if test="sdPcg != null  and sdPcg != ''"> and sd_pcg = #{sdPcg}</if>
+            <if test="sdMct != null  and sdMct != ''"> and sd_mct = #{sdMct}</if>
             <if test="sdCountry != null  and sdCountry != ''"> and sd_country = #{sdCountry}</if>
             <if test="sdRegion != null  and sdRegion != ''"> and sd_region = #{sdRegion}</if>
+            <if test="sdClass != null  and sdClass != ''"> and sd_class = #{sdClass}</if>
             <if test="sdWebsite != null  and sdWebsite != ''"> and sd_website = #{sdWebsite}</if>
             <if test="sdBrief != null  and sdBrief != ''"> and sd_brief = #{sdBrief}</if>
             <if test="sdLegal != null  and sdLegal != ''"> and sd_legal = #{sdLegal}</if>
             <if test="sdRi != null  and sdRi != ''"> and sd_ri = #{sdRi}</if>
             <if test="sdBr != null  and sdBr != ''"> and sd_br = #{sdBr}</if>
             <if test="sdRc != null  and sdRc != ''"> and sd_rc = #{sdRc}</if>
-            <if test="sdRt != null "> and sd_rt = #{sdRt}</if>
             <if test="sdStatus != null  and sdStatus != ''"> and sd_status = #{sdStatus}</if>
             <if test="sdPhone != null  and sdPhone != ''"> and sd_phone = #{sdPhone}</if>
             <if test="sdEmail != null  and sdEmail != ''"> and sd_email = #{sdEmail}</if>
@@ -77,15 +88,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sdSave != null  and sdSave != ''"> and sd_save = #{sdSave}</if>
             <if test="sdCity != null  and sdCity != ''"> and sd_city = #{sdCity}</if>
             <if test="sdCounty != null  and sdCounty != ''"> and sd_county = #{sdCounty}</if>
-            <if test="sdHead != null  and sdHead != ''"> and sd_head = #{sdHead}</if>
-            <if test="sdHeadPhone != null  and sdHeadPhone != ''"> and sd_head_phone = #{sdHeadPhone}</if>
-            <if test="sdUscc != null  and sdUscc != ''"> and sd_uscc = #{sdUscc}</if>
-            <if test="sdEn != null  and sdEn != ''"> and sd_en = #{sdEn}</if>
-            <if test="sdPcn != null  and sdPcn != ''"> and sd_pcn = #{sdPcn}</if>
-            <if test="sdPcg != null  and sdPcg != ''"> and sd_pcg = #{sdPcg}</if>
-            <if test="sdMct != null  and sdMct != ''"> and sd_mct = #{sdMct}</if>
-            <if test="sdPce != null  and sdPce != ''"> and sd_pce = #{sdPce}</if>
-            <if test="sdPcp != null  and sdPcp != ''"> and sd_pcp = #{sdPcp}</if>
             <if test="sdSm != null  and sdSm != ''"> and sd_sm = #{sdSm}</if>
             <if test="sdBank != null  and sdBank != ''"> and sd_bank = #{sdBank}</if>
             <if test="sdCurrency != null  and sdCurrency != ''"> and sd_currency = #{sdCurrency}</if>
@@ -97,30 +99,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dataTatus != null  and dataTatus != ''"> and data_tatus = #{dataTatus}</if>
         </where>
     </select>
-    
+
     <select id="selectSupplierDetailsBySdId" parameterType="Long" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
         where sd_id = #{sdId}
     </select>
-        
+
     <insert id="insertSupplierDetails" parameterType="SupplierDetails" useGeneratedKeys="true" keyProperty="sdId">
         insert into supplier_details
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sdTime != null">sd_time,</if>
-            <if test="sdCode != null and sdCode != ''">sd_code,</if>
+            <if test="sdCode != null">sd_code,</if>
             <if test="sbiName != null and sbiName != ''">sbi_name,</if>
+            <if test="sdUscc != null and sdUscc != ''">sd_uscc,</if>
             <if test="sbiAbbreviation != null">sbi_abbreviation,</if>
             <if test="sbiServe != null and sbiServe != ''">sbi_serve,</if>
             <if test="sdIndustry != null and sdIndustry != ''">sd_industry,</if>
+            <if test="sdEn != null and sdEn != ''">sd_en,</if>
+            <if test="sdRt != null">sd_rt,</if>
+            <if test="sdHead != null and sdHead != ''">sd_head,</if>
+            <if test="sdHeadPhone != null and sdHeadPhone != ''">sd_head_phone,</if>
+            <if test="sdPcn != null and sdPcn != ''">sd_pcn,</if>
+            <if test="sdPce != null and sdPce != ''">sd_pce,</if>
+            <if test="sdPcp != null and sdPcp != ''">sd_pcp,</if>
+            <if test="sdPcg != null">sd_pcg,</if>
+            <if test="sdMct != null">sd_mct,</if>
             <if test="sdCountry != null">sd_country,</if>
             <if test="sdRegion != null">sd_region,</if>
+            <if test="sdClass != null">sd_class,</if>
             <if test="sdWebsite != null">sd_website,</if>
             <if test="sdBrief != null">sd_brief,</if>
             <if test="sdLegal != null">sd_legal,</if>
             <if test="sdRi != null">sd_ri,</if>
             <if test="sdBr != null">sd_br,</if>
             <if test="sdRc != null">sd_rc,</if>
-            <if test="sdRt != null">sd_rt,</if>
             <if test="sdStatus != null">sd_status,</if>
             <if test="sdPhone != null">sd_phone,</if>
             <if test="sdEmail != null">sd_email,</if>
@@ -128,15 +140,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sdSave != null">sd_save,</if>
             <if test="sdCity != null">sd_city,</if>
             <if test="sdCounty != null">sd_county,</if>
-            <if test="sdHead != null and sdHead != ''">sd_head,</if>
-            <if test="sdHeadPhone != null and sdHeadPhone != ''">sd_head_phone,</if>
-            <if test="sdUscc != null and sdUscc != ''">sd_uscc,</if>
-            <if test="sdEn != null and sdEn != ''">sd_en,</if>
-            <if test="sdPcn != null and sdPcn != ''">sd_pcn,</if>
-            <if test="sdPcg != null">sd_pcg,</if>
-            <if test="sdMct != null">sd_mct,</if>
-            <if test="sdPce != null and sdPce != ''">sd_pce,</if>
-            <if test="sdPcp != null and sdPcp != ''">sd_pcp,</if>
             <if test="sdSm != null">sd_sm,</if>
             <if test="sdBank != null">sd_bank,</if>
             <if test="sdCurrency != null">sd_currency,</if>
@@ -144,25 +147,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCode != null">id_code,</if>
             <if test="certificateName != null">certificate_name,</if>
             <if test="filingDate != null">filing_date,</if>
-            <if test="filing != null">filing,</if>
+            <if test="filing != null and filing != ''">filing,</if>
             <if test="dataTatus != null">data_tatus,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="sdTime != null">#{sdTime},</if>
-            <if test="sdCode != null and sdCode != ''">#{sdCode},</if>
+            <if test="sdCode != null">#{sdCode},</if>
             <if test="sbiName != null and sbiName != ''">#{sbiName},</if>
+            <if test="sdUscc != null and sdUscc != ''">#{sdUscc},</if>
             <if test="sbiAbbreviation != null">#{sbiAbbreviation},</if>
             <if test="sbiServe != null and sbiServe != ''">#{sbiServe},</if>
             <if test="sdIndustry != null and sdIndustry != ''">#{sdIndustry},</if>
+            <if test="sdEn != null and sdEn != ''">#{sdEn},</if>
+            <if test="sdRt != null">#{sdRt},</if>
+            <if test="sdHead != null and sdHead != ''">#{sdHead},</if>
+            <if test="sdHeadPhone != null and sdHeadPhone != ''">#{sdHeadPhone},</if>
+            <if test="sdPcn != null and sdPcn != ''">#{sdPcn},</if>
+            <if test="sdPce != null and sdPce != ''">#{sdPce},</if>
+            <if test="sdPcp != null and sdPcp != ''">#{sdPcp},</if>
+            <if test="sdPcg != null">#{sdPcg},</if>
+            <if test="sdMct != null">#{sdMct},</if>
             <if test="sdCountry != null">#{sdCountry},</if>
             <if test="sdRegion != null">#{sdRegion},</if>
+            <if test="sdClass != null">#{sdClass},</if>
             <if test="sdWebsite != null">#{sdWebsite},</if>
             <if test="sdBrief != null">#{sdBrief},</if>
             <if test="sdLegal != null">#{sdLegal},</if>
             <if test="sdRi != null">#{sdRi},</if>
             <if test="sdBr != null">#{sdBr},</if>
             <if test="sdRc != null">#{sdRc},</if>
-            <if test="sdRt != null">#{sdRt},</if>
             <if test="sdStatus != null">#{sdStatus},</if>
             <if test="sdPhone != null">#{sdPhone},</if>
             <if test="sdEmail != null">#{sdEmail},</if>
@@ -170,15 +183,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sdSave != null">#{sdSave},</if>
             <if test="sdCity != null">#{sdCity},</if>
             <if test="sdCounty != null">#{sdCounty},</if>
-            <if test="sdHead != null and sdHead != ''">#{sdHead},</if>
-            <if test="sdHeadPhone != null and sdHeadPhone != ''">#{sdHeadPhone},</if>
-            <if test="sdUscc != null and sdUscc != ''">#{sdUscc},</if>
-            <if test="sdEn != null and sdEn != ''">#{sdEn},</if>
-            <if test="sdPcn != null and sdPcn != ''">#{sdPcn},</if>
-            <if test="sdPcg != null">#{sdPcg},</if>
-            <if test="sdMct != null">#{sdMct},</if>
-            <if test="sdPce != null and sdPce != ''">#{sdPce},</if>
-            <if test="sdPcp != null and sdPcp != ''">#{sdPcp},</if>
             <if test="sdSm != null">#{sdSm},</if>
             <if test="sdBank != null">#{sdBank},</if>
             <if test="sdCurrency != null">#{sdCurrency},</if>
@@ -186,29 +190,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCode != null">#{idCode},</if>
             <if test="certificateName != null">#{certificateName},</if>
             <if test="filingDate != null">#{filingDate},</if>
-            <if test="filing != null">#{filing},</if>
+            <if test="filing != null and filing != ''">#{filing},</if>
             <if test="dataTatus != null">#{dataTatus},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSupplierDetails" parameterType="SupplierDetails">
         update supplier_details
         <trim prefix="SET" suffixOverrides=",">
             <if test="sdTime != null">sd_time = #{sdTime},</if>
-            <if test="sdCode != null and sdCode != ''">sd_code = #{sdCode},</if>
+            <if test="sdCode != null">sd_code = #{sdCode},</if>
             <if test="sbiName != null and sbiName != ''">sbi_name = #{sbiName},</if>
+            <if test="sdUscc != null and sdUscc != ''">sd_uscc = #{sdUscc},</if>
             <if test="sbiAbbreviation != null">sbi_abbreviation = #{sbiAbbreviation},</if>
             <if test="sbiServe != null and sbiServe != ''">sbi_serve = #{sbiServe},</if>
             <if test="sdIndustry != null and sdIndustry != ''">sd_industry = #{sdIndustry},</if>
+            <if test="sdEn != null and sdEn != ''">sd_en = #{sdEn},</if>
+            <if test="sdRt != null">sd_rt = #{sdRt},</if>
+            <if test="sdHead != null and sdHead != ''">sd_head = #{sdHead},</if>
+            <if test="sdHeadPhone != null and sdHeadPhone != ''">sd_head_phone = #{sdHeadPhone},</if>
+            <if test="sdPcn != null and sdPcn != ''">sd_pcn = #{sdPcn},</if>
+            <if test="sdPce != null and sdPce != ''">sd_pce = #{sdPce},</if>
+            <if test="sdPcp != null and sdPcp != ''">sd_pcp = #{sdPcp},</if>
+            <if test="sdPcg != null">sd_pcg = #{sdPcg},</if>
+            <if test="sdMct != null">sd_mct = #{sdMct},</if>
             <if test="sdCountry != null">sd_country = #{sdCountry},</if>
             <if test="sdRegion != null">sd_region = #{sdRegion},</if>
+            <if test="sdClass != null">sd_class = #{sdClass},</if>
             <if test="sdWebsite != null">sd_website = #{sdWebsite},</if>
             <if test="sdBrief != null">sd_brief = #{sdBrief},</if>
             <if test="sdLegal != null">sd_legal = #{sdLegal},</if>
             <if test="sdRi != null">sd_ri = #{sdRi},</if>
             <if test="sdBr != null">sd_br = #{sdBr},</if>
             <if test="sdRc != null">sd_rc = #{sdRc},</if>
-            <if test="sdRt != null">sd_rt = #{sdRt},</if>
             <if test="sdStatus != null">sd_status = #{sdStatus},</if>
             <if test="sdPhone != null">sd_phone = #{sdPhone},</if>
             <if test="sdEmail != null">sd_email = #{sdEmail},</if>
@@ -216,15 +230,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sdSave != null">sd_save = #{sdSave},</if>
             <if test="sdCity != null">sd_city = #{sdCity},</if>
             <if test="sdCounty != null">sd_county = #{sdCounty},</if>
-            <if test="sdHead != null and sdHead != ''">sd_head = #{sdHead},</if>
-            <if test="sdHeadPhone != null and sdHeadPhone != ''">sd_head_phone = #{sdHeadPhone},</if>
-            <if test="sdUscc != null and sdUscc != ''">sd_uscc = #{sdUscc},</if>
-            <if test="sdEn != null and sdEn != ''">sd_en = #{sdEn},</if>
-            <if test="sdPcn != null and sdPcn != ''">sd_pcn = #{sdPcn},</if>
-            <if test="sdPcg != null">sd_pcg = #{sdPcg},</if>
-            <if test="sdMct != null">sd_mct = #{sdMct},</if>
-            <if test="sdPce != null and sdPce != ''">sd_pce = #{sdPce},</if>
-            <if test="sdPcp != null and sdPcp != ''">sd_pcp = #{sdPcp},</if>
             <if test="sdSm != null">sd_sm = #{sdSm},</if>
             <if test="sdBank != null">sd_bank = #{sdBank},</if>
             <if test="sdCurrency != null">sd_currency = #{sdCurrency},</if>
@@ -232,7 +237,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCode != null">id_code = #{idCode},</if>
             <if test="certificateName != null">certificate_name = #{certificateName},</if>
             <if test="filingDate != null">filing_date = #{filingDate},</if>
-            <if test="filing != null">filing = #{filing},</if>
+            <if test="filing != null and filing != ''">filing = #{filing},</if>
             <if test="dataTatus != null">data_tatus = #{dataTatus},</if>
         </trim>
         where sd_id = #{sdId}
@@ -243,7 +248,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteSupplierDetailsBySdIds" parameterType="String">
-        delete from supplier_details where sd_id in 
+        delete from supplier_details where sd_id in
         <foreach item="sdId" collection="array" open="(" separator="," close=")">
             #{sdId}
         </foreach>

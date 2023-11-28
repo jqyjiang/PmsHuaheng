@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.BankMapper">
+
+    <resultMap type="Bank" id="BankResult">
+        <result property="bankId"    column="bank_id"    />
+        <result property="bankCode"    column="bank_code"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankAbbreviation"    column="bank_abbreviation"    />
+        <result property="bankType"    column="bank_type"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectBankVo">
+        select bank_id, bank_code, bank_name, bank_abbreviation, bank_type, enable from bank
+    </sql>
+
+    <select id="selectBankList" parameterType="Bank" resultMap="BankResult">
+        <include refid="selectBankVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectBankByBankId" parameterType="Long" resultMap="BankResult">
+        <include refid="selectBankVo"/>
+        where bank_id = #{bankId}
+    </select>
+
+    <insert id="insertBank" parameterType="Bank" useGeneratedKeys="true" keyProperty="bankId">
+        insert into bank
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bankCode != null">bank_code,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="bankAbbreviation != null">bank_abbreviation,</if>
+            <if test="bankType != null">bank_type,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bankCode != null">#{bankCode},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="bankAbbreviation != null">#{bankAbbreviation},</if>
+            <if test="bankType != null">#{bankType},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBank" parameterType="Bank">
+        update bank
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bankCode != null">bank_code = #{bankCode},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="bankAbbreviation != null">bank_abbreviation = #{bankAbbreviation},</if>
+            <if test="bankType != null">bank_type = #{bankType},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where bank_id = #{bankId}
+    </update>
+
+    <delete id="deleteBankByBankId" parameterType="Long">
+        delete from bank where bank_id = #{bankId}
+    </delete>
+
+    <delete id="deleteBankByBankIds" parameterType="String">
+        delete from bank where bank_id in
+        <foreach item="bankId" collection="array" open="(" separator="," close=")">
+            #{bankId}
+        </foreach>
+    </delete>
+</mapper>

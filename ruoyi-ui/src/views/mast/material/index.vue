@@ -17,14 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否启用" prop="enable">
-        <el-input
-          v-model="queryParams.enable"
-          placeholder="请输入是否启用"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -150,9 +142,6 @@
         <el-form-item label="来源系统" prop="sourceSystem">
           <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
         </el-form-item>
-        <el-form-item label="是否启用" prop="enable">
-          <el-input v-model="form.enable" placeholder="请输入是否启用" />
-        </el-form-item>
         <el-form-item label="主品类" prop="mCategory">
           <el-input v-model="form.mCategory" placeholder="请输入主品类" />
         </el-form-item>
@@ -188,9 +177,6 @@
         </el-form-item>
         <el-form-item label="物料ABC属性" prop="abcAttribute">
           <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
-        </el-form-item>
-        <el-form-item label="是否免检" prop="avoidInspect">
-          <el-input v-model="form.avoidInspect" placeholder="请输入是否免检" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

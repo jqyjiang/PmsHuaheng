@@ -8,10 +8,10 @@ import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
- * 供应商详细对象 supplier_details
- * 
+ * 供应商列表对象 supplier_details
+ *
  * @author ruoyi
- * @date 2023-11-22
+ * @date 2023-11-28
  */
 public class SupplierDetails extends BaseEntity
 {
@@ -33,6 +33,10 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "供应商名称")
     private String sbiName;
 
+    /** 统一社会信用代码 */
+    @Excel(name = "统一社会信用代码")
+    private String sdUscc;
+
     /** 简称 */
     @Excel(name = "简称")
     private String sbiAbbreviation;
@@ -45,6 +49,43 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "行业")
     private String sdIndustry;
 
+    /** 企业性质 */
+    @Excel(name = "企业性质")
+    private String sdEn;
+
+    /** 注册时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "注册时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date sdRt;
+
+    /** 负责人 */
+    @Excel(name = "负责人")
+    private String sdHead;
+
+    /** 负责人手机 */
+    @Excel(name = "负责人手机")
+    private String sdHeadPhone;
+
+    /** 主要联系人姓名 */
+    @Excel(name = "主要联系人姓名")
+    private String sdPcn;
+
+    /** 主要联系人邮箱 */
+    @Excel(name = "主要联系人邮箱")
+    private String sdPce;
+
+    /** 主要联系人手机号 */
+    @Excel(name = "主要联系人手机号")
+    private String sdPcp;
+
+    /** 主要联系人性别 */
+    @Excel(name = "主要联系人性别")
+    private String sdPcg;
+
+    /** 主要联系人职务 */
+    @Excel(name = "主要联系人职务")
+    private String sdMct;
+
     /** 国家地区 */
     @Excel(name = "国家地区")
     private String sdCountry;
@@ -52,6 +93,10 @@ public class SupplierDetails extends BaseEntity
     /** 所在区域 */
     @Excel(name = "所在区域")
     private String sdRegion;
+
+    /** 供应商分类 */
+    @Excel(name = "供应商分类")
+    private String sdClass;
 
     /** 网址 */
     @Excel(name = "网址")
@@ -77,13 +122,8 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "注册资本")
     private String sdRc;
 
-    /** 注册时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "注册时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date sdRt;
-
-    /** 注册状态 */
-    @Excel(name = "注册状态")
+    /** 单位状态 */
+    @Excel(name = "单位状态")
     private String sdStatus;
 
     /** 单位电话 */
@@ -109,42 +149,6 @@ public class SupplierDetails extends BaseEntity
     /** 区(县) */
     @Excel(name = "区(县)")
     private String sdCounty;
-
-    /** 负责人 */
-    @Excel(name = "负责人")
-    private String sdHead;
-
-    /** 负责人手机 */
-    @Excel(name = "负责人手机")
-    private String sdHeadPhone;
-
-    /** 统一社会信用代码 */
-    @Excel(name = "统一社会信用代码")
-    private String sdUscc;
-
-    /** 企业性质 */
-    @Excel(name = "企业性质")
-    private String sdEn;
-
-    /** 主要联系人姓名 */
-    @Excel(name = "主要联系人姓名")
-    private String sdPcn;
-
-    /** 主要联系人性别 */
-    @Excel(name = "主要联系人性别")
-    private String sdPcg;
-
-    /** 主要联系人职务 */
-    @Excel(name = "主要联系人职务")
-    private String sdMct;
-
-    /** 主要联系人邮箱 */
-    @Excel(name = "主要联系人邮箱")
-    private String sdPce;
-
-    /** 主要联系人手机号 */
-    @Excel(name = "主要联系人手机号")
-    private String sdPcp;
 
     /** 结算方式 */
     @Excel(name = "结算方式")
@@ -183,372 +187,381 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "数据状态")
     private String dataTatus;
 
-    public void setSdId(Long sdId) 
+    public void setSdId(Long sdId)
     {
         this.sdId = sdId;
     }
 
-    public Long getSdId() 
+    public Long getSdId()
     {
         return sdId;
     }
-    public void setSdTime(Date sdTime) 
+    public void setSdTime(Date sdTime)
     {
         this.sdTime = sdTime;
     }
 
-    public Date getSdTime() 
+    public Date getSdTime()
     {
         return sdTime;
     }
-    public void setSdCode(String sdCode) 
+    public void setSdCode(String sdCode)
     {
         this.sdCode = sdCode;
     }
 
-    public String getSdCode() 
+    public String getSdCode()
     {
         return sdCode;
     }
-    public void setSbiName(String sbiName) 
+    public void setSbiName(String sbiName)
     {
         this.sbiName = sbiName;
     }
 
-    public String getSbiName() 
+    public String getSbiName()
     {
         return sbiName;
     }
-    public void setSbiAbbreviation(String sbiAbbreviation) 
-    {
-        this.sbiAbbreviation = sbiAbbreviation;
-    }
-
-    public String getSbiAbbreviation() 
-    {
-        return sbiAbbreviation;
-    }
-    public void setSbiServe(String sbiServe) 
-    {
-        this.sbiServe = sbiServe;
-    }
-
-    public String getSbiServe() 
-    {
-        return sbiServe;
-    }
-    public void setSdIndustry(String sdIndustry) 
-    {
-        this.sdIndustry = sdIndustry;
-    }
-
-    public String getSdIndustry() 
-    {
-        return sdIndustry;
-    }
-    public void setSdCountry(String sdCountry) 
-    {
-        this.sdCountry = sdCountry;
-    }
-
-    public String getSdCountry() 
-    {
-        return sdCountry;
-    }
-    public void setSdRegion(String sdRegion) 
-    {
-        this.sdRegion = sdRegion;
-    }
-
-    public String getSdRegion() 
-    {
-        return sdRegion;
-    }
-    public void setSdWebsite(String sdWebsite) 
-    {
-        this.sdWebsite = sdWebsite;
-    }
-
-    public String getSdWebsite() 
-    {
-        return sdWebsite;
-    }
-    public void setSdBrief(String sdBrief) 
-    {
-        this.sdBrief = sdBrief;
-    }
-
-    public String getSdBrief() 
-    {
-        return sdBrief;
-    }
-    public void setSdLegal(String sdLegal) 
-    {
-        this.sdLegal = sdLegal;
-    }
-
-    public String getSdLegal() 
-    {
-        return sdLegal;
-    }
-    public void setSdRi(String sdRi) 
-    {
-        this.sdRi = sdRi;
-    }
-
-    public String getSdRi() 
-    {
-        return sdRi;
-    }
-    public void setSdBr(String sdBr) 
-    {
-        this.sdBr = sdBr;
-    }
-
-    public String getSdBr() 
-    {
-        return sdBr;
-    }
-    public void setSdRc(String sdRc) 
-    {
-        this.sdRc = sdRc;
-    }
-
-    public String getSdRc() 
-    {
-        return sdRc;
-    }
-    public void setSdRt(Date sdRt) 
-    {
-        this.sdRt = sdRt;
-    }
-
-    public Date getSdRt() 
-    {
-        return sdRt;
-    }
-    public void setSdStatus(String sdStatus) 
-    {
-        this.sdStatus = sdStatus;
-    }
-
-    public String getSdStatus() 
-    {
-        return sdStatus;
-    }
-    public void setSdPhone(String sdPhone) 
-    {
-        this.sdPhone = sdPhone;
-    }
-
-    public String getSdPhone() 
-    {
-        return sdPhone;
-    }
-    public void setSdEmail(String sdEmail) 
-    {
-        this.sdEmail = sdEmail;
-    }
-
-    public String getSdEmail() 
-    {
-        return sdEmail;
-    }
-    public void setSdFax(String sdFax) 
-    {
-        this.sdFax = sdFax;
-    }
-
-    public String getSdFax() 
-    {
-        return sdFax;
-    }
-    public void setSdSave(String sdSave) 
-    {
-        this.sdSave = sdSave;
-    }
-
-    public String getSdSave() 
-    {
-        return sdSave;
-    }
-    public void setSdCity(String sdCity) 
-    {
-        this.sdCity = sdCity;
-    }
-
-    public String getSdCity() 
-    {
-        return sdCity;
-    }
-    public void setSdCounty(String sdCounty) 
-    {
-        this.sdCounty = sdCounty;
-    }
-
-    public String getSdCounty() 
-    {
-        return sdCounty;
-    }
-    public void setSdHead(String sdHead) 
-    {
-        this.sdHead = sdHead;
-    }
-
-    public String getSdHead() 
-    {
-        return sdHead;
-    }
-    public void setSdHeadPhone(String sdHeadPhone) 
-    {
-        this.sdHeadPhone = sdHeadPhone;
-    }
-
-    public String getSdHeadPhone() 
-    {
-        return sdHeadPhone;
-    }
-    public void setSdUscc(String sdUscc) 
+    public void setSdUscc(String sdUscc)
     {
         this.sdUscc = sdUscc;
     }
 
-    public String getSdUscc() 
+    public String getSdUscc()
     {
         return sdUscc;
     }
-    public void setSdEn(String sdEn) 
+    public void setSbiAbbreviation(String sbiAbbreviation)
+    {
+        this.sbiAbbreviation = sbiAbbreviation;
+    }
+
+    public String getSbiAbbreviation()
+    {
+        return sbiAbbreviation;
+    }
+    public void setSbiServe(String sbiServe)
+    {
+        this.sbiServe = sbiServe;
+    }
+
+    public String getSbiServe()
+    {
+        return sbiServe;
+    }
+    public void setSdIndustry(String sdIndustry)
+    {
+        this.sdIndustry = sdIndustry;
+    }
+
+    public String getSdIndustry()
+    {
+        return sdIndustry;
+    }
+    public void setSdEn(String sdEn)
     {
         this.sdEn = sdEn;
     }
 
-    public String getSdEn() 
+    public String getSdEn()
     {
         return sdEn;
     }
-    public void setSdPcn(String sdPcn) 
+    public void setSdRt(Date sdRt)
+    {
+        this.sdRt = sdRt;
+    }
+
+    public Date getSdRt()
+    {
+        return sdRt;
+    }
+    public void setSdHead(String sdHead)
+    {
+        this.sdHead = sdHead;
+    }
+
+    public String getSdHead()
+    {
+        return sdHead;
+    }
+    public void setSdHeadPhone(String sdHeadPhone)
+    {
+        this.sdHeadPhone = sdHeadPhone;
+    }
+
+    public String getSdHeadPhone()
+    {
+        return sdHeadPhone;
+    }
+    public void setSdPcn(String sdPcn)
     {
         this.sdPcn = sdPcn;
     }
 
-    public String getSdPcn() 
+    public String getSdPcn()
     {
         return sdPcn;
     }
-    public void setSdPcg(String sdPcg) 
-    {
-        this.sdPcg = sdPcg;
-    }
-
-    public String getSdPcg() 
-    {
-        return sdPcg;
-    }
-    public void setSdMct(String sdMct) 
-    {
-        this.sdMct = sdMct;
-    }
-
-    public String getSdMct() 
-    {
-        return sdMct;
-    }
-    public void setSdPce(String sdPce) 
+    public void setSdPce(String sdPce)
     {
         this.sdPce = sdPce;
     }
 
-    public String getSdPce() 
+    public String getSdPce()
     {
         return sdPce;
     }
-    public void setSdPcp(String sdPcp) 
+    public void setSdPcp(String sdPcp)
     {
         this.sdPcp = sdPcp;
     }
 
-    public String getSdPcp() 
+    public String getSdPcp()
     {
         return sdPcp;
     }
-    public void setSdSm(String sdSm) 
+    public void setSdPcg(String sdPcg)
+    {
+        this.sdPcg = sdPcg;
+    }
+
+    public String getSdPcg()
+    {
+        return sdPcg;
+    }
+    public void setSdMct(String sdMct)
+    {
+        this.sdMct = sdMct;
+    }
+
+    public String getSdMct()
+    {
+        return sdMct;
+    }
+    public void setSdCountry(String sdCountry)
+    {
+        this.sdCountry = sdCountry;
+    }
+
+    public String getSdCountry()
+    {
+        return sdCountry;
+    }
+    public void setSdRegion(String sdRegion)
+    {
+        this.sdRegion = sdRegion;
+    }
+
+    public String getSdRegion()
+    {
+        return sdRegion;
+    }
+    public void setSdClass(String sdClass)
+    {
+        this.sdClass = sdClass;
+    }
+
+    public String getSdClass()
+    {
+        return sdClass;
+    }
+    public void setSdWebsite(String sdWebsite)
+    {
+        this.sdWebsite = sdWebsite;
+    }
+
+    public String getSdWebsite()
+    {
+        return sdWebsite;
+    }
+    public void setSdBrief(String sdBrief)
+    {
+        this.sdBrief = sdBrief;
+    }
+
+    public String getSdBrief()
+    {
+        return sdBrief;
+    }
+    public void setSdLegal(String sdLegal)
+    {
+        this.sdLegal = sdLegal;
+    }
+
+    public String getSdLegal()
+    {
+        return sdLegal;
+    }
+    public void setSdRi(String sdRi)
+    {
+        this.sdRi = sdRi;
+    }
+
+    public String getSdRi()
+    {
+        return sdRi;
+    }
+    public void setSdBr(String sdBr)
+    {
+        this.sdBr = sdBr;
+    }
+
+    public String getSdBr()
+    {
+        return sdBr;
+    }
+    public void setSdRc(String sdRc)
+    {
+        this.sdRc = sdRc;
+    }
+
+    public String getSdRc()
+    {
+        return sdRc;
+    }
+    public void setSdStatus(String sdStatus)
+    {
+        this.sdStatus = sdStatus;
+    }
+
+    public String getSdStatus()
+    {
+        return sdStatus;
+    }
+    public void setSdPhone(String sdPhone)
+    {
+        this.sdPhone = sdPhone;
+    }
+
+    public String getSdPhone()
+    {
+        return sdPhone;
+    }
+    public void setSdEmail(String sdEmail)
+    {
+        this.sdEmail = sdEmail;
+    }
+
+    public String getSdEmail()
+    {
+        return sdEmail;
+    }
+    public void setSdFax(String sdFax)
+    {
+        this.sdFax = sdFax;
+    }
+
+    public String getSdFax()
+    {
+        return sdFax;
+    }
+    public void setSdSave(String sdSave)
+    {
+        this.sdSave = sdSave;
+    }
+
+    public String getSdSave()
+    {
+        return sdSave;
+    }
+    public void setSdCity(String sdCity)
+    {
+        this.sdCity = sdCity;
+    }
+
+    public String getSdCity()
+    {
+        return sdCity;
+    }
+    public void setSdCounty(String sdCounty)
+    {
+        this.sdCounty = sdCounty;
+    }
+
+    public String getSdCounty()
+    {
+        return sdCounty;
+    }
+    public void setSdSm(String sdSm)
     {
         this.sdSm = sdSm;
     }
 
-    public String getSdSm() 
+    public String getSdSm()
     {
         return sdSm;
     }
-    public void setSdBank(String sdBank) 
+    public void setSdBank(String sdBank)
     {
         this.sdBank = sdBank;
     }
 
-    public String getSdBank() 
+    public String getSdBank()
     {
         return sdBank;
     }
-    public void setSdCurrency(String sdCurrency) 
+    public void setSdCurrency(String sdCurrency)
     {
         this.sdCurrency = sdCurrency;
     }
 
-    public String getSdCurrency() 
+    public String getSdCurrency()
     {
         return sdCurrency;
     }
-    public void setSdAccount(String sdAccount) 
+    public void setSdAccount(String sdAccount)
     {
         this.sdAccount = sdAccount;
     }
 
-    public String getSdAccount() 
+    public String getSdAccount()
     {
         return sdAccount;
     }
-    public void setIdCode(String idCode) 
+    public void setIdCode(String idCode)
     {
         this.idCode = idCode;
     }
 
-    public String getIdCode() 
+    public String getIdCode()
     {
         return idCode;
     }
-    public void setCertificateName(String certificateName) 
+    public void setCertificateName(String certificateName)
     {
         this.certificateName = certificateName;
     }
 
-    public String getCertificateName() 
+    public String getCertificateName()
     {
         return certificateName;
     }
-    public void setFilingDate(Date filingDate) 
+    public void setFilingDate(Date filingDate)
     {
         this.filingDate = filingDate;
     }
 
-    public Date getFilingDate() 
+    public Date getFilingDate()
     {
         return filingDate;
     }
-    public void setFiling(String filing) 
+    public void setFiling(String filing)
     {
         this.filing = filing;
     }
 
-    public String getFiling() 
+    public String getFiling()
     {
         return filing;
     }
-    public void setDataTatus(String dataTatus) 
+    public void setDataTatus(String dataTatus)
     {
         this.dataTatus = dataTatus;
     }
 
-    public String getDataTatus() 
+    public String getDataTatus()
     {
         return dataTatus;
     }
@@ -556,47 +569,48 @@ public class SupplierDetails extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("sdId", getSdId())
-            .append("sdTime", getSdTime())
-            .append("sdCode", getSdCode())
-            .append("sbiName", getSbiName())
-            .append("sbiAbbreviation", getSbiAbbreviation())
-            .append("sbiServe", getSbiServe())
-            .append("sdIndustry", getSdIndustry())
-            .append("sdCountry", getSdCountry())
-            .append("sdRegion", getSdRegion())
-            .append("sdWebsite", getSdWebsite())
-            .append("sdBrief", getSdBrief())
-            .append("sdLegal", getSdLegal())
-            .append("sdRi", getSdRi())
-            .append("sdBr", getSdBr())
-            .append("sdRc", getSdRc())
-            .append("sdRt", getSdRt())
-            .append("sdStatus", getSdStatus())
-            .append("sdPhone", getSdPhone())
-            .append("sdEmail", getSdEmail())
-            .append("sdFax", getSdFax())
-            .append("sdSave", getSdSave())
-            .append("sdCity", getSdCity())
-            .append("sdCounty", getSdCounty())
-            .append("sdHead", getSdHead())
-            .append("sdHeadPhone", getSdHeadPhone())
-            .append("sdUscc", getSdUscc())
-            .append("sdEn", getSdEn())
-            .append("sdPcn", getSdPcn())
-            .append("sdPcg", getSdPcg())
-            .append("sdMct", getSdMct())
-            .append("sdPce", getSdPce())
-            .append("sdPcp", getSdPcp())
-            .append("sdSm", getSdSm())
-            .append("sdBank", getSdBank())
-            .append("sdCurrency", getSdCurrency())
-            .append("sdAccount", getSdAccount())
-            .append("idCode", getIdCode())
-            .append("certificateName", getCertificateName())
-            .append("filingDate", getFilingDate())
-            .append("filing", getFiling())
-            .append("dataTatus", getDataTatus())
-            .toString();
+                .append("sdId", getSdId())
+                .append("sdTime", getSdTime())
+                .append("sdCode", getSdCode())
+                .append("sbiName", getSbiName())
+                .append("sdUscc", getSdUscc())
+                .append("sbiAbbreviation", getSbiAbbreviation())
+                .append("sbiServe", getSbiServe())
+                .append("sdIndustry", getSdIndustry())
+                .append("sdEn", getSdEn())
+                .append("sdRt", getSdRt())
+                .append("sdHead", getSdHead())
+                .append("sdHeadPhone", getSdHeadPhone())
+                .append("sdPcn", getSdPcn())
+                .append("sdPce", getSdPce())
+                .append("sdPcp", getSdPcp())
+                .append("sdPcg", getSdPcg())
+                .append("sdMct", getSdMct())
+                .append("sdCountry", getSdCountry())
+                .append("sdRegion", getSdRegion())
+                .append("sdClass", getSdClass())
+                .append("sdWebsite", getSdWebsite())
+                .append("sdBrief", getSdBrief())
+                .append("sdLegal", getSdLegal())
+                .append("sdRi", getSdRi())
+                .append("sdBr", getSdBr())
+                .append("sdRc", getSdRc())
+                .append("sdStatus", getSdStatus())
+                .append("sdPhone", getSdPhone())
+                .append("sdEmail", getSdEmail())
+                .append("sdFax", getSdFax())
+                .append("sdSave", getSdSave())
+                .append("sdCity", getSdCity())
+                .append("sdCounty", getSdCounty())
+                .append("sdSm", getSdSm())
+                .append("sdBank", getSdBank())
+                .append("sdCurrency", getSdCurrency())
+                .append("sdAccount", getSdAccount())
+                .append("idCode", getIdCode())
+                .append("certificateName", getCertificateName())
+                .append("filingDate", getFilingDate())
+                .append("filing", getFiling())
+                .append("dataTatus", getDataTatus())
+                .toString();
     }
 }

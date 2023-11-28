@@ -5,42 +5,103 @@
 <mapper namespace="com.hh.pms.mapper.OrderManagerMapper">
 
     <resultMap type="OrderManager" id="OrderManagerResult">
-        <result property="orderId"    column="order_id"    />
-        <result property="orderCode"    column="order_code"    />
-        <result property="company"    column="company"    />
-        <result property="orderType"    column="order_type"    />
-        <result property="orderSource"    column="order_source"    />
-        <result property="purOrganization"    column="pur_organization"    />
-        <result property="annex"    column="annex"    />
-        <result property="isSelfPickup"    column="is_self_pickup"    />
-        <result property="licensePlateNumber"    column="license_plate_number"    />
-        <result property="concatInfomation"    column="concat_infomation"    />
-        <result property="contractCode"    column="contract_code"    />
-        <result property="contractName"    column="contract_name"    />
-        <result property="orderDescription"    column="order_description"    />
-        <result property="totalDemand"    column="total_demand"    />
-        <result property="purchaser"    column="purchaser"    />
-        <result property="orderState"    column="order_state"    />
-        <result property="orderStatus"    column="order_status"    />
-        <result property="currencyId"    column="currency_id"    />
-        <result property="supplier"    column="supplier"    />
-        <result property="contacts"    column="contacts"    />
-        <result property="phone"    column="phone"    />
-        <result property="invoiceMethod"    column="invoice_method"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="materialId"    column="material_id"    />
+        <id property="orderId" column="order_id"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="company" column="company"/>
+        <result property="orderType" column="order_type"/>
+        <result property="orderSource" column="order_source"/>
+        <result property="purOrganization" column="pur_organization"/>
+        <result property="annex" column="annex"/>
+        <result property="isSelfPickup" column="is_self_pickup"/>
+        <result property="licensePlateNumber" column="license_plate_number"/>
+        <result property="concatInfomation" column="concat_infomation"/>
+        <result property="contractCode" column="contract_code"/>
+        <result property="contractName" column="contract_name"/>
+        <result property="orderDescription" column="order_description"/>
+        <result property="totalDemand" column="total_demand"/>
+        <result property="purchaser" column="purchaser"/>
+        <result property="orderState" column="order_state"/>
+        <result property="orId" column="or_id"/>
+        <result property="currencyId" column="currency_id"/>
+        <result property="supplier" column="supplier"/>
+        <result property="contacts" column="contacts"/>
+        <result property="phone" column="phone"/>
+        <result property="invoiceMethod" column="invoice_method"/>
+        <result property="createTime" column="create_time"/>
+        <association property="orderTypeRunning" javaType="com.hh.pms.domain.OrderTypeRunning">
+            <id property="ortId" column="ort_id"/>
+            <result property="ortName" column="ort_name"/>
+        </association>
+        <association property="supplierDetails" javaType="com.hh.pms.domain.SupplierDetails">
+            <id property="sdId"    column="sd_id"    />
+            <result property="sdTime"    column="sd_time"    />
+            <result property="sdCode"    column="sd_code"    />
+            <result property="sbiName"    column="sbi_name"    />
+        </association>
+        <collection property="orderMaterialList" ofType="com.hh.pms.domain.OrderMaterial">
+            <id property="orId" column="or_id"/>
+            <result property="orCode" column="or_code"/>
+            <result property="orName" column="or_name"/>
+            <result property="categoryCode" column="category_code"/>
+            <result property="materialCategory" column="material_category"/>
+            <result property="materialSpecification" column="material_specification"/>
+            <result property="materialModel" column="material_model"/>
+            <result property="materialUnit" column="material_unit"/>
+            <result property="requireNumber" column="require_number"/>
+            <result property="requireTime" column="require_time"/>
+            <result property="lowerPrice" column="lower_price"/>
+            <result property="newPrice" column="new_price"/>
+            <result property="noTaxPrice" column="no_tax_price"/>
+            <result property="taxCode" column="tax_code"/>
+            <result property="tax" column="tax"/>
+            <result property="taxPrice" column="tax_price"/>
+            <result property="lineTaxAmount" column="line_tax_amount"/>
+            <result property="consignee" column="consignee"/>
+            <result property="receivingPhone" column="receiving_phone"/>
+            <result property="receivingAddress" column="receiving_address"/>
+            <result property="remarks" column="remarks"/>
+        </collection>
     </resultMap>
 
     <sql id="selectOrderManagerVo">
-        select order_id, order_code, company, order_type, order_source, pur_organization, annex, is_self_pickup, license_plate_number, concat_infomation, contract_code, contract_name, order_description, total_demand, purchaser, order_state, order_status, currency_id, supplier, contacts, phone, invoice_method, create_time, material_id from order_manager
+        select om.order_id,
+               om.order_code,
+               om.company,
+               om.order_type,
+               om.order_source,
+               om.pur_organization,
+               om.annex,
+               om.is_self_pickup,
+               om.license_plate_number,
+               om.concat_infomation,
+               om.contract_code,
+               om.contract_name,
+               om.order_description,
+               om.total_demand,
+               om.purchaser,
+               om.order_state,
+               om.or_id,
+               om.currency_id,
+               om.supplier,
+               om.contacts,
+               om.phone,
+               om.invoice_method,
+               om.create_time,
+               otr.ort_name,
+               ot.or_name,
+               sd.sbi_name
+        from order_manager om
+                 left join order_type_running otr on om.or_id = otr.ort_id
+                 left join order_material ot on om.material_id = ot.or_id
+                 left join supplier_details sd on sd.sd_id = om.supplier
     </sql>
     <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
         <include refid="selectOrderManagerVo"/>
         <where>
-            <if test="orderCode != null  and orderCode != ''"> and order_code = #{orderCode}</if>
-            <if test="orderSource != null  and orderSource != ''"> and order_source = #{orderSource}</if>
-            <if test="orderState != null "> and order_state = #{orderState}</if>
-            <if test="supplier != null "> and supplier = #{supplier}</if>
+            <if test="orderCode != null  and orderCode != ''">and order_code = #{orderCode}</if>
+            <if test="orderSource != null  and orderSource != ''">and order_source = #{orderSource}</if>
+            <if test="orderState != null ">and order_state = #{orderState}</if>
+            <if test="supplier != null ">and supplier = #{supplier}</if>
         </where>
     </select>
 
@@ -67,7 +128,7 @@
             <if test="totalDemand != null">total_demand,</if>
             <if test="purchaser != null">purchaser,</if>
             <if test="orderState != null">order_state,</if>
-            <if test="orderStatus != null">order_status,</if>
+            <if test="orId != null">or_id,</if>
             <if test="currencyId != null">currency_id,</if>
             <if test="supplier != null">supplier,</if>
             <if test="contacts != null">contacts,</if>
@@ -92,7 +153,7 @@
             <if test="totalDemand != null">#{totalDemand},</if>
             <if test="purchaser != null">#{purchaser},</if>
             <if test="orderState != null">#{orderState},</if>
-            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="orId != null">#{orId},</if>
             <if test="currencyId != null">#{currencyId},</if>
             <if test="supplier != null">#{supplier},</if>
             <if test="contacts != null">#{contacts},</if>
@@ -121,7 +182,7 @@
             <if test="totalDemand != null">total_demand = #{totalDemand},</if>
             <if test="purchaser != null">purchaser = #{purchaser},</if>
             <if test="orderState != null">order_state = #{orderState},</if>
-            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="orId != null">or_id = #{orId},</if>
             <if test="currencyId != null">currency_id = #{currencyId},</if>
             <if test="supplier != null">supplier = #{supplier},</if>
             <if test="contacts != null">contacts = #{contacts},</if>
@@ -134,7 +195,9 @@
     </update>
 
     <delete id="deleteOrderManagerByOrderId" parameterType="Long">
-        delete from order_manager where order_id = #{orderId}
+        delete
+        from order_manager
+        where order_id = #{orderId}
     </delete>
 
     <delete id="deleteOrderManagerByOrderIds" parameterType="String">

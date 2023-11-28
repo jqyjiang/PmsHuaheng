@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.CurrencyMapper">
+
+    <resultMap type="Currency" id="CurrencyResult">
+        <result property="currencyId"    column="currency_id"    />
+        <result property="currencyCode"    column="currency_code"    />
+        <result property="currencyName"    column="currency_name"    />
+        <result property="countryRegion"    column="country_region"    />
+        <result property="financialAccuracy"    column="financial_accuracy"    />
+        <result property="accuracy"    column="accuracy"    />
+        <result property="currencySymbol"    column="currency_symbol"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectCurrencyVo">
+        select currency_id, currency_code, currency_name, country_region, financial_accuracy, accuracy, currency_symbol, enable from currency
+    </sql>
+
+    <select id="selectCurrencyList" parameterType="Currency" resultMap="CurrencyResult">
+        <include refid="selectCurrencyVo"/>
+        <where>
+            <if test="currencyCode != null  and currencyCode != ''"> and currency_code = #{currencyCode}</if>
+            <if test="currencyName != null  and currencyName != ''"> and currency_name like concat('%', #{currencyName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectCurrencyByCurrencyId" parameterType="Long" resultMap="CurrencyResult">
+        <include refid="selectCurrencyVo"/>
+        where currency_id = #{currencyId}
+    </select>
+
+    <insert id="insertCurrency" parameterType="Currency" useGeneratedKeys="true" keyProperty="currencyId">
+        insert into currency
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="currencyCode != null">currency_code,</if>
+            <if test="currencyName != null">currency_name,</if>
+            <if test="countryRegion != null">country_region,</if>
+            <if test="financialAccuracy != null">financial_accuracy,</if>
+            <if test="accuracy != null">accuracy,</if>
+            <if test="currencySymbol != null">currency_symbol,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="currencyCode != null">#{currencyCode},</if>
+            <if test="currencyName != null">#{currencyName},</if>
+            <if test="countryRegion != null">#{countryRegion},</if>
+            <if test="financialAccuracy != null">#{financialAccuracy},</if>
+            <if test="accuracy != null">#{accuracy},</if>
+            <if test="currencySymbol != null">#{currencySymbol},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCurrency" parameterType="Currency">
+        update currency
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="currencyCode != null">currency_code = #{currencyCode},</if>
+            <if test="currencyName != null">currency_name = #{currencyName},</if>
+            <if test="countryRegion != null">country_region = #{countryRegion},</if>
+            <if test="financialAccuracy != null">financial_accuracy = #{financialAccuracy},</if>
+            <if test="accuracy != null">accuracy = #{accuracy},</if>
+            <if test="currencySymbol != null">currency_symbol = #{currencySymbol},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where currency_id = #{currencyId}
+    </update>
+
+    <delete id="deleteCurrencyByCurrencyId" parameterType="Long">
+        delete from currency where currency_id = #{currencyId}
+    </delete>
+
+    <delete id="deleteCurrencyByCurrencyIds" parameterType="String">
+        delete from currency where currency_id in
+        <foreach item="currencyId" collection="array" open="(" separator="," close=")">
+            #{currencyId}
+        </foreach>
+    </delete>
+</mapper>
