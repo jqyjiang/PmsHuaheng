@@ -71,10 +71,18 @@
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <!-- <el-table-column label="物料序号" align="center" prop="materialId" /> -->
+      <el-table-column label="物料序号" align="center" prop="materialId" />
       <el-table-column label="物料编码" align="center" prop="materialCode" />
       <el-table-column label="物料名称" align="center" prop="materialName" />
-      <el-table-column label="基本计算单位" align="center" prop="calculationUnit" />
+      <el-table-column label="基本计算单位" align="center" prop="calculationUnit" >
+        <template slot-scope="scope">
+          <span v-for="item in accountList" :key="index">
+            <template v-if="scope.row.calculationUnit===item.unitId">
+              {{item.meteringUnit}}
+            </template>
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column label="采购员" align="center" prop="purchaser" />
       <el-table-column label="最后更新人" align="center" prop="lUpdated" />
       <el-table-column label="最后更新时间" align="center" prop="lUpdateTime" width="180">
@@ -84,31 +92,23 @@
       </el-table-column>
       <el-table-column label="来源系统" align="center" prop="sourceSystem" />
       <el-table-column label="是否启用" align="center" prop="enable">
-        <template slot-scope="scope">
-          <el-checkbox
-            v-model="scope.row.enable"
-            :disabled="true"
-            :checked="scope.row.enable === 1"
-          ></el-checkbox>
-      </template>
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="enableStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
       </el-table-column>
-      <el-table-column label="主品类" align="center" prop="mCategory" />
-      <!-- <el-table-column label="规格" align="center" prop="specifications" /> -->
-      <!-- <el-table-column label="型号" align="center" prop="model" />
-      <el-table-column label="品牌" align="center" prop="brand" />
-      <el-table-column label="默认税种/税率" align="center" prop="categoriesTaxes" />
-      <el-table-column label="物料图片" align="center" prop="image" width="100">
+      <!-- <el-table-column label="主品类" align="center" prop="mCategory" /> -->
+      <el-table-column label="主品类" align="center" prop="mCategory" >
         <template slot-scope="scope">
-          <image-preview :src="scope.row.image" :width="50" :height="50"/>
+          <span v-for="item in categoryList">
+            <template v-if="scope.row.mCategory === item.categoryid">
+              {{item.categoryName}}
+            </template>
+          </span>
         </template>
       </el-table-column>
-      <el-table-column label="毛重" align="center" prop="gWeight" />
-      <el-table-column label="净重" align="center" prop="nWeight" />
-      <el-table-column label="重量单位" align="center" prop="weight" />
-      <el-table-column label="体积" align="center" prop="volume" />
-      <el-table-column label="体积单位" align="center" prop="vUnit" />
-      <el-table-column label="物料ABC属性" align="center" prop="abcAttribute" />
-      <el-table-column label="是否免检" align="center" prop="avoidInspect" /> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -137,7 +137,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改物料对话框 -->
+    <!-- 添加或修改物料维护对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="物料编码" prop="materialCode">
@@ -212,7 +212,7 @@
 </template>
 
 <script>
-import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial } from "@/api/mast/material";
+import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial ,listAccount ,listCategory} from "@/api/mast/material";
 
 export default {
   name: "Material",
@@ -230,8 +230,11 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 物料表格数据
+      // 物料维护表格数据
       materialList: [],
+      accountList: [],
+      enableStatus: [], // 用于存储复选框选中状态的数组
+      categoryList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -253,15 +256,30 @@ export default {
   },
   created() {
     this.getList();
+    this.getList1();
+    this.getList2();
   },
   methods: {
-    /** 查询物料列表 */
+    /** 查询物料维护列表 */
     getList() {
       this.loading = true;
       listMaterial(this.queryParams).then(response => {
         this.materialList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.enableStatus = this.materialList.map((account) => account.enable === 1);
+      });
+    },
+     /** 查询计算单位定义列表 */
+     getList1() {
+      listAccount(this.queryParams).then(response => {
+        this.accountList = response.rows;
+      });
+    },
+      /** 查询品类列表 */
+    getList2() {
+      listCategory(this.queryParams).then(response => {
+        this.categoryList = response.rows;
       });
     },
     // 取消按钮
@@ -317,7 +335,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加物料";
+      this.title = "添加物料维护";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -326,7 +344,7 @@ export default {
       getMaterial(materialId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改物料";
+        this.title = "修改物料维护";
       });
     },
     /** 提交按钮 */
@@ -352,7 +370,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const materialIds = row.materialId || this.ids;
-      this.$modal.confirm('是否确认删除物料编号为"' + materialIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除物料维护编号为"' + materialIds + '"的数据项？').then(function() {
         return delMaterial(materialIds);
       }).then(() => {
         this.getList();

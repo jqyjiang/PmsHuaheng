@@ -59,13 +59,12 @@
       <el-table-column label="单位类型代码" align="center" prop="unitTypeCode" />
       <el-table-column label="单位类型名称" align="center" prop="unitTypeName" />
       <el-table-column label="是否启用" align="center" prop="enable">
-        <template slot-scope="scope">
-          <el-checkbox
-            v-model="scope.row.enable"
-            :disabled="true"
-            :checked="scope.row.enable === 1"
-          ></el-checkbox>
-      </template>
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="enableStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -134,6 +133,7 @@ export default {
       total: 0,
       // 计量单位类型定义表格数据
       unit_typeList: [],
+      enableStatus: [], // 用于存储复选框选中状态的数组
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -161,6 +161,7 @@ export default {
         this.unit_typeList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.enableStatus = this.unit_typeList.map((account) => account.enable === 1);
       });
     },
     // 取消按钮

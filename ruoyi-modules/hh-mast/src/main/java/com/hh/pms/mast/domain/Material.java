@@ -9,10 +9,10 @@ import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
- * 物料对象 material
+ * 物料维护对象 material
  * 
  * @author ruoyi
- * @date 2023-11-28
+ * @date 2023-11-29
  */
 public class Material extends BaseEntity
 {
@@ -56,54 +56,42 @@ public class Material extends BaseEntity
 
     /** 主品类 */
     @Excel(name = "主品类")
-    private String mCategory;
+    private Long mCategory;
 
     /** 规格 */
-    @Excel(name = "规格")
     private String specifications;
 
     /** 型号 */
-    @Excel(name = "型号")
     private String model;
 
     /** 品牌 */
-    @Excel(name = "品牌")
     private String brand;
 
     /** 默认税种/税率 */
-    @Excel(name = "默认税种/税率")
     private Integer categoriesTaxes;
 
     /** 物料图片 */
-    @Excel(name = "物料图片")
     private String image;
 
     /** 毛重 */
-    @Excel(name = "毛重")
     private BigDecimal gWeight;
 
     /** 净重 */
-    @Excel(name = "净重")
     private BigDecimal nWeight;
 
     /** 重量单位 */
-    @Excel(name = "重量单位")
     private Long weight;
 
     /** 体积 */
-    @Excel(name = "体积")
     private BigDecimal volume;
 
     /** 体积单位 */
-    @Excel(name = "体积单位")
     private Integer vUnit;
 
     /** 物料ABC属性 */
-    @Excel(name = "物料ABC属性")
     private String abcAttribute;
 
     /** 是否免检 */
-    @Excel(name = "是否免检")
     private Long avoidInspect;
 
     public void setMaterialId(Long materialId) 
@@ -187,12 +175,12 @@ public class Material extends BaseEntity
     {
         return enable;
     }
-    public void setmCategory(String mCategory) 
+    public void setmCategory(Long mCategory) 
     {
         this.mCategory = mCategory;
     }
 
-    public String getmCategory() 
+    public Long getmCategory() 
     {
         return mCategory;
     }

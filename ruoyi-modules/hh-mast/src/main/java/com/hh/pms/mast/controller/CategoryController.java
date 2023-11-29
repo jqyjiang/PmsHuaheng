@@ -26,7 +26,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * 品类Controller
  *
  * @author ruoyi
- * @date 2023-11-24
+ * @date 2023-11-29
  */
 @RestController
 @RequestMapping("/category")
@@ -42,11 +42,18 @@ public class CategoryController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(Category category)
     {
-        startPage();
+        startPage();//分页
         List<Category> list = categoryService.selectCategoryList(category);
         return getDataTable(list);
     }
-
+    //无分页
+    @RequiresPermissions("mast:category:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(Category category)
+    {
+        List<Category> list = categoryService.selectCategoryList(category);
+        return getDataTable(list);
+    }
     /**
      * 导出品类列表
      */

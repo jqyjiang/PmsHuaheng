@@ -18,7 +18,7 @@
           v-hasPermi="['mast:bank_type:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -28,7 +28,7 @@
           @click="handleUpdate"
           v-hasPermi="['mast:bank_type:edit']"
         >修改</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="danger"
@@ -55,17 +55,17 @@
 
     <el-table v-loading="loading" :data="bank_typeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="银行类型ID" align="center" prop="bankTypeId" />
+      <!-- <el-table-column label="银行类型ID" align="center" prop="bankTypeId" /> -->
       <el-table-column label="银行类型" align="center" prop="bankType" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:bank_type:edit']"
-          >修改</el-button>
+          >修改</el-button> -->
           <el-button
             size="mini"
             type="text"

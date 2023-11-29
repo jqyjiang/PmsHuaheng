@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mast.mapper.IndustryTypeMapper">
+
+    <resultMap type="IndustryType" id="IndustryTypeResult">
+        <result property="industryTypeId"    column="industry_type_id"    />
+        <result property="industryTypeCode"    column="industry_type_Code"    />
+        <result property="industryTypeName"    column="industry_type_name"    />
+        <result property="superiorIndustry"    column="superior_industry"    />
+        <result property="enable"    column="enable"    />
+    </resultMap>
+
+    <sql id="selectIndustryTypeVo">
+        select industry_type_id, industry_type_Code, industry_type_name, superior_industry, enable from industry_type
+    </sql>
+
+    <select id="selectIndustryTypeList" parameterType="IndustryType" resultMap="IndustryTypeResult">
+        <include refid="selectIndustryTypeVo"/>
+        <where>
+            <if test="industryTypeCode != null  and industryTypeCode != ''"> and industry_type_Code = #{industryTypeCode}</if>
+            <if test="industryTypeName != null  and industryTypeName != ''"> and industry_type_name like concat('%', #{industryTypeName}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectIndustryTypeByIndustryTypeId" parameterType="Long" resultMap="IndustryTypeResult">
+        <include refid="selectIndustryTypeVo"/>
+        where industry_type_id = #{industryTypeId}
+    </select>
+
+    <insert id="insertIndustryType" parameterType="IndustryType" useGeneratedKeys="true" keyProperty="industryTypeId">
+        insert into industry_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="industryTypeCode != null">industry_type_Code,</if>
+            <if test="industryTypeName != null">industry_type_name,</if>
+            <if test="superiorIndustry != null">superior_industry,</if>
+            <if test="enable != null">enable,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="industryTypeCode != null">#{industryTypeCode},</if>
+            <if test="industryTypeName != null">#{industryTypeName},</if>
+            <if test="superiorIndustry != null">#{superiorIndustry},</if>
+            <if test="enable != null">#{enable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIndustryType" parameterType="IndustryType">
+        update industry_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="industryTypeCode != null">industry_type_Code = #{industryTypeCode},</if>
+            <if test="industryTypeName != null">industry_type_name = #{industryTypeName},</if>
+            <if test="superiorIndustry != null">superior_industry = #{superiorIndustry},</if>
+            <if test="enable != null">enable = #{enable},</if>
+        </trim>
+        where industry_type_id = #{industryTypeId}
+    </update>
+
+    <delete id="deleteIndustryTypeByIndustryTypeId" parameterType="Long">
+        delete from industry_type where industry_type_id = #{industryTypeId}
+    </delete>
+
+    <delete id="deleteIndustryTypeByIndustryTypeIds" parameterType="String">
+        delete from industry_type where industry_type_id in
+        <foreach item="industryTypeId" collection="array" open="(" separator="," close=")">
+            #{industryTypeId}
+        </foreach>
+    </delete>
+</mapper>

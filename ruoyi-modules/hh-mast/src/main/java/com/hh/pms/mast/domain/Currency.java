@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 币种对象 currency
  *
@@ -32,11 +34,11 @@ public class Currency extends BaseEntity
 
     /** 财务精度 */
     @Excel(name = "财务精度")
-    private String financialAccuracy;
+    private BigDecimal financialAccuracy;
 
     /** 精度 */
     @Excel(name = "精度")
-    private String accuracy;
+    private BigDecimal accuracy;
 
     /** 货币符号 */
     @Excel(name = "货币符号")
@@ -82,21 +84,21 @@ public class Currency extends BaseEntity
     {
         return countryRegion;
     }
-    public void setFinancialAccuracy(String financialAccuracy)
+    public void setFinancialAccuracy(BigDecimal financialAccuracy)
     {
         this.financialAccuracy = financialAccuracy;
     }
 
-    public String getFinancialAccuracy()
+    public BigDecimal getFinancialAccuracy()
     {
         return financialAccuracy;
     }
-    public void setAccuracy(String accuracy)
+    public void setAccuracy(BigDecimal accuracy)
     {
         this.accuracy = accuracy;
     }
 
-    public String getAccuracy()
+    public BigDecimal getAccuracy()
     {
         return accuracy;
     }

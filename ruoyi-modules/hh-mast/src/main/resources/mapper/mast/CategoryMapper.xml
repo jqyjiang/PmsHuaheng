@@ -14,7 +14,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="creationTime"    column="creation_time"    />
         <result property="lUpdated"    column="l_updated"    />
         <result property="lUpdateTime"    column="l_update_time"    />
-        <result property="bEName"    column="b_e_name"    />
         <result property="company"    column="company"    />
         <result property="meteringUnit"    column="metering_unit"    />
         <result property="sourceSystem"    column="source_system"    />
@@ -23,13 +22,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategoryVo">
-        select categoryid, category_code, category_name, enable, is_no, superior_category, creation_time, l_updated, l_update_time, b_e_name, company, metering_unit, source_system, introduction_requirements, assign_purchaser from category
+        select categoryid, category_code, category_name, enable, is_no, superior_category, creation_time, l_updated, l_update_time, company, metering_unit, source_system, introduction_requirements, assign_purchaser from category
     </sql>
 
     <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">
         <include refid="selectCategoryVo"/>
         <where>
-            <if test="categoryCode != null  and categoryCode != ''"> and category_code like concat('%', #{categoryCode}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
             <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
             <if test="enable != null "> and enable = #{enable}</if>
             <if test="superiorCategory != null "> and superior_category = #{superiorCategory}</if>
@@ -41,10 +40,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where categoryid = #{categoryid}
     </select>
 
-    <insert id="insertCategory" parameterType="Category">
+    <insert id="insertCategory" parameterType="Category" useGeneratedKeys="true" keyProperty="categoryid">
         insert into category
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="categoryid != null">categoryid,</if>
             <if test="categoryCode != null">category_code,</if>
             <if test="categoryName != null">category_name,</if>
             <if test="enable != null">enable,</if>
@@ -53,7 +51,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creationTime != null">creation_time,</if>
             <if test="lUpdated != null">l_updated,</if>
             <if test="lUpdateTime != null">l_update_time,</if>
-            <if test="bEName != null">b_e_name,</if>
             <if test="company != null">company,</if>
             <if test="meteringUnit != null">metering_unit,</if>
             <if test="sourceSystem != null">source_system,</if>
@@ -61,7 +58,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="assignPurchaser != null">assign_purchaser,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="categoryid != null">#{categoryid},</if>
             <if test="categoryCode != null">#{categoryCode},</if>
             <if test="categoryName != null">#{categoryName},</if>
             <if test="enable != null">#{enable},</if>
@@ -70,7 +66,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creationTime != null">#{creationTime},</if>
             <if test="lUpdated != null">#{lUpdated},</if>
             <if test="lUpdateTime != null">#{lUpdateTime},</if>
-            <if test="bEName != null">#{bEName},</if>
             <if test="company != null">#{company},</if>
             <if test="meteringUnit != null">#{meteringUnit},</if>
             <if test="sourceSystem != null">#{sourceSystem},</if>
@@ -90,7 +85,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="creationTime != null">creation_time = #{creationTime},</if>
             <if test="lUpdated != null">l_updated = #{lUpdated},</if>
             <if test="lUpdateTime != null">l_update_time = #{lUpdateTime},</if>
-            <if test="bEName != null">b_e_name = #{bEName},</if>
             <if test="company != null">company = #{company},</if>
             <if test="meteringUnit != null">metering_unit = #{meteringUnit},</if>
             <if test="sourceSystem != null">source_system = #{sourceSystem},</if>

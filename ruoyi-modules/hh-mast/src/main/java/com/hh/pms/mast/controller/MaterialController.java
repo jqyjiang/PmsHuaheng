@@ -23,10 +23,10 @@ import com.ruoyi.common.core.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
- * 物料Controller
- * 
+ * 物料维护Controller
+ *
  * @author ruoyi
- * @date 2023-11-28
+ * @date 2023-11-29
  */
 @RestController
 @RequestMapping("/material")
@@ -36,7 +36,7 @@ public class MaterialController extends BaseController
     private IMaterialService materialService;
 
     /**
-     * 查询物料列表
+     * 查询物料维护列表
      */
     @RequiresPermissions("mast:material:list")
     @GetMapping("/list")
@@ -45,24 +45,33 @@ public class MaterialController extends BaseController
         System.out.println("传递的对象:"+material);
         startPage();
         List<Material> list = materialService.selectMaterialList(material);
+        System.out.println(list);
+        return getDataTable(list);
+    }
+    @RequiresPermissions("mast:material:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(Material material)
+    {
+        List<Material> list = materialService.selectMaterialList(material);
+//        System.out.println(list);
         return getDataTable(list);
     }
 
     /**
-     * 导出物料列表
+     * 导出物料维护列表
      */
     @RequiresPermissions("mast:material:export")
-    @Log(title = "物料", businessType = BusinessType.EXPORT)
+    @Log(title = "物料维护", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, Material material)
     {
         List<Material> list = materialService.selectMaterialList(material);
         ExcelUtil<Material> util = new ExcelUtil<Material>(Material.class);
-        util.exportExcel(response, list, "物料数据");
+        util.exportExcel(response, list, "物料维护数据");
     }
 
     /**
-     * 获取物料详细信息
+     * 获取物料维护详细信息
      */
     @RequiresPermissions("mast:material:query")
     @GetMapping(value = "/{materialId}")
@@ -72,10 +81,10 @@ public class MaterialController extends BaseController
     }
 
     /**
-     * 新增物料
+     * 新增物料维护
      */
     @RequiresPermissions("mast:material:add")
-    @Log(title = "物料", businessType = BusinessType.INSERT)
+    @Log(title = "物料维护", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody Material material)
     {
@@ -83,10 +92,10 @@ public class MaterialController extends BaseController
     }
 
     /**
-     * 修改物料
+     * 修改物料维护
      */
     @RequiresPermissions("mast:material:edit")
-    @Log(title = "物料", businessType = BusinessType.UPDATE)
+    @Log(title = "物料维护", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody Material material)
     {
@@ -94,10 +103,10 @@ public class MaterialController extends BaseController
     }
 
     /**
-     * 删除物料
+     * 删除物料维护
      */
     @RequiresPermissions("mast:material:remove")
-    @Log(title = "物料", businessType = BusinessType.DELETE)
+    @Log(title = "物料维护", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{materialIds}")
     public AjaxResult remove(@PathVariable Long[] materialIds)
     {

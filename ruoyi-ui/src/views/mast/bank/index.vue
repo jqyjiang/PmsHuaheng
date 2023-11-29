@@ -18,7 +18,7 @@
           v-hasPermi="['mast:bank:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -28,8 +28,8 @@
           @click="handleUpdate"
           v-hasPermi="['mast:bank:edit']"
         >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
+      </el-col> -->
+      <!-- <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -39,8 +39,8 @@
           @click="handleDelete"
           v-hasPermi="['mast:bank:remove']"
         >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
+      </el-col> -->
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -49,7 +49,7 @@
           @click="handleExport"
           v-hasPermi="['mast:bank:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -69,22 +69,22 @@
         </template>
       </el-table-column>
       <el-table-column label="是否启用" align="center" prop="enable">
-        <template slot-scope="scope">
-          <el-checkbox
-            v-model="scope.row.enable"
-            :disabled="true"
-            :checked="scope.row.enable === 1"/>
-      </template>
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="enableStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:bank:edit']"
-          >修改</el-button>
+          >修改</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -147,6 +147,7 @@ export default {
       // 银行表格数据
       bankList: [],
       bank_typeList: [],
+      enableStatus: [], // 用于存储复选框选中状态的数组
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -175,6 +176,7 @@ export default {
         this.bankList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.enableStatus = this.bankList.map((account) => account.enable === 1);
       });
     },
     /** 查询银行类型列表 */
@@ -224,16 +226,16 @@ export default {
       this.open = true;
       this.title = "添加银行";
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const bankId = row.bankId || this.ids
-      getBank(bankId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改银行";
-      });
-    },
+    // /** 修改按钮操作 */
+    // handleUpdate(row) {
+    //   this.reset();
+    //   const bankId = row.bankId || this.ids
+    //   getBank(bankId).then(response => {
+    //     this.form = response.data;
+    //     this.open = true;
+    //     this.title = "修改银行";
+    //   });
+    // },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -265,11 +267,11 @@ export default {
       }).catch(() => {});
     },
     /** 导出按钮操作 */
-    handleExport() {
-      this.download('mast/bank/export', {
-        ...this.queryParams
-      }, `bank_${new Date().getTime()}.xlsx`)
-    }
+    // handleExport() {
+    //   this.download('mast/bank/export', {
+    //     ...this.queryParams
+    //   }, `bank_${new Date().getTime()}.xlsx`)
+    // }
   }
 };
 </script>

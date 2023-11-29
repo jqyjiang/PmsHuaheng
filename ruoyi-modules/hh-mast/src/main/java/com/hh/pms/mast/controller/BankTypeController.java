@@ -46,6 +46,13 @@ public class BankTypeController extends BaseController
         List<BankType> list = bankTypeService.selectBankTypeList(bankType);
         return getDataTable(list);
     }
+    @RequiresPermissions("mast:bank_type:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(BankType bankType)
+    {
+        List<BankType> list = bankTypeService.selectBankTypeList(bankType);
+        return getDataTable(list);
+    }
 
     /**
      * 导出银行类型列表

@@ -8,10 +8,10 @@ import com.hh.pms.mast.domain.Material;
 import com.hh.pms.mast.service.IMaterialService;
 
 /**
- * 物料Service业务层处理
+ * 物料维护Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-11-28
+ * @date 2023-11-29
  */
 @Service
 public class MaterialServiceImpl implements IMaterialService 
@@ -20,10 +20,10 @@ public class MaterialServiceImpl implements IMaterialService
     private MaterialMapper materialMapper;
 
     /**
-     * 查询物料
+     * 查询物料维护
      * 
-     * @param materialId 物料主键
-     * @return 物料
+     * @param materialId 物料维护主键
+     * @return 物料维护
      */
     @Override
     public Material selectMaterialByMaterialId(Long materialId)
@@ -32,10 +32,10 @@ public class MaterialServiceImpl implements IMaterialService
     }
 
     /**
-     * 查询物料列表
+     * 查询物料维护列表
      * 
-     * @param material 物料
-     * @return 物料
+     * @param material 物料维护
+     * @return 物料维护
      */
     @Override
     public List<Material> selectMaterialList(Material material)
@@ -44,9 +44,9 @@ public class MaterialServiceImpl implements IMaterialService
     }
 
     /**
-     * 新增物料
+     * 新增物料维护
      * 
-     * @param material 物料
+     * @param material 物料维护
      * @return 结果
      */
     @Override
@@ -56,9 +56,9 @@ public class MaterialServiceImpl implements IMaterialService
     }
 
     /**
-     * 修改物料
+     * 修改物料维护
      * 
-     * @param material 物料
+     * @param material 物料维护
      * @return 结果
      */
     @Override
@@ -68,9 +68,9 @@ public class MaterialServiceImpl implements IMaterialService
     }
 
     /**
-     * 批量删除物料
+     * 批量删除物料维护
      * 
-     * @param materialIds 需要删除的物料主键
+     * @param materialIds 需要删除的物料维护主键
      * @return 结果
      */
     @Override
@@ -80,9 +80,9 @@ public class MaterialServiceImpl implements IMaterialService
     }
 
     /**
-     * 删除物料信息
+     * 删除物料维护信息
      * 
-     * @param materialId 物料主键
+     * @param materialId 物料维护主键
      * @return 结果
      */
     @Override

@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mast.mapper.UnitOfAccountMapper">
 
     <resultMap type="UnitOfAccount" id="UnitOfAccountResult">
-        <result property="unitId"    column="unit_id"    />
-        <result property="unitTypeName"    column="unit_type_name"    />
-        <result property="calculationUnitCode"    column="calculation_unit_code"    />
-        <result property="meteringUnit"    column="metering_unit"    />
-        <result property="sourceSystem"    column="source_system"    />
-        <result property="unitConversionRate"    column="unit_conversion_rate"    />
-        <result property="accuracy"    column="accuracy"    />
-        <result property="enable"    column="enable"    />
+        <result property="unitId" column="unit_id"/>
+        <result property="unitTypeName" column="unit_type_name"/>
+        <result property="calculationUnitCode" column="calculation_unit_code"/>
+        <result property="meteringUnit" column="metering_unit"/>
+        <result property="sourceSystem" column="source_system"/>
+        <result property="unitConversionRate" column="unit_conversion_rate"/>
+        <result property="accuracy" column="accuracy"/>
+        <result property="enable" column="enable"/>
     </resultMap>
 
     <sql id="selectUnitOfAccountVo">
-        select unit_id, unit_type_name, calculation_unit_code, metering_unit, source_system, unit_conversion_rate, accuracy, enable from unit_of_account
+        select unit_id,
+               unit_type_name,
+               calculation_unit_code,
+               metering_unit,
+               source_system,
+               unit_conversion_rate,
+               accuracy,
+               enable
+        from unit_of_account
     </sql>
 
     <select id="selectUnitOfAccountList" parameterType="UnitOfAccount" resultMap="UnitOfAccountResult">
@@ -40,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unitConversionRate != null">unit_conversion_rate,</if>
             <if test="accuracy != null">accuracy,</if>
             <if test="enable != null">enable,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="unitTypeName != null">#{unitTypeName},</if>
             <if test="calculationUnitCode != null">#{calculationUnitCode},</if>
@@ -49,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unitConversionRate != null">#{unitConversionRate},</if>
             <if test="accuracy != null">#{accuracy},</if>
             <if test="enable != null">#{enable},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateUnitOfAccount" parameterType="UnitOfAccount">
@@ -67,7 +75,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteUnitOfAccountByUnitId" parameterType="Long">
-        delete from unit_of_account where unit_id = #{unitId}
+        delete
+        from unit_of_account
+        where unit_id = #{unitId}
     </delete>
 
     <delete id="deleteUnitOfAccountByUnitIds" parameterType="String">

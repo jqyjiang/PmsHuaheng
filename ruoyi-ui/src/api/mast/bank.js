@@ -12,7 +12,7 @@ export function listBank(query) {
 // 查询银行类型列表
 export function listBank_type(query) {
   return request({
-    url: '/mast/bank_type/list',
+    url: '/mast/bank_type/listAll',
     method: 'get',
     params: query
   })

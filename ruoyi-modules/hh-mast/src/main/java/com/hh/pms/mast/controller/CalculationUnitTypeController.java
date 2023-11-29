@@ -24,7 +24,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 计量单位类型定义Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-11-28
  */
@@ -43,6 +43,13 @@ public class CalculationUnitTypeController extends BaseController
     public TableDataInfo list(CalculationUnitType calculationUnitType)
     {
         startPage();
+        List<CalculationUnitType> list = calculationUnitTypeService.selectCalculationUnitTypeList(calculationUnitType);
+        return getDataTable(list);
+    }
+    @RequiresPermissions("mast:unit_type:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(CalculationUnitType calculationUnitType)
+    {
         List<CalculationUnitType> list = calculationUnitTypeService.selectCalculationUnitTypeList(calculationUnitType);
         return getDataTable(list);
     }

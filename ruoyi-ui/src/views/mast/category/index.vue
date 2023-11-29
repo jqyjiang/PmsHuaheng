@@ -17,6 +17,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="是否启用" prop="enable">
+        <el-input
+          v-model="queryParams.enable"
+          placeholder="请输入是否启用"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="上级品类" prop="superiorCategory">
         <el-input
           v-model="queryParams.superiorCategory"
@@ -79,11 +87,26 @@
 
     <el-table v-loading="loading" :data="categoryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="品类序号" align="center" prop="categoryid" />
+      <!-- <el-table-column label="品类序号" align="center" prop="categoryid" /> -->
       <el-table-column label="品类代码" align="center" prop="categoryCode" />
       <el-table-column label="品类名称" align="center" prop="categoryName" />
-      <el-table-column label="启用" align="center" prop="enable" />
-      <el-table-column label="允许超量送货" align="center" prop="isNo" />
+      <el-table-column label="是否启用" align="center" prop="enable">
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="enableStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
+      </el-table-column>
+      <!-- <el-table-column label="是否允许超量送货" align="center" prop="isNo" /> -->
+      <el-table-column label="是否允许超量送货" align="center" prop="isNo">
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="isNoStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
+      </el-table-column>
       <el-table-column label="上级品类" align="center" prop="superiorCategory" />
       <el-table-column label="创建时间" align="center" prop="creationTime" width="180">
         <template slot-scope="scope">
@@ -133,6 +156,12 @@
         <el-form-item label="品类名称" prop="categoryName">
           <el-input v-model="form.categoryName" placeholder="请输入品类名称" />
         </el-form-item>
+        <el-form-item label="是否启用" prop="enable">
+          <el-input v-model="form.enable" placeholder="请输入是否启用" />
+        </el-form-item>
+        <el-form-item label="是否允许超量送货" prop="isNo">
+          <el-input v-model="form.isNo" placeholder="请输入是否允许超量送货" />
+        </el-form-item>
         <el-form-item label="上级品类" prop="superiorCategory">
           <el-input v-model="form.superiorCategory" placeholder="请输入上级品类" />
         </el-form-item>
@@ -155,14 +184,17 @@
             placeholder="请选择最后更新时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="业务实体名称" prop="bEName">
-          <el-input v-model="form.bEName" placeholder="请输入业务实体名称" />
-        </el-form-item>
         <el-form-item label="公司" prop="company">
           <el-input v-model="form.company" placeholder="请输入公司" />
         </el-form-item>
         <el-form-item label="计量单位" prop="meteringUnit">
           <el-input v-model="form.meteringUnit" placeholder="请输入计量单位" />
+        </el-form-item>
+        <el-form-item label="来源系统" prop="sourceSystem">
+          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
+        </el-form-item>
+        <el-form-item label="引入要求 1:严格 0：一般" prop="introductionRequirements">
+          <el-input v-model="form.introductionRequirements" placeholder="请输入引入要求 1:严格 0：一般" />
         </el-form-item>
         <el-form-item label="分配采购人" prop="assignPurchaser">
           <el-input v-model="form.assignPurchaser" placeholder="请输入分配采购人" />
@@ -197,6 +229,8 @@ export default {
       total: 0,
       // 品类表格数据
       categoryList: [],
+      enableStatus: [], // 用于存储复选框选中状态的数组
+      isNoStatus: [], // 用于存储复选框选中状态的数组  是否允许超量送货
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -228,6 +262,8 @@ export default {
         this.categoryList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.enableStatus = this.categoryList.map((account) => account.enable === 1);
+        this.isNoStatus = this.categoryList.map((account) => account.isNo === 1);
       });
     },
     // 取消按钮
@@ -247,7 +283,6 @@ export default {
         creationTime: null,
         lUpdated: null,
         lUpdateTime: null,
-        bEName: null,
         company: null,
         meteringUnit: null,
         sourceSystem: null,

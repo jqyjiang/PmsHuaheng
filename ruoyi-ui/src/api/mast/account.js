@@ -12,7 +12,7 @@ export function listAccount(query) {
 // 查询计量单位类型定义列表
 export function listUnit_type(query) {
   return request({
-    url: '/mast/unit_type/list',
+    url: '/mast/unit_type/listAll',
     method: 'get',
     params: query
   })

@@ -46,6 +46,13 @@ public class TaxRateController extends BaseController
         List<TaxRate> list = taxRateService.selectTaxRateList(taxRate);
         return getDataTable(list);
     }
+    @RequiresPermissions("mast:rate:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(TaxRate taxRate)
+    {
+        List<TaxRate> list = taxRateService.selectTaxRateList(taxRate);
+        return getDataTable(list);
+    }
 
     /**
      * 导出税率列表

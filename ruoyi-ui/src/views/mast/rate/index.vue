@@ -58,15 +58,14 @@
       <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
       <el-table-column label="税种代码" align="center" prop="taxCode" />
       <el-table-column label="描述" align="center" prop="describes" />
-      <el-table-column label="税率" align="center" prop="taxRate" />
+      <el-table-column label="税率" align="center" prop="taxRate" :formatter="formatTaxRate"/>
       <el-table-column label="是否启用" align="center" prop="enable">
-        <template slot-scope="scope">
-          <el-checkbox
-            v-model="scope.row.enable"
-            :disabled="true"
-            :checked="scope.row.enable === 1"
-          ></el-checkbox>
-      </template>
+       <template slot-scope="scope">
+        <el-checkbox
+         :value="enableStatus[scope.$index]"
+         :disabled="true"
+        ></el-checkbox>
+       </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -139,6 +138,7 @@ export default {
       total: 0,
       // 税率表格数据
       rateList: [],
+      enableStatus: [], // 用于存储复选框选中状态的数组
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -159,6 +159,13 @@ export default {
     this.getList();
   },
   methods: {
+    formatTaxRate(row, column) {
+      const value = row[column.property];
+      if (value === null || value === undefined) {
+        return ''; // 处理空值情况
+      }
+      return parseFloat(value).toFixed(2); // 使用 toFixed 方法保留两位小数
+    },
     /** 查询税率列表 */
     getList() {
       this.loading = true;
@@ -166,6 +173,7 @@ export default {
         this.rateList = response.rows;
         this.total = response.total;
         this.loading = false;
+        this.enableStatus = this.rateList.map((account) => account.enable === 1);
       });
     },
     // 取消按钮
@@ -254,5 +262,6 @@ export default {
     }
   }
 };
+
 </script>
 

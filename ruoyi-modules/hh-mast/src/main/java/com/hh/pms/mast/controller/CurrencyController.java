@@ -46,6 +46,13 @@ public class CurrencyController extends BaseController
         List<Currency> list = currencyService.selectCurrencyList(currency);
         return getDataTable(list);
     }
+    @RequiresPermissions("mast:currency:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(Currency currency)
+    {
+        List<Currency> list = currencyService.selectCurrencyList(currency);
+        return getDataTable(list);
+    }
 
     /**
      * 导出币种列表

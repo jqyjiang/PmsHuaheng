@@ -46,6 +46,13 @@ public class UnitOfAccountController extends BaseController
         List<UnitOfAccount> list = unitOfAccountService.selectUnitOfAccountList(unitOfAccount);
         return getDataTable(list);
     }
+    @RequiresPermissions("mast:account:list")
+    @GetMapping("/listAll")
+    public TableDataInfo lists(UnitOfAccount unitOfAccount)
+    {
+        List<UnitOfAccount> list = unitOfAccountService.selectUnitOfAccountList(unitOfAccount);
+        return getDataTable(list);
+    }
 
     /**
      * 导出计算单位定义列表
