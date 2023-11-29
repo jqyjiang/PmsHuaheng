@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="mustNumber"    column="must_number"    />
         <result property="mustDate"    column="must_date"    />
         <result property="currencyId"    column="currency_id"    />
-        <result property="referenceDate"    column="reference_date"    />
+        <result property="referencePrice"    column="reference_price"    />
         <result property="unitPrice"    column="unit_price"    />
         <result property="rateValue"    column="rate_value"    />
         <result property="budgetAmount"    column="budget_amount"    />
@@ -19,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMaterialInformationVo">
-        select mi_id, material_id, must_number, must_date, currency_id, reference_date, unit_price, rate_value, budget_amount, remarks, annex from material_information
+        select mi_id, material_id, must_number, must_date, currency_id, reference_price, unit_price, rate_value, budget_amount, remarks, annex from material_information
     </sql>
 
     <select id="selectMaterialInformationList" parameterType="MaterialInformation" resultMap="MaterialInformationResult">
@@ -29,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mustNumber != null "> and must_number = #{mustNumber}</if>
             <if test="mustDate != null "> and must_date = #{mustDate}</if>
             <if test="currencyId != null "> and currency_id = #{currencyId}</if>
-            <if test="referenceDate != null "> and reference_date = #{referenceDate}</if>
+            <if test="referencePrice != null "> and reference_price = #{referencePrice}</if>
             <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
             <if test="rateValue != null  and rateValue != ''"> and rate_value = #{rateValue}</if>
             <if test="budgetAmount != null  and budgetAmount != ''"> and budget_amount = #{budgetAmount}</if>
@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mustNumber != null">must_number,</if>
             <if test="mustDate != null">must_date,</if>
             <if test="currencyId != null">currency_id,</if>
-            <if test="referenceDate != null">reference_date,</if>
+            <if test="referencePrice != null">reference_price,</if>
             <if test="unitPrice != null">unit_price,</if>
             <if test="rateValue != null">rate_value,</if>
             <if test="budgetAmount != null">budget_amount,</if>
@@ -62,7 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mustNumber != null">#{mustNumber},</if>
             <if test="mustDate != null">#{mustDate},</if>
             <if test="currencyId != null">#{currencyId},</if>
-            <if test="referenceDate != null">#{referenceDate},</if>
+            <if test="referencePrice != null">#{referencePrice},</if>
             <if test="unitPrice != null">#{unitPrice},</if>
             <if test="rateValue != null">#{rateValue},</if>
             <if test="budgetAmount != null">#{budgetAmount},</if>
@@ -78,7 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="mustNumber != null">must_number = #{mustNumber},</if>
             <if test="mustDate != null">must_date = #{mustDate},</if>
             <if test="currencyId != null">currency_id = #{currencyId},</if>
-            <if test="referenceDate != null">reference_date = #{referenceDate},</if>
+            <if test="referencePrice != null">reference_price = #{referencePrice},</if>
             <if test="unitPrice != null">unit_price = #{unitPrice},</if>
             <if test="rateValue != null">rate_value = #{rateValue},</if>
             <if test="budgetAmount != null">budget_amount = #{budgetAmount},</if>

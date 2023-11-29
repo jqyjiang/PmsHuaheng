@@ -62,9 +62,6 @@ public class OrderManagerController extends BaseController
     @RequiresPermissions("mast:material:list")
     @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
     public TableDataInfo listMaterial(Material material,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
-//        System.out.println("传递的对象:"+material);
-//        System.out.println("那一页:"+pageNum);
-//        System.out.println("多少行:"+pageSize);
         return materialClient.list(material,pageNum,pageSize);
     }
 

@@ -9,10 +9,10 @@ import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
- * 采购需求池对象 material
- * 
+ * 物料维护对象 material
+ *
  * @author ruoyi
- * @date 2023-11-27
+ * @date 2023-11-29
  */
 public class Material extends BaseEntity
 {
@@ -31,7 +31,7 @@ public class Material extends BaseEntity
 
     /** 基本计算单位 */
     @Excel(name = "基本计算单位")
-    private String calculationUnit;
+    private Integer calculationUnit;
 
     /** 采购员 */
     @Excel(name = "采购员")
@@ -56,251 +56,239 @@ public class Material extends BaseEntity
 
     /** 主品类 */
     @Excel(name = "主品类")
-    private String mCategory;
+    private Long mCategory;
 
     /** 规格 */
-    @Excel(name = "规格")
     private String specifications;
 
     /** 型号 */
-    @Excel(name = "型号")
     private String model;
 
     /** 品牌 */
-    @Excel(name = "品牌")
     private String brand;
 
     /** 默认税种/税率 */
-    @Excel(name = "默认税种/税率")
-    private BigDecimal categoriesTaxes;
+    private Integer categoriesTaxes;
 
     /** 物料图片 */
-    @Excel(name = "物料图片")
     private String image;
 
     /** 毛重 */
-    @Excel(name = "毛重")
     private BigDecimal gWeight;
 
     /** 净重 */
-    @Excel(name = "净重")
     private BigDecimal nWeight;
 
     /** 重量单位 */
-    @Excel(name = "重量单位")
-    private String weight;
+    private Long weight;
 
     /** 体积 */
-    @Excel(name = "体积")
     private BigDecimal volume;
 
     /** 体积单位 */
-    @Excel(name = "体积单位")
-    private String vUnit;
+    private Integer vUnit;
 
     /** 物料ABC属性 */
-    @Excel(name = "物料ABC属性")
     private String abcAttribute;
 
     /** 是否免检 */
-    @Excel(name = "是否免检")
     private Long avoidInspect;
 
-    public void setMaterialId(Long materialId) 
+    public void setMaterialId(Long materialId)
     {
         this.materialId = materialId;
     }
 
-    public Long getMaterialId() 
+    public Long getMaterialId()
     {
         return materialId;
     }
-    public void setMaterialCode(String materialCode) 
+    public void setMaterialCode(String materialCode)
     {
         this.materialCode = materialCode;
     }
 
-    public String getMaterialCode() 
+    public String getMaterialCode()
     {
         return materialCode;
     }
-    public void setMaterialName(String materialName) 
+    public void setMaterialName(String materialName)
     {
         this.materialName = materialName;
     }
 
-    public String getMaterialName() 
+    public String getMaterialName()
     {
         return materialName;
     }
-    public void setCalculationUnit(String calculationUnit) 
+    public void setCalculationUnit(Integer calculationUnit)
     {
         this.calculationUnit = calculationUnit;
     }
 
-    public String getCalculationUnit() 
+    public Integer getCalculationUnit()
     {
         return calculationUnit;
     }
-    public void setPurchaser(String purchaser) 
+    public void setPurchaser(String purchaser)
     {
         this.purchaser = purchaser;
     }
 
-    public String getPurchaser() 
+    public String getPurchaser()
     {
         return purchaser;
     }
-    public void setlUpdated(String lUpdated) 
+    public void setlUpdated(String lUpdated)
     {
         this.lUpdated = lUpdated;
     }
 
-    public String getlUpdated() 
+    public String getlUpdated()
     {
         return lUpdated;
     }
-    public void setlUpdateTime(Date lUpdateTime) 
+    public void setlUpdateTime(Date lUpdateTime)
     {
         this.lUpdateTime = lUpdateTime;
     }
 
-    public Date getlUpdateTime() 
+    public Date getlUpdateTime()
     {
         return lUpdateTime;
     }
-    public void setSourceSystem(String sourceSystem) 
+    public void setSourceSystem(String sourceSystem)
     {
         this.sourceSystem = sourceSystem;
     }
 
-    public String getSourceSystem() 
+    public String getSourceSystem()
     {
         return sourceSystem;
     }
-    public void setEnable(Long enable) 
+    public void setEnable(Long enable)
     {
         this.enable = enable;
     }
 
-    public Long getEnable() 
+    public Long getEnable()
     {
         return enable;
     }
-    public void setmCategory(String mCategory) 
+    public void setmCategory(Long mCategory)
     {
         this.mCategory = mCategory;
     }
 
-    public String getmCategory() 
+    public Long getmCategory()
     {
         return mCategory;
     }
-    public void setSpecifications(String specifications) 
+    public void setSpecifications(String specifications)
     {
         this.specifications = specifications;
     }
 
-    public String getSpecifications() 
+    public String getSpecifications()
     {
         return specifications;
     }
-    public void setModel(String model) 
+    public void setModel(String model)
     {
         this.model = model;
     }
 
-    public String getModel() 
+    public String getModel()
     {
         return model;
     }
-    public void setBrand(String brand) 
+    public void setBrand(String brand)
     {
         this.brand = brand;
     }
 
-    public String getBrand() 
+    public String getBrand()
     {
         return brand;
     }
-    public void setCategoriesTaxes(BigDecimal categoriesTaxes) 
+    public void setCategoriesTaxes(Integer categoriesTaxes)
     {
         this.categoriesTaxes = categoriesTaxes;
     }
 
-    public BigDecimal getCategoriesTaxes() 
+    public Integer getCategoriesTaxes()
     {
         return categoriesTaxes;
     }
-    public void setImage(String image) 
+    public void setImage(String image)
     {
         this.image = image;
     }
 
-    public String getImage() 
+    public String getImage()
     {
         return image;
     }
-    public void setgWeight(BigDecimal gWeight) 
+    public void setgWeight(BigDecimal gWeight)
     {
         this.gWeight = gWeight;
     }
 
-    public BigDecimal getgWeight() 
+    public BigDecimal getgWeight()
     {
         return gWeight;
     }
-    public void setnWeight(BigDecimal nWeight) 
+    public void setnWeight(BigDecimal nWeight)
     {
         this.nWeight = nWeight;
     }
 
-    public BigDecimal getnWeight() 
+    public BigDecimal getnWeight()
     {
         return nWeight;
     }
-    public void setWeight(String weight) 
+    public void setWeight(Long weight)
     {
         this.weight = weight;
     }
 
-    public String getWeight() 
+    public Long getWeight()
     {
         return weight;
     }
-    public void setVolume(BigDecimal volume) 
+    public void setVolume(BigDecimal volume)
     {
         this.volume = volume;
     }
 
-    public BigDecimal getVolume() 
+    public BigDecimal getVolume()
     {
         return volume;
     }
-    public void setvUnit(String vUnit) 
+    public void setvUnit(Integer vUnit)
     {
         this.vUnit = vUnit;
     }
 
-    public String getvUnit() 
+    public Integer getvUnit()
     {
         return vUnit;
     }
-    public void setAbcAttribute(String abcAttribute) 
+    public void setAbcAttribute(String abcAttribute)
     {
         this.abcAttribute = abcAttribute;
     }
 
-    public String getAbcAttribute() 
+    public String getAbcAttribute()
     {
         return abcAttribute;
     }
-    public void setAvoidInspect(Long avoidInspect) 
+    public void setAvoidInspect(Long avoidInspect)
     {
         this.avoidInspect = avoidInspect;
     }
 
-    public Long getAvoidInspect() 
+    public Long getAvoidInspect()
     {
         return avoidInspect;
     }
@@ -308,28 +296,28 @@ public class Material extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("materialId", getMaterialId())
-            .append("materialCode", getMaterialCode())
-            .append("materialName", getMaterialName())
-            .append("calculationUnit", getCalculationUnit())
-            .append("purchaser", getPurchaser())
-            .append("lUpdated", getlUpdated())
-            .append("lUpdateTime", getlUpdateTime())
-            .append("sourceSystem", getSourceSystem())
-            .append("enable", getEnable())
-            .append("mCategory", getmCategory())
-            .append("specifications", getSpecifications())
-            .append("model", getModel())
-            .append("brand", getBrand())
-            .append("categoriesTaxes", getCategoriesTaxes())
-            .append("image", getImage())
-            .append("gWeight", getgWeight())
-            .append("nWeight", getnWeight())
-            .append("weight", getWeight())
-            .append("volume", getVolume())
-            .append("vUnit", getvUnit())
-            .append("abcAttribute", getAbcAttribute())
-            .append("avoidInspect", getAvoidInspect())
-            .toString();
+                .append("materialId", getMaterialId())
+                .append("materialCode", getMaterialCode())
+                .append("materialName", getMaterialName())
+                .append("calculationUnit", getCalculationUnit())
+                .append("purchaser", getPurchaser())
+                .append("lUpdated", getlUpdated())
+                .append("lUpdateTime", getlUpdateTime())
+                .append("sourceSystem", getSourceSystem())
+                .append("enable", getEnable())
+                .append("mCategory", getmCategory())
+                .append("specifications", getSpecifications())
+                .append("model", getModel())
+                .append("brand", getBrand())
+                .append("categoriesTaxes", getCategoriesTaxes())
+                .append("image", getImage())
+                .append("gWeight", getgWeight())
+                .append("nWeight", getnWeight())
+                .append("weight", getWeight())
+                .append("volume", getVolume())
+                .append("vUnit", getvUnit())
+                .append("abcAttribute", getAbcAttribute())
+                .append("avoidInspect", getAvoidInspect())
+                .toString();
     }
 }

@@ -131,30 +131,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateMaterialRequirement" parameterType="MaterialRequirement">
         update material_requirement
         <trim prefix="SET" suffixOverrides=",">
-            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>
-            <if test="requirementCreator != null">requirement_creator = #{requirementCreator},</if>
-            <if test="requirementTitle != null">requirement_title = #{requirementTitle},</if>
-            <if test="createDepartment != null">create_department = #{createDepartment},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="demander != null">demander = #{demander},</if>
-            <if test="demandDepartment != null">demand_department = #{demandDepartment},</if>
-            <if test="requirementType != null">requirement_type = #{requirementType},</if>
-            <if test="companiesId != null">companies_id = #{companiesId},</if>
-            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
-            <if test="contactPerson != null">contact_person = #{contactPerson},</if>
-            <if test="expenseDepartment != null">expense_department = #{expenseDepartment},</if>
-            <if test="description != null">description = #{description},</if>
-            <if test="address != null">address = #{address},</if>
-            <if test="phone != null">phone = #{phone},</if>
-            <if test="annex != null">annex = #{annex},</if>
-            <if test="currencyId != null">currency_id = #{currencyId},</if>
-            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>
-            <if test="materialId != null">material_id = #{materialId},</if>
-            <if test="requiredMaterials != null">required_materials = #{requiredMaterials},</if>
-            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>
-            <if test="automaticAssign != null">automatic_assign = #{automaticAssign},</if>
+<!--            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>-->
+<!--            <if test="requirementCreator != null">requirement_creator = #{requirementCreator},</if>-->
+<!--            <if test="requirementTitle != null">requirement_title = #{requirementTitle},</if>-->
+<!--            <if test="createDepartment != null">create_department = #{createDepartment},</if>-->
+<!--            <if test="createTime != null">create_time = #{createTime},</if>-->
+<!--            <if test="demander != null">demander = #{demander},</if>-->
+<!--            <if test="demandDepartment != null">demand_department = #{demandDepartment},</if>-->
+<!--            <if test="requirementType != null">requirement_type = #{requirementType},</if>-->
+<!--            <if test="companiesId != null">companies_id = #{companiesId},</if>-->
+<!--            <if test="totalAmount != null">total_amount = #{totalAmount},</if>-->
+<!--            <if test="contactPerson != null">contact_person = #{contactPerson},</if>-->
+<!--            <if test="expenseDepartment != null">expense_department = #{expenseDepartment},</if>-->
+<!--            <if test="description != null">description = #{description},</if>-->
+<!--            <if test="address != null">address = #{address},</if>-->
+<!--            <if test="phone != null">phone = #{phone},</if>-->
+<!--            <if test="annex != null">annex = #{annex},</if>-->
+<!--            <if test="currencyId != null">currency_id = #{currencyId},</if>-->
+<!--            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>-->
+<!--            <if test="materialId != null">material_id = #{materialId},</if>-->
+<!--            <if test="requiredMaterials != null">required_materials = #{requiredMaterials},</if>-->
+<!--            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>-->
+<!--            <if test="automaticAssign != null">automatic_assign = #{automaticAssign},</if>-->
             <if test="status != null">status = #{status},</if>
-            <if test="mi_id != null">mi_id = #{mi_id},</if>
+<!--            <if test="mi_id != null">mi_id = #{mi_id},</if>-->
         </trim>
         where requirement_id = #{requirementId}
     </update>

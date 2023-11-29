@@ -1,6 +1,7 @@
 package com.hh.pms.domain;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,9 +11,9 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 采购需求池对象 material_information
- * 
+ *
  * @author ruoyi
- * @date 2023-11-27
+ * @date 2023-11-29
  */
 public class MaterialInformation extends BaseEntity
 {
@@ -38,10 +39,9 @@ public class MaterialInformation extends BaseEntity
     @Excel(name = "币种")
     private Long currencyId;
 
-    /** 参考日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "参考日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date referenceDate;
+    /** 参考价格 */
+    @Excel(name = "参考价格")
+    private BigDecimal referencePrice;
 
     /** 预算单价(不含税) */
     @Excel(name = "预算单价(不含税)")
@@ -63,120 +63,134 @@ public class MaterialInformation extends BaseEntity
     @Excel(name = "附件")
     private String annex;
 
-    public void setMiId(Integer miId) 
+    /** 物料维护信息 */
+    private List<Material> materialList;
+
+    public void setMiId(Integer miId)
     {
         this.miId = miId;
     }
 
-    public Integer getMiId() 
+    public Integer getMiId()
     {
         return miId;
     }
-    public void setMaterialId(Long materialId) 
+    public void setMaterialId(Long materialId)
     {
         this.materialId = materialId;
     }
 
-    public Long getMaterialId() 
+    public Long getMaterialId()
     {
         return materialId;
     }
-    public void setMustNumber(Long mustNumber) 
+    public void setMustNumber(Long mustNumber)
     {
         this.mustNumber = mustNumber;
     }
 
-    public Long getMustNumber() 
+    public Long getMustNumber()
     {
         return mustNumber;
     }
-    public void setMustDate(Date mustDate) 
+    public void setMustDate(Date mustDate)
     {
         this.mustDate = mustDate;
     }
 
-    public Date getMustDate() 
+    public Date getMustDate()
     {
         return mustDate;
     }
-    public void setCurrencyId(Long currencyId) 
+    public void setCurrencyId(Long currencyId)
     {
         this.currencyId = currencyId;
     }
 
-    public Long getCurrencyId() 
+    public Long getCurrencyId()
     {
         return currencyId;
     }
-    public void setReferenceDate(Date referenceDate) 
+    public void setReferencePrice(BigDecimal referencePrice)
     {
-        this.referenceDate = referenceDate;
+        this.referencePrice = referencePrice;
     }
 
-    public Date getReferenceDate() 
+    public BigDecimal getReferencePrice()
     {
-        return referenceDate;
+        return referencePrice;
     }
-    public void setUnitPrice(BigDecimal unitPrice) 
+    public void setUnitPrice(BigDecimal unitPrice)
     {
         this.unitPrice = unitPrice;
     }
 
-    public BigDecimal getUnitPrice() 
+    public BigDecimal getUnitPrice()
     {
         return unitPrice;
     }
-    public void setRateValue(String rateValue) 
+    public void setRateValue(String rateValue)
     {
         this.rateValue = rateValue;
     }
 
-    public String getRateValue() 
+    public String getRateValue()
     {
         return rateValue;
     }
-    public void setBudgetAmount(String budgetAmount) 
+    public void setBudgetAmount(String budgetAmount)
     {
         this.budgetAmount = budgetAmount;
     }
 
-    public String getBudgetAmount() 
+    public String getBudgetAmount()
     {
         return budgetAmount;
     }
-    public void setRemarks(String remarks) 
+    public void setRemarks(String remarks)
     {
         this.remarks = remarks;
     }
 
-    public String getRemarks() 
+    public String getRemarks()
     {
         return remarks;
     }
-    public void setAnnex(String annex) 
+    public void setAnnex(String annex)
     {
         this.annex = annex;
     }
 
-    public String getAnnex() 
+    public String getAnnex()
     {
         return annex;
+    }
+
+    public List<Material> getMaterialList()
+    {
+        return materialList;
+    }
+
+    public void setMaterialList(List<Material> materialList)
+    {
+        this.materialList = materialList;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("miId", getMiId())
-            .append("materialId", getMaterialId())
-            .append("mustNumber", getMustNumber())
-            .append("mustDate", getMustDate())
-            .append("currencyId", getCurrencyId())
-            .append("referenceDate", getReferenceDate())
-            .append("unitPrice", getUnitPrice())
-            .append("rateValue", getRateValue())
-            .append("budgetAmount", getBudgetAmount())
-            .append("remarks", getRemarks())
-            .append("annex", getAnnex())
-            .toString();
+                .append("miId", getMiId())
+                .append("materialId", getMaterialId())
+                .append("mustNumber", getMustNumber())
+                .append("mustDate", getMustDate())
+                .append("currencyId", getCurrencyId())
+                .append("referencePrice", getReferencePrice())
+                .append("unitPrice", getUnitPrice())
+                .append("rateValue", getRateValue())
+                .append("budgetAmount", getBudgetAmount())
+                .append("remarks", getRemarks())
+                .append("annex", getAnnex())
+                .append("materialList", getMaterialList())
+                .toString();
     }
 }

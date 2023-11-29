@@ -42,3 +42,12 @@ export function delRequirement(requirementId) {
     method: 'delete'
   })
 }
+
+// 查询物料列表
+export function listInformation(query) {
+  return request({
+    url: '/procure/information/list',
+    method: 'get',
+    params: query
+  })
+}

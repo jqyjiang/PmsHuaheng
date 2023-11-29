@@ -17,8 +17,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      
-     
       <el-form-item label="需求部门" prop="demandDepartment">
         <el-input
           v-model="queryParams.demandDepartment"
@@ -117,7 +115,7 @@
         </template>
       </el-table-column> -->
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -127,7 +125,7 @@
     />
 
     <!-- 添加或修改采购需求申请对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="950px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="需求编号" prop="requirementCode">
           <el-input v-model="form.requirementCode" placeholder="请输入需求编号" />
@@ -185,6 +183,175 @@
         <el-form-item label="自动分配" prop="automaticAssign">
           <el-input v-model="form.automaticAssign" placeholder="请输入自动分配" />
         </el-form-item>
+        <el-form-item label="物料信息ID" prop="miId">
+          <el-input v-model="form.mi_id" placeholder="物料信息ID" />
+        </el-form-item>
+        <!--   物料信息    -->
+        <el-divider content-position="center">物料明细信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddMaterial">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteMaterial">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="InfomaterialList" :row-class-name="rowMaterialIndex" @selection-change="handleMaterialSelectionChange" ref="material">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="物料编码" prop="materialCode" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.materialCode" placeholder="请输入物料编码" />
+              <i class="el-icon-search" id="serachOne1" @click="showMaterial()"></i>
+              <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
+                <!-- 这里是物料管理的内容 -->
+                <el-table v-loading="loading" :data="materialList" @row-click="handleRowClickMaterial">
+                  <el-table-column type="selection" width="55" align="center" />
+                  <el-table-column label="物料编码" align="center" prop="materialCode" />
+                  <el-table-column label="物料名称" align="center" prop="materialName" />
+                </el-table>
+
+                <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="mqueryParams.pageNum"
+                  :limit.sync="mqueryParams.pageSize" @pagination="getList2" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogMaterial = false">取消</el-button>
+                </div>
+              </el-dialog>
+            </template>
+          </el-table-column>
+          <el-table-column label="物料名称" prop="materialName" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.materialName" placeholder="请输入物料名称" />
+            </template>
+          </el-table-column>
+
+          <el-table-column label="品类代码" prop="categoryCode" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.categoryCode" placeholder="请输入品类代码" />
+            </template>
+          </el-table-column>
+
+          <el-table-column label="品类名称" prop="categoryName" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.categoryName" placeholder="请输入品类名称" />
+            </template>
+          </el-table-column>
+
+          <el-table-column label="基本计算单位" prop="calculationUnit" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.calculationUnit" placeholder="请输入基本计算单位" />
+            </template>
+          </el-table-column>
+
+          <el-table-column label="最后更新人" prop="lUpdated" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.lUpdated" placeholder="请输入最后更新人" />
+            </template>
+          </el-table-column>
+          <el-table-column label="最后更新时间" prop="lUpdateTime" width="240">
+            <template slot-scope="scope">
+              <el-date-picker clearable v-model="scope.row.lUpdateTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择最后更新时间" />
+            </template>
+          </el-table-column>
+          <el-table-column label="来源系统" prop="sourceSystem" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.sourceSystem" placeholder="请输入来源系统" />
+            </template>
+          </el-table-column>
+          <el-table-column label="是否启用" prop="enable" width="150">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.enable" placeholder="请选择是否启用">
+                <el-option label="请选择字典生成" value="" />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="主品类" prop="mCategory" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.mCategory" placeholder="请输入主品类" />
+            </template>
+          </el-table-column>
+          <el-table-column label="物料规格" prop="specifications" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.specifications" placeholder="请输入规格" />
+            </template>
+          </el-table-column>
+          <el-table-column label="物料型号" prop="model" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.model" placeholder="请输入型号" />
+            </template>
+          </el-table-column>
+          <el-table-column label="品牌" prop="brand" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.brand" placeholder="请输入品牌" />
+            </template>
+          </el-table-column>
+          <el-table-column label="物料单位" prop="calculationUnit" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.calculationUnit" placeholder="请输入基本计算单位" />
+            </template>
+          </el-table-column>
+          <el-table-column label="需求数量" prop="mustNumber" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.mustNumber" placeholder="请输入品牌" />
+          </template>
+        </el-table-column><el-table-column label="需求日期" prop="mustDate" width="150">
+          <template slot-scope="scope">
+            <el-date-picker clearable
+                            v-model="scope.row.mustDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="请选择需求日期">
+            </el-date-picker>
+          </template>
+        </el-table-column>
+          <el-table-column label="币种" prop="currencyId" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.currencyId" placeholder="请输入默认税种/税率" />
+            </template>
+          </el-table-column>
+          <el-table-column label="参考价格" prop="referencePrice" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.referencePrice" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="预算单价(不含税)" prop="unitPrice" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.unitPrice" placeholder=""/>
+            </template>
+          </el-table-column>
+          <el-table-column label="税率" prop="weight" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.weight" placeholder="请输入重量单位" />
+            </template>
+          </el-table-column>
+          <el-table-column label="税率值" prop="volume" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.volume" placeholder="请输入体积" />
+            </template>
+          </el-table-column>
+          <el-table-column label="行预算金额" prop="budgetAmount" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.budgetAmount" placeholder=""/>
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" prop="remarks" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.remarks"  />
+            </template>
+          </el-table-column>
+<!--          <el-table-column label="附件" prop="annex" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-select v-model="scope.row.annex" placeholder="请选择是否免检">-->
+<!--                <el-option label="请选择字典生成" value="" />-->
+<!--              </el-select>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+          <el-table-column label="采购员" prop="purchaser" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.purchaser" placeholder="请输入采购员" />
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -195,7 +362,7 @@
 </template>
 
 <script>
-import { listRequirement, getRequirement, delRequirement, addRequirement, updateRequirement } from "@/api/procure/requirement";
+import { listRequirement, getRequirement, delRequirement, addRequirement, updateRequirement, listInformation } from "@/api/procure/requirement";
 
 export default {
   name: "Requirement",
@@ -215,6 +382,21 @@ export default {
       total: 0,
       // 采购需求申请表格数据
       requirementList: [],
+      // 物料表格数据
+      InfomaterialList: [],
+      //物料基本信息总条数
+      mtotal: 0,
+      // 物料基本信息
+      materialList: [],
+       //物料基本信息查询参数
+       mqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        materialCode: null,
+        materialName: null,
+      },
+      //添加物料基本信息
+      materialInfo: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -252,7 +434,8 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      dialogMaterial: false //用于标记物料信息表是否可见
     };
   },
   created() {
@@ -272,6 +455,9 @@ export default {
             return '一般用品采购';
         }
       }
+    },
+    isSelfPickupSelected() {
+      return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
     }
   },
   methods: {
@@ -294,6 +480,19 @@ export default {
       }else{
         return 'danger';
       }
+    },
+      /** 查询采购需求池列表 */
+      getList2() {
+      this.loading = true;
+      listInformation(this.mqueryParams).then(response => {
+        this.informationList = response.rows;
+        this.total = response.total;
+        this.loading = false;
+      });
+    },
+    showMaterial() {
+      this.dialogMaterial = true;
+      this.getList2();
     },
     // 取消按钮
     cancel() {
@@ -329,6 +528,7 @@ export default {
         status: null,
         mi_id: null
       };
+      this.InfomaterialList= [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -341,11 +541,42 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    // 多选框选中数据
+    /** 多选框选中数据 */
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.requirementId)
       this.single = selection.length!==1
       this.multiple = !selection.length
+    },
+    handleRowClickMaterial(row) {
+      const data = {
+        materialName: row.materialName,
+        materialCode: row.materialCode,
+        materialModel: row.model,
+        materialSpecification: row.specifications,
+        materialUnit: row.calculationUnit,
+        materialCategory: row.mCategory,
+        // tax: row.tax,
+      };
+      let index = this.informationList.length;
+      if (this.informationList.length === 1) {
+        // 修改第一条数据的属性值
+        this.informationList[0].materialCode = row.materialCode;
+        this.informationList[0].materialName = row.materialName;
+        this.informationList[0].categoryCode = row.categoryCode;
+        this.informationList[0].materialCategory = row.mCategory;
+        this.informationList[0].materialSpecification = row.specifications;
+        this.informationList[0].materialModel = row.model;
+        this.informationList[0].materialUnit = row.calculationUnit;
+      } else {
+        this.informationList[index - 1].materialCode = row.materialCode;
+        this.informationList[index - 1].materialName = row.materialName;
+        this.informationList[index - 1].categoryCode = row.categoryCode;
+        this.informationList[index - 1].materialCategory = row.mCategory;
+        this.informationList[index - 1].materialSpecification = row.specifications;
+        this.informationList[index - 1].materialModel = row.model;
+        this.informationList[index - 1].materialUnit = row.calculationUnit;
+      }
+      this.dialogMaterial = false; // 关闭对话框
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -367,6 +598,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.InfomaterialList=this.InfomaterialList;
           if (this.form.requirementId != null) {
             updateRequirement(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -393,6 +625,59 @@ export default {
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
+   	/** 物料序号 */
+     rowMaterialIndex({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+    },
+    /** 物料添加按钮操作 */
+    handleAddMaterial() {
+      let obj = {};
+      obj.materialCode = "";
+      obj.materialName = "";
+      obj.calculationUnit = "";
+      obj.purchaser = "";
+      obj.lUpdated = "";
+      obj.lUpdateTime = "";
+      obj.sourceSystem = "";
+      obj.enable = "";
+      obj.mCategory = "";
+      obj.specifications = "";
+      obj.model = "";
+      obj.brand = "";
+      obj.categoriesTaxes = "";
+      obj.image = "";
+      obj.gWeight = "";
+      obj.nWeight = "";
+      obj.weight = "";
+      obj.volume = "";
+      obj.vUnit = "";
+      obj.abcAttribute = "";
+      obj.avoidInspect = "";
+      this.InfomaterialList.push(obj);
+    },
+    /** 物料删除按钮操作 */
+    handleDeleteMaterial() {
+      if (this.checkedMaterial.length == 0) {
+        this.$modal.msgError("请先选择要删除的物料数据");
+      } else {
+        const InfomaterialList = this.InfomaterialList;
+        const checkedMaterial = this.checkedMaterial;
+        this.InfomaterialList = InfomaterialList.filter(function(item) {
+          return checkedMaterial.indexOf(item.index) == -1
+        });
+      }
+    },
+    /** 复选框选中数据 */
+    handleMaterialSelectionChange(selection) {
+      this.checkedMaterial = selection.map(item => item.index)
+    },
+    /** 导出按钮操作 */
+    handleExport() {
+      this.download('procure/information/export', {
+        ...this.queryParams
+      }, `information_${new Date().getTime()}.xlsx`)
+    }
+  },
     /** 导出按钮操作 */
     handleExport() {
       this.download('procure/requirement/export', {
@@ -400,5 +685,11 @@ export default {
       }, `requirement_${new Date().getTime()}.xlsx`)
     }
   }
-};
 </script>
+<style>
+#serachOne1 {
+  position: absolute;
+  right: 15px;
+  top: 21.5px;
+}
+</style>

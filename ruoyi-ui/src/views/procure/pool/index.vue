@@ -24,48 +24,69 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['procure:pool:add']"
-        >新增</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="primary"-->
+<!--          plain-->
+<!--          icon="el-icon-plus"-->
+<!--          size="mini"-->
+<!--          @click="handleAdd"-->
+<!--          v-hasPermi="['procure:pool:add']"-->
+<!--        >新增</el-button>-->
+<!--      </el-col>
+         :disabled="single"
+-->
       <el-col :span="1.5">
         <el-button
           type="success"
           plain
-          icon="el-icon-edit"
           size="mini"
-          :disabled="single"
+          @row-click="handleRowClick"
           @click="handleUpdate"
           v-hasPermi="['procure:pool:edit']"
-        >修改</el-button>
+        >暂挂</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['procure:pool:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['procure:pool:export']"
-        >导出</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="success"-->
+<!--          plain-->
+<!--          size="mini"-->
+<!--          :disabled="single"-->
+<!--          @click="handleUpdate1"-->
+<!--          v-hasPermi="['procure:pool:edit']"-->
+<!--        >作废</el-button>-->
+<!--      </el-col>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="success"-->
+<!--          plain-->
+<!--          size="mini"-->
+<!--          :disabled="single"-->
+<!--          @click="handleUpdate2"-->
+<!--          v-hasPermi="['procure:pool:edit']"-->
+<!--        >分配</el-button>-->
+<!--      </el-col>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="danger"-->
+<!--          plain-->
+<!--          icon="el-icon-delete"-->
+<!--          size="mini"-->
+<!--          :disabled="multiple"-->
+<!--          @click="handleDelete"-->
+<!--          v-hasPermi="['procure:pool:remove']"-->
+<!--        >删除</el-button>-->
+<!--      </el-col>-->
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="warning"-->
+<!--          plain-->
+<!--          icon="el-icon-download"-->
+<!--          size="mini"-->
+<!--          @click="handleExport"-->
+<!--          v-hasPermi="['procure:pool:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -94,7 +115,11 @@
 
       <el-table-column label="需求到货时间" align="center" prop="deliveryTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.deliveryTime, '{y}-{m}-{d}') }}</span>
+          <span  v-for="item in requirementList">
+            <template v-if="scope.row.materialId===item.materialId">
+              {{ parseTime(item.deliveryTime, '{y}-{m}-{d}') }}
+            </template>
+          </span>
         </template>
       </el-table-column>
       <el-table-column label="需求编号" align="center" prop="requirementCode" >
@@ -147,7 +172,7 @@
         <template slot-scope="scope">
           <span v-for="item in requirementList">
             <template v-if="scope.row.materialId===item.materialId">
-              <span :style="{color:item.automaticAssign===1?'red':'green'}">
+              <span :style="{color:item.automaticAssign===1?'green':'red'}">
                 {{item.automaticAssign===1?'是':'否'}}
               </span>
             </template>
@@ -165,24 +190,24 @@
           </span>
       </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['procure:pool:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['procure:pool:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
+<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-edit"-->
+<!--            @click="handleUpdate(scope.row)"-->
+<!--            v-hasPermi="['procure:pool:edit']"-->
+<!--          >修改</el-button>-->
+<!--          <el-button-->
+<!--            size="mini"-->
+<!--            type="text"-->
+<!--            icon="el-icon-delete"-->
+<!--            @click="handleDelete(scope.row)"-->
+<!--            v-hasPermi="['procure:pool:remove']"-->
+<!--          >删除</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -280,6 +305,7 @@ export default {
   name: "Pool",
   data() {
     return {
+      selectedRows: [], // 初始化为空数组
       // 遮罩层
       loading: true,
       // 选中数组
@@ -352,6 +378,10 @@ export default {
             return '已作废';
         }
       }
+    },
+    hasSelectedRows() {
+      console.log('selectedRows:', this.selectedRows);
+      return this.selectedRows.length > 0;
     }
   },
   methods: {
@@ -440,6 +470,9 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
+    handleRowClick(row) {
+      this.selectedRows = [row]; // 将选中的行数据赋值给 selectedRows 数组
+    },
     // /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -448,8 +481,12 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
+      if (!this.hasSelectedRows){
+        this.$message.error('请至少选中一条数据');
+        return;
+      }
       this.reset();
-      const materialId = row.materialId || this.ids
+      const materialId=row.materialId || this.ids;
       getPool(materialId).then(response => {
         this.form = response.data;
         this.open = true;
