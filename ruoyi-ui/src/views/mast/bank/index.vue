@@ -16,7 +16,8 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['mast:bank:add']"
-        >新增</el-button>
+          class="add"
+        >新建</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button
@@ -275,3 +276,4 @@ export default {
   }
 };
 </script>
+

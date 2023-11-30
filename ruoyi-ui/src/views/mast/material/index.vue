@@ -71,7 +71,7 @@
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="物料序号" align="center" prop="materialId" />
+      <!-- <el-table-column label="物料序号" align="center" prop="materialId" /> -->
       <el-table-column label="物料编码" align="center" prop="materialCode" />
       <el-table-column label="物料名称" align="center" prop="materialName" />
       <el-table-column label="基本计算单位" align="center" prop="calculationUnit" >

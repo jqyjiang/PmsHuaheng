@@ -10,7 +10,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 物料维护对象 material
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
@@ -58,6 +58,10 @@ public class Material extends BaseEntity
     @Excel(name = "主品类")
     private Long mCategory;
 
+    //主品类名称
+    @Excel(name = "品类名称")
+    private String categoryName;
+
     /** 规格 */
     private String specifications;
 
@@ -94,201 +98,209 @@ public class Material extends BaseEntity
     /** 是否免检 */
     private Long avoidInspect;
 
-    public void setMaterialId(Long materialId) 
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public void setMaterialId(Long materialId)
     {
         this.materialId = materialId;
     }
 
-    public Long getMaterialId() 
+    public Long getMaterialId()
     {
         return materialId;
     }
-    public void setMaterialCode(String materialCode) 
+    public void setMaterialCode(String materialCode)
     {
         this.materialCode = materialCode;
     }
 
-    public String getMaterialCode() 
+    public String getMaterialCode()
     {
         return materialCode;
     }
-    public void setMaterialName(String materialName) 
+    public void setMaterialName(String materialName)
     {
         this.materialName = materialName;
     }
 
-    public String getMaterialName() 
+    public String getMaterialName()
     {
         return materialName;
     }
-    public void setCalculationUnit(Integer calculationUnit) 
+    public void setCalculationUnit(Integer calculationUnit)
     {
         this.calculationUnit = calculationUnit;
     }
 
-    public Integer getCalculationUnit() 
+    public Integer getCalculationUnit()
     {
         return calculationUnit;
     }
-    public void setPurchaser(String purchaser) 
+    public void setPurchaser(String purchaser)
     {
         this.purchaser = purchaser;
     }
 
-    public String getPurchaser() 
+    public String getPurchaser()
     {
         return purchaser;
     }
-    public void setlUpdated(String lUpdated) 
+    public void setlUpdated(String lUpdated)
     {
         this.lUpdated = lUpdated;
     }
 
-    public String getlUpdated() 
+    public String getlUpdated()
     {
         return lUpdated;
     }
-    public void setlUpdateTime(Date lUpdateTime) 
+    public void setlUpdateTime(Date lUpdateTime)
     {
         this.lUpdateTime = lUpdateTime;
     }
 
-    public Date getlUpdateTime() 
+    public Date getlUpdateTime()
     {
         return lUpdateTime;
     }
-    public void setSourceSystem(String sourceSystem) 
+    public void setSourceSystem(String sourceSystem)
     {
         this.sourceSystem = sourceSystem;
     }
 
-    public String getSourceSystem() 
+    public String getSourceSystem()
     {
         return sourceSystem;
     }
-    public void setEnable(Long enable) 
+    public void setEnable(Long enable)
     {
         this.enable = enable;
     }
 
-    public Long getEnable() 
+    public Long getEnable()
     {
         return enable;
     }
-    public void setmCategory(Long mCategory) 
+    public void setmCategory(Long mCategory)
     {
         this.mCategory = mCategory;
     }
 
-    public Long getmCategory() 
+    public Long getmCategory()
     {
         return mCategory;
     }
-    public void setSpecifications(String specifications) 
+    public void setSpecifications(String specifications)
     {
         this.specifications = specifications;
     }
 
-    public String getSpecifications() 
+    public String getSpecifications()
     {
         return specifications;
     }
-    public void setModel(String model) 
+    public void setModel(String model)
     {
         this.model = model;
     }
 
-    public String getModel() 
+    public String getModel()
     {
         return model;
     }
-    public void setBrand(String brand) 
+    public void setBrand(String brand)
     {
         this.brand = brand;
     }
 
-    public String getBrand() 
+    public String getBrand()
     {
         return brand;
     }
-    public void setCategoriesTaxes(Integer categoriesTaxes) 
+    public void setCategoriesTaxes(Integer categoriesTaxes)
     {
         this.categoriesTaxes = categoriesTaxes;
     }
 
-    public Integer getCategoriesTaxes() 
+    public Integer getCategoriesTaxes()
     {
         return categoriesTaxes;
     }
-    public void setImage(String image) 
+    public void setImage(String image)
     {
         this.image = image;
     }
 
-    public String getImage() 
+    public String getImage()
     {
         return image;
     }
-    public void setgWeight(BigDecimal gWeight) 
+    public void setgWeight(BigDecimal gWeight)
     {
         this.gWeight = gWeight;
     }
 
-    public BigDecimal getgWeight() 
+    public BigDecimal getgWeight()
     {
         return gWeight;
     }
-    public void setnWeight(BigDecimal nWeight) 
+    public void setnWeight(BigDecimal nWeight)
     {
         this.nWeight = nWeight;
     }
 
-    public BigDecimal getnWeight() 
+    public BigDecimal getnWeight()
     {
         return nWeight;
     }
-    public void setWeight(Long weight) 
+    public void setWeight(Long weight)
     {
         this.weight = weight;
     }
 
-    public Long getWeight() 
+    public Long getWeight()
     {
         return weight;
     }
-    public void setVolume(BigDecimal volume) 
+    public void setVolume(BigDecimal volume)
     {
         this.volume = volume;
     }
 
-    public BigDecimal getVolume() 
+    public BigDecimal getVolume()
     {
         return volume;
     }
-    public void setvUnit(Integer vUnit) 
+    public void setvUnit(Integer vUnit)
     {
         this.vUnit = vUnit;
     }
 
-    public Integer getvUnit() 
+    public Integer getvUnit()
     {
         return vUnit;
     }
-    public void setAbcAttribute(String abcAttribute) 
+    public void setAbcAttribute(String abcAttribute)
     {
         this.abcAttribute = abcAttribute;
     }
 
-    public String getAbcAttribute() 
+    public String getAbcAttribute()
     {
         return abcAttribute;
     }
-    public void setAvoidInspect(Long avoidInspect) 
+    public void setAvoidInspect(Long avoidInspect)
     {
         this.avoidInspect = avoidInspect;
     }
 
-    public Long getAvoidInspect() 
+    public Long getAvoidInspect()
     {
         return avoidInspect;
     }
@@ -306,6 +318,7 @@ public class Material extends BaseEntity
             .append("sourceSystem", getSourceSystem())
             .append("enable", getEnable())
             .append("mCategory", getmCategory())
+            .append("categoryName",getCategoryName())
             .append("specifications", getSpecifications())
             .append("model", getModel())
             .append("brand", getBrand())
