@@ -47,12 +47,17 @@
         <result property="filingDate"    column="filing_date"    />
         <result property="filing"    column="filing"    />
         <result property="dataTatus"    column="data_tatus"    />
+        <result property="classCode"    column="class_code"    />
+        <result property="classDescribe"    column="class_describe"    />
     </resultMap>
 
+<!--    <sql id="selectSupplierDetailsVo">-->
+<!--        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details-->
+<!--    </sql>-->
     <sql id="selectSupplierDetailsVo">
-        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details
+        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus, class_code,class_describe
+        from supplier_details sd left join supplier_classification sc on sd.sd_class = sc.class_code
     </sql>
-
     <select id="selectSupplierDetailsList" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
         <where>

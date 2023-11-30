@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询供应商列表列表
+// 查询供应商列表
 export function listDetails(query) {
   return request({
     url: '/supplierpms/details/list',
@@ -8,7 +8,14 @@ export function listDetails(query) {
     params: query
   })
 }
-
+//查询供应商列表已分类列表
+export function listFilter(query) {
+  return request({
+    url: '/supplierpms/details/filter',
+    method: 'get',
+    params: query
+  })
+}
 // 查询供应商列表详细
 export function getDetails(sdId) {
   return request({

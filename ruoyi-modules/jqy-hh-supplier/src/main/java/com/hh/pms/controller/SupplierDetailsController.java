@@ -1,10 +1,12 @@
 package com.hh.pms.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.io.IOException;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +45,21 @@ public class SupplierDetailsController extends BaseController
         return getDataTable(list);
     }
 
+    @RequiresPermissions("supplierpms:details:list")
+    @RequestMapping(method = RequestMethod.GET,value = "/filter")
+    public TableDataInfo listFilter(SupplierDetails supplierDetails)
+    {
+        startPage();
+        List<SupplierDetails> list = supplierDetailsService.selectSupplierDetailsList(supplierDetails);
+        List<SupplierDetails> filteredList = new ArrayList<>();
+        for (SupplierDetails detail : list) {
+            if (detail.getSdClass() != null && !detail.getSdClass().isEmpty()) {
+                filteredList.add(detail);
+            }
+        }
+        System.out.println(filteredList);
+        return getDataTable(filteredList);
+    }
     /**
      * 导出供应商列表列表
      */

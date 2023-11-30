@@ -187,6 +187,33 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "数据状态")
     private String dataTatus;
 
+
+    /** 分类编码 */
+    @Excel(name = "分类编码")
+    private String classCode;
+
+    /** 分类描述 */
+    @Excel(name = "分类描述")
+    private String classDescribe;
+    public void setClassCode(String classCode)
+    {
+        this.classCode = classCode;
+    }
+
+    public String getClassCode()
+    {
+        return classCode;
+    }
+    public void setClassDescribe(String classDescribe)
+    {
+        this.classDescribe = classDescribe;
+    }
+
+    public String getClassDescribe()
+    {
+        return classDescribe;
+    }
+
     public void setSdId(Long sdId)
     {
         this.sdId = sdId;

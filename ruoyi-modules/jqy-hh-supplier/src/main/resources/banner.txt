@@ -1,2 +1,6 @@
 Spring Boot Version: ${spring-boot.version}
 Spring Application Name: ${spring.application.name}
+／l、
+（ﾟ､ 。 ７
+　l、 ~ヽ
+　じしf_, )ノ

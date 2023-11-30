@@ -143,8 +143,15 @@
             <li v-for="item in tableData" :key="item.name">{{ item.name }}</li>
           </ul> -->
           <el-form-item label="主要联系人性别" prop="sdPcg">
-            <el-input v-model="form.sdPcg" placeholder="请输入主要联系人性别" />
-          </el-form-item>
+          <el-select v-model="form.sdPcg" placeholder="请选择主要联系人性别">
+            <el-option
+              v-for="dict in dict.type.sys_user_sex"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
           <el-form-item label="主要联系人职务" prop="sdMct">
             <el-input v-model="form.sdMct" placeholder="请输入主要联系人职务" />
           </el-form-item>
@@ -293,7 +300,7 @@ import {
 
 export default {
   name: "Supplier",
-  dicts: ["service_scope", "registration"],
+  dicts: ["service_scope", "registration", 'sys_user_sex'],
   data() {
     return {
       //展示
@@ -535,7 +542,7 @@ export default {
     //     this.title = "修改供应商详细";
     //   });
     // },
-    /** 企业认证按钮 */
+    /** 点击企业认证按钮 */
     authentication(row) {
       // this.$refs["companyForm"].validate((valid) => {});
       this.drawer = true;
@@ -546,6 +553,7 @@ export default {
         this.form = response.data;
       });
     },
+    /** 提交企业认证*/
     authentications() {
       this.$refs["form"].validate((valid) => {
         console.log("ggg"+valid);
@@ -632,16 +640,6 @@ export default {
         });
       }
     }
-    // submitForm() {
-    //   this.$refs.companyForm.validate(valid => {
-    //     if (valid) {
-    //       // 发送认证请求
-    //       console.log(this.form);
-    //     } else {
-    //       console.log('表单验证失败');
-    //     }
-    //   });
-    // }
   },
 };
 </script>
