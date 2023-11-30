@@ -1,5 +1,6 @@
 package com.hh.pms.model;
 
+import com.hh.pms.mast.domain.Category;
 import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.mast.domain.Material;
 import com.ruoyi.common.core.web.page.TableDataInfo;
@@ -20,4 +21,6 @@ public interface MaterialClient {
 
     @RequestMapping(method = RequestMethod.GET,value = "/currency/list")
     public TableDataInfo list(@RequestParam("currency") Currency currency,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
+    @RequestMapping(method = RequestMethod.GET,value = "/category/list")
+    public TableDataInfo listCategory(@RequestParam("category") Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 }

@@ -78,3 +78,12 @@ export function listCurrency(query) {
     params: query
   })
 }
+
+// 查询品类列表
+export function listCategory(query) {
+  return request({
+    url: '/pms/manager/listCategory',
+    method: 'get',
+    params: query
+  })
+}

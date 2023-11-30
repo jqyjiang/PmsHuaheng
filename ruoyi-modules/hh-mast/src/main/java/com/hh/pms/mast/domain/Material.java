@@ -98,6 +98,7 @@ public class Material extends BaseEntity
     /** 是否免检 */
     private Long avoidInspect;
 
+
     public String getCategoryName() {
         return categoryName;
     }

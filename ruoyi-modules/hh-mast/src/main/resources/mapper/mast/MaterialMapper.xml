@@ -28,32 +28,33 @@
         <result property="vUnit" column="v_unit"/>
         <result property="abcAttribute" column="abc_attribute"/>
         <result property="avoidInspect" column="avoid_inspect"/>
+
     </resultMap>
 
     <sql id="selectMaterialVo">
-        select material_id,
-               material_code,
-               material_name,
-               calculation_unit,
-               purchaser,
-               l_updated,
-               l_update_time,
-               source_system,
-               enable,
-               m_category,
+        select a.material_id,
+               a.material_code,
+               a.material_name,
+               a.calculation_unit,
+               a.purchaser,
+               a.l_updated,
+               a.l_update_time,
+               a.source_system,
+               a.enable,
+               a.m_category,
                b.category_name,
-               specifications,
-               model,
-               brand,
-               categories_taxes,
-               image,
-               g_weight,
-               n_weight,
-               weight,
-               volume,
-               v_unit,
-               abc_attribute,
-               avoid_inspect
+               a.specifications,
+               a.model,
+               a.brand,
+               a.categories_taxes,
+               a.image,
+               a.g_weight,
+               a.n_weight,
+               a.weight,
+               a.volume,
+               a.v_unit,
+               a.abc_attribute,
+               a.avoid_inspect
         from material a LEFT JOIN category b
         ON a.m_category=b.categoryid
     </sql>

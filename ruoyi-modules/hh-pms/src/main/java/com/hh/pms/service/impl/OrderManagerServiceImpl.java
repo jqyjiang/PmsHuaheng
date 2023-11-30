@@ -157,7 +157,6 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                 String code = "PO" + newBidDate + idNum;  //date = 20201111+124
                 return code;
             }
-
         } else {
             //如果今天时间不存在
             String code = "PO" + newBidDate + "001";

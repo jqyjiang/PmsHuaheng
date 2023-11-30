@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.domain.OrderMaterial;
 import com.hh.pms.domain.SupplierDetails;
+import com.hh.pms.mast.domain.Category;
 import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.mast.domain.Material;
 import com.hh.pms.model.MaterialClient;
@@ -53,7 +54,14 @@ public class OrderManagerController extends BaseController
     public TableDataInfo listSupplier(SupplierDetails supplierDetails, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
         return supplierClient.list(supplierDetails,pageNum,pageSize);
     }
-
+    /**
+     * 查询品类列表
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET,value = "/listCategory")
+    public TableDataInfo listCategory(Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
+        return materialClient.listCategory(category,pageNum,pageSize);
+    }
     /**
      * 查询物料基础表
      * @param material

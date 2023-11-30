@@ -127,7 +127,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="采购组织" prop="purOrganization">
-          <el-input v-model="form.purOrganization" placeholder="请输入采购组织" />
+          <el-select v-model="form.purOrganization" placeholder="请选择采购组织">
+            <el-option v-for="dict in dict.type.procure" :key="dict.value" :label="dict.label"
+              :value="parseInt(dict.value)"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="附件" prop="annex">
           <file-upload v-model="form.annex" />
@@ -270,6 +273,21 @@
           <el-table-column label="品类编码" prop="categoryCode" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.categoryCode" placeholder="请输入品类编码" />
+              <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
+              <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
+                <!-- 这里是品类的内容 -->
+                <el-table :data="categoryList" v-loading="loading" @row-click="handleRowClickMaterial1">
+                  <el-table-column type="selection" width="55" align="center" />
+                  <el-table-column label="品类名称" align="center" prop="categoryName" />
+                  <el-table-column label="品类代码" align="center" prop="categoryCode" />
+                  <el-table-column label="上级品类" align="center" prop="superiorCategory" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
+                  :limit.sync="caqueryParams.pageSize" @pagination="getListCategory" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogMaterial1 = false">取消</el-button>
+                </div>
+              </el-dialog>
             </template>
           </el-table-column>
           <el-table-column label="物料品类" prop="materialCategory" width="150">
@@ -369,11 +387,11 @@
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory } from "@/api/pms/manager";
 
 export default {
   name: "Manager",
-  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'supplier_invoice', 'invoice_method'],
+  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method'],
   data() {
     return {
       headerImages: require('../../../assets/images/order_main_header1.png'),
@@ -416,7 +434,18 @@ export default {
       stotal: 0,
       //物料基本信息总条数
       mtotal: 0,
-
+      //品类对象列表
+      categoryList: [],
+      // 品类对象查询参数
+      caqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        categoryCode: null,
+        categoryName: null,
+        superiorCategory: null,
+      },
+      //品类对象总数
+      catotal: 0,
       //供应商查询参数
       squeryParams: {
         pageNum: 1,
@@ -438,7 +467,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 币种定义名称
-      currencyName:'',
+      currencyName: '',
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -457,7 +486,8 @@ export default {
       dialogVisible: false, // 用于标记供应商弹窗是否可见
       dialogVisible1: false, // 用于标记供应商弹窗是否可见
       dialogMaterial: false, //用于标记物料信息表是否可见
-      dialogCurrency: false //用于标记物料信息表是否可见
+      dialogCurrency: false, //用于标记物料信息表是否可见
+      dialogMaterial1: false
     };
   },
   created() {
@@ -489,6 +519,15 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    /** 查询品类对象列表 */
+    getListCategory() {
+        this.loading = true;
+        listCategory(this.caqueryParams).then(response => {
+          this.categoryList = response.rows;
+          this.catotal = response.total;
+          this.loading = false;
+        })
     },
     /** 查询币种定义列表 */
     getListCurrency() {
@@ -567,6 +606,10 @@ export default {
       this.dialogMaterial = true;
       this.getList2();
     },
+    showMaterial1() {
+      this.dialogMaterial1 = true;
+      this.getListCategory();
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -631,13 +674,16 @@ export default {
     },
     handleSelectionChangeCurrency(row) {
       this.form.currencyId = row.currencyId;
-      for(let i = 0; i < this.currencyList.length; i++){
+      for (let i = 0; i < this.currencyList.length; i++) {
         const innerElement = this.currencyList[i];
         if (innerElement.currencyId === row.currencyId) {
           this.currencyName = innerElement.currencyName
         }
       }
       this.dialogCurrency = false; // 关闭对话框
+    },
+    handleSelectionChangeCategory(row) {
+
     },
     handleRowClick1(row) {
       this.form.supplier = row.sdId; // 将供应商名称填充到输入框中
@@ -671,23 +717,34 @@ export default {
         // 修改第一条数据的属性值
         this.orderMaterialList[0].orCode = row.materialCode;
         this.orderMaterialList[0].orName = row.materialName;
-        this.orderMaterialList[0].categoryCode = row.categoryCode;
-        this.orderMaterialList[0].materialCategory = row.categoryCode;
+        this.orderMaterialList[0].categoryCode = row.categoryName;
+        this.orderMaterialList[0].materialCategory = row.categoryName;
         this.orderMaterialList[0].materialSpecification = row.specifications;
         this.orderMaterialList[0].materialModel = row.model;
         this.orderMaterialList[0].materialUnit = row.calculationUnit;
       } else {
         this.orderMaterialList[index - 1].orCode = row.materialCode;
         this.orderMaterialList[index - 1].orName = row.materialName;
-        this.orderMaterialList[index - 1].categoryCode = row.categoryCode;
-        this.orderMaterialList[index - 1].materialCategory = row.categoryCode;
+        this.orderMaterialList[index - 1].categoryCode = row.mCategory;
+        this.orderMaterialList[index - 1].materialCategory = row.mCategory;
         this.orderMaterialList[index - 1].materialSpecification = row.specifications;
         this.orderMaterialList[index - 1].materialModel = row.model;
         this.orderMaterialList[index - 1].materialUnit = row.calculationUnit;
       }
       this.dialogMaterial = false; // 关闭对话框
     },
-
+    handleRowClickMaterial1(row) {
+      let index = this.orderMaterialList.length;
+      if (this.orderMaterialList.length === 1) {
+        // 修改第一条数据的属性值
+        this.orderMaterialList[0].categoryCode = row.categoryName;
+        this.orderMaterialList[0].materialCategory = row.categoryName;
+      } else {
+        this.orderMaterialList[0].categoryCode = row.categoryName;
+        this.orderMaterialList[0].materialCategory = row.categoryName;
+      }
+      this.dialogMaterial1 = false; // 关闭对话框
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
