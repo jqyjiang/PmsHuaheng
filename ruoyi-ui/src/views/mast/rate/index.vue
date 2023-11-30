@@ -29,7 +29,7 @@
           v-hasPermi="['mast:rate:edit']"
         >修改</el-button>
       </el-col> -->
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -39,7 +39,7 @@
           @click="handleDelete"
           v-hasPermi="['mast:rate:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <!-- <el-col :span="1.5">
         <el-button
           type="warning"
@@ -67,15 +67,15 @@
         ></el-checkbox>
        </template>
       </el-table-column>
-      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:rate:edit']"
-          >修改</el-button>
+          >修改</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -84,7 +84,7 @@
             v-hasPermi="['mast:rate:remove']"
           >删除</el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
 
     <pagination
@@ -106,6 +106,9 @@
         </el-form-item>
         <el-form-item label="税率" prop="taxRate">
           <el-input v-model="form.taxRate" placeholder="请输入税率" />
+        </el-form-item>
+        <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -219,6 +222,11 @@ export default {
       this.reset();
       const taxTypeId = row.taxTypeId || this.ids
       getRate(taxTypeId).then(response => {
+        if(response.data.enable==1){
+          response.data.enable=true
+        }else{
+          response.data.enable=false
+        }
         this.form = response.data;
         this.open = true;
         this.title = "修改税率";
@@ -229,12 +237,22 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.taxTypeId != null) {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             updateRate(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             addRate(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

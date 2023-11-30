@@ -127,6 +127,9 @@
             />
           </el-select>
         </el-form-item>
+        <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -140,6 +143,17 @@
 import { listBank, getBank, delBank, addBank, updateBank,listBank_type } from "@/api/mast/bank";
 
 export default {
+  // props:['values'],
+  // computed:{
+  //   isChecked:{
+  //     get(){
+  //       return this.value>0
+  //     },
+  //     set(val){
+  //       this.$emit('input',val?1:0);
+  //     }
+  //   }
+  // },
   name: "Bank",
   data() {
     return {
@@ -258,6 +272,11 @@ export default {
       this.reset();
       const bankId = row.bankId || this.ids
       getBank(bankId).then(response => {
+        if(response.data.enable==1){
+          response.data.enable=true
+        }else{
+          response.data.enable=false
+        }
         this.form = response.data;
         this.open = true;
         this.title = "修改银行";
@@ -268,12 +287,22 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.bankId != null) {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             updateBank(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             addBank(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

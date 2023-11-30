@@ -34,7 +34,7 @@
           v-hasPermi="['mast:currency:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -44,8 +44,8 @@
           @click="handleUpdate"
           v-hasPermi="['mast:currency:edit']"
         >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
+      </el-col> -->
+      <!-- <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -55,8 +55,8 @@
           @click="handleDelete"
           v-hasPermi="['mast:currency:remove']"
         >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
+      </el-col> -->
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -65,7 +65,7 @@
           @click="handleExport"
           v-hasPermi="['mast:currency:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -86,15 +86,18 @@
         ></el-checkbox>
        </template>
       </el-table-column>
+      <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
+        </el-form-item>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:currency:edit']"
-          >修改</el-button>
+          >修改</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -126,6 +129,16 @@
         <el-form-item label="国家/地区" prop="countryRegion">
           <el-input v-model="form.countryRegion" placeholder="请输入国家/地区" />
         </el-form-item>
+        <!-- <el-form-item label="国家/地区" prop="countryRegion">
+          <el-select v-model="form.countryRegion" placeholder="请选择国家/地区" >
+            <el-option
+              v-for="dict in currencyList"
+              :key="dict.currencyId"
+              :label="dict.countryRegion"
+              :value="dict.currencyId"
+            />
+          </el-select>
+        </el-form-item> -->
         <el-form-item label="财务精度" prop="financialAccuracy">
           <el-input v-model="form.financialAccuracy" placeholder="请输入财务精度" />
         </el-form-item>
@@ -135,7 +148,11 @@
         <el-form-item label="货币符号" prop="currencySymbol">
           <el-input v-model="form.currencySymbol" placeholder="请输入货币符号" />
         </el-form-item>
+        <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
+        </el-form-item>
       </el-form>
+      
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -246,16 +263,16 @@ export default {
       this.open = true;
       this.title = "添加币种";
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const currencyId = row.currencyId || this.ids
-      getCurrency(currencyId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改币种";
-      });
-    },
+    // /** 修改按钮操作 */
+    // handleUpdate(row) {
+    //   this.reset();
+    //   const currencyId = row.currencyId || this.ids
+    //   getCurrency(currencyId).then(response => {
+    //     this.form = response.data;
+    //     this.open = true;
+    //     this.title = "修改币种";
+    //   });
+    // },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -267,6 +284,11 @@ export default {
               this.getList();
             });
           } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             addCurrency(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
