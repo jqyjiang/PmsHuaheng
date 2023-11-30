@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hh.pms.mast.domain.Currency;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
@@ -94,6 +95,28 @@ public class OrderManager extends BaseEntity
     private String phone;
 
 
+    /** 供应商发票方式 */
+    private Long invoiceMethod;
+
+    @Excel(name = "采购订单创建日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    /** 物料信息ID */
+    @Excel(name = "物料信息")
+    private String materialId;
+
     @Override
     public String toString() {
         return "OrderManager{" +
@@ -119,25 +142,38 @@ public class OrderManager extends BaseEntity
                 ", contacts='" + contacts + '\'' +
                 ", phone='" + phone + '\'' +
                 ", invoiceMethod=" + invoiceMethod +
+                ", createTime=" + createTime +
+                ", materialId='" + materialId + '\'' +
                 ", orderMaterialList=" + orderMaterialList +
                 ", supplierDetails=" + supplierDetails +
                 ", orderTypeRunning=" + orderTypeRunning +
-                ", createTime=" + createTime +
-                ", materialId='" + materialId + '\'' +
+                ", companies=" + companies +
+                ", currency=" + currency +
                 '}';
     }
-
-
-    /** 供应商发票方式 */
-    private Long invoiceMethod;
 
     /** 订单物料明细信息 */
     private List<OrderMaterial> orderMaterialList;
 
+    //供应商类型
     private SupplierDetails supplierDetails;
 
+    //订单类型
     private OrderTypeRunning orderTypeRunning;
 
+    //公司表信息
+    private Companies companies;
+
+    //币种类型
+    private Currency currency;
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
 
     public List<OrderMaterial> getOrderMaterialList() {
         return orderMaterialList;
@@ -145,6 +181,14 @@ public class OrderManager extends BaseEntity
 
     public void setOrderMaterialList(List<OrderMaterial> orderMaterialList) {
         this.orderMaterialList = orderMaterialList;
+    }
+
+    public Companies getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Companies companies) {
+        this.companies = companies;
     }
 
     public SupplierDetails getSupplierDetails() {
@@ -171,24 +215,6 @@ public class OrderManager extends BaseEntity
         this.orId = orId;
     }
 
-    @Excel(name = "采购订单创建日期")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-
-    @Override
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @Override
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    /** 物料信息ID */
-    @Excel(name = "物料信息ID")
-    private String materialId;
 
     public void setOrderId(Long orderId)
     {

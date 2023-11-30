@@ -45,11 +45,11 @@ export function delManager(orderId) {
 
 
 // 查询供应商详细列表
-export function listSupplier() {
+export function listSupplier(query) {
   return request({
     url: '/pms/manager/listSupplier',
     method: 'get',
-
+    params: query
   })
 }
 
@@ -57,6 +57,23 @@ export function listSupplier() {
 export function listMaterial(query) {
   return request({
     url: '/pms/manager/listMaterial',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询订单物料明细列表
+export function listOrderMaterial() {
+  return request({
+    url: '/pms/manager/listOrderMaterial',
+    method: 'get',
+  })
+}
+
+// 查询币种列表
+export function listCurrency(query) {
+  return request({
+    url: '/pms/manager/listCurrency',
     method: 'get',
     params: query
   })

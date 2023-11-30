@@ -3,10 +3,13 @@ package com.hh.pms.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.hh.pms.domain.OrderMaterial;
 import com.hh.pms.domain.SupplierDetails;
+import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.mast.domain.Material;
 import com.hh.pms.model.MaterialClient;
 import com.hh.pms.model.SupplierClient;
+import com.hh.pms.service.IOrderMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +31,6 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/manager")
-
 public class OrderManagerController extends BaseController
 {
     @Autowired
@@ -40,15 +42,8 @@ public class OrderManagerController extends BaseController
     @Autowired
     private  MaterialClient materialClient;
 
-//    @Autowired
-//    public OrderManagerController(SupplierClient supplierClient) {
-//        this.supplierClient = supplierClient;
-//    }
-//
-//    @Autowired
-//    public OrderManagerController(MaterialClient materialClient) {
-//        this.materialClient = materialClient;
-//    }
+    @Autowired
+    private IOrderMaterialService orderMaterialService;
 
     /**
      * 查询供应商列表
@@ -59,12 +54,39 @@ public class OrderManagerController extends BaseController
         return supplierClient.list(supplierDetails,pageNum,pageSize);
     }
 
-    @RequiresPermissions("mast:material:list")
+    /**
+     * 查询物料基础表
+     * @param material
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
     public TableDataInfo listMaterial(Material material,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize){
         return materialClient.list(material,pageNum,pageSize);
     }
+    /**
+     * 查询订单物料明细列表
+     */
+    @RequiresPermissions("pms:material:listOrderMaterial")
+    @GetMapping("/listOrderMaterial")
+    public TableDataInfo listOrderMaterial(OrderMaterial orderMaterial)
+    {
+        List<OrderMaterial> list = orderMaterialService.selectOrderMaterialList(orderMaterial);
+        return getDataTable(list);
+    }
 
+    /**
+     * 查询币种定义表
+     * @param currency
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/listCurrency")
+    public TableDataInfo listCurrency(Currency currency, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+        return materialClient.list(currency, pageNum, pageSize);
+    }
     /**
      * 查询采购订单管理列表
      */
@@ -108,6 +130,8 @@ public class OrderManagerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody OrderManager orderManager)
     {
+        System.out.println("这是OrderManager对象:"+orderManager);
+        //System.out.println("这是OrderMaterial对象:"+orderMaterial);
         return toAjax(orderManagerService.insertOrderManager(orderManager));
     }
 

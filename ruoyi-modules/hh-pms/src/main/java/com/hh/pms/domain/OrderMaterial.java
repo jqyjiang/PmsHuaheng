@@ -102,6 +102,10 @@ public class OrderMaterial extends BaseEntity
     @Excel(name = "备注")
     private String remarks;
 
+    /** 所属订单号 */
+    @Excel(name = "所属订单号")
+    private String orderCode;
+
     public void setOrId(Long orId)
     {
         this.orId = orId;
@@ -292,30 +296,39 @@ public class OrderMaterial extends BaseEntity
         return remarks;
     }
 
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("orId", getOrId())
-                .append("orCode", getOrCode())
-                .append("orName", getOrName())
-                .append("categoryCode", getCategoryCode())
-                .append("materialCategory", getMaterialCategory())
-                .append("materialSpecification", getMaterialSpecification())
-                .append("materialModel", getMaterialModel())
-                .append("materialUnit", getMaterialUnit())
-                .append("requireNumber", getRequireNumber())
-                .append("requireTime", getRequireTime())
-                .append("lowerPrice", getLowerPrice())
-                .append("newPrice", getNewPrice())
-                .append("noTaxPrice", getNoTaxPrice())
-                .append("taxCode", getTaxCode())
-                .append("tax", getTax())
-                .append("taxPrice", getTaxPrice())
-                .append("lineTaxAmount", getLineTaxAmount())
-                .append("consignee", getConsignee())
-                .append("receivingPhone", getReceivingPhone())
-                .append("receivingAddress", getReceivingAddress())
-                .append("remarks", getRemarks())
-                .toString();
+        return "OrderMaterial{" +
+                "orId=" + orId +
+                ", orCode='" + orCode + '\'' +
+                ", orName='" + orName + '\'' +
+                ", categoryCode='" + categoryCode + '\'' +
+                ", materialCategory='" + materialCategory + '\'' +
+                ", materialSpecification='" + materialSpecification + '\'' +
+                ", materialModel='" + materialModel + '\'' +
+                ", materialUnit='" + materialUnit + '\'' +
+                ", requireNumber=" + requireNumber +
+                ", requireTime=" + requireTime +
+                ", lowerPrice=" + lowerPrice +
+                ", newPrice=" + newPrice +
+                ", noTaxPrice=" + noTaxPrice +
+                ", taxCode='" + taxCode + '\'' +
+                ", tax=" + tax +
+                ", taxPrice=" + taxPrice +
+                ", lineTaxAmount=" + lineTaxAmount +
+                ", consignee=" + consignee +
+                ", receivingPhone='" + receivingPhone + '\'' +
+                ", receivingAddress='" + receivingAddress + '\'' +
+                ", remarks='" + remarks + '\'' +
+                ", orderCode='" + orderCode + '\'' +
+                '}';
     }
 }

@@ -28,15 +28,49 @@
         <result property="phone" column="phone"/>
         <result property="invoiceMethod" column="invoice_method"/>
         <result property="createTime" column="create_time"/>
+        <result property="materialId" column="material_id"/>
         <association property="orderTypeRunning" javaType="com.hh.pms.domain.OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
         </association>
         <association property="supplierDetails" javaType="com.hh.pms.domain.SupplierDetails">
-            <id property="sdId"    column="sd_id"    />
-            <result property="sdTime"    column="sd_time"    />
-            <result property="sdCode"    column="sd_code"    />
-            <result property="sbiName"    column="sbi_name"    />
+            <id property="sdId" column="sd_id"/>
+            <result property="sdTime" column="sd_time"/>
+            <result property="sdCode" column="sd_code"/>
+            <result property="sbiName" column="sbi_name"/>
+        </association>
+        <association property="currency" javaType="com.hh.pms.mast.domain.Currency">
+            <result property="currencyId" column="currency_id"/>
+            <result property="currencyCode" column="currency_code"/>
+            <result property="currencyName" column="currency_name"/>
+            <result property="countryRegion" column="country_region"/>
+            <result property="financialAccuracy" column="financial_accuracy"/>
+            <result property="accuracy" column="accuracy"/>
+            <result property="currencySymbol" column="currency_symbol"/>
+            <result property="enable" column="enable"/>
+        </association>
+        <association property="companies" javaType="com.hh.pms.domain.Companies">
+            <id property="companiesId" column="companies_id"/>
+            <result property="companiesName" column="companies_name"/>
+            <result property="creditCode" column="credit_code"/>
+            <result property="companiesAbbreviation" column="companies_abbreviation"/>
+            <result property="isgroup" column="isgroup"/>
+            <result property="companiesCode" column="companies_code"/>
+            <result property="registrationNumber" column="registration_number"/>
+            <result property="enterpriseType" column="enterprise_type"/>
+            <result property="registeredCountry" column="registered_country"/>
+            <result property="representative" column="representative"/>
+            <result property="registeredCapital" column="registered_capital"/>
+            <result property="establishmentDate" column="establishment_date"/>
+            <result property="operatingPeriod" column="operating_period"/>
+            <result property="basicDivision" column="basic_division"/>
+            <result property="businessLicense" column="business_license"/>
+            <result property="taxpayer" column="taxpayer"/>
+            <result property="province" column="province"/>
+            <result property="address" column="address"/>
+            <result property="currencyId2" column="currency_id2"/>
+            <result property="dengCode" column="deng_code"/>
+            <result property="profile" column="profile"/>
         </association>
         <collection property="orderMaterialList" ofType="com.hh.pms.domain.OrderMaterial">
             <id property="orId" column="or_id"/>
@@ -87,13 +121,16 @@
                om.phone,
                om.invoice_method,
                om.create_time,
+               om.material_id,
                otr.ort_name,
-               ot.or_name,
-               sd.sbi_name
+               sd.sbi_name,
+               c.companies_name,
+               y.currency_name
         from order_manager om
                  left join order_type_running otr on om.or_id = otr.ort_id
-                 left join order_material ot on om.material_id = ot.or_id
                  left join supplier_details sd on sd.sd_id = om.supplier
+                 left join companies c on c.companies_id = om.company
+                 left join currency y on y.currency_id = om.currency_id
     </sql>
     <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
         <include refid="selectOrderManagerVo"/>

@@ -66,6 +66,6 @@ public interface OrderManagerMapper
      * @param orderTime
      * @return
      */
-    @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time")
+    @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time DESC limit 1")
     String selectOrderCode(Date orderTime);
 }

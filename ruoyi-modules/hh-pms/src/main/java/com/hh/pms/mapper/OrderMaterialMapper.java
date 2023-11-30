@@ -35,6 +35,8 @@ public interface OrderMaterialMapper
      */
     public int insertOrderMaterial(OrderMaterial orderMaterial);
 
+    public int insertOrderMaterials(List<OrderMaterial> orderMaterials);
+
     /**
      * 修改订单物料明细
      * 

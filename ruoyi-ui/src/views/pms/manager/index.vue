@@ -1,11 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <div class="header_box" style="font-size: 20px; height: 50px; line-height: 50px; ">
-
-      <img :src="headerImages" style="width: 40px;height: 40px;vertical-align: middle;margin-right: 10px;"/>
-    <span style="display: inline-block;">采购订单管理</span>
-
-    </div> -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
       <el-form-item label="供应商名称:" prop="supplier">
         <el-input v-model="squeryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
@@ -13,6 +7,7 @@
         <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
         <el-dialog :visible.sync="dialogVisible" title="供应商名称">
           <!-- 这里是供应商的内容 -->
+
           <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
@@ -66,11 +61,11 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChangeCurrency">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
       <el-table-column label="采购订单编号" align="center" prop="orderCode" />
-      <el-table-column label="公司" align="center" prop="company" />
+      <el-table-column label="公司" align="center" prop="companies.companiesName" />
       <el-table-column label="订单来源" align="center" prop="orderSource">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.order_source" :value="scope.row.orderSource" />
@@ -91,7 +86,12 @@
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="物料信息ID" align="center" prop="orderMaterialList.orName" />
+      <el-table-column label="物料信息" align="center" prop="materialId">
+        <template slot-scope="scope">
+          <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -166,11 +166,57 @@
           </el-select>
         </el-form-item>
         <el-form-item label="币种" prop="currencyId">
-          <el-input v-model="form.currencyId" placeholder="请输入币种" />
+          <el-input v-model="currencyName" placeholder="请输入币种" />
+          <i class="el-icon-search" id="serachOne" @click="showDiagCurrency"></i>
+          <el-dialog :visible.sync="dialogCurrency" title="币种定义" :modal="false">
+            <el-form :model="queryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
+              label-width="68px">
+              <el-form-item label="币种编码" prop="currencyCode">
+                <el-input v-model="cqueryParams.currencyCode" placeholder="请输入币种编码" clearable
+                  @keyup.enter.native="handleQuery2" />
+              </el-form-item>
+              <el-form-item label="币种名称" prop="currencyName">
+                <el-input v-model="cqueryParams.currencyName" placeholder="请输入币种名称" clearable
+                  @keyup.enter.native="handleQuery2" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery2">搜索</el-button>
+              </el-form-item>
+            </el-form>
+            <el-table v-loading="loading" :data="currencyList" @row-click="handleSelectionChangeCurrency">
+              <el-table-column type="selection" width="55" align="center" />
+              <!-- <el-table-column label="币种ID" align="center" prop="currencyId" /> -->
+              <el-table-column label="币种编码" align="center" prop="currencyCode" />
+              <el-table-column label="币种名称" align="center" prop="currencyName" />
+              <el-table-column label="国家/地区" align="center" prop="countryRegion" />
+              <el-table-column label="财务精度" align="center" prop="financialAccuracy" />
+              <el-table-column label="精度" align="center" prop="accuracy" />
+              <el-table-column label="货币符号" align="center" prop="currencySymbol" />
+            </el-table>
+            <pagination v-show="ctotal > 0" :total="ctotal" :page.sync="cqueryParams.pageNum"
+              :limit.sync="cqueryParams.pageSize" @pagination="getListCurrency" />
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogCurrency = false">取消</el-button>
+            </div>
+          </el-dialog>
         </el-form-item>
         <el-form-item label="供应商名称" prop="supplier">
-          <el-input v-model="form.supplier" placeholder="请输入供应商名称" />
-          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+          <el-input v-model="supplyName" placeholder="请输入供应商名称" />
+          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie1()"></i>
+          <el-dialog :visible.sync="dialogVisible1" title="供应商名称" :modal="false">
+            <!-- 这里是供应商的内容 -->
+            <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick1">
+              <el-table-column type="selection" width="55" align="center" />
+              <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+              <el-table-column label="供应商名称" align="center" prop="sbiName" />
+            </el-table>
+
+            <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
+              :limit.sync="squeryParams.pageSize" @pagination="getList1" />
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible1 = false">取消</el-button>
+            </div>
+          </el-dialog>
         </el-form-item>
         <el-form-item label="联系人" prop="contacts">
           <el-input v-model="form.contacts" placeholder="请输入联系人" />
@@ -180,13 +226,10 @@
         </el-form-item>
         <el-form-item label="供应商发票方式" prop="invoiceMethod">
           <el-select v-model="form.invoiceMethod" placeholder="请选择供应商发票方式">
-            <el-option v-for="dict in dict.type.supplier_invoice" :key="dict.value" :label="dict.label"
+            <el-option v-for="dict in dict.type.invoice_method" :key="dict.value" :label="dict.label"
               :value="parseInt(dict.value)"></el-option>
           </el-select>
         </el-form-item>
-        <!-- <el-form-item label="物料信息ID" prop="materialId">
-          <el-input v-model="form.materialId" placeholder="请输入物料信息ID" />
-        </el-form-item> -->
         <el-divider content-position="center">订单物料明细信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
@@ -211,7 +254,6 @@
                   <el-table-column label="物料编码" align="center" prop="materialCode" />
                   <el-table-column label="物料名称" align="center" prop="materialName" />
                 </el-table>
-
                 <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="mqueryParams.pageNum"
                   :limit.sync="mqueryParams.pageSize" @pagination="getList2" />
                 <div slot="footer" class="dialog-footer">
@@ -327,11 +369,11 @@
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency } from "@/api/pms/manager";
 
 export default {
   name: "Manager",
-  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'supplier_invoice'],
+  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'supplier_invoice', 'invoice_method'],
   data() {
     return {
       headerImages: require('../../../assets/images/order_main_header1.png'),
@@ -339,14 +381,29 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      //供应商名称
+      supplyName: '',
       // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
+      //订单物料明细对比数据
+      listOrderMaterial: [],
       // 显示搜索条件
       showSearch: true,
       // 总条数
       total: 0,
+      // 币种表格数据
+      currencyList: [],
+      // 币种定义查询参数
+      cqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        currencyCode: null,
+        currencyName: null,
+      },
+      // 币种定义总条数
+      ctotal: 0,
       // 采购订单管理表格数据
       managerList: [],
       // 供应商列表表格数据
@@ -359,6 +416,7 @@ export default {
       stotal: 0,
       //物料基本信息总条数
       mtotal: 0,
+
       //供应商查询参数
       squeryParams: {
         pageNum: 1,
@@ -379,6 +437,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 币种定义名称
+      currencyName:'',
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -390,17 +450,19 @@ export default {
       },
       // 表单参数
       form: {
-        totalDemand: 0 // 需求总数量
       },
       // 表单校验
       rules: {
       },
       dialogVisible: false, // 用于标记供应商弹窗是否可见
-      dialogMaterial: false //用于标记物料信息表是否可见
+      dialogVisible1: false, // 用于标记供应商弹窗是否可见
+      dialogMaterial: false, //用于标记物料信息表是否可见
+      dialogCurrency: false //用于标记物料信息表是否可见
     };
   },
   created() {
     this.getList();
+    this.getlistOrderMaterials();
   },
   computed: {
     totalDemand() {
@@ -410,7 +472,9 @@ export default {
           sum += parseFloat(item.requireNumber);
         }
       });
-      return isNaN(sum) ? 0.00 : sum.toFixed(2);
+      const total = isNaN(sum) ? 0.00 : sum.toFixed(2);
+      this.form.totalDemand = total; // 将计算得到的总价赋值给 form.totalDemand
+      return total;
     },
     isSelfPickupSelected() {
       return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
@@ -426,6 +490,45 @@ export default {
         this.loading = false;
       });
     },
+    /** 查询币种定义列表 */
+    getListCurrency() {
+      this.loading = true;
+      listCurrency(this.cqueryParams).then(response => {
+        // 过滤出状态为1的元素并重新赋值给currencyList
+        this.currencyList = response.rows;
+        this.ctotal = response.total;
+        this.loading = false;
+      });
+    },
+    /**
+     * 订单物料明细查询
+     */
+    getlistOrderMaterials() {
+      this.loading = true;
+      listOrderMaterial().then(response => {
+        this.listOrderMaterial = response.rows;
+        this.loading = false;
+      });
+    },
+    /**
+     * 查询orName物料名称
+     * @param {*} orderMaterialList 
+     */
+    getFormattedMaterialName(row) {
+      if (!row.orderCode || typeof row.orderCode !== 'string') {
+        return '';
+      }
+      const names = [];
+      for (let i = 0; i < this.listOrderMaterial.length; i++) {
+        const innerElement = this.listOrderMaterial[i];
+        if (innerElement.orderCode === row.orderCode) {
+          names.push(innerElement.orName)
+        }
+      }
+      return names.join(' ');
+    },
+
+
     /**
      * 供应商列表
      */
@@ -451,6 +554,14 @@ export default {
     showDiagSupplie() {
       this.dialogVisible = true;
       this.getList1();
+    },
+    showDiagSupplie1() {
+      this.dialogVisible1 = true;
+      this.getList1();
+    },
+    showDiagCurrency() {
+      this.dialogCurrency = true;
+      this.getListCurrency();
     },
     showMaterial() {
       this.dialogMaterial = true;
@@ -497,10 +608,20 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
+    /** 币种定义搜索按钮操作 */
+    handleQuery2() {
+      this.cqueryParams.pageNum = 1;
+      this.getListCurrency();
+    },
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
+    },
+    /** 币种定义重置按钮操作 */
+    resetQuery() {
+      this.resetForm("cqueryForm");
+      this.handleQuery2();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -508,6 +629,28 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
+    handleSelectionChangeCurrency(row) {
+      this.form.currencyId = row.currencyId;
+      for(let i = 0; i < this.currencyList.length; i++){
+        const innerElement = this.currencyList[i];
+        if (innerElement.currencyId === row.currencyId) {
+          this.currencyName = innerElement.currencyName
+        }
+      }
+      this.dialogCurrency = false; // 关闭对话框
+    },
+    handleRowClick1(row) {
+      this.form.supplier = row.sdId; // 将供应商名称填充到输入框中
+      for (let i = 0; i < this.detailsList.length; i++) {
+        const innerElement = this.detailsList[i];
+        if (innerElement.sdId === row.sdId) {
+          this.supplyName = innerElement.sbiName
+        }
+      }
+      this.dialogVisible1 = false; // 关闭对话框
+      this.handleQuery();
+    },
+    //点击供应商列表列数据
     handleRowClick(row) {
       this.squeryParams.sbiName = row.sbiName; // 将供应商名称填充到输入框中
       this.dialogVisible = false; // 关闭对话框
@@ -529,7 +672,7 @@ export default {
         this.orderMaterialList[0].orCode = row.materialCode;
         this.orderMaterialList[0].orName = row.materialName;
         this.orderMaterialList[0].categoryCode = row.categoryCode;
-        this.orderMaterialList[0].materialCategory = row.mCategory;
+        this.orderMaterialList[0].materialCategory = row.categoryCode;
         this.orderMaterialList[0].materialSpecification = row.specifications;
         this.orderMaterialList[0].materialModel = row.model;
         this.orderMaterialList[0].materialUnit = row.calculationUnit;
@@ -537,7 +680,7 @@ export default {
         this.orderMaterialList[index - 1].orCode = row.materialCode;
         this.orderMaterialList[index - 1].orName = row.materialName;
         this.orderMaterialList[index - 1].categoryCode = row.categoryCode;
-        this.orderMaterialList[index - 1].materialCategory = row.mCategory;
+        this.orderMaterialList[index - 1].materialCategory = row.categoryCode;
         this.orderMaterialList[index - 1].materialSpecification = row.specifications;
         this.orderMaterialList[index - 1].materialModel = row.model;
         this.orderMaterialList[index - 1].materialUnit = row.calculationUnit;
@@ -554,6 +697,12 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      for (let i = 0; i < this.listOrderMaterial.length; i++) {
+        const innerElement = this.listOrderMaterial[i];
+        if (innerElement.orderCode === row.orderCode) {
+          this.orderMaterialList[i] = this.listOrderMaterial[i];
+        }
+      }
       const orderId = row.orderId || this.ids
       getManager(orderId).then(response => {
         this.form = response.data;
@@ -561,8 +710,8 @@ export default {
         this.title = "修改采购订单管理";
       });
     },
-   /** 提交按钮 */
-   submitForm() {
+    /** 提交按钮 */
+    submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.form.orderMaterialList = this.orderMaterialList;

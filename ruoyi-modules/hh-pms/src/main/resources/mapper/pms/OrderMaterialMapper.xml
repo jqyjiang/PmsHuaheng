@@ -1,68 +1,98 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.OrderMaterialMapper">
-    
+
     <resultMap type="OrderMaterial" id="OrderMaterialResult">
-        <result property="orId"    column="or_id"    />
-        <result property="orCode"    column="or_code"    />
-        <result property="orName"    column="or_name"    />
-        <result property="categoryCode"    column="category_code"    />
-        <result property="materialCategory"    column="material_category"    />
-        <result property="materialSpecification"    column="material_specification"    />
-        <result property="materialModel"    column="material_model"    />
-        <result property="materialUnit"    column="material_unit"    />
-        <result property="requireNumber"    column="require_number"    />
-        <result property="requireTime"    column="require_time"    />
-        <result property="lowerPrice"    column="lower_price"    />
-        <result property="newPrice"    column="new_price"    />
-        <result property="noTaxPrice"    column="no_tax_price"    />
-        <result property="taxCode"    column="tax_code"    />
-        <result property="tax"    column="tax"    />
-        <result property="taxPrice"    column="tax_price"    />
-        <result property="lineTaxAmount"    column="line_tax_amount"    />
-        <result property="consignee"    column="consignee"    />
-        <result property="receivingPhone"    column="receiving_phone"    />
-        <result property="receivingAddress"    column="receiving_address"    />
-        <result property="remarks"    column="remarks"    />
+        <result property="orId" column="or_id"/>
+        <result property="orCode" column="or_code"/>
+        <result property="orName" column="or_name"/>
+        <result property="categoryCode" column="category_code"/>
+        <result property="materialCategory" column="material_category"/>
+        <result property="materialSpecification" column="material_specification"/>
+        <result property="materialModel" column="material_model"/>
+        <result property="materialUnit" column="material_unit"/>
+        <result property="requireNumber" column="require_number"/>
+        <result property="requireTime" column="require_time"/>
+        <result property="lowerPrice" column="lower_price"/>
+        <result property="newPrice" column="new_price"/>
+        <result property="noTaxPrice" column="no_tax_price"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="tax" column="tax"/>
+        <result property="taxPrice" column="tax_price"/>
+        <result property="lineTaxAmount" column="line_tax_amount"/>
+        <result property="consignee" column="consignee"/>
+        <result property="receivingPhone" column="receiving_phone"/>
+        <result property="receivingAddress" column="receiving_address"/>
+        <result property="remarks" column="remarks"/>
+        <result property="orderCode" column="order_code"/>
     </resultMap>
 
     <sql id="selectOrderMaterialVo">
-        select or_id, or_code, or_name, category_code, material_category, material_specification, material_model, material_unit, require_number, require_time, lower_price, new_price, no_tax_price, tax_code, tax, tax_price, line_tax_amount, consignee, receiving_phone, receiving_address, remarks from order_material
+        select or_id,
+               or_code,
+               or_name,
+               category_code,
+               material_category,
+               material_specification,
+               material_model,
+               material_unit,
+               require_number,
+               require_time,
+               lower_price,
+               new_price,
+               no_tax_price,
+               tax_code,
+               tax,
+               tax_price,
+               line_tax_amount,
+               consignee,
+               receiving_phone,
+               receiving_address,
+               remarks,
+               order_code
+        from order_material
     </sql>
 
     <select id="selectOrderMaterialList" parameterType="OrderMaterial" resultMap="OrderMaterialResult">
         <include refid="selectOrderMaterialVo"/>
-        <where>  
-            <if test="orCode != null  and orCode != ''"> and or_code = #{orCode}</if>
-            <if test="orName != null  and orName != ''"> and or_name like concat('%', #{orName}, '%')</if>
-            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
-            <if test="materialCategory != null  and materialCategory != ''"> and material_category = #{materialCategory}</if>
-            <if test="materialSpecification != null  and materialSpecification != ''"> and material_specification = #{materialSpecification}</if>
-            <if test="materialModel != null  and materialModel != ''"> and material_model = #{materialModel}</if>
-            <if test="materialUnit != null  and materialUnit != ''"> and material_unit = #{materialUnit}</if>
-            <if test="requireNumber != null "> and require_number = #{requireNumber}</if>
-            <if test="requireTime != null "> and require_time = #{requireTime}</if>
-            <if test="lowerPrice != null "> and lower_price = #{lowerPrice}</if>
-            <if test="newPrice != null "> and new_price = #{newPrice}</if>
-            <if test="noTaxPrice != null "> and no_tax_price = #{noTaxPrice}</if>
-            <if test="taxCode != null  and taxCode != ''"> and tax_code = #{taxCode}</if>
-            <if test="tax != null "> and tax = #{tax}</if>
-            <if test="taxPrice != null "> and tax_price = #{taxPrice}</if>
-            <if test="lineTaxAmount != null "> and line_tax_amount = #{lineTaxAmount}</if>
-            <if test="consignee != null "> and consignee = #{consignee}</if>
-            <if test="receivingPhone != null  and receivingPhone != ''"> and receiving_phone = #{receivingPhone}</if>
-            <if test="receivingAddress != null  and receivingAddress != ''"> and receiving_address = #{receivingAddress}</if>
-            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        <where>
+            <if test="orCode != null  and orCode != ''">and or_code = #{orCode}</if>
+            <if test="orName != null  and orName != ''">and or_name like concat('%', #{orName}, '%')</if>
+            <if test="categoryCode != null  and categoryCode != ''">and category_code = #{categoryCode}</if>
+            <if test="materialCategory != null  and materialCategory != ''">and material_category =
+                #{materialCategory}
+            </if>
+            <if test="materialSpecification != null  and materialSpecification != ''">and material_specification =
+                #{materialSpecification}
+            </if>
+            <if test="materialModel != null  and materialModel != ''">and material_model = #{materialModel}</if>
+            <if test="materialUnit != null  and materialUnit != ''">and material_unit = #{materialUnit}</if>
+            <if test="requireNumber != null ">and require_number = #{requireNumber}</if>
+            <if test="requireTime != null ">and require_time = #{requireTime}</if>
+            <if test="lowerPrice != null ">and lower_price = #{lowerPrice}</if>
+            <if test="newPrice != null ">and new_price = #{newPrice}</if>
+            <if test="noTaxPrice != null ">and no_tax_price = #{noTaxPrice}</if>
+            <if test="taxCode != null  and taxCode != ''">and tax_code = #{taxCode}</if>
+            <if test="tax != null ">and tax = #{tax}</if>
+            <if test="taxPrice != null ">and tax_price = #{taxPrice}</if>
+            <if test="lineTaxAmount != null ">and line_tax_amount = #{lineTaxAmount}</if>
+            <if test="consignee != null ">and consignee = #{consignee}</if>
+            <if test="receivingPhone != null  and receivingPhone != ''">and receiving_phone = #{receivingPhone}</if>
+            <if test="receivingAddress != null  and receivingAddress != ''">and receiving_address =
+                #{receivingAddress}
+            </if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+            <if test="orderCode != null  and orderCode != ''">and order_code = #{orderCode}</if>
         </where>
     </select>
-    
-    <select id="selectOrderMaterialByOrId" parameterType="Long" resultMap="OrderMaterialResult">
+
+    <select id="selectOrderMaterialOrName" resultType="com.hh.pms.domain.OrderMaterial">
         <include refid="selectOrderMaterialVo"/>
-        where or_id = #{orId}
+        where
     </select>
-        
+
     <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">
         insert into order_material
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -86,7 +116,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivingPhone != null">receiving_phone,</if>
             <if test="receivingAddress != null">receiving_address,</if>
             <if test="remarks != null">remarks,</if>
-         </trim>
+            <if test="orderCode != null">order_code,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orCode != null">#{orCode},</if>
             <if test="orName != null">#{orName},</if>
@@ -108,8 +139,62 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receivingPhone != null">#{receivingPhone},</if>
             <if test="receivingAddress != null">#{receivingAddress},</if>
             <if test="remarks != null">#{remarks},</if>
-         </trim>
+            <if test="orderCode != null">#{orderCode},</if>
+        </trim>
     </insert>
+    <insert id="insertOrderMaterials" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="orId">
+        insert into order_material
+        (
+        or_code,
+        or_name,
+        category_code,
+        material_category,
+        material_specification,
+        material_model,
+        material_unit,
+        require_number,
+        require_time,
+        lower_price,
+        new_price,
+        no_tax_price,
+        tax_code,
+        tax,
+        tax_price,
+        line_tax_amount,
+        consignee,
+        receiving_phone,
+        receiving_address,
+        remarks,
+        order_code
+        )
+        values
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.orCode},
+            #{item.orName},
+            #{item.categoryCode},
+            #{item.materialCategory},
+            #{item.materialSpecification},
+            #{item.materialModel},
+            #{item.materialUnit},
+            #{item.requireNumber},
+            #{item.requireTime},
+            #{item.lowerPrice},
+            #{item.newPrice},
+            #{item.noTaxPrice},
+            #{item.taxCode},
+            #{item.tax},
+            #{item.taxPrice},
+            #{item.lineTaxAmount},
+            #{item.consignee},
+            #{item.receivingPhone},
+            #{item.receivingAddress},
+            #{item.remarks},
+            #{item.orderCode}
+            )
+        </foreach>
+    </insert>
+
 
     <update id="updateOrderMaterial" parameterType="OrderMaterial">
         update order_material
@@ -139,11 +224,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteOrderMaterialByOrId" parameterType="Long">
-        delete from order_material where or_id = #{orId}
+        delete
+        from order_material
+        where or_id = #{orId}
     </delete>
 
     <delete id="deleteOrderMaterialByOrIds" parameterType="String">
-        delete from order_material where or_id in 
+        delete from order_material where or_id in
         <foreach item="orId" collection="array" open="(" separator="," close=")">
             #{orId}
         </foreach>
