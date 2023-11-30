@@ -34,7 +34,7 @@
 <!--          v-hasPermi="['procure:pool:add']"-->
 <!--        >新增</el-button>-->
 <!--      </el-col>
-         :disabled="single"
+         :disabled="single"  @click="handleUpdate"   v-hasPermi="['procure:pool:edit']"
 -->
       <el-col :span="1.5">
         <el-button
@@ -221,74 +221,74 @@
     <!-- 添加或修改采购需求池对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="物料编码" prop="materialCode">
+        <el-form-item label="暂挂原因" prop="materialCode">
           <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
         </el-form-item>
-        <el-form-item label="物料名称" prop="materialName">
-          <el-input v-model="form.materialName" placeholder="请输入物料名称" />
-        </el-form-item>
-        <el-form-item label="基本计算单位" prop="calculationUnit">
-          <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />
-        </el-form-item>
-        <el-form-item label="采购员" prop="purchaser">
-          <el-input v-model="form.purchaser" placeholder="请输入采购员" />
-        </el-form-item>
-        <el-form-item label="最后更新人" prop="lUpdated">
-          <el-input v-model="form.lUpdated" placeholder="请输入最后更新人" />
-        </el-form-item>
-        <el-form-item label="最后更新时间" prop="lUpdateTime">
-          <el-date-picker clearable
-            v-model="form.lUpdateTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择最后更新时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="来源系统" prop="sourceSystem">
-          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
-        </el-form-item>
-        <el-form-item label="是否启用" prop="enable">
-          <el-input v-model="form.enable" placeholder="请输入是否启用" />
-        </el-form-item>
-        <el-form-item label="主品类" prop="mCategory">
-          <el-input v-model="form.mCategory" placeholder="请输入主品类" />
-        </el-form-item>
-        <el-form-item label="规格" prop="specifications">
-          <el-input v-model="form.specifications" placeholder="请输入规格" />
-        </el-form-item>
-        <el-form-item label="型号" prop="model">
-          <el-input v-model="form.model" placeholder="请输入型号" />
-        </el-form-item>
-        <el-form-item label="品牌" prop="brand">
-          <el-input v-model="form.brand" placeholder="请输入品牌" />
-        </el-form-item>
-        <el-form-item label="默认税种/税率" prop="categoriesTaxes">
-          <el-input v-model="form.categoriesTaxes" placeholder="请输入默认税种/税率" />
-        </el-form-item>
-        <el-form-item label="物料图片" prop="image">
-          <image-upload v-model="form.image"/>
-        </el-form-item>
-        <el-form-item label="毛重" prop="gWeight">
-          <el-input v-model="form.gWeight" placeholder="请输入毛重" />
-        </el-form-item>
-        <el-form-item label="净重" prop="nWeight">
-          <el-input v-model="form.nWeight" placeholder="请输入净重" />
-        </el-form-item>
-        <el-form-item label="重量单位" prop="weight">
-          <el-input v-model="form.weight" placeholder="请输入重量单位" />
-        </el-form-item>
-        <el-form-item label="体积" prop="volume">
-          <el-input v-model="form.volume" placeholder="请输入体积" />
-        </el-form-item>
-        <el-form-item label="体积单位" prop="vUnit">
-          <el-input v-model="form.vUnit" placeholder="请输入体积单位" />
-        </el-form-item>
-        <el-form-item label="物料ABC属性" prop="abcAttribute">
-          <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
-        </el-form-item>
-        <el-form-item label="是否免检" prop="avoidInspect">
-          <el-input v-model="form.avoidInspect" placeholder="请输入是否免检" />
-        </el-form-item>
+<!--        <el-form-item label="物料名称" prop="materialName">-->
+<!--          <el-input v-model="form.materialName" placeholder="请输入物料名称" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="基本计算单位" prop="calculationUnit">-->
+<!--          <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="采购员" prop="purchaser">-->
+<!--          <el-input v-model="form.purchaser" placeholder="请输入采购员" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="最后更新人" prop="lUpdated">-->
+<!--          <el-input v-model="form.lUpdated" placeholder="请输入最后更新人" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="最后更新时间" prop="lUpdateTime">-->
+<!--          <el-date-picker clearable-->
+<!--            v-model="form.lUpdateTime"-->
+<!--            type="date"-->
+<!--            value-format="yyyy-MM-dd"-->
+<!--            placeholder="请选择最后更新时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="来源系统" prop="sourceSystem">-->
+<!--          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="是否启用" prop="enable">-->
+<!--          <el-input v-model="form.enable" placeholder="请输入是否启用" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="主品类" prop="mCategory">-->
+<!--          <el-input v-model="form.mCategory" placeholder="请输入主品类" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="规格" prop="specifications">-->
+<!--          <el-input v-model="form.specifications" placeholder="请输入规格" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="型号" prop="model">-->
+<!--          <el-input v-model="form.model" placeholder="请输入型号" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="品牌" prop="brand">-->
+<!--          <el-input v-model="form.brand" placeholder="请输入品牌" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="默认税种/税率" prop="categoriesTaxes">-->
+<!--          <el-input v-model="form.categoriesTaxes" placeholder="请输入默认税种/税率" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="物料图片" prop="image">-->
+<!--          <image-upload v-model="form.image"/>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="毛重" prop="gWeight">-->
+<!--          <el-input v-model="form.gWeight" placeholder="请输入毛重" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="净重" prop="nWeight">-->
+<!--          <el-input v-model="form.nWeight" placeholder="请输入净重" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="重量单位" prop="weight">-->
+<!--          <el-input v-model="form.weight" placeholder="请输入重量单位" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="体积" prop="volume">-->
+<!--          <el-input v-model="form.volume" placeholder="请输入体积" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="体积单位" prop="vUnit">-->
+<!--          <el-input v-model="form.vUnit" placeholder="请输入体积单位" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="物料ABC属性" prop="abcAttribute">-->
+<!--          <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="是否免检" prop="avoidInspect">-->
+<!--          <el-input v-model="form.avoidInspect" placeholder="请输入是否免检" />-->
+<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -380,7 +380,6 @@ export default {
       }
     },
     hasSelectedRows() {
-      console.log('selectedRows:', this.selectedRows);
       return this.selectedRows.length > 0;
     }
   },
@@ -392,21 +391,21 @@ export default {
         this.poolList = response.rows;
         this.total = response.total;
         this.loading = false;
-        console.info(this.poolList)
+        // console.info(this.poolList)
       });
     },
      /** 查询采购需求申请列表 */
      getList1() {
       listRequirement().then(response => {
         this.requirementList = response.rows;
-        console.info(this.requirementList)
+        // console.info(this.requirementList)
       });
     },
       /** 查询采购需求池列表 */
       getList2() {
       listInformation().then(response => {
         this.informationList = response.rows;
-        console.info(this.informationList)
+        // console.info(this.informationList)
       });
     },
    getTagType(status){
@@ -472,6 +471,7 @@ export default {
     },
     handleRowClick(row) {
       this.selectedRows = [row]; // 将选中的行数据赋值给 selectedRows 数组
+      console.info("选中的行数据：", row);
     },
     // /** 新增按钮操作 */
     handleAdd() {
@@ -481,17 +481,19 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      if (!this.hasSelectedRows){
+      if (!this.hasSelectedRows&&!row){
         this.$message.error('请至少选中一条数据');
         return;
+      }else if (!this.hasSelectedRows&&row){
+        this.reset();
+        const materialId=row.materialId || this.ids;
+        getPool(materialId).then(response => {
+          this.form = response.data;
+          this.open = true;
+          this.title = "修改采购需求池";
+        });
       }
-      this.reset();
-      const materialId=row.materialId || this.ids;
-      getPool(materialId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改采购需求池";
-      });
+
     },
     /** 提交按钮 */
     submitForm() {

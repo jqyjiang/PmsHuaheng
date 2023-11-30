@@ -1,7 +1,9 @@
 package com.hh.pms.mapper;
 
+import java.util.Date;
 import java.util.List;
 import com.hh.pms.domain.MaterialRequirement;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购需求申请Mapper接口
@@ -58,4 +60,14 @@ public interface MaterialRequirementMapper
      * @return 结果
      */
     public int deleteMaterialRequirementByRequirementIds(Long[] requirementIds);
+
+    /**
+     * 向需求申请表查询是否存在某天
+     * @param requirementTime
+     * @return
+     */
+
+    @Select("SELECT requirement_code FROM material_requirement  WHERE TO_DAYS(create_time)=TO_DAYS(#{requirementTime}) GROUP BY requirement_code ORDER BY create_time DESC LIMIT 1")
+    String selectRequirementCode(Date requirementTime);
+
 }

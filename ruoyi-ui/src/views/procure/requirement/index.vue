@@ -164,7 +164,7 @@
           <el-input v-model="form.phone" placeholder="请输入联系方式" />
         </el-form-item>
         <el-form-item label="附件" prop="annex">
-          <image-upload v-model="form.annex"/>
+          <file-upload v-model="form.annex"/>
         </el-form-item>
         <el-form-item label="相关项目" prop="relatedProjects">
           <el-input v-model="form.relatedProjects" placeholder="请输入相关项目" />
@@ -225,61 +225,26 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="品类代码" prop="categoryCode" width="150">
+          <el-table-column label="物料品类" prop="categoryCode" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.categoryCode" placeholder="请输入品类代码" />
             </template>
           </el-table-column>
 
-          <el-table-column label="品类名称" prop="categoryName" width="150">
+          <el-table-column label="物料品类名称" prop="categoryName" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.categoryName" placeholder="请输入品类名称" />
-            </template>
-          </el-table-column>
-
-          <el-table-column label="基本计算单位" prop="calculationUnit" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.calculationUnit" placeholder="请输入基本计算单位" />
-            </template>
-          </el-table-column>
-
-          <el-table-column label="最后更新人" prop="lUpdated" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.lUpdated" placeholder="请输入最后更新人" />
-            </template>
-          </el-table-column>
-          <el-table-column label="最后更新时间" prop="lUpdateTime" width="240">
-            <template slot-scope="scope">
-              <el-date-picker clearable v-model="scope.row.lUpdateTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择最后更新时间" />
-            </template>
-          </el-table-column>
-          <el-table-column label="来源系统" prop="sourceSystem" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.sourceSystem" placeholder="请输入来源系统" />
-            </template>
-          </el-table-column>
-          <el-table-column label="是否启用" prop="enable" width="150">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.enable" placeholder="请选择是否启用">
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="主品类" prop="mCategory" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.mCategory" placeholder="请输入主品类" />
             </template>
           </el-table-column>
           <el-table-column label="物料规格" prop="specifications" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.specifications" placeholder="请输入规格" />
             </template>
-          </el-table-column>
-          <el-table-column label="物料型号" prop="model" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.model" placeholder="请输入型号" />
-            </template>
-          </el-table-column>
+          </el-table-column>、<el-table-column label="物料型号" prop="model" width="150">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.model" placeholder="请输入型号" />
+          </template>
+        </el-table-column>
           <el-table-column label="品牌" prop="brand" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.brand" placeholder="请输入品牌" />
@@ -291,10 +256,10 @@
             </template>
           </el-table-column>
           <el-table-column label="需求数量" prop="mustNumber" width="150">
-          <template slot-scope="scope">
-            <el-input v-model="scope.row.mustNumber" placeholder="请输入品牌" />
-          </template>
-        </el-table-column><el-table-column label="需求日期" prop="mustDate" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.mustNumber" placeholder="请输入品牌" />
+            </template>
+          </el-table-column><el-table-column label="需求日期" prop="mustDate" width="150">
           <template slot-scope="scope">
             <el-date-picker clearable
                             v-model="scope.row.mustDate"
@@ -304,9 +269,9 @@
             </el-date-picker>
           </template>
         </el-table-column>
-          <el-table-column label="币种" prop="currencyId" width="150">
+          <el-table-column label="币种" prop="currencyName" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.currencyId" placeholder="请输入默认税种/税率" />
+              <el-input v-model="scope.row.currencyName" placeholder="请输入默认税种/税率" />
             </template>
           </el-table-column>
           <el-table-column label="参考价格" prop="referencePrice" width="150">
@@ -319,14 +284,14 @@
               <el-input v-model="scope.row.unitPrice" placeholder=""/>
             </template>
           </el-table-column>
-          <el-table-column label="税率" prop="weight" width="150">
+          <el-table-column label="税率" prop="tax" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.weight" placeholder="请输入重量单位" />
+              <el-input v-model="scope.row.tax" placeholder="请输入重量单位" />
             </template>
           </el-table-column>
-          <el-table-column label="税率值" prop="volume" width="150">
+          <el-table-column label="税率值" prop="rateValue" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.volume" placeholder="请输入体积" />
+              <el-input v-model="scope.row.rateValue" placeholder="请输入体积" />
             </template>
           </el-table-column>
           <el-table-column label="行预算金额" prop="budgetAmount" width="150">
@@ -339,13 +304,11 @@
               <el-input v-model="scope.row.remarks"  />
             </template>
           </el-table-column>
-<!--          <el-table-column label="附件" prop="annex" width="150">-->
-<!--            <template slot-scope="scope">-->
-<!--              <el-select v-model="scope.row.annex" placeholder="请选择是否免检">-->
-<!--                <el-option label="请选择字典生成" value="" />-->
-<!--              </el-select>-->
-<!--            </template>-->
-<!--          </el-table-column>-->
+          <el-table-column label="附件" prop="annex" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.annex"  />
+            </template>
+          </el-table-column>
           <el-table-column label="采购员" prop="purchaser" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.purchaser" placeholder="请输入采购员" />
@@ -380,6 +343,7 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      rateValue:0,
       // 采购需求申请表格数据
       requirementList: [],
       // 物料表格数据

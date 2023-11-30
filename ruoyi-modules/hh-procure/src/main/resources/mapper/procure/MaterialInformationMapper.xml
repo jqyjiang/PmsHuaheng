@@ -1,89 +1,161 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.MaterialInformationMapper">
-    
+
     <resultMap type="MaterialInformation" id="MaterialInformationResult">
         <result property="miId"    column="mi_id"    />
-        <result property="materialId"    column="material_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialCategory"    column="material_category"    />
+        <result property="materialSpecification"    column="material_specification"    />
+        <result property="materialModel"    column="material_model"    />
+        <result property="materialBrand"    column="material_brand"    />
+        <result property="materialUnit"    column="material_unit"    />
         <result property="mustNumber"    column="must_number"    />
         <result property="mustDate"    column="must_date"    />
-        <result property="currencyId"    column="currency_id"    />
+        <result property="currencyName"    column="currency_name"    />
         <result property="referencePrice"    column="reference_price"    />
         <result property="unitPrice"    column="unit_price"    />
+        <result property="tax"    column="tax"    />
         <result property="rateValue"    column="rate_value"    />
         <result property="budgetAmount"    column="budget_amount"    />
         <result property="remarks"    column="remarks"    />
         <result property="annex"    column="annex"    />
+        <result property="purchaser"    column="purchaser"    />
+    </resultMap>
+
+    <resultMap id="MaterialInformationMaterialResult" type="MaterialInformation" extends="MaterialInformationResult">
+        <collection property="materialList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MaterialResult" />
+    </resultMap>
+
+    <resultMap type="Material" id="MaterialResult">
+        <result property="materialId"    column="sub_material_id"    />
+        <result property="materialCode"    column="sub_material_code"    />
+        <result property="materialName"    column="sub_material_name"    />
+        <result property="calculationUnit"    column="sub_calculation_unit"    />
+        <result property="purchaser"    column="sub_purchaser"    />
+        <result property="lUpdated"    column="sub_l_updated"    />
+        <result property="lUpdateTime"    column="sub_l_update_time"    />
+        <result property="sourceSystem"    column="sub_source_system"    />
+        <result property="enable"    column="sub_enable"    />
+        <result property="mCategory"    column="sub_m_category"    />
+        <result property="specifications"    column="sub_specifications"    />
+        <result property="model"    column="sub_model"    />
+        <result property="brand"    column="sub_brand"    />
+        <result property="categoriesTaxes"    column="sub_categories_taxes"    />
+        <result property="image"    column="sub_image"    />
+        <result property="gWeight"    column="sub_g_weight"    />
+        <result property="nWeight"    column="sub_n_weight"    />
+        <result property="weight"    column="sub_weight"    />
+        <result property="volume"    column="sub_volume"    />
+        <result property="vUnit"    column="sub_v_unit"    />
+        <result property="abcAttribute"    column="sub_abc_attribute"    />
+        <result property="avoidInspect"    column="sub_avoid_inspect"    />
     </resultMap>
 
     <sql id="selectMaterialInformationVo">
-        select mi_id, material_id, must_number, must_date, currency_id, reference_price, unit_price, rate_value, budget_amount, remarks, annex from material_information
+        select mi_id, material_code, material_name, material_category, material_specification, material_model, material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price, tax, rate_value, budget_amount, remarks, annex, purchaser from material_information
     </sql>
 
     <select id="selectMaterialInformationList" parameterType="MaterialInformation" resultMap="MaterialInformationResult">
         <include refid="selectMaterialInformationVo"/>
-        <where>  
-            <if test="materialId != null "> and material_id = #{materialId}</if>
+        <where>
+            <if test="materialCode != null  and materialCode != ''"> and material_code = #{materialCode}</if>
+            <if test="materialName != null  and materialName != ''"> and material_name like concat('%', #{materialName}, '%')</if>
+            <if test="materialCategory != null  and materialCategory != ''"> and material_category = #{materialCategory}</if>
+            <if test="materialSpecification != null  and materialSpecification != ''"> and material_specification = #{materialSpecification}</if>
+            <if test="materialModel != null  and materialModel != ''"> and material_model = #{materialModel}</if>
+            <if test="materialBrand != null  and materialBrand != ''"> and material_brand = #{materialBrand}</if>
+            <if test="materialUnit != null  and materialUnit != ''"> and material_unit = #{materialUnit}</if>
             <if test="mustNumber != null "> and must_number = #{mustNumber}</if>
             <if test="mustDate != null "> and must_date = #{mustDate}</if>
-            <if test="currencyId != null "> and currency_id = #{currencyId}</if>
+            <if test="currencyName != null "> and currency_name = #{currencyName}</if>
             <if test="referencePrice != null "> and reference_price = #{referencePrice}</if>
             <if test="unitPrice != null "> and unit_price = #{unitPrice}</if>
+            <if test="tax != null  and tax != ''"> and tax = #{tax}</if>
             <if test="rateValue != null  and rateValue != ''"> and rate_value = #{rateValue}</if>
             <if test="budgetAmount != null  and budgetAmount != ''"> and budget_amount = #{budgetAmount}</if>
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
             <if test="annex != null  and annex != ''"> and annex = #{annex}</if>
+            <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
         </where>
     </select>
-    
-    <select id="selectMaterialInformationByMiId" parameterType="Integer" resultMap="MaterialInformationResult">
-        <include refid="selectMaterialInformationVo"/>
-        where mi_id = #{miId}
+
+    <select id="selectMaterialInformationByMiId" parameterType="Integer" resultMap="MaterialInformationMaterialResult">
+        select a.mi_id, a.material_code, a.material_name, a.material_category, a.material_specification, a.material_model, a.material_brand, a.material_unit, a.must_number, a.must_date, a.currency_name, a.reference_price, a.unit_price, a.tax, a.rate_value, a.budget_amount, a.remarks, a.annex, a.purchaser,
+               b.material_id as sub_material_id, b.material_code as sub_material_code, b.material_name as sub_material_name, b.calculation_unit as sub_calculation_unit, b.purchaser as sub_purchaser, b.l_updated as sub_l_updated, b.l_update_time as sub_l_update_time, b.source_system as sub_source_system, b.enable as sub_enable, b.m_category as sub_m_category, b.specifications as sub_specifications, b.model as sub_model, b.brand as sub_brand, b.categories_taxes as sub_categories_taxes, b.image as sub_image, b.g_weight as sub_g_weight, b.n_weight as sub_n_weight, b.weight as sub_weight, b.volume as sub_volume, b.v_unit as sub_v_unit, b.abc_attribute as sub_abc_attribute, b.avoid_inspect as sub_avoid_inspect
+        from material_information a
+                 left join material b on b.material_id = a.mi_id
+        where a.mi_id = #{miId}
     </select>
-        
+
     <insert id="insertMaterialInformation" parameterType="MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
         insert into material_information
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="materialId != null">material_id,</if>
+            <if test="materialCode != null">material_code,</if>
+            <if test="materialName != null">material_name,</if>
+            <if test="materialCategory != null">material_category,</if>
+            <if test="materialSpecification != null">material_specification,</if>
+            <if test="materialModel != null">material_model,</if>
+            <if test="materialBrand != null">material_brand,</if>
+            <if test="materialUnit != null">material_unit,</if>
             <if test="mustNumber != null">must_number,</if>
             <if test="mustDate != null">must_date,</if>
-            <if test="currencyId != null">currency_id,</if>
+            <if test="currencyName != null">currency_name,</if>
             <if test="referencePrice != null">reference_price,</if>
             <if test="unitPrice != null">unit_price,</if>
+            <if test="tax != null">tax,</if>
             <if test="rateValue != null">rate_value,</if>
             <if test="budgetAmount != null">budget_amount,</if>
             <if test="remarks != null">remarks,</if>
             <if test="annex != null">annex,</if>
-         </trim>
+            <if test="purchaser != null">purchaser,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="materialId != null">#{materialId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialCategory != null">#{materialCategory},</if>
+            <if test="materialSpecification != null">#{materialSpecification},</if>
+            <if test="materialModel != null">#{materialModel},</if>
+            <if test="materialBrand != null">#{materialBrand},</if>
+            <if test="materialUnit != null">#{materialUnit},</if>
             <if test="mustNumber != null">#{mustNumber},</if>
             <if test="mustDate != null">#{mustDate},</if>
-            <if test="currencyId != null">#{currencyId},</if>
+            <if test="currencyName != null">#{currencyName},</if>
             <if test="referencePrice != null">#{referencePrice},</if>
             <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="tax != null">#{tax},</if>
             <if test="rateValue != null">#{rateValue},</if>
             <if test="budgetAmount != null">#{budgetAmount},</if>
             <if test="remarks != null">#{remarks},</if>
             <if test="annex != null">#{annex},</if>
-         </trim>
+            <if test="purchaser != null">#{purchaser},</if>
+        </trim>
     </insert>
 
     <update id="updateMaterialInformation" parameterType="MaterialInformation">
         update material_information
         <trim prefix="SET" suffixOverrides=",">
-            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="materialCategory != null">material_category = #{materialCategory},</if>
+            <if test="materialSpecification != null">material_specification = #{materialSpecification},</if>
+            <if test="materialModel != null">material_model = #{materialModel},</if>
+            <if test="materialBrand != null">material_brand = #{materialBrand},</if>
+            <if test="materialUnit != null">material_unit = #{materialUnit},</if>
             <if test="mustNumber != null">must_number = #{mustNumber},</if>
             <if test="mustDate != null">must_date = #{mustDate},</if>
-            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="currencyName != null">currency_name = #{currencyName},</if>
             <if test="referencePrice != null">reference_price = #{referencePrice},</if>
             <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="tax != null">tax = #{tax},</if>
             <if test="rateValue != null">rate_value = #{rateValue},</if>
             <if test="budgetAmount != null">budget_amount = #{budgetAmount},</if>
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="annex != null">annex = #{annex},</if>
+            <if test="purchaser != null">purchaser = #{purchaser},</if>
         </trim>
         where mi_id = #{miId}
     </update>
@@ -93,9 +165,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteMaterialInformationByMiIds" parameterType="String">
-        delete from material_information where mi_id in 
+        delete from material_information where mi_id in
         <foreach item="miId" collection="array" open="(" separator="," close=")">
             #{miId}
         </foreach>
     </delete>
+
+    <delete id="deleteMaterialByMaterialIds" parameterType="String">
+        delete from material where material_id in
+        <foreach item="materialId" collection="array" open="(" separator="," close=")">
+            #{materialId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteMaterialByMaterialId" parameterType="Integer">
+        delete from material where material_id = #{materialId}
+    </delete>
+
+    <insert id="batchMaterial">
+        insert into material( material_id, material_code, material_name, calculation_unit, purchaser, l_updated, l_update_time, source_system, enable, m_category, specifications, model, brand, categories_taxes, image, g_weight, n_weight, weight, volume, v_unit, abc_attribute, avoid_inspect) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.materialId}, #{item.materialCode}, #{item.materialName}, #{item.calculationUnit}, #{item.purchaser}, #{item.lUpdated}, #{item.lUpdateTime}, #{item.sourceSystem}, #{item.enable}, #{item.mCategory}, #{item.specifications}, #{item.model}, #{item.brand}, #{item.categoriesTaxes}, #{item.image}, #{item.gWeight}, #{item.nWeight}, #{item.weight}, #{item.volume}, #{item.vUnit}, #{item.abcAttribute}, #{item.avoidInspect})
+        </foreach>
+    </insert>
 </mapper>
