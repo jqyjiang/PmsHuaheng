@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <!-- <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
-    </el-form>
+    </el-form> -->
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -16,7 +16,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['mast:bank:add']"
-          class="add"
+          style="margin-left: 10px;"
         >新建</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
@@ -56,7 +56,7 @@
 
     <el-table v-loading="loading" :data="bankList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="银行序号" align="center" prop="bankId" />
+      <!-- <el-table-column label="银行序号" align="center" prop="bankId" /> -->
       <el-table-column label="银行编码" align="center" prop="bankCode" />
       <el-table-column label="银行名称" align="center" prop="bankName" />
       <el-table-column label="银行简称" align="center" prop="bankAbbreviation" />
@@ -79,13 +79,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <!-- <el-button
+          <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:bank:edit']"
-          >修改</el-button> -->
+          >修改</el-button>
           <el-button
             size="mini"
             type="text"
@@ -117,6 +117,16 @@
         <el-form-item label="银行简称" prop="bankAbbreviation">
           <el-input v-model="form.bankAbbreviation" placeholder="请输入银行简称" />
         </el-form-item>
+        <el-form-item label="银行类型" prop="bankType">
+          <el-select v-model="form.bankType" placeholder="请选择银行类型" >
+            <el-option
+              v-for="dict in bank_typeList"
+              :key="dict.bankTypeId"
+              :label="dict.bankType"
+              :value="dict.bankTypeId"
+            />
+          </el-select>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -147,6 +157,9 @@ export default {
       total: 0,
       // 银行表格数据
       bankList: [],
+      // form:{
+      //   bankType:'',//初始化银行类型为空
+      // },
       bank_typeList: [],
       enableStatus: [], // 用于存储复选框选中状态的数组
       // 弹出层标题
@@ -165,6 +178,9 @@ export default {
       }
     };
   },
+  // mounted() {
+  //   this.fetchBankTypes(); // 在组件挂载后执行数据库查询
+  // },
   created() {
     this.getList();
     this.getList1();
@@ -188,6 +204,16 @@ export default {
         this.total = response.total;
       });
     },
+    // fetchBankTypes() {
+    //   // 执行数据库查询，获取银行类型数据
+    //   axios.get('/mast/bank_type/list')
+    //     .then(response => {
+    //       this.bankTypes = response.data; // 将查询结果赋值给 bankTypes
+    //     })
+    //     .catch(error => {
+    //       console.error(error);
+    //     });
+    // },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -227,16 +253,16 @@ export default {
       this.open = true;
       this.title = "添加银行";
     },
-    // /** 修改按钮操作 */
-    // handleUpdate(row) {
-    //   this.reset();
-    //   const bankId = row.bankId || this.ids
-    //   getBank(bankId).then(response => {
-    //     this.form = response.data;
-    //     this.open = true;
-    //     this.title = "修改银行";
-    //   });
-    // },
+    /** 修改按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      const bankId = row.bankId || this.ids
+      getBank(bankId).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "修改银行";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
