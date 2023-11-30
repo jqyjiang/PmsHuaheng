@@ -41,7 +41,7 @@
                source_system,
                enable,
                m_category,
-               category_name,
+               b.category_name,
                specifications,
                model,
                brand,
