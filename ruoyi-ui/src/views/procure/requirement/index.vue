@@ -127,29 +127,31 @@
     <!-- 添加或修改采购需求申请对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="950px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="需求编号" prop="requirementCode">
-          <el-input v-model="form.requirementCode" placeholder="请输入需求编号" />
-        </el-form-item>
-        <el-form-item label="需求创建人" prop="requirementCreator">
-          <el-input v-model="form.requirementCreator" placeholder="请输入需求创建人" />
-        </el-form-item>
-        <el-form-item label="需求标题" prop="requirementTitle">
-          <el-input v-model="form.requirementTitle" placeholder="请输入需求标题" />
-        </el-form-item>
-        <el-form-item label="创建部门" prop="createDepartment">
-          <el-input v-model="form.createDepartment" placeholder="请输入创建部门" />
-        </el-form-item>
-        <el-form-item label="需求人" prop="demander">
-          <el-input v-model="form.demander" placeholder="请输入需求人" />
+<!--        <el-form-item label="需求编号" prop="requirementCode">-->
+<!--          <el-input v-model="form.requirementCode" placeholder="请输入需求编号" />-->
+<!--        </el-form-item>-->
+        <el-form-item label="需求人" prop="requirementCreator">
+          <el-input v-model="form.requirementCreator" placeholder="请输入需求人" />
         </el-form-item>
         <el-form-item label="需求部门" prop="demandDepartment">
           <el-input v-model="form.demandDepartment" placeholder="请输入需求部门" />
+        </el-form-item>
+        <el-form-item label="公司" prop="companiesId">
+          <el-input v-model="form.companiesId" placeholder="请输入需求部门" />
+        </el-form-item>
+        <el-form-item label="需求类型" prop="requirementType">
+          <el-select v-model="form.requirementType" placeholder="请输入需求类型" >
+
+          </el-select>
         </el-form-item>
         <el-form-item label="预估总金额" prop="totalAmount">
           <el-input v-model="form.totalAmount" placeholder="请输入预估总金额" />
         </el-form-item>
         <el-form-item label="收货联系人" prop="contactPerson">
           <el-input v-model="form.contactPerson" placeholder="请输入收货联系人" />
+        </el-form-item>
+        <el-form-item label="创建部门" prop="createDepartment">
+          <el-input v-model="form.createDepartment" placeholder="请输入创建部门" />
         </el-form-item>
         <el-form-item label="费用部门" prop="expenseDepartment">
           <el-input v-model="form.expenseDepartment" placeholder="请输入费用部门" />
@@ -166,27 +168,11 @@
         <el-form-item label="附件" prop="annex">
           <file-upload v-model="form.annex"/>
         </el-form-item>
-        <el-form-item label="相关项目" prop="relatedProjects">
-          <el-input v-model="form.relatedProjects" placeholder="请输入相关项目" />
+        <el-form-item label="币种" prop="currency_id">
+          <el-input v-model="form.currency_id" placeholder="请输入币种" />
         </el-form-item>
-        <el-form-item label="需求物料数量" prop="requiredMaterials">
-          <el-input v-model="form.requiredMaterials" placeholder="请输入需求物料数量" />
-        </el-form-item>
-        <el-form-item label="需求到货时间" prop="deliveryTime">
-          <el-date-picker clearable
-            v-model="form.deliveryTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择需求到货时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="自动分配" prop="automaticAssign">
-          <el-input v-model="form.automaticAssign" placeholder="请输入自动分配" />
-        </el-form-item>
-        <el-form-item label="物料信息ID" prop="miId">
-          <el-input v-model="form.mi_id" placeholder="物料信息ID" />
-        </el-form-item>
-        <!--   物料信息    -->
+
+      <!--   物料信息    -->
         <el-divider content-position="center">物料明细信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">

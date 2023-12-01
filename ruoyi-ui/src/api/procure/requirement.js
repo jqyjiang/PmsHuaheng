@@ -51,3 +51,13 @@ export function listInformation(query) {
     params: query
   })
 }
+
+
+// 查询需求类型列表
+export function listTable(query) {
+  return request({
+    url: '/procure/table/list',
+    method: 'get',
+    params: query
+  })
+}
