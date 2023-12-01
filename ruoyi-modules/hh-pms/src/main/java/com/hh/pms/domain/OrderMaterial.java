@@ -88,7 +88,7 @@ public class OrderMaterial extends BaseEntity
 
     /** 收货人 */
     @Excel(name = "收货人")
-    private Long consignee;
+    private String consignee;
 
     /** 收货电话 */
     @Excel(name = "收货电话")
@@ -259,15 +259,15 @@ public class OrderMaterial extends BaseEntity
     {
         return lineTaxAmount;
     }
-    public void setConsignee(Long consignee)
-    {
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
         this.consignee = consignee;
     }
 
-    public Long getConsignee()
-    {
-        return consignee;
-    }
     public void setReceivingPhone(String receivingPhone)
     {
         this.receivingPhone = receivingPhone;

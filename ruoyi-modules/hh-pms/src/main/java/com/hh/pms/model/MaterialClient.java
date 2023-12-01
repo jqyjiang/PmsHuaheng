@@ -3,6 +3,7 @@ package com.hh.pms.model;
 import com.hh.pms.mast.domain.Category;
 import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.mast.domain.Material;
+import com.hh.pms.mast.domain.TaxRate;
 import com.ruoyi.common.core.web.page.TableDataInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -23,4 +24,6 @@ public interface MaterialClient {
     public TableDataInfo list(@RequestParam("currency") Currency currency,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/category/list")
     public TableDataInfo listCategory(@RequestParam("category") Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
+    @RequestMapping(method = RequestMethod.GET,value = "/rate/list")
+    public TableDataInfo listRate(@RequestParam("taxRate") TaxRate taxRate, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
 }

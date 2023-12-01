@@ -12,6 +12,12 @@ import com.hh.pms.domain.OrderManager;
 public interface IOrderManagerService 
 {
     /**
+     * 根据执行状态Id查询采购订单列表
+     * @param orId
+     * @return
+     */
+    List<OrderManager> selectByOrderTypeRunning(Long orId);
+    /**
      * 查询采购订单管理
      * 
      * @param orderId 采购订单管理主键

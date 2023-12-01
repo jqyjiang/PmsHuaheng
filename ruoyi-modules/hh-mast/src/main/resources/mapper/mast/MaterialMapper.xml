@@ -9,7 +9,7 @@
         <result property="materialCode" column="material_code"/>
         <result property="materialName" column="material_name"/>
         <result property="calculationUnit" column="calculation_unit"/>
-        <result property="meteringUnit" column="metering_unit"/>
+        <result property="metering_unit" column="metering_unit"/>
         <result property="purchaser" column="purchaser"/>
         <result property="lUpdated" column="l_updated"/>
         <result property="lUpdateTime" column="l_update_time"/>

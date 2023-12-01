@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
+import Contextmenu from 'vue-contextmenujs';
 
 import Element from 'element-ui'
 import './assets/styles/element-variables.scss'
@@ -61,6 +62,7 @@ Vue.component('ImagePreview', ImagePreview)
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
+Vue.use(Contextmenu)
 DictData.install()
 
 /**

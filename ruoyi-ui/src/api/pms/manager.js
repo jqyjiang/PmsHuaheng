@@ -47,7 +47,7 @@ export function delManager(orderId) {
 // 查询供应商详细列表
 export function listSupplier(query) {
   return request({
-    url: '/pms/manager/listSupplier',
+    url: '/pms/OrderManager/listSupplier',
     method: 'get',
     params: query
   })
@@ -56,7 +56,7 @@ export function listSupplier(query) {
 // 查询物料列表
 export function listMaterial(query) {
   return request({
-    url: '/pms/manager/listMaterial',
+    url: '/pms/OrderManager/listMaterial',
     method: 'get',
     params: query
   })
@@ -73,7 +73,7 @@ export function listOrderMaterial() {
 // 查询币种列表
 export function listCurrency(query) {
   return request({
-    url: '/pms/manager/listCurrency',
+    url: '/pms/OrderManager/listCurrency',
     method: 'get',
     params: query
   })
@@ -82,7 +82,33 @@ export function listCurrency(query) {
 // 查询品类列表
 export function listCategory(query) {
   return request({
-    url: '/pms/manager/listCategory',
+    url: '/pms/OrderManager/listCategory',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询税率列表
+export function listRate(query) {
+  return request({
+    url: '/pms/OrderManager/listRate',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询执行状态列表
+export function listTypeRun() {
+  return request({
+    url: '/pms/running/listRunning',
+    method: 'get',
+  })
+}
+
+// 根据执行状态ID查看采购订单列表
+export function managerList(query) {
+  return request({
+    url: '/pms/manager/managerList',
     method: 'get',
     params: query
   })

@@ -68,4 +68,11 @@ public interface OrderManagerMapper
      */
     @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time DESC limit 1")
     String selectOrderCode(Date orderTime);
+
+    /**
+     * 根据执行状态Id查询采购订单列表
+     * @param orId
+     * @return
+     */
+    List<OrderManager> selectByOrderTypeRunning(Long orId);
 }

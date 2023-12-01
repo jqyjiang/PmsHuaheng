@@ -22,7 +22,7 @@
         </el-dialog>
       </el-form-item>
       <el-form-item label="采购订单编号:" prop="orderCode">
-        <el-input v-model="queryParams.orderCode" placeholder="请输入采购订单编号" clearable @keyup.enter.native="handleQuery" />
+        <el-input v-model="queryParams.orderCode" placeholder="请输入采购订单编号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="订单来源:" prop="orderSource">
         <el-select v-model="queryParams.orderSource" placeholder="请选择订单来源" clearable>
@@ -109,7 +109,7 @@
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="采购订单编号" prop="orderCode">
-          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" />
+          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled/>
         </el-form-item>
         <el-form-item label="公司" prop="company">
           <el-input v-model="form.company" placeholder="请输入公司" />
@@ -148,7 +148,7 @@
           <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" :disabled="!isSelfPickupSelected" />
         </el-form-item>
         <el-form-item label="关联合同编号" prop="contractCode">
-          <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" />
+          <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled/>
         </el-form-item>
         <el-form-item label="关联合同名称" prop="contractName">
           <el-input v-model="form.contractName" placeholder="请输入关联合同名称" />
@@ -240,6 +240,9 @@
           </el-col>
           <el-col :span="1.5">
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="primary" @click="showBatchAddDialog">批量新增</el-button>
           </el-col>
         </el-row>
         <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
@@ -339,6 +342,23 @@
           <el-table-column label="税率代码" prop="taxCode" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.taxCode" placeholder="请输入税率代码" />
+              <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
+              <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
+                <!-- 这里是品类的内容 -->
+                <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
+                  <el-table-column type="selection" width="55" align="center" />
+                  <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
+                  <el-table-column label="税种代码" align="center" prop="taxCode" />
+                  <el-table-column label="描述" align="center" prop="describes" />
+                  <el-table-column label="税率" align="center" prop="taxRate" :formatter="formatTaxRate" />
+                  <el-table-column label="是否启用" align="center" prop="enable"></el-table-column>
+                </el-table>
+                <pagination v-show="rtotal > 0" :total="rtotal" :page.sync="rqueryParams.pageNum"
+                  :limit.sync="rqueryParams.pageSize" @pagination="getListRate" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogMaterial2 = false">取消</el-button>
+                </div>
+              </el-dialog>
             </template>
           </el-table-column>
           <el-table-column label="税率" prop="tax" width="150">
@@ -383,11 +403,36 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 批量新增对话框 -->
+    <el-dialog :visible.sync="batchAddDialogVisible" title="批量维护">
+      <el-form :model="forms" ref="forms">
+        <el-form-item label="需求日期" prop="batchRequireTime">
+          <el-date-picker v-model="forms.batchRequireTime" type="date" value-format="yyyy-MM-dd"
+            placeholder="请选择需求日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="需求数量" prop="batchRequireNumber">
+          <el-input v-model="forms.batchRequireNumber" placeholder="请输入需求数量"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人" prop="batchConsignee">
+          <el-input v-model="forms.batchConsignee" placeholder="请输入收货人"></el-input>
+        </el-form-item>
+        <el-form-item label="收货地址" prop="batchReceivingAddress">
+          <el-input v-model="forms.batchReceivingAddress" placeholder="请输入收货地址"></el-input>
+        </el-form-item>
+        <el-form-item label="收货电话" prop="batchReceivingPhone">
+          <el-input v-model="forms.batchReceivingPhone" placeholder="请输入收货电话"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer">
+        <el-button @click="cancelBatchAdd">取消</el-button>
+        <el-button type="primary" @click="doBatchAdd">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate,listTypeRun,managerList } from "@/api/pms/manager";
 
 export default {
   name: "Manager",
@@ -411,6 +456,9 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      //选中税率数组
+      rateId: [],
+      rtotal: 0,
       // 币种表格数据
       currencyList: [],
       // 币种定义查询参数
@@ -452,6 +500,8 @@ export default {
         pageSize: 10,
         sdCode: null,
         sbiName: null,
+        phone: '',
+        people: '',
       },
       //物料基本信息查询参数
       mqueryParams: {
@@ -459,6 +509,13 @@ export default {
         pageSize: 10,
         materialCode: null,
         materialName: null,
+      },
+      // 税率表格数据
+      rateList: [],
+      // 查询参数
+      rqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
       },
       //添加物料基本信息
       materialInfo: [],
@@ -477,6 +534,13 @@ export default {
         orderState: null,
         supplier: null,
       },
+      forms: {
+        batchRequireTime: '',
+        batchRequireNumber: '',
+        batchConsignee: '',
+        batchReceivingAddress: '',
+        batchReceivingPhone: ''
+      },
       // 表单参数
       form: {
       },
@@ -487,7 +551,18 @@ export default {
       dialogVisible1: false, // 用于标记供应商弹窗是否可见
       dialogMaterial: false, //用于标记物料信息表是否可见
       dialogCurrency: false, //用于标记物料信息表是否可见
-      dialogMaterial1: false
+      dialogMaterial1: false,
+      dialogMaterial2: false,
+      // 批量新增对话框的可见性
+      batchAddDialogVisible: false,
+      // 批量新增数据列表
+      batchAddDataList: [],
+      checkedOrderMaterials: null,
+      batchRequireTime: '', // 批量修改的需求日期
+      batchRequireNumber: '', // 批量修改的需求数量
+      batchConsignee: '', // 批量修改的收货人
+      batchReceivingAddress: '', // 批量修改的收货地址
+      batchReceivingPhone: '' // 批量修改的收货电话
     };
   },
   created() {
@@ -511,6 +586,57 @@ export default {
     }
   },
   methods: {
+
+
+    /** 物料明细复选框选中数据 */
+    handleOrderMaterialSelectionChange(selection) {
+      let checkedOrderMaterial = selection.map(item => item)
+      this.checkedOrderMaterials = checkedOrderMaterial
+      console.log(this.checkedOrderMaterials)
+      console.log(checkedOrderMaterial)
+    },
+    // 显示批量新增对话框
+    showBatchAddDialog() {
+      this.batchAddDialogVisible = true;
+    },
+    // 取消批量新增
+    cancelBatchAdd() {
+      this.batchAddDataList = []; // 清空批量新增数据列表
+      this.batchAddDialogVisible = false;
+    },
+
+    // 执行批量新增
+    doBatchAdd() {
+      if (this.checkedOrderMaterials.length === 0) {
+        this.$message.warning('请至少选择一条记录');
+        return;
+      }
+      // 对选中的行数据进行修改
+      this.checkedOrderMaterials.forEach(row => {
+        row.requireTime = this.forms.batchRequireTime;
+        row.requireNumber = this.forms.batchRequireNumber;
+        row.consignee = this.forms.batchConsignee;
+        row.receivingAddress = this.forms.batchReceivingAddress;
+        row.receivingPhone = this.forms.batchReceivingPhone;
+      });
+      console.log(this.checkedOrderMaterials)
+      // 清空批量修改的值
+      this.batchRequireTime = '';
+      this.batchRequireNumber = '';
+      this.batchConsignee = '';
+      this.batchReceivingAddress = '';
+      this.batchReceivingPhone = '';
+      //this.$refs.orderMaterial.clearSelection(); // 清空选中的行数据
+      this.$message.success('批量修改成功');
+      this.batchAddDialogVisible = false;
+    },
+    formatTaxRate(row, column) {
+      const value = row[column.property];
+      if (value === null || value === undefined) {
+        return ''; // 处理空值情况
+      }
+      return parseFloat(value).toFixed(2); // 使用 toFixed 方法保留两位小数
+    },
     /** 查询采购订单管理列表 */
     getList() {
       this.loading = true;
@@ -522,12 +648,21 @@ export default {
     },
     /** 查询品类对象列表 */
     getListCategory() {
-        this.loading = true;
-        listCategory(this.caqueryParams).then(response => {
-          this.categoryList = response.rows;
-          this.catotal = response.total;
-          this.loading = false;
-        })
+      this.loading = true;
+      listCategory(this.caqueryParams).then(response => {
+        this.categoryList = response.rows;
+        this.catotal = response.total;
+        this.loading = false;
+      })
+    },
+    /** 查询税率对象列表 */
+    getListRate() {
+      this.loading = true;
+      listRate(this.rqueryParams).then(response => {
+        this.rateList = response.rows;
+        this.rtotal = response.total;
+        this.loading = false;
+      })
     },
     /** 查询币种定义列表 */
     getListCurrency() {
@@ -551,7 +686,7 @@ export default {
     },
     /**
      * 查询orName物料名称
-     * @param {*} orderMaterialList 
+     * @param {*} orderMaterialList
      */
     getFormattedMaterialName(row) {
       if (!row.orderCode || typeof row.orderCode !== 'string') {
@@ -610,6 +745,10 @@ export default {
       this.dialogMaterial1 = true;
       this.getListCategory();
     },
+    showMaterial2() {
+      this.dialogMaterial2 = true;
+      this.getListRate();
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -664,7 +803,7 @@ export default {
     /** 币种定义重置按钮操作 */
     resetQuery() {
       this.resetForm("cqueryForm");
-      this.handleQuery2();
+      // this.handleQuery2();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
@@ -682,25 +821,26 @@ export default {
       }
       this.dialogCurrency = false; // 关闭对话框
     },
-    handleSelectionChangeCategory(row) {
-
-    },
     handleRowClick1(row) {
       this.form.supplier = row.sdId; // 将供应商名称填充到输入框中
       for (let i = 0; i < this.detailsList.length; i++) {
         const innerElement = this.detailsList[i];
         if (innerElement.sdId === row.sdId) {
           this.supplyName = innerElement.sbiName
+          this.form.phone = innerElement.sdPcp
+          this.form.contacts = innerElement.sdPcn
         }
       }
       this.dialogVisible1 = false; // 关闭对话框
-      this.handleQuery();
+
     },
     //点击供应商列表列数据
     handleRowClick(row) {
       this.squeryParams.sbiName = row.sbiName; // 将供应商名称填充到输入框中
+      // this.squeryParams.phone = row.sdPcp;
+      // this.squeryParams.people = row.sdPcn;
       this.dialogVisible = false; // 关闭对话框
-      this.handleQuery();
+
     },
     handleRowClickMaterial(row) {
       const data = {
@@ -721,15 +861,15 @@ export default {
         this.orderMaterialList[0].materialCategory = row.categoryName;
         this.orderMaterialList[0].materialSpecification = row.specifications;
         this.orderMaterialList[0].materialModel = row.model;
-        this.orderMaterialList[0].materialUnit = row.calculationUnit;
+        this.orderMaterialList[0].materialUnit = row.metering_unit;
       } else {
         this.orderMaterialList[index - 1].orCode = row.materialCode;
         this.orderMaterialList[index - 1].orName = row.materialName;
-        this.orderMaterialList[index - 1].categoryCode = row.mCategory;
-        this.orderMaterialList[index - 1].materialCategory = row.mCategory;
+        this.orderMaterialList[index - 1].categoryCode = row.categoryName;
+        this.orderMaterialList[index - 1].materialCategory = row.categoryName;
         this.orderMaterialList[index - 1].materialSpecification = row.specifications;
         this.orderMaterialList[index - 1].materialModel = row.model;
-        this.orderMaterialList[index - 1].materialUnit = row.calculationUnit;
+        this.orderMaterialList[index - 1].materialUnit = row.metering_unit;
       }
       this.dialogMaterial = false; // 关闭对话框
     },
@@ -740,10 +880,22 @@ export default {
         this.orderMaterialList[0].categoryCode = row.categoryName;
         this.orderMaterialList[0].materialCategory = row.categoryName;
       } else {
-        this.orderMaterialList[0].categoryCode = row.categoryName;
-        this.orderMaterialList[0].materialCategory = row.categoryName;
+        this.orderMaterialList[index - 1].categoryCode = row.categoryName;
+        this.orderMaterialList[index - 1].materialCategory = row.categoryName;
       }
       this.dialogMaterial1 = false; // 关闭对话框
+    },
+    handleRowClickMaterial2(row) {
+      let index = this.orderMaterialList.length;
+      if (this.orderMaterialList.length === 1) {
+        // 修改第一条数据的属性值
+        this.orderMaterialList[0].taxCode = row.taxCode;
+        this.orderMaterialList[0].tax = row.taxRate;
+      } else {
+        this.orderMaterialList[index - 1].taxCode = row.taxCode;
+        this.orderMaterialList[index - 1].tax = row.taxRate;
+      }
+      this.dialogMaterial2 = false; // 关闭对话框
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -838,10 +990,6 @@ export default {
           return checkedOrderMaterial.indexOf(item.index) == -1
         });
       }
-    },
-    /** 复选框选中数据 */
-    handleOrderMaterialSelectionChange(selection) {
-      this.checkedOrderMaterial = selection.map(item => item.index)
     },
     /** 导出按钮操作 */
     handleExport() {

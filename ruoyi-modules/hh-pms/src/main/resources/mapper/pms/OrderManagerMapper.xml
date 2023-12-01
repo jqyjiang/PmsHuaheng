@@ -146,6 +146,10 @@
         <include refid="selectOrderManagerVo"/>
         where order_id = #{orderId}
     </select>
+    <select id="selectByOrderTypeRunning" resultType="com.hh.pms.domain.OrderManager">
+        <include refid="selectOrderManagerVo"/>
+        where or_id = #{orId}
+    </select>
 
     <insert id="insertOrderManager" parameterType="OrderManager" useGeneratedKeys="true" keyProperty="orderId">
         insert into order_manager

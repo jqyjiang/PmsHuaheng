@@ -29,7 +29,7 @@ public class TaxRate extends BaseEntity
 
     /** 税率 */
     @Excel(name = "税率")
-    private BigDecimal taxRate;
+    private String taxRate;
 
     /** 是否启用 */
     @Excel(name = "是否启用")
@@ -62,15 +62,15 @@ public class TaxRate extends BaseEntity
     {
         return describes;
     }
-    public void setTaxRate(BigDecimal taxRate)
-    {
+
+    public String getTaxRate() {
+        return taxRate;
+    }
+
+    public void setTaxRate(String taxRate) {
         this.taxRate = taxRate;
     }
 
-    public BigDecimal getTaxRate()
-    {
-        return taxRate;
-    }
     public void setEnable(Long enable)
     {
         this.enable = enable;

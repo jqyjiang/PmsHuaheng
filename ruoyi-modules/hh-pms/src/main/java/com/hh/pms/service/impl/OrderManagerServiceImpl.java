@@ -31,6 +31,16 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     private OrderMaterialMapper orderMaterialMapper;
 
     /**
+     * 根据执行状态Id查询采购订单列表
+     * @param orId
+     * @return
+     */
+    @Override
+    public List<OrderManager> selectByOrderTypeRunning(Long orId) {
+        return orderManagerMapper.selectByOrderTypeRunning(orId);
+    }
+
+    /**
      * 查询采购订单管理
      *
      * @param orderId 采购订单管理主键
