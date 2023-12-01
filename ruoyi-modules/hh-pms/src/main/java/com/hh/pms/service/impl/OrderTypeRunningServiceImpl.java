@@ -14,6 +14,7 @@ public class OrderTypeRunningServiceImpl implements IOrderTypeRunningService {
     private OrderTypeRunningMapper orderTypeRunningMapper;
     @Override
     public List<OrderTypeRunning> listName() {
+        System.out.println(orderTypeRunningMapper.listName());
         return orderTypeRunningMapper.listName();
     }
 }

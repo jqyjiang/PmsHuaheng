@@ -139,6 +139,7 @@
             <if test="orderSource != null  and orderSource != ''">and order_source = #{orderSource}</if>
             <if test="orderState != null ">and order_state = #{orderState}</if>
             <if test="supplier != null ">and supplier = #{supplier}</if>
+            <if test="orId != null ">and or_id = #{orId}</if>
         </where>
     </select>
 

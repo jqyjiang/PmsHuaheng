@@ -1,45 +1,91 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
-      <el-form-item label="供应商名称:" prop="supplier">
-        <el-input v-model="squeryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
-          icon="el-icon-search" />
-        <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
-        <el-dialog :visible.sync="dialogVisible" title="供应商名称">
-          <!-- 这里是供应商的内容 -->
+    <div style="background-color: #f9f9f9; border: 1px solid #ccc; padding: 10px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+        <div>
+          <!-- 左边的图片和文字 -->
+          <img :src="headerImages" alt="采购订单管理"
+            style="width: 40px; height: 40px;margin-right: 10px; vertical-align: middle;">
+          <span style="font-size: 18px; line-height: 40px; vertical-align: middle;">采购订单管理</span>
+        </div>
 
-          <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
-            <el-table-column type="selection" width="55" align="center" />
-            <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
-            <el-table-column label="供应商名称" align="center" prop="sbiName" />
-          </el-table>
+        <div>
+          <!-- 右边的三个按钮 -->
+          <el-button type="primary" size="small" @click="handleConvertToOrder">需求转订单</el-button>
+          <el-button type="primary" size="small" @click="handleContractToOrder">合同转订单</el-button>
+          <el-button type="primary" size="small" @click="handleCloseOrder">关闭订单</el-button>
+        </div>
+      </div>
+    </div>
 
-          <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
-            :limit.sync="squeryParams.pageSize" @pagination="getList1" />
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取消</el-button>
+    <div style="background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px; margin-top: 20px;">
+      <el-form :model="formData" label-width="40px">
+        <el-row>
+          <!-- 添加“全部”选项 -->
+          <div style="margin-top: 20px;">
+            <el-col :span="1.3" :inline="true" size="small">
+              <el-link :class="{ 'selected': selectedRoute === null }" type="primary" @click="selectRoute(null)">
+                全部({{ this.managerList.length }})
+              </el-link>
+            </el-col>
           </div>
-        </el-dialog>
-      </el-form-item>
-      <el-form-item label="采购订单编号:" prop="orderCode">
-        <el-input v-model="queryParams.orderCode" placeholder="请输入采购订单编号" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="订单来源:" prop="orderSource">
-        <el-select v-model="queryParams.orderSource" placeholder="请选择订单来源" clearable>
-          <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label" :value="dict.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="采购审批状态:" prop="orderState">
-        <el-select v-model="queryParams.orderState" placeholder="请选择采购审批状态" clearable>
-          <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label" :value="dict.value" />
-        </el-select>
-      </el-form-item>
 
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+          <!-- 循环显示其他选项 -->
+          <el-col v-for="route in typeRunList" :key="route.ortId" :span="1.3" :inline="true" size="small">
+            <el-form-item>
+              <el-link :class="{ 'selected': selectedRoute === route }" type="primary" @click="selectRoute(route.ortId)">
+                {{ route.ortName }} ({{ getTotalCount(route.ortId) }})
+              </el-link>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+
+    <div style="background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px; margin-top: 20px;">
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
+        <el-form-item label="供应商名称:" prop="supplier">
+          <el-input v-model="squeryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
+            icon="el-icon-search" />
+          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+          <el-dialog :visible.sync="dialogVisible" title="供应商名称">
+            <!-- 这里是供应商的内容 -->
+
+            <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
+              <el-table-column type="selection" width="55" align="center" />
+              <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+              <el-table-column label="供应商名称" align="center" prop="sbiName" />
+            </el-table>
+
+            <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
+              :limit.sync="squeryParams.pageSize" @pagination="getList1" />
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+            </div>
+          </el-dialog>
+        </el-form-item>
+        <el-form-item label="采购订单编号:" prop="orderCode">
+          <el-input v-model="queryParams.orderCode" placeholder="请输入采购订单编号" clearable @keyup.enter.native="handleQuery" />
+        </el-form-item>
+        <el-form-item label="订单来源:" prop="orderSource">
+          <el-select v-model="queryParams.orderSource" placeholder="请选择订单来源" clearable>
+            <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="采购审批状态:" prop="orderState">
+          <el-select v-model="queryParams.orderState" placeholder="请选择采购审批状态" clearable>
+            <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -63,35 +109,51 @@
 
     <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChangeCurrency">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="关联合同名称" align="center" prop="contractName" />
       <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
       <el-table-column label="采购订单编号" align="center" prop="orderCode" />
+      <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
+      <el-table-column label="物料信息" align="center" prop="materialId">
+        <template slot-scope="scope">
+          <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单执行状态" align="center" prop="orderTypeRunning.ortName">
+        <template slot-scope="scope">
+          <div v-html="getFormattedOrderTypeRunning(scope.row)"></div>
+        </template>
+      </el-table-column>
+      <el-table-column label="需求总数量" align="center" prop="totalDemand">
+        <template slot-scope="scope">
+          <span>
+            {{ scope.row.totalDemand !== null && !isNaN(scope.row.totalDemand)
+              ? parseFloat(scope.row.totalDemand).toFixed(2)
+              : '0.00' }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="采购员" align="center" prop="purchaser" />
       <el-table-column label="公司" align="center" prop="companies.companiesName" />
       <el-table-column label="订单来源" align="center" prop="orderSource">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.order_source" :value="scope.row.orderSource" />
         </template>
       </el-table-column>
-      <el-table-column label="关联合同名称" align="center" prop="contractName" />
-      <el-table-column label="需求总数量" align="center" prop="totalDemand" />
-      <el-table-column label="采购员" align="center" prop="purchaser" />
-      <el-table-column label="采购审批状态" align="center" prop="orderState">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.order_state" :value="scope.row.orderState" />
-        </template>
-      </el-table-column>
-      <el-table-column label="订单执行状态" align="center" prop="orderTypeRunning.ortName" />
-      <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
       <el-table-column label="采购订单创建日期" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <div>
+            <div>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</div>
+            <div>{{ parseTime(scope.row.createTime, '{h}:{i}:{s}') }}</div>
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="物料信息" align="center" prop="materialId">
+      <el-table-column label="采购审批状态" align="center" prop="orderState">
         <template slot-scope="scope">
-          <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
+          <span :class="getStatusClass(scope.row.orderState)">
+            <dict-tag :options="dict.type.order_state" :value="scope.row.orderState" />
+          </span>
         </template>
       </el-table-column>
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -109,7 +171,7 @@
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="采购订单编号" prop="orderCode">
-          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled/>
+          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled />
         </el-form-item>
         <el-form-item label="公司" prop="company">
           <el-input v-model="form.company" placeholder="请输入公司" />
@@ -148,7 +210,7 @@
           <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" :disabled="!isSelfPickupSelected" />
         </el-form-item>
         <el-form-item label="关联合同编号" prop="contractCode">
-          <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled/>
+          <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled />
         </el-form-item>
         <el-form-item label="关联合同名称" prop="contractName">
           <el-input v-model="form.contractName" placeholder="请输入关联合同名称" />
@@ -432,7 +494,7 @@
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate,listTypeRun,managerList } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList } from "@/api/pms/manager";
 
 export default {
   name: "Manager",
@@ -525,6 +587,8 @@ export default {
       open: false,
       // 币种定义名称
       currencyName: '',
+      //执行状态列表
+      typeRunList: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -533,7 +597,10 @@ export default {
         orderSource: null,
         orderState: null,
         supplier: null,
+        //根据执行状态Id查询
+        orId: null,
       },
+
       forms: {
         batchRequireTime: '',
         batchRequireNumber: '',
@@ -562,12 +629,16 @@ export default {
       batchRequireNumber: '', // 批量修改的需求数量
       batchConsignee: '', // 批量修改的收货人
       batchReceivingAddress: '', // 批量修改的收货地址
-      batchReceivingPhone: '' // 批量修改的收货电话
+      batchReceivingPhone: '', // 批量修改的收货电话
+      //执行状态查询
+      formData: {},
+      selectedRoute: null
     };
   },
   created() {
     this.getList();
     this.getlistOrderMaterials();
+    this.getlistTypeRun();
   },
   computed: {
     totalDemand() {
@@ -586,14 +657,76 @@ export default {
     }
   },
   methods: {
+    //控制订单执行状态的颜色
+    getFormattedOrderTypeRunning(row) {
+      if (row.orderTypeRunning !== null) {
+        // 访问 row.orderTypeRunning 的属性并执行相应逻辑
+        const statusClass = this.getOrderTypeRunningClass(row.orderTypeRunning.ortName);
+        return `<span class="${statusClass}">${row.orderTypeRunning.ortName}</span>`;
+      }
 
-
+    },
+    //控制订单审批状态的颜色
+    getStatusClass(orderState) {
+      console.log("这是一个:" + orderState)
+      if (orderState === 1) {
+        return 'status-pending'; // 新建样式类
+      } else if (orderState === 2) {
+        return 'status-canceled'; // 审批中样式类
+      } else if (orderState === 3) {
+        return 'status-approved'; // 审批通过样式类
+      } else if (orderState === 4) {
+        return 'status-rejected'; // 审批拒绝样式类
+      }
+    },
+    getOrderTypeRunningClass(orderTypeRunning) {
+      // 根据 orderTypeRunning 的值返回相应的样式类
+      // 示例中仅给出了一个样式类的判断条件
+      if (orderTypeRunning === '订单已确认') {
+        return 'status-type1'; // 类型1样式类
+      } else if (orderTypeRunning === '订单待确认') {
+        return 'status-type2'; // 其他情况无样式类
+      } else if (orderTypeRunning === '订单已关闭') {
+        return 'status-type3'; // 其他情况无样式类
+      } else if (orderTypeRunning === '执行中') {
+        return 'status-type4'; // 其他情况无样式类
+      } else if (orderTypeRunning === '订单已完成') {
+        return 'status-type5'; // 其他情况无样式类
+      } else if (orderTypeRunning === '订单已拒绝') {
+        return 'status-type6'; // 其他情况无样式类
+      } else if (orderTypeRunning === '订单审批') {
+        return 'status-type7'; // 其他情况无样式类
+      }
+    },
+    selectRoute(route) {
+      if (this.selectedRoute === route) {
+        // 如果点击的是已选中的路线，则取消选中状态
+        // this.selectedRoute = null;
+        this.queryParams.orId = route
+        this.getList();
+      } else {
+        // 否则更新选中状态为当前路线
+        this.selectedRoute = route;
+      }
+    },
+    /**
+     * 计算各个执行状态的总数
+     * @param {} ortId 
+     */
+    getTotalCount(ortId) {
+      if (ortId === null) {
+        // 计算“全部”选项的总数
+        return this.managerList.length;
+      } else {
+        // 计算其他选项的总数
+        const count = this.managerList.filter(item => item.orId === ortId).length;
+        return count;
+      }
+    },
     /** 物料明细复选框选中数据 */
     handleOrderMaterialSelectionChange(selection) {
       let checkedOrderMaterial = selection.map(item => item)
       this.checkedOrderMaterials = checkedOrderMaterial
-      console.log(this.checkedOrderMaterials)
-      console.log(checkedOrderMaterial)
     },
     // 显示批量新增对话框
     showBatchAddDialog() {
@@ -619,7 +752,6 @@ export default {
         row.receivingAddress = this.forms.batchReceivingAddress;
         row.receivingPhone = this.forms.batchReceivingPhone;
       });
-      console.log(this.checkedOrderMaterials)
       // 清空批量修改的值
       this.batchRequireTime = '';
       this.batchRequireNumber = '';
@@ -643,6 +775,15 @@ export default {
       listManager(this.queryParams).then(response => {
         this.managerList = response.rows;
         this.total = response.total;
+        this.loading = false;
+      });
+    },
+    /** 查询采购订单管理列表 */
+    getlistTypeRun() {
+      this.loading = true;
+      listTypeRun().then(response => {
+        console.log(response)
+        this.typeRunList = response;
         this.loading = false;
       });
     },
@@ -837,8 +978,6 @@ export default {
     //点击供应商列表列数据
     handleRowClick(row) {
       this.squeryParams.sbiName = row.sbiName; // 将供应商名称填充到输入框中
-      // this.squeryParams.phone = row.sdPcp;
-      // this.squeryParams.people = row.sdPcn;
       this.dialogVisible = false; // 关闭对话框
 
     },
@@ -1011,5 +1150,139 @@ export default {
   position: absolute;
   right: 15px;
   top: 21.5px;
+}
+
+.el-form-item__label {
+  padding-right: 0;
+}
+
+
+.el-form-item {
+  margin-bottom: 10px;
+}
+
+.selected {
+  position: relative;
+}
+
+.selected::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  /* 控制下划线距离文字的位置 */
+  border-bottom: 1px solid #000;
+  /* 下划线样式 */
+}
+
+.status-pending {
+  display: inline-block;
+  width: 100px;
+  border: 1px solid #ff9800;
+  background-color: #ffe0b2;
+  border-radius: 5px;
+  color: #ff9800;
+  /* 橙色字体 */
+}
+
+.status-canceled {
+  display: inline-block;
+  width: 100px;
+  border: 1px solid #9e9e9e;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  color: #9e9e9e;
+  /* 灰色字体 */
+}
+
+.status-approved {
+  display: inline-block;
+  width: 100px;
+  border: 1px solid #4caf50;
+  background-color: #c8e6c9;
+  border-radius: 5px;
+  color: #4caf50;
+  /* 绿色字体 */
+}
+
+.status-rejected {
+  border: 1px solid #f44336;
+  background-color: #ffcdd2;
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  color: #f44336;
+  /* 红色字体 */
+}
+
+.status-type1 {
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid #2196f3;
+  background-color: #e3f2fd;
+  color: #2196f3;
+  /* 蓝色字体 */
+}
+
+.status-type2 {
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid #4caf50;
+  background-color: #e8f5e9;
+  color: #4caf50;
+  /* 绿色字体 */
+}
+
+.status-type3 {
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid #f44336;
+  background-color: #ffebee;
+  color: #f44336;
+  /* 红色字体 */
+}
+
+.status-type4 {
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid #ff9800;
+  background-color: #fff3e0;
+  color: #ff9800;
+  /* 橙色字体 */
+}
+
+.status-type5 {
+  display: inline-block;
+  width: 100px;
+  border-radius: 5px;
+  border: 1px solid #9c27b0;
+  background-color: #f3e5f5;
+  color: #9c27b0;
+  /* 紫色字体 */
+}
+
+.status-type6 {
+  width: 100px;
+  display: inline-block;
+  border-radius: 5px;
+  border: 1px solid #673ab7;
+  background-color: #ede7f6;
+  color: #673ab7;
+  /* 深紫色字体 */
+}
+
+.status-type7 {
+  width: 100px;
+  display: inline-block;
+  border: 1px solid #ff5722;
+  background-color: #ffccbc;
+  border-radius: 5px;
+  color: #ff5722;
+  /* 橙红色字体 */
 }
 </style>
