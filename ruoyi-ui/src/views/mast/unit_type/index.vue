@@ -18,7 +18,7 @@
           v-hasPermi="['mast:unit_type:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -49,7 +49,7 @@
           @click="handleExport"
           v-hasPermi="['mast:unit_type:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -68,13 +68,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['mast:unit_type:edit']"
-          >修改</el-button>
+          >修改</el-button> -->
           <el-button
             size="mini"
             type="text"
@@ -95,13 +95,16 @@
     />
 
     <!-- 添加或修改计量单位类型定义对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="单位类型代码" prop="unitTypeCode">
           <el-input v-model="form.unitTypeCode" placeholder="请输入单位类型代码" />
         </el-form-item>
         <el-form-item label="单位类型名称" prop="unitTypeName">
           <el-input v-model="form.unitTypeName" placeholder="请输入单位类型名称" />
+        </el-form-item>
+        <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -222,6 +225,11 @@ export default {
               this.getList();
             });
           } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             addUnit_type(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
