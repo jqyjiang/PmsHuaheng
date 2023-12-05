@@ -22,6 +22,13 @@ public interface OrderManagerMapper
     public OrderManager selectOrderManagerByOrderId(Long orderId);
 
     /**
+     * 查询执行状态个数
+     * @return
+     */
+
+    public List<OrderManager> findRunTypeNumber();
+
+    /**
      * 查询采购订单管理列表
      * 
      * @param orderManager 采购订单管理

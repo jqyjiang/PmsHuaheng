@@ -17,6 +17,14 @@ export function getManager(orderId) {
   })
 }
 
+// 查询采购订单管理详细
+export function getNumber() {
+  return request({
+    url: '/pms/manager/runTypeNumber' ,
+    method: 'get'
+  })
+}
+
 // 新增采购订单管理
 export function addManager(data) {
   return request({

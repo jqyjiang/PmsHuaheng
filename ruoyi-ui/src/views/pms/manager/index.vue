@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <div style="background-color: #f9f9f9; border: 1px solid #ccc; padding: 10px;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+    <div style="background-color: #f9f9f9; border: 1px solid #eaeaea; padding: 10px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; ">
         <div>
           <!-- 左边的图片和文字 -->
           <img :src="headerImages" alt="采购订单管理"
@@ -11,499 +11,653 @@
 
         <div>
           <!-- 右边的三个按钮 -->
-          <el-button type="primary" size="small" @click="handleConvertToOrder">需求转订单</el-button>
+          <el-button type="primary" size="small" label="rtl" @click="drawer = true">需求转订单</el-button>
           <el-button type="primary" size="small" @click="handleContractToOrder">合同转订单</el-button>
           <el-button type="primary" size="small" @click="handleCloseOrder">关闭订单</el-button>
         </div>
       </div>
     </div>
-
-    <div style="background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px; margin-top: 20px;">
-      <el-form :model="formData" label-width="40px">
-        <el-row>
-          <!-- 添加“全部”选项 -->
-          <div style="margin-top: 20px;">
-            <el-col :span="1.3" :inline="true" size="small">
-              <el-link :class="{ 'selected': selectedRoute === null }" type="primary" @click="selectRoute(null)">
-                全部({{ this.managerList.length }})
-              </el-link>
-            </el-col>
-          </div>
-
-          <!-- 循环显示其他选项 -->
-          <el-col v-for="route in typeRunList" :key="route.ortId" :span="1.3" :inline="true" size="small">
-            <el-form-item>
-              <el-link :class="{ 'selected': selectedRoute === route }" type="primary" @click="selectRoute(route.ortId)">
-                {{ route.ortName }} ({{ getTotalCount(route.ortId) }})
-              </el-link>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    <div>
+      <span @click="showWholeOrder" :class="{ active: isWholeOrder }">整单</span>
+      <span @click="showOrderDetail" :class="{ active: !isWholeOrder }">订单明细</span>
     </div>
-
-    <div style="background-color: #f5f5f5; border: 1px solid #ccc; padding: 10px; margin-top: 20px;">
-      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
-        <el-form-item label="供应商名称:" prop="supplier">
-          <el-input v-model="squeryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
-            icon="el-icon-search" />
-          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
-          <el-dialog :visible.sync="dialogVisible" title="供应商名称">
-            <!-- 这里是供应商的内容 -->
-
-            <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
-              <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
-              <el-table-column label="供应商名称" align="center" prop="sbiName" />
-            </el-table>
-
-            <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
-              :limit.sync="squeryParams.pageSize" @pagination="getList1" />
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible = false">取消</el-button>
+    <div class="order-info" v-show="isWholeOrder">
+      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px;">
+        <el-form :model="formData" label-width="40px">
+          <el-row>
+            <!-- 添加“全部”选项 -->
+            <div style="margin-top: 20px;">
+              <el-col :span="1.3" :inline="true" size="small">
+                <el-link :class="{ 'selected': selectedRoute === null }" type="primary" @click="selectRoute(null)">
+                  全部({{ this.runNumber.length }})
+                </el-link>
+              </el-col>
             </div>
-          </el-dialog>
-        </el-form-item>
-        <el-form-item label="采购订单编号:" prop="orderCode">
-          <el-input v-model="queryParams.orderCode" placeholder="请输入采购订单编号" clearable @keyup.enter.native="handleQuery" />
-        </el-form-item>
-        <el-form-item label="订单来源:" prop="orderSource">
-          <el-select v-model="queryParams.orderSource" placeholder="请选择订单来源" clearable>
-            <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label" :value="dict.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="采购审批状态:" prop="orderState">
-          <el-select v-model="queryParams.orderState" placeholder="请选择采购审批状态" clearable>
-            <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label" :value="dict.value" />
-          </el-select>
-        </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
-
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['pms:manager:add']">新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['pms:manager:edit']">修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['pms:manager:remove']">删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['pms:manager:export']">导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChangeCurrency">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="关联合同名称" align="center" prop="contractName" />
-      <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
-      <el-table-column label="采购订单编号" align="center" prop="orderCode" />
-      <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
-      <el-table-column label="物料信息" align="center" prop="materialId">
-        <template slot-scope="scope">
-          <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="订单执行状态" align="center" prop="orderTypeRunning.ortName">
-        <template slot-scope="scope">
-          <div v-html="getFormattedOrderTypeRunning(scope.row)"></div>
-        </template>
-      </el-table-column>
-      <el-table-column label="需求总数量" align="center" prop="totalDemand">
-        <template slot-scope="scope">
-          <span>
-            {{ scope.row.totalDemand !== null && !isNaN(scope.row.totalDemand)
-              ? parseFloat(scope.row.totalDemand).toFixed(2)
-              : '0.00' }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="采购员" align="center" prop="purchaser" />
-      <el-table-column label="公司" align="center" prop="companies.companiesName" />
-      <el-table-column label="订单来源" align="center" prop="orderSource">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.order_source" :value="scope.row.orderSource" />
-        </template>
-      </el-table-column>
-      <el-table-column label="采购订单创建日期" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <div>
-            <div>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</div>
-            <div>{{ parseTime(scope.row.createTime, '{h}:{i}:{s}') }}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="采购审批状态" align="center" prop="orderState">
-        <template slot-scope="scope">
-          <span :class="getStatusClass(scope.row.orderState)">
-            <dict-tag :options="dict.type.order_state" :value="scope.row.orderState" />
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['pms:manager:edit']">修改</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['pms:manager:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
-
-    <!-- 添加或修改采购订单管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="采购订单编号" prop="orderCode">
-          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled />
-        </el-form-item>
-        <el-form-item label="公司" prop="company">
-          <el-input v-model="form.company" placeholder="请输入公司" />
-        </el-form-item>
-        <el-form-item label="订单类型" prop="orderType">
-          <el-select v-model="form.orderType" placeholder="请选择订单类型">
-            <el-option v-for="dict in dict.type.order_type" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="订单来源" prop="orderSource">
-          <el-select v-model="form.orderSource" placeholder="请选择订单来源">
-            <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
-              :value="dict.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="采购组织" prop="purOrganization">
-          <el-select v-model="form.purOrganization" placeholder="请选择采购组织">
-            <el-option v-for="dict in dict.type.procure" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="附件" prop="annex">
-          <file-upload v-model="form.annex" />
-        </el-form-item>
-        <el-form-item label="是否自提" prop="isSelfPickup">
-          <el-select v-model="form.isSelfPickup" placeholder="请选择是否自提">
-            <el-option v-for="dict in dict.type.self_pickup" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="自提车牌号" prop="licensePlateNumber">
-          <el-input v-model="form.licensePlateNumber" placeholder="请输入自提车牌号" :disabled="!isSelfPickupSelected" />
-        </el-form-item>
-        <el-form-item label="自提司机联系方式" prop="concatInfomation">
-          <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" :disabled="!isSelfPickupSelected" />
-        </el-form-item>
-        <el-form-item label="关联合同编号" prop="contractCode">
-          <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled />
-        </el-form-item>
-        <el-form-item label="关联合同名称" prop="contractName">
-          <el-input v-model="form.contractName" placeholder="请输入关联合同名称" />
-        </el-form-item>
-        <el-form-item label="订单说明" prop="orderDescription">
-          <el-input v-model="form.orderDescription" placeholder="请输入订单说明" />
-        </el-form-item>
-        <el-form-item label="需求总数量" prop="totalDemand">
-          <el-input :value="totalDemand" disabled placeholder="请输入需求总数量" />
-        </el-form-item>
-        <el-form-item label="采购员" prop="purchaser">
-          <el-input v-model="form.purchaser" placeholder="请输入采购员" />
-        </el-form-item>
-        <el-form-item label="采购审批状态" prop="orderState">
-          <el-select v-model="form.orderState" placeholder="请选择采购审批状态">
-            <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="币种" prop="currencyId">
-          <el-input v-model="currencyName" placeholder="请输入币种" />
-          <i class="el-icon-search" id="serachOne" @click="showDiagCurrency"></i>
-          <el-dialog :visible.sync="dialogCurrency" title="币种定义" :modal="false">
-            <el-form :model="queryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
-              label-width="68px">
-              <el-form-item label="币种编码" prop="currencyCode">
-                <el-input v-model="cqueryParams.currencyCode" placeholder="请输入币种编码" clearable
-                  @keyup.enter.native="handleQuery2" />
-              </el-form-item>
-              <el-form-item label="币种名称" prop="currencyName">
-                <el-input v-model="cqueryParams.currencyName" placeholder="请输入币种名称" clearable
-                  @keyup.enter.native="handleQuery2" />
-              </el-form-item>
+            <!-- 循环显示其他选项 -->
+            <el-col v-for="route in typeRunList" :key="route.ortId" :span="1.3" :inline="true" size="small">
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery2">搜索</el-button>
+                <el-link :class="{ 'selected': selectedRoute === route }" type="primary"
+                  @click="selectRoute(route.ortId)">
+                  {{ route.ortName }} ({{ getTotalCount(route.ortId) }})
+                </el-link>
               </el-form-item>
-            </el-form>
-            <el-table v-loading="loading" :data="currencyList" @row-click="handleSelectionChangeCurrency">
-              <el-table-column type="selection" width="55" align="center" />
-              <!-- <el-table-column label="币种ID" align="center" prop="currencyId" /> -->
-              <el-table-column label="币种编码" align="center" prop="currencyCode" />
-              <el-table-column label="币种名称" align="center" prop="currencyName" />
-              <el-table-column label="国家/地区" align="center" prop="countryRegion" />
-              <el-table-column label="财务精度" align="center" prop="financialAccuracy" />
-              <el-table-column label="精度" align="center" prop="accuracy" />
-              <el-table-column label="货币符号" align="center" prop="currencySymbol" />
-            </el-table>
-            <pagination v-show="ctotal > 0" :total="ctotal" :page.sync="cqueryParams.pageNum"
-              :limit.sync="cqueryParams.pageSize" @pagination="getListCurrency" />
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogCurrency = false">取消</el-button>
-            </div>
-          </el-dialog>
-        </el-form-item>
-        <el-form-item label="供应商名称" prop="supplier">
-          <el-input v-model="supplyName" placeholder="请输入供应商名称" />
-          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie1()"></i>
-          <el-dialog :visible.sync="dialogVisible1" title="供应商名称" :modal="false">
-            <!-- 这里是供应商的内容 -->
-            <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick1">
-              <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
-              <el-table-column label="供应商名称" align="center" prop="sbiName" />
-            </el-table>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+      <el-drawer title="需求任务转订单" :visible.sync="drawer" :direction="direction" :before-close="handleClose" :width="60">
+        <el-table :data="gridData">
+          <el-table-column property="date" label="任务单号" width="150"></el-table-column>
+          <el-table-column property="name" label="需求编号" width="200"></el-table-column>
+          <el-table-column property="address" label="公司"></el-table-column>
+          <el-table-column property="address" label="采购员"></el-table-column>
+          <el-table-column property="address" label="任务总数量"></el-table-column>
+          <el-table-column property="address" label="任务总金额"></el-table-column>
+          <el-table-column property="address" label="已受理数量"></el-table-column>
+          <el-table-column property="address" label="占用任务数量"></el-table-column>
+        <el-table-column property="address" label="待受理数量"></el-table-column>
+        </el-table>
+      </el-drawer>
+      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px; margin-bottom: 10px;">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px"
+          style="position: relative; top: 15px;">
+          <el-form-item label="供应商名称:" prop="supplier">
+            <el-input v-model="squeryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
+              icon="el-icon-search" />
+            <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+            <el-dialog :visible.sync="dialogVisible" title="供应商名称">
+              <!-- 这里是供应商的内容 -->
 
-            <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
-              :limit.sync="squeryParams.pageSize" @pagination="getList1" />
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogVisible1 = false">取消</el-button>
+              <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
+                <el-table-column type="selection" width="55" align="center" />
+                <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+                <el-table-column label="供应商名称" align="center" prop="sbiName" />
+              </el-table>
+
+              <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
+                :limit.sync="squeryParams.pageSize" @pagination="getList1" />
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+              </div>
+            </el-dialog>
+          </el-form-item>
+          <el-form-item label="订单号:" prop="orderCode">
+            <el-input v-model="queryParams.orderCode" placeholder="请输入订单号" clearable @keyup.enter.native="handleQuery" />
+          </el-form-item>
+          <el-form-item label="订单来源:" prop="orderSource">
+            <el-select v-model="queryParams.orderSource" placeholder="请选择订单来源" clearable>
+              <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
+                :value="dict.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="采购审批状态:" prop="orderState">
+            <el-select v-model="queryParams.orderState" placeholder="请选择采购审批状态" clearable>
+              <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label"
+                :value="dict.value" />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+
+
+      <el-row :gutter="10" class="mb8">
+        <el-col :span="1.5">
+          <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+            v-hasPermi="['pms:manager:add']">新增</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+            v-hasPermi="['pms:manager:edit']">修改</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+            v-hasPermi="['pms:manager:remove']">删除</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+            v-hasPermi="['pms:manager:export']">导出</el-button>
+        </el-col>
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      </el-row>
+
+      <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChangeCurrency">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="关联合同名称" align="center" prop="contractName" />
+        <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
+        <el-table-column label="订单号" align="center" prop="orderCode" width="150px" />
+        <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
+        <el-table-column label="物料信息" align="center" prop="materialId">
+          <template slot-scope="scope">
+            <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="订单执行状态" align="center" prop="orderTypeRunning.ortName">
+          <template slot-scope="scope">
+            <div v-html="getFormattedOrderTypeRunning(scope.row)"></div>
+          </template>
+        </el-table-column>
+        <el-table-column label="需求总数量" align="center" prop="totalDemand">
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.totalDemand !== null && !isNaN(scope.row.totalDemand)
+                ? parseFloat(scope.row.totalDemand).toFixed(2)
+                : '0.00' }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="采购员" align="center" prop="purchaser" />
+        <el-table-column label="含税总金额" align="center" prop="taxTotal" />
+        <el-table-column label="订单来源" align="center" prop="orderSource">
+          <template slot-scope="scope">
+            <dict-tag :options="dict.type.order_source" :value="scope.row.orderSource" />
+          </template>
+        </el-table-column>
+        <el-table-column label="采购订单创建日期" align="center" prop="createTime" width="180">
+          <template slot-scope="scope">
+            <div>
+              <div>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</div>
+              <div>{{ parseTime(scope.row.createTime, '{h}:{i}:{s}') }}</div>
             </div>
-          </el-dialog>
-        </el-form-item>
-        <el-form-item label="联系人" prop="contacts">
-          <el-input v-model="form.contacts" placeholder="请输入联系人" />
-        </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入联系电话" />
-        </el-form-item>
-        <el-form-item label="供应商发票方式" prop="invoiceMethod">
-          <el-select v-model="form.invoiceMethod" placeholder="请选择供应商发票方式">
-            <el-option v-for="dict in dict.type.invoice_method" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-divider content-position="center">订单物料明细信息</el-divider>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddOrderMaterial">添加</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="primary" @click="showBatchAddDialog">批量新增</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
-          @selection-change="handleOrderMaterialSelectionChange" ref="orderMaterial">
-          <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50" />
-          <el-table-column label="物料编码" prop="orCode" width="150">
+          </template>
+        </el-table-column>
+        <el-table-column label="采购审批状态" align="center" prop="orderState">
+          <template slot-scope="scope">
+            <span :class="getStatusClass(scope.row.orderState)">
+              <dict-tag :options="dict.type.order_state" :value="scope.row.orderState" />
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+              v-hasPermi="['pms:manager:edit']">修改</el-button>
+            <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+              v-hasPermi="['pms:manager:remove']">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+        @pagination="getList" />
+
+      <!-- 添加或修改采购订单管理对话框 -->
+      <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
+        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+          <el-form-item label="采购订单编号" prop="orderCode">
+            <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled />
+          </el-form-item>
+          <el-form-item label="公司" prop="company">
+            <el-input v-model="form.company" placeholder="请输入公司" />
+          </el-form-item>
+          <el-form-item label="订单类型" prop="orderType">
+            <el-select v-model="form.orderType" placeholder="请选择订单类型">
+              <el-option v-for="dict in dict.type.order_type" :key="dict.value" :label="dict.label"
+                :value="parseInt(dict.value)"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="订单来源" prop="orderSource">
+            <el-select v-model="form.orderSource" placeholder="请选择订单来源">
+              <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
+                :value="dict.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="采购组织" prop="purOrganization">
+            <el-select v-model="form.purOrganization" placeholder="请选择采购组织">
+              <el-option v-for="dict in dict.type.procure" :key="dict.value" :label="dict.label"
+                :value="parseInt(dict.value)"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="附件" prop="annex">
+            <file-upload v-model="form.annex" />
+          </el-form-item>
+          <el-form-item label="是否自提" prop="isSelfPickup">
+            <el-select v-model="form.isSelfPickup" placeholder="请选择是否自提">
+              <el-option v-for="dict in dict.type.self_pickup" :key="dict.value" :label="dict.label"
+                :value="parseInt(dict.value)"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="自提车牌号" prop="licensePlateNumber">
+            <el-input v-model="form.licensePlateNumber" placeholder="请输入自提车牌号" :disabled="!isSelfPickupSelected" />
+          </el-form-item>
+          <el-form-item label="自提司机联系方式" prop="concatInfomation">
+            <el-input v-model="form.concatInfomation" placeholder="请输入自提司机联系方式" :disabled="!isSelfPickupSelected" />
+          </el-form-item>
+          <el-form-item label="关联合同编号" prop="contractCode">
+            <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled />
+          </el-form-item>
+          <el-form-item label="关联合同名称" prop="contractName">
+            <el-input v-model="form.contractName" placeholder="请输入关联合同名称" />
+          </el-form-item>
+          <el-form-item label="订单说明" prop="orderDescription">
+            <el-input v-model="form.orderDescription" placeholder="请输入订单说明" />
+          </el-form-item>
+          <el-form-item label="需求总数量" prop="totalDemand">
+            <el-input :value="totalDemand" disabled placeholder="请输入需求总数量" />
+          </el-form-item>
+          <el-form-item label="采购员" prop="purchaser">
+            <el-input v-model="form.purchaser" placeholder="请输入采购员" />
+          </el-form-item>
+          <el-form-item label="采购审批状态" prop="orderState">
+            <el-select v-model="form.orderState" placeholder="请选择采购审批状态">
+              <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label"
+                :value="parseInt(dict.value)"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="币种" prop="currencyId">
+            <el-input v-model="currencyName" placeholder="请输入币种" />
+            <i class="el-icon-search" id="serachOne" @click="showDiagCurrency"></i>
+            <el-dialog :visible.sync="dialogCurrency" title="币种定义" :modal="false">
+              <el-form :model="queryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
+                label-width="68px">
+                <el-form-item label="币种编码" prop="currencyCode">
+                  <el-input v-model="cqueryParams.currencyCode" placeholder="请输入币种编码" clearable
+                    @keyup.enter.native="handleQuery2" />
+                </el-form-item>
+                <el-form-item label="币种名称" prop="currencyName">
+                  <el-input v-model="cqueryParams.currencyName" placeholder="请输入币种名称" clearable
+                    @keyup.enter.native="handleQuery2" />
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery2">搜索</el-button>
+                </el-form-item>
+              </el-form>
+              <el-table v-loading="loading" :data="currencyList" @row-click="handleSelectionChangeCurrency">
+                <el-table-column type="selection" width="55" align="center" />
+                <!-- <el-table-column label="币种ID" align="center" prop="currencyId" /> -->
+                <el-table-column label="币种编码" align="center" prop="currencyCode" />
+                <el-table-column label="币种名称" align="center" prop="currencyName" />
+                <el-table-column label="国家/地区" align="center" prop="countryRegion" />
+                <el-table-column label="财务精度" align="center" prop="financialAccuracy" />
+                <el-table-column label="精度" align="center" prop="accuracy" />
+                <el-table-column label="货币符号" align="center" prop="currencySymbol" />
+              </el-table>
+              <pagination v-show="ctotal > 0" :total="ctotal" :page.sync="cqueryParams.pageNum"
+                :limit.sync="cqueryParams.pageSize" @pagination="getListCurrency" />
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogCurrency = false">取消</el-button>
+              </div>
+            </el-dialog>
+          </el-form-item>
+          <el-form-item label="供应商名称" prop="supplier">
+            <el-input v-model="supplyName" placeholder="请输入供应商名称" />
+            <i class="el-icon-search" id="serachOne" @click="showDiagSupplie1()"></i>
+            <el-dialog :visible.sync="dialogVisible1" title="供应商名称" :modal="false">
+              <!-- 这里是供应商的内容 -->
+              <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick1">
+                <el-table-column type="selection" width="55" align="center" />
+                <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+                <el-table-column label="供应商名称" align="center" prop="sbiName" />
+              </el-table>
+
+              <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
+                :limit.sync="squeryParams.pageSize" @pagination="getList1" />
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible1 = false">取消</el-button>
+              </div>
+            </el-dialog>
+          </el-form-item>
+          <el-form-item label="联系人" prop="contacts">
+            <el-input v-model="form.contacts" placeholder="请输入联系人" />
+          </el-form-item>
+          <el-form-item label="联系电话" prop="phone">
+            <el-input v-model="form.phone" placeholder="请输入联系电话" />
+          </el-form-item>
+          <el-form-item label="供应商发票方式" prop="invoiceMethod">
+            <el-select v-model="form.invoiceMethod" placeholder="请选择供应商发票方式">
+              <el-option v-for="dict in dict.type.invoice_method" :key="dict.value" :label="dict.label"
+                :value="parseInt(dict.value)"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-divider content-position="center">订单物料明细信息</el-divider>
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddOrderMaterial">添加</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="primary" @click="showBatchAddDialog">批量新增</el-button>
+            </el-col>
+          </el-row>
+          <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
+            @selection-change="handleOrderMaterialSelectionChange" ref="orderMaterial">
+            <el-table-column type="selection" width="50" align="center" />
+            <el-table-column label="序号" align="center" prop="index" width="50" />
+            <el-table-column label="物料编码" prop="orCode" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.orCode" placeholder="" />
+                <i class="el-icon-search" id="serachOne1" @click="showMaterial()"></i>
+                <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
+                  <!-- 这里是物料管理的内容 -->
+                  <el-table v-loading="loading" :data="materialList" @row-click="handleRowClickMaterial">
+                    <el-table-column type="selection" width="55" align="center" />
+                    <el-table-column label="物料编码" align="center" prop="materialCode" />
+                    <el-table-column label="物料名称" align="center" prop="materialName" />
+                  </el-table>
+                  <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="mqueryParams.pageNum"
+                    :limit.sync="mqueryParams.pageSize" @pagination="getList2" />
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogMaterial = false">取消</el-button>
+                  </div>
+                </el-dialog>
+              </template>
+            </el-table-column>
+            <el-table-column label="物料名称" prop="orName" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.orName" placeholder="请输入物料名称" />
+              </template>
+            </el-table-column>
+            <el-table-column label="品类编码" prop="categoryCode" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.categoryCode" placeholder="请输入品类编码" />
+                <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
+                <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
+                  <!-- 这里是品类的内容 -->
+                  <el-table :data="categoryList" v-loading="loading" @row-click="handleRowClickMaterial1">
+                    <el-table-column type="selection" width="55" align="center" />
+                    <el-table-column label="品类名称" align="center" prop="categoryName" />
+                    <el-table-column label="品类代码" align="center" prop="categoryCode" />
+                    <el-table-column label="上级品类" align="center" prop="superiorCategory" />
+                  </el-table>
+                  <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
+                    :limit.sync="caqueryParams.pageSize" @pagination="getListCategory" />
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogMaterial1 = false">取消</el-button>
+                  </div>
+                </el-dialog>
+              </template>
+            </el-table-column>
+            <el-table-column label="物料品类" prop="materialCategory" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.materialCategory" placeholder="请输入物料品类" />
+              </template>
+            </el-table-column>
+            <el-table-column label="物料规格" prop="materialSpecification" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.materialSpecification" placeholder="请输入物料规格" />
+              </template>
+            </el-table-column>
+            <el-table-column label="物料型号" prop="materialModel" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.materialModel" placeholder="请输入物料型号" />
+              </template>
+            </el-table-column>
+            <el-table-column label="物料单位" prop="materialUnit" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.materialUnit" placeholder="请输入物料单位" />
+              </template>
+            </el-table-column>
+            <el-table-column label="需求数量" prop="requireNumber" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.requireNumber" placeholder="请输入需求数量" />
+              </template>
+            </el-table-column>
+            <el-table-column label="需求日期" prop="requireTime" width="240">
+              <template slot-scope="scope">
+                <el-date-picker clearable v-model="scope.row.requireTime" type="date" value-format="yyyy-MM-dd"
+                  placeholder="请选择需求日期" />
+              </template>
+            </el-table-column>
+            <el-table-column label="历史最低价" prop="lowerPrice" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.lowerPrice" placeholder="请输入历史最低价" />
+              </template>
+            </el-table-column>
+            <el-table-column label="最新价格" prop="newPrice" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.newPrice" placeholder="请输入最新价格" />
+              </template>
+            </el-table-column>
+            <el-table-column label="不含税单价" prop="noTaxPrice" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.noTaxPrice" placeholder="请输入不含税单价" />
+              </template>
+            </el-table-column>
+            <el-table-column label="税率代码" prop="taxCode" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.taxCode" placeholder="请输入税率代码" />
+                <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
+                <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
+                  <!-- 这里是品类的内容 -->
+                  <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
+                    <el-table-column type="selection" width="55" align="center" />
+                    <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
+                    <el-table-column label="税种代码" align="center" prop="taxCode" />
+                    <el-table-column label="描述" align="center" prop="describes" />
+                    <el-table-column label="税率" align="center" prop="taxRate" :formatter="formatTaxRate" />
+                    <el-table-column label="是否启用" align="center" prop="enable"></el-table-column>
+                  </el-table>
+                  <pagination v-show="rtotal > 0" :total="rtotal" :page.sync="rqueryParams.pageNum"
+                    :limit.sync="rqueryParams.pageSize" @pagination="getListRate" />
+                  <div slot="footer" class="dialog-footer">
+                    <el-button @click="dialogMaterial2 = false">取消</el-button>
+                  </div>
+                </el-dialog>
+              </template>
+            </el-table-column>
+            <el-table-column label="税率" prop="tax" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.tax" placeholder="请输入税率" />
+              </template>
+            </el-table-column>
+            <el-table-column label="含税单价" prop="taxPrice" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.taxPrice" placeholder="请输入含税单价" />
+              </template>
+            </el-table-column>
+            <el-table-column label="行含税金额" prop="lineTaxAmount" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.lineTaxAmount" placeholder="请输入行含税金额" />
+              </template>
+            </el-table-column>
+            <el-table-column label="收货人" prop="consignee" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.consignee" placeholder="请输入收货人" />
+              </template>
+            </el-table-column>
+            <el-table-column label="收货电话" prop="receivingPhone" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.receivingPhone" placeholder="请输入收货电话" />
+              </template>
+            </el-table-column>
+            <el-table-column label="收货地址" prop="receivingAddress" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.receivingAddress" placeholder="请输入收货地址" />
+              </template>
+            </el-table-column>
+            <el-table-column label="备注" prop="remarks" width="150">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.remarks" placeholder="请输入备注" />
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </el-dialog>
+      <!-- 批量新增对话框 -->
+      <el-dialog :visible.sync="batchAddDialogVisible" title="批量维护">
+        <el-form :model="forms" ref="forms">
+          <el-form-item label="需求日期" prop="batchRequireTime">
+            <el-date-picker v-model="forms.batchRequireTime" type="date" value-format="yyyy-MM-dd"
+              placeholder="请选择需求日期"></el-date-picker>
+          </el-form-item>
+          <el-form-item label="需求数量" prop="batchRequireNumber">
+            <el-input v-model="forms.batchRequireNumber" placeholder="请输入需求数量"></el-input>
+          </el-form-item>
+          <el-form-item label="收货人" prop="batchConsignee">
+            <el-input v-model="forms.batchConsignee" placeholder="请输入收货人"></el-input>
+          </el-form-item>
+          <el-form-item label="收货地址" prop="batchReceivingAddress">
+            <el-input v-model="forms.batchReceivingAddress" placeholder="请输入收货地址"></el-input>
+          </el-form-item>
+          <el-form-item label="收货电话" prop="batchReceivingPhone">
+            <el-input v-model="forms.batchReceivingPhone" placeholder="请输入收货电话"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="cancelBatchAdd">取消</el-button>
+          <el-button type="primary" @click="doBatchAdd">确定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+
+
+    <div class="order-info" v-show="!isWholeOrder">
+      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px;">
+        <el-form :model="formData" label-width="40px">
+          <el-row>
+            <!-- 添加“全部”选项 -->
+            <div style="margin-top: 20px;">
+              <el-col :span="1.3" :inline="true" size="small">
+                <el-link :class="{ 'selected': selectedRoute === null }" type="primary" @click="selectRoute(null)">
+                  全部({{ this.runNumber.length }})
+                </el-link>
+              </el-col>
+            </div>
+
+            <!-- 循环显示其他选项 -->
+            <el-col v-for="dict in dict.type.om_state" :key="dict.value" :span="1.3" :inline="true" size="small">
+              <el-form-item>
+                <el-link :class="{ 'selected': selectedRoute === dict }" type="primary" @click="selectRoute(dict.value)">
+                  {{ dict.label }} ({{ getTotalCount(dict.value) }})
+                </el-link>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px;">
+        <el-form :model="ormqueryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
+          label-width="68px">
+          <el-form-item label="供应商名称:" prop="supplier">
+            <el-input v-model="ormqueryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
+              icon="el-icon-search" />
+            <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+            <el-dialog :visible.sync="dialogVisible" title="供应商名称">
+              <!-- 这里是供应商的内容 -->
+              <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
+                <el-table-column type="selection" width="55" align="center" />
+                <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+                <el-table-column label="供应商名称" align="center" prop="sbiName" />
+              </el-table>
+              <pagination v-show="stotal > 0" :total="stotal" :page.sync="ormqueryParams.pageNum"
+                :limit.sync="ormqueryParams.pageSize" @pagination="getList1" />
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+              </div>
+            </el-dialog>
+          </el-form-item>
+          <el-form-item label="订单来源:" prop="orderSource">
+            <el-select v-model="ormqueryParams.orderSource" placeholder="请选择订单来源" clearable>
+              <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
+                :value="dict.value" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="物料名称" prop="orName">
+            <el-input v-model="ormqueryParams.orName" placeholder="请输入物料名称" clearable @keyup.enter.native="handleQuery" />
+          </el-form-item>
+          <el-form-item label="所属订单号" prop="orderCode">
+            <el-input v-model="ormqueryParams.orderCode" placeholder="请输入所属订单号" clearable
+              @keyup.enter.native="handleQuery" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div>
+        <el-table v-loading="loading" :data="materiaslList" @selection-change="handleSelectionChange1">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="所属订单号" align="center" prop="orderCode" />
+          <el-table-column label="物料名称" align="center" prop="orName" />
+          <el-table-column label="需求总数量" align="center" prop="requireNumber">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.orCode" placeholder="" />
-              <i class="el-icon-search" id="serachOne1" @click="showMaterial()"></i>
-              <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
-                <!-- 这里是物料管理的内容 -->
-                <el-table v-loading="loading" :data="materialList" @row-click="handleRowClickMaterial">
-                  <el-table-column type="selection" width="55" align="center" />
-                  <el-table-column label="物料编码" align="center" prop="materialCode" />
-                  <el-table-column label="物料名称" align="center" prop="materialName" />
-                </el-table>
-                <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="mqueryParams.pageNum"
-                  :limit.sync="mqueryParams.pageSize" @pagination="getList2" />
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogMaterial = false">取消</el-button>
-                </div>
-              </el-dialog>
+              <span>{{ scope.row.requireNumber.toFixed(2) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="物料名称" prop="orName" width="150">
+          <el-table-column label="供应商名称" align="center" prop="sbiName" />
+          <el-table-column label="订单明细执行状态" align="center" prop="omState">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.orName" placeholder="请输入物料名称" />
+              <dict-tag :options="dict.type.om_state" :value="scope.row.omState" />
             </template>
           </el-table-column>
-          <el-table-column label="品类编码" prop="categoryCode" width="150">
+          <el-table-column label="含税总金额" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.categoryCode" placeholder="请输入品类编码" />
-              <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
-              <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
-                <!-- 这里是品类的内容 -->
-                <el-table :data="categoryList" v-loading="loading" @row-click="handleRowClickMaterial1">
-                  <el-table-column type="selection" width="55" align="center" />
-                  <el-table-column label="品类名称" align="center" prop="categoryName" />
-                  <el-table-column label="品类代码" align="center" prop="categoryCode" />
-                  <el-table-column label="上级品类" align="center" prop="superiorCategory" />
-                </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
-                  :limit.sync="caqueryParams.pageSize" @pagination="getListCategory" />
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogMaterial1 = false">取消</el-button>
-                </div>
-              </el-dialog>
+              {{ calculateTotal('totalPrice') }}
             </template>
           </el-table-column>
-          <el-table-column label="物料品类" prop="materialCategory" width="150">
+          <el-table-column label="在途数量" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialCategory" placeholder="请输入物料品类" />
+              {{ calculateTotal('onWayNumber') }}
             </template>
           </el-table-column>
-          <el-table-column label="物料规格" prop="materialSpecification" width="150">
+          <el-table-column label="在途金额" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialSpecification" placeholder="请输入物料规格" />
+              {{ calculateTotal('onWayPrice') }}
             </template>
           </el-table-column>
-          <el-table-column label="物料型号" prop="materialModel" width="150">
+          <el-table-column label="已入库数量" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialModel" placeholder="请输入物料型号" />
+              {{ calculateTotal('inStockNumber') }}
             </template>
           </el-table-column>
-          <el-table-column label="物料单位" prop="materialUnit" width="150">
+          <el-table-column label="已入库金额" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialUnit" placeholder="请输入物料单位" />
+              {{ calculateTotal('inStockPrice') }}
             </template>
           </el-table-column>
-          <el-table-column label="需求数量" prop="requireNumber" width="150">
+          <el-table-column label="待发货数量" align="center">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.requireNumber" placeholder="请输入需求数量" />
+              {{ calculateTotal('toShipNumber') }}
             </template>
           </el-table-column>
-          <el-table-column label="需求日期" prop="requireTime" width="240">
+          <el-table-column label="待发货金额" align="center">
             <template slot-scope="scope">
-              <el-date-picker clearable v-model="scope.row.requireTime" type="date" value-format="yyyy-MM-dd"
-                placeholder="请选择需求日期" />
+              {{ calculateTotal('toShipPrice') }}
             </template>
           </el-table-column>
-          <el-table-column label="历史最低价" prop="lowerPrice" width="150">
+          <el-table-column label="采购员" align="center" prop="buyerName" />
+          <el-table-column label="需求日期" align="center" prop="requireTime" width="180">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.lowerPrice" placeholder="请输入历史最低价" />
-            </template>
-          </el-table-column>
-          <el-table-column label="最新价格" prop="newPrice" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.newPrice" placeholder="请输入最新价格" />
-            </template>
-          </el-table-column>
-          <el-table-column label="不含税单价" prop="noTaxPrice" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.noTaxPrice" placeholder="请输入不含税单价" />
-            </template>
-          </el-table-column>
-          <el-table-column label="税率代码" prop="taxCode" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.taxCode" placeholder="请输入税率代码" />
-              <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
-              <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
-                <!-- 这里是品类的内容 -->
-                <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
-                  <el-table-column type="selection" width="55" align="center" />
-                  <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
-                  <el-table-column label="税种代码" align="center" prop="taxCode" />
-                  <el-table-column label="描述" align="center" prop="describes" />
-                  <el-table-column label="税率" align="center" prop="taxRate" :formatter="formatTaxRate" />
-                  <el-table-column label="是否启用" align="center" prop="enable"></el-table-column>
-                </el-table>
-                <pagination v-show="rtotal > 0" :total="rtotal" :page.sync="rqueryParams.pageNum"
-                  :limit.sync="rqueryParams.pageSize" @pagination="getListRate" />
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogMaterial2 = false">取消</el-button>
-                </div>
-              </el-dialog>
-            </template>
-          </el-table-column>
-          <el-table-column label="税率" prop="tax" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.tax" placeholder="请输入税率" />
-            </template>
-          </el-table-column>
-          <el-table-column label="含税单价" prop="taxPrice" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.taxPrice" placeholder="请输入含税单价" />
-            </template>
-          </el-table-column>
-          <el-table-column label="行含税金额" prop="lineTaxAmount" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.lineTaxAmount" placeholder="请输入行含税金额" />
-            </template>
-          </el-table-column>
-          <el-table-column label="收货人" prop="consignee" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.consignee" placeholder="请输入收货人" />
-            </template>
-          </el-table-column>
-          <el-table-column label="收货电话" prop="receivingPhone" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.receivingPhone" placeholder="请输入收货电话" />
-            </template>
-          </el-table-column>
-          <el-table-column label="收货地址" prop="receivingAddress" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.receivingAddress" placeholder="请输入收货地址" />
-            </template>
-          </el-table-column>
-          <el-table-column label="备注" prop="remarks" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.remarks" placeholder="请输入备注" />
+              <span>{{ parseTime(scope.row.requireTime, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
         </el-table>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+
+        <pagination v-show="ormtotal > 0" :total="ormtotal" :page.sync="ormqueryParams.pageNum"
+          :limit.sync="ormqueryParams.pageSize" @pagination="getListMaterial" />
+
       </div>
-    </el-dialog>
-    <!-- 批量新增对话框 -->
-    <el-dialog :visible.sync="batchAddDialogVisible" title="批量维护">
-      <el-form :model="forms" ref="forms">
-        <el-form-item label="需求日期" prop="batchRequireTime">
-          <el-date-picker v-model="forms.batchRequireTime" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择需求日期"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="需求数量" prop="batchRequireNumber">
-          <el-input v-model="forms.batchRequireNumber" placeholder="请输入需求数量"></el-input>
-        </el-form-item>
-        <el-form-item label="收货人" prop="batchConsignee">
-          <el-input v-model="forms.batchConsignee" placeholder="请输入收货人"></el-input>
-        </el-form-item>
-        <el-form-item label="收货地址" prop="batchReceivingAddress">
-          <el-input v-model="forms.batchReceivingAddress" placeholder="请输入收货地址"></el-input>
-        </el-form-item>
-        <el-form-item label="收货电话" prop="batchReceivingPhone">
-          <el-input v-model="forms.batchReceivingPhone" placeholder="请输入收货电话"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer">
-        <el-button @click="cancelBatchAdd">取消</el-button>
-        <el-button type="primary" @click="doBatchAdd">确定</el-button>
-      </div>
-    </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList } from "@/api/pms/manager";
-
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber } from "@/api/pms/manager";
+import { listMaterials, getMaterial, delMaterial, addMaterial, updateMaterial } from "@/api/pms/materials";
 export default {
   name: "Manager",
-  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method'],
+  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method', 'om_state'],
   data() {
     return {
+      isWholeOrder: true, // 默认显示整单信息
       headerImages: require('../../../assets/images/order_main_header1.png'),
       // 遮罩层
       loading: true,
+      //用于展示执行状态的个数
+      runNumber: [],
       // 选中数组
       ids: [],
       //供应商名称
@@ -530,6 +684,15 @@ export default {
         currencyCode: null,
         currencyName: null,
       },
+      // 查询参数
+      ormqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        orName: null,
+        supply: null,
+        orderSource: null,
+        orderCode: null
+      },
       // 币种定义总条数
       ctotal: 0,
       // 采购订单管理表格数据
@@ -540,6 +703,8 @@ export default {
       orderMaterialList: [],
       // 物料基本信息
       materialList: [],
+      //订单物料基本信息表明细
+      materiaslList: [],
       //供应商总条数
       stotal: 0,
       //物料基本信息总条数
@@ -632,10 +797,15 @@ export default {
       batchReceivingPhone: '', // 批量修改的收货电话
       //执行状态查询
       formData: {},
-      selectedRoute: null
+      selectedRoute: null,
+      ormtotal: 0,
+      drawer: false,
+      direction: 'rtl',
     };
   },
   created() {
+    this.getListMaterial();
+    this.getlistNumber();
     this.getList();
     this.getlistOrderMaterials();
     this.getlistTypeRun();
@@ -657,6 +827,32 @@ export default {
     }
   },
   methods: {
+    calculateTotal(prop) {
+      const total = this.materiaslList.reduce((sum, item) => {
+        const value = Number(item[prop]);
+        if (!isNaN(value)) {
+          return sum + value;
+        } else {
+          return sum;
+        }
+      }, 0);
+
+      return total.toFixed(2); // 保留两位小数
+    },
+    getListMaterial() {
+      this.loading = true;
+      listMaterials(this.queryParams).then(response => {
+        this.materiaslList = response.rows;
+        this.ormtotal = response.total;
+        this.loading = false;
+      });
+    },
+    showWholeOrder() {
+      this.isWholeOrder = true;
+    },
+    showOrderDetail() {
+      this.isWholeOrder = false;
+    },
     //控制订单执行状态的颜色
     getFormattedOrderTypeRunning(row) {
       if (row.orderTypeRunning !== null) {
@@ -716,10 +912,10 @@ export default {
     getTotalCount(ortId) {
       if (ortId === null) {
         // 计算“全部”选项的总数
-        return this.managerList.length;
+        return this.runNumber.length;
       } else {
         // 计算其他选项的总数
-        const count = this.managerList.filter(item => item.orId === ortId).length;
+        const count = this.runNumber.filter(item => item.orId === ortId).length;
         return count;
       }
     },
@@ -782,8 +978,15 @@ export default {
     getlistTypeRun() {
       this.loading = true;
       listTypeRun().then(response => {
-        console.log(response)
         this.typeRunList = response;
+        this.loading = false;
+      });
+    },
+    /** 查询采购订单管理列表 */
+    getlistNumber() {
+      this.loading = true;
+      getNumber().then(response => {
+        this.runNumber = response;
         this.loading = false;
       });
     },
@@ -952,6 +1155,12 @@ export default {
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
+    // 订单物料明细多选框选中数据
+    handleSelectionChange1(selection) {
+      this.ids = selection.map(item => item.orderId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
+    },
     handleSelectionChangeCurrency(row) {
       this.form.currencyId = row.currencyId;
       for (let i = 0; i < this.currencyList.length; i++) {
@@ -1068,12 +1277,14 @@ export default {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
+
             });
           } else {
             addManager(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+              this.getlistNumber();
             });
           }
         }
@@ -1140,6 +1351,30 @@ export default {
 };
 </script>
 <style>
+.order-info {
+  margin-top: 20px;
+}
+
+.underline {
+  width: 100%;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 10px;
+  display: none;
+}
+
+.active+.underline {
+  display: block;
+}
+
+span {
+  cursor: pointer;
+}
+
+span.active {
+  font-weight: bold;
+}
+
 #serachOne {
   position: absolute;
   right: 10px;
@@ -1151,7 +1386,9 @@ export default {
   right: 15px;
   top: 21.5px;
 }
-
+.el-drawer.rtl {
+  width: 85%!important; /* 修改宽度为85% */
+}
 .el-form-item__label {
   padding-right: 0;
 }
@@ -1178,7 +1415,7 @@ export default {
 
 .status-pending {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border: 1px solid #ff9800;
   background-color: #ffe0b2;
   border-radius: 5px;
@@ -1188,7 +1425,7 @@ export default {
 
 .status-canceled {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border: 1px solid #9e9e9e;
   background-color: #eeeeee;
   border-radius: 5px;
@@ -1198,7 +1435,7 @@ export default {
 
 .status-approved {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border: 1px solid #4caf50;
   background-color: #c8e6c9;
   border-radius: 5px;
@@ -1210,7 +1447,7 @@ export default {
   border: 1px solid #f44336;
   background-color: #ffcdd2;
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   color: #f44336;
   /* 红色字体 */
@@ -1218,7 +1455,7 @@ export default {
 
 .status-type1 {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   border: 1px solid #2196f3;
   background-color: #e3f2fd;
@@ -1228,7 +1465,7 @@ export default {
 
 .status-type2 {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   border: 1px solid #4caf50;
   background-color: #e8f5e9;
@@ -1238,7 +1475,7 @@ export default {
 
 .status-type3 {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   border: 1px solid #f44336;
   background-color: #ffebee;
@@ -1248,7 +1485,7 @@ export default {
 
 .status-type4 {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   border: 1px solid #ff9800;
   background-color: #fff3e0;
@@ -1258,7 +1495,7 @@ export default {
 
 .status-type5 {
   display: inline-block;
-  width: 100px;
+  width: 85px;
   border-radius: 5px;
   border: 1px solid #9c27b0;
   background-color: #f3e5f5;
@@ -1267,7 +1504,7 @@ export default {
 }
 
 .status-type6 {
-  width: 100px;
+  width: 85px;
   display: inline-block;
   border-radius: 5px;
   border: 1px solid #673ab7;
@@ -1277,7 +1514,7 @@ export default {
 }
 
 .status-type7 {
-  width: 100px;
+  width: 85px;
   display: inline-block;
   border: 1px solid #ff5722;
   background-color: #ffccbc;

@@ -106,6 +106,29 @@ public class OrderMaterial extends BaseEntity
     @Excel(name = "所属订单号")
     private String orderCode;
 
+    @Excel(name = "订单明细执行状态")
+    private Long omState;
+
+    /** 供应商名称 */
+    @Excel(name = "供应商名称")
+    private String sbiName;
+
+    public String getSbiName() {
+        return sbiName;
+    }
+
+    public void setSbiName(String sbiName) {
+        this.sbiName = sbiName;
+    }
+
+    public Long getOmState() {
+        return omState;
+    }
+
+    public void setOmState(Long omState) {
+        this.omState = omState;
+    }
+
     public void setOrId(Long orId)
     {
         this.orId = orId;
@@ -324,11 +347,13 @@ public class OrderMaterial extends BaseEntity
                 ", tax=" + tax +
                 ", taxPrice=" + taxPrice +
                 ", lineTaxAmount=" + lineTaxAmount +
-                ", consignee=" + consignee +
+                ", consignee='" + consignee + '\'' +
                 ", receivingPhone='" + receivingPhone + '\'' +
                 ", receivingAddress='" + receivingAddress + '\'' +
                 ", remarks='" + remarks + '\'' +
                 ", orderCode='" + orderCode + '\'' +
+                ", omState=" + omState +
+                ", sbiName='" + sbiName + '\'' +
                 '}';
     }
 }

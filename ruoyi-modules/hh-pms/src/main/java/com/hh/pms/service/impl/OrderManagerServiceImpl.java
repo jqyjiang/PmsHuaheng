@@ -41,6 +41,15 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     }
 
     /**
+     * 查询执行状态个数
+     * @return
+     */
+    @Override
+    public List<OrderManager> findRunTypeNumber() {
+        return orderManagerMapper.findRunTypeNumber();
+    }
+
+    /**
      * 查询采购订单管理
      *
      * @param orderId 采购订单管理主键
@@ -48,7 +57,6 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
      */
     @Override
     public OrderManager selectOrderManagerByOrderId(Long orderId) {
-
         return orderManagerMapper.selectOrderManagerByOrderId(orderId);
     }
 
@@ -83,7 +91,6 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
             item.setOrderCode(orderCode);
         });
         int i = orderMaterialMapper.insertOrderMaterials(orderMaterialList);
-        System.out.println("新增物料基础信息:" + i);
         // 获取自增Id集合
         // 获取自增Id集合并转换为逗号隔开的字符串形式
         StringBuilder orIdBuilder = new StringBuilder();
@@ -94,7 +101,6 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
             orIdBuilder.append(item.getOrId());
         }
         String orIdString = orIdBuilder.toString();
-        System.out.println(orIdBuilder);
         orderManager.setMaterialId(orIdString);
         String connectCode=generateContractNumber();
         orderManager.setContractCode(connectCode);
@@ -143,13 +149,9 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     public String createOrderCode(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String newBidDate = dateFormat.format(date).replace("-", "");//把2020-11-11中-去掉
-        System.out.println("long类型的时间戳:" + date);
-        System.out.println("时间类型字段:" + newBidDate);
         String order = orderManagerMapper.selectOrderCode(date);
-        System.out.println("物料编码:" + order);
         if (order != null) {
             //如果这个时间存在,说明今天已经有订单生成了
-            System.out.println("物料编码:" + order + "+1");
             String orderCode = order;
             orderCode = orderCode.substring(10, 13);
             int num = Integer.valueOf(orderCode);

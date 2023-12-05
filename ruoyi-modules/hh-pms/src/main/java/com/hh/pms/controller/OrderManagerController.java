@@ -51,7 +51,14 @@ public class OrderManagerController extends BaseController
     public List<OrderManager> managerList(@RequestParam("orId") Long orId){
         return orderManagerService.selectByOrderTypeRunning(orId);
     }
-
+    /**
+     * 查询执行状态个数
+     * @return
+     */
+    @GetMapping("/runTypeNumber")
+    public List<OrderManager> runTypeNumber(){
+        return orderManagerService.findRunTypeNumber();
+    }
     /**
      * 查询订单物料明细列表
      */
@@ -59,6 +66,7 @@ public class OrderManagerController extends BaseController
     @GetMapping("/listOrderMaterial")
     public TableDataInfo listOrderMaterial(OrderMaterial orderMaterial)
     {
+        startPage();
         List<OrderMaterial> list = orderMaterialService.selectOrderMaterialList(orderMaterial);
         return getDataTable(list);
     }

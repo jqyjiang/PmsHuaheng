@@ -94,6 +94,7 @@
             <result property="receivingPhone" column="receiving_phone"/>
             <result property="receivingAddress" column="receiving_address"/>
             <result property="remarks" column="remarks"/>
+            <result property="taxTotal"    column="tax_total"    />
         </collection>
     </resultMap>
 
@@ -122,6 +123,7 @@
                om.invoice_method,
                om.create_time,
                om.material_id,
+               om.tax_total,
                otr.ort_name,
                sd.sbi_name,
                c.companies_name,
@@ -150,6 +152,9 @@
     <select id="selectByOrderTypeRunning" resultType="com.hh.pms.domain.OrderManager">
         <include refid="selectOrderManagerVo"/>
         where or_id = #{orId}
+    </select>
+    <select id="findRunTypeNumber" resultType="com.hh.pms.domain.OrderManager" resultMap="OrderManagerResult">
+        select order_id,or_id from order_manager
     </select>
 
     <insert id="insertOrderManager" parameterType="OrderManager" useGeneratedKeys="true" keyProperty="orderId">

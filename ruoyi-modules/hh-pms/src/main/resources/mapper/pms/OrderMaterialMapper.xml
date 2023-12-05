@@ -27,32 +27,39 @@
         <result property="receivingAddress" column="receiving_address"/>
         <result property="remarks" column="remarks"/>
         <result property="orderCode" column="order_code"/>
+        <result property="omState" column="om_state"/>
+        <result property="sbiName"    column="sbi_name"    />
     </resultMap>
 
     <sql id="selectOrderMaterialVo">
-        select or_id,
-               or_code,
-               or_name,
-               category_code,
-               material_category,
-               material_specification,
-               material_model,
-               material_unit,
-               require_number,
-               require_time,
-               lower_price,
-               new_price,
-               no_tax_price,
-               tax_code,
-               tax,
-               tax_price,
-               line_tax_amount,
-               consignee,
-               receiving_phone,
-               receiving_address,
-               remarks,
-               order_code
-        from order_material
+        select orm.or_id,
+               orm.or_code,
+               orm.or_name,
+               orm.category_code,
+               orm.material_category,
+               orm.material_specification,
+               orm.material_model,
+               orm.material_unit,
+               orm.require_number,
+               orm.require_time,
+               orm.lower_price,
+               orm.new_price,
+               orm.no_tax_price,
+               orm.tax_code,
+               orm.tax,
+               orm.tax_price,
+               orm.line_tax_amount,
+               orm.consignee,
+               orm.receiving_phone,
+               orm.receiving_address,
+               orm.remarks,
+               orm.order_code,
+               orm.om_state,
+               sd.sbi_name
+        from order_material orm
+                 left join order_manager om
+                           on orm.order_code = om.order_code
+                 left join supplier_details sd on sd.sd_id = om.supplier
     </sql>
 
     <select id="selectOrderMaterialList" parameterType="OrderMaterial" resultMap="OrderMaterialResult">

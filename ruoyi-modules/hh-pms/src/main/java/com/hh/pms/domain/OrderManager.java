@@ -98,6 +98,10 @@ public class OrderManager extends BaseEntity
     /** 供应商发票方式 */
     private Long invoiceMethod;
 
+    /** 含税总金额 */
+    @Excel(name = "含税总金额")
+    private BigDecimal taxTotal;
+
     @Excel(name = "采购订单创建日期")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -142,6 +146,7 @@ public class OrderManager extends BaseEntity
                 ", contacts='" + contacts + '\'' +
                 ", phone='" + phone + '\'' +
                 ", invoiceMethod=" + invoiceMethod +
+                ", taxTotal=" + taxTotal +
                 ", createTime=" + createTime +
                 ", materialId='" + materialId + '\'' +
                 ", orderMaterialList=" + orderMaterialList +
@@ -163,6 +168,14 @@ public class OrderManager extends BaseEntity
 
     //公司表信息
     private Companies companies;
+
+    public BigDecimal getTaxTotal() {
+        return taxTotal;
+    }
+
+    public void setTaxTotal(BigDecimal taxTotal) {
+        this.taxTotal = taxTotal;
+    }
 
     //币种类型
     private Currency currency;

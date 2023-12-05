@@ -88,6 +88,21 @@ export const constantRoutes = [
       }
     ]
   }
+  // {
+  //   path:'/pms',
+  //   component:()=>import('@/views/pms/manager/index.vue'),
+  //   children:[
+  //     {
+  //         path:'info',
+  //         component:import('@/views/pms/manager/orderInfo.vue')
+  //     },
+  //     {
+  //       path:'order',
+  //       component:import('@/views/pms/manager/order.vue')
+  //   }
+    
+  //   ]
+  // }
 ]
 
 // 动态路由，基于用户权限动态去加载

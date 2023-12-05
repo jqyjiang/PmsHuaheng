@@ -2,6 +2,7 @@ package com.hh.pms.service;
 
 import java.util.List;
 import com.hh.pms.domain.OrderManager;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购订单管理Service接口
@@ -17,6 +18,12 @@ public interface IOrderManagerService
      * @return
      */
     List<OrderManager> selectByOrderTypeRunning(Long orId);
+    /**
+     * 查询执行状态个数
+     * @return
+     */
+    @Select("select order_id,or_id from order_manager")
+    public List<OrderManager> findRunTypeNumber();
     /**
      * 查询采购订单管理
      * 

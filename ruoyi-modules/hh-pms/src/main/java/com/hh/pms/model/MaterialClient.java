@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface MaterialClient {
     @RequestMapping(method = RequestMethod.GET,value = "/material/list")
     public TableDataInfo list(@RequestParam("mqueryParams") Material material,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
-
     @RequestMapping(method = RequestMethod.GET,value = "/currency/list")
     public TableDataInfo list(@RequestParam("currency") Currency currency,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/category/list")
