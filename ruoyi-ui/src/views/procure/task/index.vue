@@ -74,11 +74,11 @@
       <el-table-column label="任务单号" align="center" prop="taskCode" />
       <el-table-column label="采购策略" align="center" prop="procurementStrategy" />
       <el-table-column label="任务总金额" align="center" prop="taskTotal" />
-      <el-table-column label="需求编号-行号" align="center" prop="requirementId1" />
-      <el-table-column label="公司" align="center" prop="companiesId1" />
+      <el-table-column label="需求编号-行号" align="center" prop="requirementId" />
+      <el-table-column label="公司" align="center" prop="companiesId" />
       <el-table-column label="采购员" align="center" prop="purchaser" />
-      <el-table-column label="物料名称" align="center" prop="materialId2" />
-      <el-table-column label="币种" align="center" prop="currencyId2" />
+      <el-table-column label="物料名称" align="center" prop="materialId" />
+      <el-table-column label="币种" align="center" prop="currencyId" />
       <el-table-column label="受理策略" align="center" prop="acceptanceStrategy" />
       <el-table-column label="任务总数量" align="center" prop="taskNumber" />
       <el-table-column label="已受理数量" align="center" prop="acceptedQuantity" />
@@ -126,19 +126,19 @@
         <el-form-item label="任务总金额" prop="taskTotal">
           <el-input v-model="form.taskTotal" placeholder="请输入任务总金额" />
         </el-form-item>
-        <el-form-item label="需求申请ID" prop="requirementId1">
+        <el-form-item label="需求申请ID" prop="requirementId">
           <el-input v-model="form.requirementId1" placeholder="请输入需求申请ID" />
         </el-form-item>
-        <el-form-item label="公司ID" prop="companiesId1">
+        <el-form-item label="公司ID" prop="companiesId">
           <el-input v-model="form.companiesId1" placeholder="请输入公司ID" />
         </el-form-item>
         <el-form-item label="采购员" prop="purchaser">
           <el-input v-model="form.purchaser" placeholder="请输入采购员" />
         </el-form-item>
-        <el-form-item label="物料ID" prop="materialId2">
+        <el-form-item label="物料ID" prop="materialId">
           <el-input v-model="form.materialId2" placeholder="请输入物料ID" />
         </el-form-item>
-        <el-form-item label="币种ID" prop="currencyId2">
+        <el-form-item label="币种ID" prop="currencyId">
           <el-input v-model="form.currencyId2" placeholder="请输入币种ID" />
         </el-form-item>
         <el-form-item label="受理策略" prop="acceptanceStrategy">
@@ -200,11 +200,11 @@ export default {
         taskCode: null,
         procurementStrategy: null,
         taskTotal: null,
-        requirementId1: null,
-        companiesId1: null,
+        requirementId: null,
+        companiesId: null,
         purchaser: null,
-        materialId2: null,
-        currencyId2: null,
+        materialId: null,
+        currencyId: null,
         acceptanceStrategy: null,
         taskNumber: null,
         acceptedQuantity: null,
@@ -245,11 +245,11 @@ export default {
         taskCode: null,
         procurementStrategy: null,
         taskTotal: null,
-        requirementId1: null,
-        companiesId1: null,
+        requirementId: null,
+        companiesId: null,
         purchaser: null,
-        materialId2: null,
-        currencyId2: null,
+        materialId: null,
+        currencyId: null,
         acceptanceStrategy: null,
         taskNumber: null,
         acceptedQuantity: null,
