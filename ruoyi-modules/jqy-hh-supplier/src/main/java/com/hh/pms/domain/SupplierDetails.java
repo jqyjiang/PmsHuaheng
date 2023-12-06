@@ -638,6 +638,8 @@ public class SupplierDetails extends BaseEntity
                 .append("filingDate", getFilingDate())
                 .append("filing", getFiling())
                 .append("dataTatus", getDataTatus())
+                .append("classCode", getClassCode())
+                .append("classDescribe", getClassDescribe())
                 .toString();
     }
 }

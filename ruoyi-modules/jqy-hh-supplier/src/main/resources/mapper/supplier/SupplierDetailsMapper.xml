@@ -101,7 +101,7 @@
             <if test="certificateName != null  and certificateName != ''"> and certificate_name like concat('%', #{certificateName}, '%')</if>
             <if test="filingDate != null "> and filing_date = #{filingDate}</if>
             <if test="filing != null  and filing != ''"> and filing = #{filing}</if>
-            <if test="dataTatus != null  and dataTatus != ''"> and data_tatus = #{dataTatus}</if>
+            and data_tatus = 0
         </where>
     </select>
 
@@ -249,11 +249,18 @@
     </update>
 
     <delete id="deleteSupplierDetailsBySdId" parameterType="Long">
-        delete from supplier_details where sd_id = #{sdId}
+        update supplier_details set data_tatus=1 where sd_id = #{sdId}
     </delete>
 
     <delete id="deleteSupplierDetailsBySdIds" parameterType="String">
-        delete from supplier_details where sd_id in
+        update supplier_details set data_tatus=1 where sd_id in
+        <foreach item="sdId" collection="array" open="(" separator="," close=")">
+            #{sdId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSupplierClassBySdIds" parameterType="String">
+        update supplier_details set sd_class='' where sd_id in
         <foreach item="sdId" collection="array" open="(" separator="," close=")">
             #{sdId}
         </foreach>

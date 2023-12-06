@@ -58,4 +58,7 @@ public interface SupplierDetailsMapper
      * @return 结果
      */
     public int deleteSupplierDetailsBySdIds(Long[] sdIds);
+
+    //删除供应商类别
+    int deleteSupplierClassBySdIds(Long[] sdIds);
 }

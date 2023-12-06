@@ -262,24 +262,9 @@
           <el-form-item label="邮箱">
             <el-input v-model="form.sdPce"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="文件" prop="filing">
-            <file-upload v-model="form.filing" />
-          </el-form-item> -->
-          <!-- <el-table-column label="营业执照" align="center" prop="filing" width="100">
-            <template slot-scope="scope">
-              <image-preview :src="scope.row.filing" :width="50" :height="50" />
-            </template>
-          </el-table-column> -->
           <el-form-item label="营业执照" prop="filing">
             <image-upload v-model="form.filing" />
           </el-form-item>
-          <!-- <el-form-item label="营业执照">
-            <el-upload action="/api/upload" :on-success="handleUploadSuccess" :before-upload="beforeUpload"
-              :file-list="fileList" list-type="picture-card" :limit="1">
-              <i class="el-icon-plus"></i>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
-            </el-upload>
-          </el-form-item> -->
           <el-form-item>
             <el-button type="primary" @click="authentications">提交认证</el-button>
           </el-form-item>

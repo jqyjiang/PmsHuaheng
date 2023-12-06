@@ -6,6 +6,8 @@ import com.ruoyi.common.security.annotation.EnableCustomConfig;
 import com.ruoyi.common.security.annotation.EnableRyFeignClients;
 import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
 
+import java.util.Arrays;
+
 /**
  * 系统模块
  *
@@ -18,7 +20,9 @@ import com.ruoyi.common.swagger.annotation.EnableCustomSwagger2;
 public class JqyHhSupplierApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(JqyHhSupplierApplication.class, args);
+
     }
 
 }

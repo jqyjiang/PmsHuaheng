@@ -45,6 +45,7 @@ public class SupplierDetailsController extends BaseController
         return getDataTable(list);
     }
 
+    //查询已分类供应商
     @RequiresPermissions("supplierpms:details:list")
     @RequestMapping(method = RequestMethod.GET,value = "/filter")
     public TableDataInfo listFilter(SupplierDetails supplierDetails)
@@ -57,7 +58,6 @@ public class SupplierDetailsController extends BaseController
                 filteredList.add(detail);
             }
         }
-        System.out.println(filteredList);
         return getDataTable(filteredList);
     }
     /**
@@ -105,6 +105,7 @@ public class SupplierDetailsController extends BaseController
         //System.out.println(day);
         supplierDetails.setSdTime(day);
         supplierDetails.setSdStatus("0");
+        supplierDetails.setDataTatus("0");
         supplierDetails.setSdCode("GYS"+nowTime+Math.round(Math.random()*10000));
         return toAjax(supplierDetailsService.insertSupplierDetails(supplierDetails));
     }
@@ -117,9 +118,22 @@ public class SupplierDetailsController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody SupplierDetails supplierDetails)
     {
-        return toAjax(supplierDetailsService.updateSupplierDetails(supplierDetails));
+        AjaxResult ajaxResult = toAjax(supplierDetailsService.updateSupplierDetails(supplierDetails));
+        return ajaxResult;
     }
-
+    /**
+     * 修改供应商列表
+     */
+    @RequiresPermissions("supplierpms:details:edit")
+    @Log(title = "供应商列表", businessType = BusinessType.UPDATE)
+//    @RequestMapping(method = RequestMethod.GET,value = "/updateDetails/{sdId}")
+    @DeleteMapping("/updateDetails/{sdId}")
+    public AjaxResult updateDetails(@PathVariable("sdId") Long[] sdId)
+    {
+        System.out.println("ssssssss");
+        AjaxResult ajaxResult = toAjax(supplierDetailsService.deleteSupplierClassBySdIds(sdId));
+        return ajaxResult;
+    }
     /**
      * 删除供应商列表
      */

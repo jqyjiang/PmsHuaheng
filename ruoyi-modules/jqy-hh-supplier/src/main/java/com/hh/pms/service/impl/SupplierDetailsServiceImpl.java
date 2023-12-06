@@ -90,4 +90,9 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
     {
         return supplierDetailsMapper.deleteSupplierDetailsBySdId(sdId);
     }
+
+    @Override
+    public int deleteSupplierClassBySdIds(Long[] sdIds) {
+        return supplierDetailsMapper.deleteSupplierClassBySdIds(sdIds);
+    }
 }

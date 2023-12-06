@@ -24,6 +24,7 @@ export function getDetails(sdId) {
   })
 }
 
+
 // 新增供应商列表
 export function addDetails(data) {
   return request({
@@ -41,8 +42,16 @@ export function updateDetails(data) {
     data: data
   })
 }
+//批量删除供应商类别
+export function delClassDetails(sdId) {
+  return request({
+    url: '/supplierpms/details/updateDetails/' + sdId,
+    method: 'delete',
+    
+  })
+}
 
-// 删除供应商列表
+//删除供应商列表
 export function delDetails(sdId) {
   return request({
     url: '/supplierpms/details/' + sdId,

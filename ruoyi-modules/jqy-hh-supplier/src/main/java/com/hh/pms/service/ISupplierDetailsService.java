@@ -58,4 +58,6 @@ public interface ISupplierDetailsService
      * @return 结果
      */
     public int deleteSupplierDetailsBySdId(Long sdId);
+
+    int deleteSupplierClassBySdIds(Long[] sdIds);
 }
