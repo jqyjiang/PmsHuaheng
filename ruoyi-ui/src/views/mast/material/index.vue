@@ -34,7 +34,7 @@
           v-hasPermi="['mast:material:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -55,7 +55,7 @@
           @click="handleDelete"
           v-hasPermi="['mast:material:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -139,15 +139,25 @@
 
     <!-- 添加或修改物料维护对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="物料编码" prop="materialCode">
           <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
         </el-form-item>
         <el-form-item label="物料名称" prop="materialName">
           <el-input v-model="form.materialName" placeholder="请输入物料名称" />
         </el-form-item>
-        <el-form-item label="基本计算单位" prop="calculationUnit">
+        <!-- <el-form-item label="基本计算单位" prop="calculationUnit">
           <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />
+        </el-form-item> -->
+        <el-form-item label="基本计算单位" prop="calculationUnit">
+          <el-select v-model="form.calculationUnit" placeholder="请选择基本计算单位" >
+            <el-option
+              v-for="dict in accountList"
+              :key="dict.unitId"
+              :label="dict.meteringUnit"
+              :value="dict.unitId"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="采购员" prop="purchaser">
           <el-input v-model="form.purchaser" placeholder="请输入采购员" />
@@ -201,6 +211,9 @@
         </el-form-item>
         <el-form-item label="物料ABC属性" prop="abcAttribute">
           <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
+        </el-form-item>
+        <el-form-item label="启用" prop="enable">
+        <el-checkbox v-model="form.enable" ></el-checkbox>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -342,6 +355,11 @@ export default {
       this.reset();
       const materialId = row.materialId || this.ids
       getMaterial(materialId).then(response => {
+        if(response.data.enable==1){
+          response.data.enable=true
+        }else{
+          response.data.enable=false
+        }
         this.form = response.data;
         this.open = true;
         this.title = "修改物料维护";
@@ -352,12 +370,22 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.materialId != null) {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             updateMaterial(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
             addMaterial(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

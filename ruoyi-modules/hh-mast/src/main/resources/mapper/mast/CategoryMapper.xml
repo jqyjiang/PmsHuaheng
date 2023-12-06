@@ -15,6 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="lUpdated"    column="l_updated"    />
         <result property="lUpdateTime"    column="l_update_time"    />
         <result property="company"    column="company"    />
+        <result property="companiesName"    column="companies_name"    />
         <result property="meteringUnit"    column="metering_unit"    />
         <result property="sourceSystem"    column="source_system"    />
         <result property="introductionRequirements"    column="introduction_requirements"    />
@@ -22,7 +23,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCategoryVo">
-        select categoryid, category_code, category_name, enable, is_no, superior_category, creation_time, l_updated, l_update_time, company, metering_unit, source_system, introduction_requirements, assign_purchaser from category
+        select a.categoryid, a.category_code, a.category_name, a.enable, a.is_no, a.superior_category, a.creation_time, a.l_updated, a.l_update_time, a.company,b.companies_name, a.metering_unit, a.source_system, a.introduction_requirements, a.assign_purchaser
+        from category a left join companies b
+        on a.company=b.companies_id
     </sql>
 
     <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">

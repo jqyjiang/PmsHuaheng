@@ -9,6 +9,33 @@ export function listCategory(query) {
   })
 }
 
+// 查询品类列表弹框
+export function listCategory1(query) {
+  return request({
+    url: '/mast/category/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询计算单位定义列表
+export function listAccount(query) {
+  return request({
+    url: '/mast/account/listAll',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询公司表列表
+export function listCompanies(query) {
+  return request({
+    url: '/mast/companies/list',
+    method: 'get',
+    params: query
+  })
+}
+
 // 查询品类详细
 export function getCategory(categoryid) {
   return request({

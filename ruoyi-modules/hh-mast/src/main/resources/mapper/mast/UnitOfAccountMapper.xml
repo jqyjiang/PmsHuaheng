@@ -10,6 +10,7 @@
         <result property="calculationUnitCode" column="calculation_unit_code"/>
         <result property="meteringUnit" column="metering_unit"/>
         <result property="sourceSystem" column="source_system"/>
+        <result property="conversionUnits" column="conversion_units"/>
         <result property="unitConversionRate" column="unit_conversion_rate"/>
         <result property="accuracy" column="accuracy"/>
         <result property="enable" column="enable"/>
@@ -21,6 +22,7 @@
                calculation_unit_code,
                metering_unit,
                source_system,
+               conversion_units,
                unit_conversion_rate,
                accuracy,
                enable
@@ -45,6 +47,7 @@
             <if test="calculationUnitCode != null">calculation_unit_code,</if>
             <if test="meteringUnit != null">metering_unit,</if>
             <if test="sourceSystem != null">source_system,</if>
+            <if test="conversionUnits != null">conversion_units,</if>
             <if test="unitConversionRate != null">unit_conversion_rate,</if>
             <if test="accuracy != null">accuracy,</if>
             <if test="enable != null">enable,</if>
@@ -54,6 +57,7 @@
             <if test="calculationUnitCode != null">#{calculationUnitCode},</if>
             <if test="meteringUnit != null">#{meteringUnit},</if>
             <if test="sourceSystem != null">#{sourceSystem},</if>
+            <if test="conversionUnits != null">#{conversionUnits},</if>
             <if test="unitConversionRate != null">#{unitConversionRate},</if>
             <if test="accuracy != null">#{accuracy},</if>
             <if test="enable != null">#{enable},</if>
@@ -67,6 +71,7 @@
             <if test="calculationUnitCode != null">calculation_unit_code = #{calculationUnitCode},</if>
             <if test="meteringUnit != null">metering_unit = #{meteringUnit},</if>
             <if test="sourceSystem != null">source_system = #{sourceSystem},</if>
+            <if test="conversionUnits != null">conversion_units = #{conversionUnits},</if>
             <if test="unitConversionRate != null">unit_conversion_rate = #{unitConversionRate},</if>
             <if test="accuracy != null">accuracy = #{accuracy},</if>
             <if test="enable != null">enable = #{enable},</if>

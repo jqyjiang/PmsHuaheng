@@ -9,7 +9,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 品类对象 category
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
@@ -38,7 +38,7 @@ public class Category extends BaseEntity
 
     /** 上级品类 */
     @Excel(name = "上级品类")
-    private Long superiorCategory;
+    private String superiorCategory;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -57,6 +57,9 @@ public class Category extends BaseEntity
     /** 公司 */
     private Long company;
 
+    /** 公司名*/
+    private String companiesName;
+
     /** 计量单位 */
     private Long meteringUnit;
 
@@ -69,129 +72,137 @@ public class Category extends BaseEntity
     /** 分配采购人 */
     private String assignPurchaser;
 
-    public void setCategoryid(Long categoryid) 
+    public String getCompaniesName() {
+        return companiesName;
+    }
+
+    public void setCompaniesName(String companiesName) {
+        this.companiesName = companiesName;
+    }
+
+    public void setCategoryid(Long categoryid)
     {
         this.categoryid = categoryid;
     }
 
-    public Long getCategoryid() 
+    public Long getCategoryid()
     {
         return categoryid;
     }
-    public void setCategoryCode(String categoryCode) 
+    public void setCategoryCode(String categoryCode)
     {
         this.categoryCode = categoryCode;
     }
 
-    public String getCategoryCode() 
+    public String getCategoryCode()
     {
         return categoryCode;
     }
-    public void setCategoryName(String categoryName) 
+    public void setCategoryName(String categoryName)
     {
         this.categoryName = categoryName;
     }
 
-    public String getCategoryName() 
+    public String getCategoryName()
     {
         return categoryName;
     }
-    public void setEnable(Long enable) 
+    public void setEnable(Long enable)
     {
         this.enable = enable;
     }
 
-    public Long getEnable() 
+    public Long getEnable()
     {
         return enable;
     }
-    public void setIsNo(Long isNo) 
+    public void setIsNo(Long isNo)
     {
         this.isNo = isNo;
     }
 
-    public Long getIsNo() 
+    public Long getIsNo()
     {
         return isNo;
     }
-    public void setSuperiorCategory(Long superiorCategory) 
-    {
+
+    public String getSuperiorCategory() {
+        return superiorCategory;
+    }
+
+    public void setSuperiorCategory(String superiorCategory) {
         this.superiorCategory = superiorCategory;
     }
 
-    public Long getSuperiorCategory() 
-    {
-        return superiorCategory;
-    }
-    public void setCreationTime(Date creationTime) 
+    public void setCreationTime(Date creationTime)
     {
         this.creationTime = creationTime;
     }
 
-    public Date getCreationTime() 
+    public Date getCreationTime()
     {
         return creationTime;
     }
-    public void setlUpdated(String lUpdated) 
+    public void setlUpdated(String lUpdated)
     {
         this.lUpdated = lUpdated;
     }
 
-    public String getlUpdated() 
+    public String getlUpdated()
     {
         return lUpdated;
     }
-    public void setlUpdateTime(Date lUpdateTime) 
+    public void setlUpdateTime(Date lUpdateTime)
     {
         this.lUpdateTime = lUpdateTime;
     }
 
-    public Date getlUpdateTime() 
+    public Date getlUpdateTime()
     {
         return lUpdateTime;
     }
-    public void setCompany(Long company) 
+    public void setCompany(Long company)
     {
         this.company = company;
     }
 
-    public Long getCompany() 
+    public Long getCompany()
     {
         return company;
     }
-    public void setMeteringUnit(Long meteringUnit) 
+    public void setMeteringUnit(Long meteringUnit)
     {
         this.meteringUnit = meteringUnit;
     }
 
-    public Long getMeteringUnit() 
+    public Long getMeteringUnit()
     {
         return meteringUnit;
     }
-    public void setSourceSystem(String sourceSystem) 
+    public void setSourceSystem(String sourceSystem)
     {
         this.sourceSystem = sourceSystem;
     }
 
-    public String getSourceSystem() 
+    public String getSourceSystem()
     {
         return sourceSystem;
     }
-    public void setIntroductionRequirements(Long introductionRequirements) 
+    public void setIntroductionRequirements(Long introductionRequirements)
     {
         this.introductionRequirements = introductionRequirements;
     }
 
-    public Long getIntroductionRequirements() 
+    public Long getIntroductionRequirements()
     {
         return introductionRequirements;
     }
-    public void setAssignPurchaser(String assignPurchaser) 
+    public void setAssignPurchaser(String assignPurchaser)
     {
         this.assignPurchaser = assignPurchaser;
     }
 
-    public String getAssignPurchaser() 
+    public String getAssignPurchaser()
     {
         return assignPurchaser;
     }
@@ -209,6 +220,7 @@ public class Category extends BaseEntity
             .append("lUpdated", getlUpdated())
             .append("lUpdateTime", getlUpdateTime())
             .append("company", getCompany())
+            .append("companiesName",getCompaniesName())
             .append("meteringUnit", getMeteringUnit())
             .append("sourceSystem", getSourceSystem())
             .append("introductionRequirements", getIntroductionRequirements())

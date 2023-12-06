@@ -35,6 +35,10 @@ public class UnitOfAccount extends BaseEntity
     @Excel(name = "来源系统")
     private String sourceSystem;
 
+    //转换单位
+    @Excel(name = "转换单位")
+    private Integer conversionUnits;
+
     /** 单位转换率 */
     @Excel(name = "单位转换率")
     private BigDecimal unitConversionRate;
@@ -46,6 +50,14 @@ public class UnitOfAccount extends BaseEntity
     /** 是否启用 0：启用 1：停用 */
     @Excel(name = "是否启用 0：启用 1：停用")
     private Long enable;
+
+    public Integer getConversionUnits() {
+        return conversionUnits;
+    }
+
+    public void setConversionUnits(Integer conversionUnits) {
+        this.conversionUnits = conversionUnits;
+    }
 
     public void setUnitId(Long unitId)
     {
@@ -128,6 +140,7 @@ public class UnitOfAccount extends BaseEntity
             .append("calculationUnitCode", getCalculationUnitCode())
             .append("meteringUnit", getMeteringUnit())
             .append("sourceSystem", getSourceSystem())
+            .append("conversionUnits",getConversionUnits())
             .append("unitConversionRate", getUnitConversionRate())
             .append("accuracy", getAccuracy())
             .append("enable", getEnable())

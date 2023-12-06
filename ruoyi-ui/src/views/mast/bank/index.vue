@@ -214,7 +214,6 @@ export default {
     getList1() {
       listBank_type().then(response => {
         this.bank_typeList = response.rows;
-        console.log(response.rows)
         this.total = response.total;
       });
     },
