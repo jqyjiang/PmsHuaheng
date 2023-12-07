@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.Companies;
+
 import java.util.List;
-import com.hh.pms.domain.Companies;
 
 /**
  * 公司表Service接口
