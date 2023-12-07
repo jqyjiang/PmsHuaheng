@@ -28,7 +28,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  * @date 2023-12-05
  */
 @RestController
-@RequestMapping("/companies")
+@RequestMapping("/company")
 public class CompanyController extends BaseController
 {
     @Autowired
@@ -69,36 +69,5 @@ public class CompanyController extends BaseController
         return success(companiesService.selectCompaniesByCompaniesId(companiesId));
     }
 
-    /**
-     * 新增公司表
-     */
-    @RequiresPermissions("mast:companies:add")
-    @Log(title = "公司表", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody Company companies)
-    {
-        return toAjax(companiesService.insertCompanies(companies));
-    }
 
-    /**
-     * 修改公司表
-     */
-    @RequiresPermissions("mast:companies:edit")
-    @Log(title = "公司表", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody Company companies)
-    {
-        return toAjax(companiesService.updateCompanies(companies));
-    }
-
-    /**
-     * 删除公司表
-     */
-    @RequiresPermissions("mast:companies:remove")
-    @Log(title = "公司表", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{companiesIds}")
-    public AjaxResult remove(@PathVariable Long[] companiesIds)
-    {
-        return toAjax(companiesService.deleteCompaniesByCompaniesIds(companiesIds));
-    }
 }

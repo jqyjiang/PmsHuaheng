@@ -30,7 +30,7 @@ export function listAccount(query) {
 // 查询公司表列表
 export function listCompanies(query) {
   return request({
-    url: '/mast/companies/list',
+    url: '/mast/company/list',
     method: 'get',
     params: query
   })
