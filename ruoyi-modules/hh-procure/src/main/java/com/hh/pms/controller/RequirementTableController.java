@@ -38,68 +38,10 @@ public class RequirementTableController extends BaseController
     /**
      * 查询需求类型列表
      */
-    @RequiresPermissions("procure:table:list")
-    @GetMapping("/list")
-    public TableDataInfo list(RequirementTable requirementTable)
+    @GetMapping("/listRequirementTableName")
+    public List<RequirementTable> list()
     {
-        startPage();
-        List<RequirementTable> list = requirementTableService.selectRequirementTableList(requirementTable);
-        return getDataTable(list);
+       return requirementTableService.listRequirementTableName();
     }
 
-    /**
-     * 导出需求类型列表
-     */
-    @RequiresPermissions("procure:table:export")
-    @Log(title = "需求类型", businessType = BusinessType.EXPORT)
-    @PostMapping("/export")
-    public void export(HttpServletResponse response, RequirementTable requirementTable)
-    {
-        List<RequirementTable> list = requirementTableService.selectRequirementTableList(requirementTable);
-        ExcelUtil<RequirementTable> util = new ExcelUtil<RequirementTable>(RequirementTable.class);
-        util.exportExcel(response, list, "需求类型数据");
-    }
-
-    /**
-     * 获取需求类型详细信息
-     */
-    @RequiresPermissions("procure:table:query")
-    @GetMapping(value = "/{requirementId}")
-    public AjaxResult getInfo(@PathVariable("requirementId") Long requirementId)
-    {
-        return success(requirementTableService.selectRequirementTableByRequirementId(requirementId));
-    }
-
-    /**
-     * 新增需求类型
-     */
-    @RequiresPermissions("procure:table:add")
-    @Log(title = "需求类型", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody RequirementTable requirementTable)
-    {
-        return toAjax(requirementTableService.insertRequirementTable(requirementTable));
-    }
-
-    /**
-     * 修改需求类型
-     */
-    @RequiresPermissions("procure:table:edit")
-    @Log(title = "需求类型", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody RequirementTable requirementTable)
-    {
-        return toAjax(requirementTableService.updateRequirementTable(requirementTable));
-    }
-
-    /**
-     * 删除需求类型
-     */
-    @RequiresPermissions("procure:table:remove")
-    @Log(title = "需求类型", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{requirementIds}")
-    public AjaxResult remove(@PathVariable Long[] requirementIds)
-    {
-        return toAjax(requirementTableService.deleteRequirementTableByRequirementIds(requirementIds));
-    }
 }

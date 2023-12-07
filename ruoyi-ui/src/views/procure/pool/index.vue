@@ -22,192 +22,83 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
     <el-row :gutter="10" class="mb8">
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="primary"-->
-<!--          plain-->
-<!--          icon="el-icon-plus"-->
-<!--          size="mini"-->
-<!--          @click="handleAdd"-->
-<!--          v-hasPermi="['procure:pool:add']"-->
-<!--        >新增</el-button>-->
-<!--      </el-col>
-         :disabled="single"  @click="handleUpdate"   v-hasPermi="['procure:pool:edit']"
--->
+      <el-col :span="1.5">
+        <el-button
+          type="primary"
+          plain
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['procure:information:add']"
+        >分配</el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="success"
           plain
           size="mini"
-          @row-click="handleRowClick"
+          :disabled="pending"
           @click="handleUpdate"
-          v-hasPermi="['procure:pool:edit']"
         >暂挂</el-button>
       </el-col>
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate1"-->
-<!--          v-hasPermi="['procure:pool:edit']"-->
-<!--        >作废</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate2"-->
-<!--          v-hasPermi="['procure:pool:edit']"-->
-<!--        >分配</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="danger"-->
-<!--          plain-->
-<!--          icon="el-icon-delete"-->
-<!--          size="mini"-->
-<!--          :disabled="multiple"-->
-<!--          @click="handleDelete"-->
-<!--          v-hasPermi="['procure:pool:remove']"-->
-<!--        >删除</el-button>-->
-<!--      </el-col>-->
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="warning"-->
-<!--          plain-->
-<!--          icon="el-icon-download"-->
-<!--          size="mini"-->
-<!--          @click="handleExport"-->
-<!--          v-hasPermi="['procure:pool:export']"-->
-<!--        >导出</el-button>-->
-<!--      </el-col>-->
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          size="mini"
+          :disabled="pending"
+          @click="handleUpdateCancel"
+        >作废</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['procure:information:remove']"
+        >删除</el-button>
+      </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['procure:information:export']"
+        >导出</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="poolList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="informationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="相关项目" align="center" prop="relatedProjects" >
-      <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.relatedProjects}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
+      <el-table-column label="相关项目" align="center" prop="relatedProjects" />
       <el-table-column label="需求物料号" align="center" prop="materialCode" />
       <el-table-column label="需求物料名称" align="center" prop="materialName" />
-      <el-table-column label="需求物料数量" align="center" prop="materiaId" >
+      <el-table-column label="需求物料数量" align="center" prop="mustNumber" />
+      <el-table-column label="需求到货时间" align="center" prop="mustDate" width="180">
         <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.requiredMaterials}}
-            </template>
-          </span>
+          <span>{{ parseTime(scope.row.mustDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-
-      <el-table-column label="需求到货时间" align="center" prop="deliveryTime" width="180">
-        <template slot-scope="scope">
-          <span  v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{ parseTime(item.deliveryTime, '{y}-{m}-{d}') }}
-            </template>
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="需求编号" align="center" prop="requirementCode" >
-      <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.requirementCode}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
-      <el-table-column label="预算单价(不含税)" align="center" prop="unitPrice" >
-      <template slot-scope="scope">
-          <span v-for="item in informationList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.unitPrice}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
-      <el-table-column label="行预算金额" align="center" prop="budgetAmount" >
-      <template slot-scope="scope">
-          <span v-for="item in informationList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.budgetAmount}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
-      <el-table-column label="负责采购员" align="center" prop="purchaser" />
-      <el-table-column label="需求部门" align="center" prop="demandDepartment" >
-      <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.demandDepartment}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
-      <el-table-column label="需求人" align="center" prop="demander" >
-      <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              {{item.demander}}
-            </template>
-          </span>
-      </template>
-      </el-table-column>
-      <el-table-column label="自动分配" align="center" prop="automaticAssign" >
-        <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              <span :style="{color:item.automaticAssign===1?'green':'red'}">
-                {{item.automaticAssign===1?'是':'否'}}
-              </span>
-            </template>
-          </span>
-        </template>
-      </el-table-column>
+      <el-table-column label="需求编号" align="center" prop="requirementCode" />
+      <el-table-column label="负责采购人" align="center" prop="purchaser" />
+      <el-table-column label="需求部门" align="center" prop="demandDepartment" />
+      <el-table-column label="预算单价(不含税)" align="center" prop="unitPrice" />
+      <el-table-column label="行金额" align="center" prop="budgetAmount" />
+      <el-table-column label="需求说明" align="center" prop="description" />
+      <el-table-column label="需求人" align="center" prop="demander" />
       <el-table-column label="状态" align="center" prop="status" >
-      <template slot-scope="scope">
-          <span v-for="item in requirementList">
-            <template v-if="scope.row.materialId===item.materialId">
-              <el-tag :type="getTagType(item.status)">
-                {{ getStstusName(item.status) }}
-             </el-tag>
-            </template>
-          </span>
-      </template>
+        <template slot-scope="scope">
+          <el-tag :type="getTagType(scope.row.status)">
+            {{ getStstusName(scope.row.status) }}
+          </el-tag>
+        </template>
       </el-table-column>
-<!--      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">-->
-<!--        <template slot-scope="scope">-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-edit"-->
-<!--            @click="handleUpdate(scope.row)"-->
-<!--            v-hasPermi="['procure:pool:edit']"-->
-<!--          >修改</el-button>-->
-<!--          <el-button-->
-<!--            size="mini"-->
-<!--            type="text"-->
-<!--            icon="el-icon-delete"-->
-<!--            @click="handleDelete(scope.row)"-->
-<!--            v-hasPermi="['procure:pool:remove']"-->
-<!--          >删除</el-button>-->
-<!--        </template>-->
-<!--      </el-table-column>-->
     </el-table>
 
     <pagination
@@ -224,71 +115,6 @@
         <el-form-item label="暂挂原因" prop="materialCode">
           <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
         </el-form-item>
-<!--        <el-form-item label="物料名称" prop="materialName">-->
-<!--          <el-input v-model="form.materialName" placeholder="请输入物料名称" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="基本计算单位" prop="calculationUnit">-->
-<!--          <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="采购员" prop="purchaser">-->
-<!--          <el-input v-model="form.purchaser" placeholder="请输入采购员" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="最后更新人" prop="lUpdated">-->
-<!--          <el-input v-model="form.lUpdated" placeholder="请输入最后更新人" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="最后更新时间" prop="lUpdateTime">-->
-<!--          <el-date-picker clearable-->
-<!--            v-model="form.lUpdateTime"-->
-<!--            type="date"-->
-<!--            value-format="yyyy-MM-dd"-->
-<!--            placeholder="请选择最后更新时间">-->
-<!--          </el-date-picker>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="来源系统" prop="sourceSystem">-->
-<!--          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="是否启用" prop="enable">-->
-<!--          <el-input v-model="form.enable" placeholder="请输入是否启用" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="主品类" prop="mCategory">-->
-<!--          <el-input v-model="form.mCategory" placeholder="请输入主品类" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="规格" prop="specifications">-->
-<!--          <el-input v-model="form.specifications" placeholder="请输入规格" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="型号" prop="model">-->
-<!--          <el-input v-model="form.model" placeholder="请输入型号" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="品牌" prop="brand">-->
-<!--          <el-input v-model="form.brand" placeholder="请输入品牌" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="默认税种/税率" prop="categoriesTaxes">-->
-<!--          <el-input v-model="form.categoriesTaxes" placeholder="请输入默认税种/税率" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="物料图片" prop="image">-->
-<!--          <image-upload v-model="form.image"/>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="毛重" prop="gWeight">-->
-<!--          <el-input v-model="form.gWeight" placeholder="请输入毛重" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="净重" prop="nWeight">-->
-<!--          <el-input v-model="form.nWeight" placeholder="请输入净重" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="重量单位" prop="weight">-->
-<!--          <el-input v-model="form.weight" placeholder="请输入重量单位" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="体积" prop="volume">-->
-<!--          <el-input v-model="form.volume" placeholder="请输入体积" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="体积单位" prop="vUnit">-->
-<!--          <el-input v-model="form.vUnit" placeholder="请输入体积单位" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="物料ABC属性" prop="abcAttribute">-->
-<!--          <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="是否免检" prop="avoidInspect">-->
-<!--          <el-input v-model="form.avoidInspect" placeholder="请输入是否免检" />-->
-<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -299,7 +125,7 @@
 </template>
 
 <script>
-import { listPool, getPool, delPool, addPool, updatePool,listRequirement,listInformation } from "@/api/procure/pool";
+import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel } from "@/api/procure/pool";
 
 export default {
   name: "Pool",
@@ -310,17 +136,17 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      status:"",
       // 非单个禁用
       single: true,
       // 非多个禁用
       multiple: true,
+      pending: true,
       // 显示搜索条件
       showSearch: true,
       // 总条数
       total: 0,
       // 采购需求池表格数据
-      poolList: [],
-      requirementList: [],
       informationList: [],
       // 弹出层标题
       title: "",
@@ -361,8 +187,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getList1();
-    this.getList2();
   },
   computed: {
     getStstusName(){
@@ -379,46 +203,29 @@ export default {
         }
       }
     },
-    hasSelectedRows() {
-      return this.selectedRows.length > 0;
-    }
   },
   methods: {
     /** 查询采购需求池列表 */
     getList() {
       this.loading = true;
-      listPool(this.queryParams).then(response => {
-        this.poolList = response.rows;
+      listInformation(this.queryParams).then(response => {
+        this.informationList = response.rows;
         this.total = response.total;
         this.loading = false;
         // console.info(this.poolList)
       });
     },
-     /** 查询采购需求申请列表 */
-     getList1() {
-      listRequirement().then(response => {
-        this.requirementList = response.rows;
-        // console.info(this.requirementList)
-      });
+    getTagType(status){
+      if(status==1){
+        return 'success';
+      }else if(status==2){
+        return 'info';
+      }else if(status==3){
+        return 'warning';
+      }else{
+        return 'danger';
+      }
     },
-      /** 查询采购需求池列表 */
-      getList2() {
-      listInformation().then(response => {
-        this.informationList = response.rows;
-        // console.info(this.informationList)
-      });
-    },
-   getTagType(status){
-    if(status==1){
-      return 'success';
-    }else if(status==2){
-      return 'info';
-    }else if(status==3){
-      return 'warning';
-    }else{
-      return 'danger';
-    }
-  },
 
     // 取消按钮
     cancel() {
@@ -465,9 +272,11 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.materialId)
+      this.ids = selection.map(item => item.miId)
+      this.status = selection.map(item => item.status)
       this.single = selection.length!==1
       this.multiple = !selection.length
+      this.pending=!selection.length
     },
     handleRowClick(row) {
       this.selectedRows = [row]; // 将选中的行数据赋值给 selectedRows 数组
@@ -479,34 +288,50 @@ export default {
       this.open = true;
       this.title = "添加采购需求池";
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      if (!this.hasSelectedRows&&!row){
-        this.$message.error('请至少选中一条数据');
+    /** 暂挂按钮操作 */
+    handleUpdate() {
+      const miIds =  this.ids;
+      const status =  this.status;
+      if (parseInt(status)===1){
+        this.$modal.confirm('是否暂挂编号为"' + miIds + '"的数据项？').then(function() {
+          return editStatus(miIds);
+        }).then(() => {
+          this.getList();
+          this.$modal.msgSuccess("暂挂成功");
+        }).catch(() => {});
+      }else {
+        this.$message.error('存在已暂挂、已分配或已作废的数据,请修改后重试！');
         return;
-      }else if (!this.hasSelectedRows&&row){
-        this.reset();
-        const materialId=row.materialId || this.ids;
-        getPool(materialId).then(response => {
-          this.form = response.data;
-          this.open = true;
-          this.title = "修改采购需求池";
-        });
       }
-
+    },
+    /** 作废按钮操作 */
+    handleUpdateCancel() {
+      const miIds =  this.ids;
+      const status =  this.status;
+      if (parseInt(status)===1||parseInt(status)===2){
+        this.$modal.confirm('是否作废编号为"' + miIds + '"的数据项？').then(function() {
+          return editStatusCancel(miIds);
+        }).then(() => {
+          this.getList();
+          this.$modal.msgSuccess("作废成功");
+        }).catch(() => {});
+      }else {
+        this.$message.error('存在已分配或已作废的数据,请修改后重试！');
+        return;
+      }
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.materialId != null) {
-            updatePool(this.form).then(response => {
+          if (this.form.miId != null) {
+            updateInformation(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addPool(this.form).then(response => {
+            addInformation(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -517,9 +342,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const materialIds = row.materialId || this.ids;
-      this.$modal.confirm('是否确认删除采购需求池编号为"' + materialIds + '"的数据项？').then(function() {
-        return delPool(materialIds);
+      const miIds = row.miId || this.ids;
+      this.$modal.confirm('是否确认删除采购需求池编号为"' + miIds + '"的数据项？').then(function() {
+        return delInformation(miIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -527,9 +352,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('procure/pool/export', {
+      this.download('procure/information/export', {
         ...this.queryParams
-      }, `pool_${new Date().getTime()}.xlsx`)
+      }, `information_${new Date().getTime()}.xlsx`)
     }
   }
 };

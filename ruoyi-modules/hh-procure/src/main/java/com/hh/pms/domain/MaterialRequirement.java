@@ -2,6 +2,8 @@ package com.hh.pms.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -10,9 +12,9 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 采购需求申请对象 material_requirement
- * 
+ *
  * @author ruoyi
- * @date 2023-11-24
+ * @date 2023-12-05
  */
 public class MaterialRequirement extends BaseEntity
 {
@@ -89,273 +91,224 @@ public class MaterialRequirement extends BaseEntity
     @Excel(name = "相关项目")
     private String relatedProjects;
 
-    /** 需求物料ID */
-    @Excel(name = "需求物料ID")
-    private Long materialId;
 
-    /** 需求物料数量 */
-    @Excel(name = "需求物料数量")
-    private BigDecimal requiredMaterials;
 
-    /** 需求到货时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "需求到货时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date deliveryTime;
 
-    /** 自动分配 */
-    @Excel(name = "自动分配")
-    private Long automaticAssign;
 
-    /** 状态 */
-    @Excel(name = "状态")
-    private Long status;
+    /** 任务单号 */
+    @Excel(name = "任务单号")
+    private String taskCode;
 
-    /** 物料信息ID */
-    @Excel(name = "物料信息ID")
-    private Long mi_id;
 
-    public void setRequirementId(Long requirementId) 
+
+    public void setRequirementId(Long requirementId)
     {
         this.requirementId = requirementId;
     }
 
-    public Long getRequirementId() 
+    public Long getRequirementId()
     {
         return requirementId;
     }
-    public void setRequirementCode(String requirementCode) 
+    public void setRequirementCode(String requirementCode)
     {
         this.requirementCode = requirementCode;
     }
 
-    public String getRequirementCode() 
+    public String getRequirementCode()
     {
         return requirementCode;
     }
-    public void setRequirementCreator(String requirementCreator) 
+    public void setRequirementCreator(String requirementCreator)
     {
         this.requirementCreator = requirementCreator;
     }
 
-    public String getRequirementCreator() 
+    public String getRequirementCreator()
     {
         return requirementCreator;
     }
-    public void setRequirementTitle(String requirementTitle) 
+    public void setRequirementTitle(String requirementTitle)
     {
         this.requirementTitle = requirementTitle;
     }
 
-    public String getRequirementTitle() 
+    public String getRequirementTitle()
     {
         return requirementTitle;
     }
-    public void setCreateDepartment(String createDepartment) 
+    public void setCreateDepartment(String createDepartment)
     {
         this.createDepartment = createDepartment;
     }
 
-    public String getCreateDepartment() 
+    public String getCreateDepartment()
     {
         return createDepartment;
     }
-    public void setDemander(String demander) 
+    public void setDemander(String demander)
     {
         this.demander = demander;
     }
 
-    public String getDemander() 
+    public String getDemander()
     {
         return demander;
     }
-    public void setDemandDepartment(String demandDepartment) 
+    public void setDemandDepartment(String demandDepartment)
     {
         this.demandDepartment = demandDepartment;
     }
 
-    public String getDemandDepartment() 
+    public String getDemandDepartment()
     {
         return demandDepartment;
     }
-    public void setRequirementType(Long requirementType) 
+    public void setRequirementType(Long requirementType)
     {
         this.requirementType = requirementType;
     }
 
-    public Long getRequirementType() 
+    public Long getRequirementType()
     {
         return requirementType;
     }
-    public void setCompaniesId(Long companiesId) 
+    public void setCompaniesId(Long companiesId)
     {
         this.companiesId = companiesId;
     }
 
-    public Long getCompaniesId() 
+    public Long getCompaniesId()
     {
         return companiesId;
     }
-    public void setTotalAmount(BigDecimal totalAmount) 
+    public void setTotalAmount(BigDecimal totalAmount)
     {
         this.totalAmount = totalAmount;
     }
 
-    public BigDecimal getTotalAmount() 
+    public BigDecimal getTotalAmount()
     {
         return totalAmount;
     }
-    public void setContactPerson(String contactPerson) 
+    public void setContactPerson(String contactPerson)
     {
         this.contactPerson = contactPerson;
     }
 
-    public String getContactPerson() 
+    public String getContactPerson()
     {
         return contactPerson;
     }
-    public void setExpenseDepartment(String expenseDepartment) 
+    public void setExpenseDepartment(String expenseDepartment)
     {
         this.expenseDepartment = expenseDepartment;
     }
 
-    public String getExpenseDepartment() 
+    public String getExpenseDepartment()
     {
         return expenseDepartment;
     }
-    public void setDescription(String description) 
+    public void setDescription(String description)
     {
         this.description = description;
     }
 
-    public String getDescription() 
+    public String getDescription()
     {
         return description;
     }
-    public void setAddress(String address) 
+    public void setAddress(String address)
     {
         this.address = address;
     }
 
-    public String getAddress() 
+    public String getAddress()
     {
         return address;
     }
-    public void setPhone(String phone) 
+    public void setPhone(String phone)
     {
         this.phone = phone;
     }
 
-    public String getPhone() 
+    public String getPhone()
     {
         return phone;
     }
-    public void setAnnex(String annex) 
+    public void setAnnex(String annex)
     {
         this.annex = annex;
     }
 
-    public String getAnnex() 
+    public String getAnnex()
     {
         return annex;
     }
-    public void setCurrencyId(Long currencyId) 
+    public void setCurrencyId(Long currencyId)
     {
         this.currencyId = currencyId;
     }
 
-    public Long getCurrencyId() 
+    public Long getCurrencyId()
     {
         return currencyId;
     }
-    public void setRelatedProjects(String relatedProjects) 
+    public void setRelatedProjects(String relatedProjects)
     {
         this.relatedProjects = relatedProjects;
     }
 
-    public String getRelatedProjects() 
+    public String getRelatedProjects()
     {
         return relatedProjects;
     }
-    public void setMaterialId(Long materialId) 
+
+    public void setTaskCode(String taskCode)
     {
-        this.materialId = materialId;
+        this.taskCode = taskCode;
     }
 
-    public Long getMaterialId() 
+    public String getTaskCode()
     {
-        return materialId;
-    }
-    public void setRequiredMaterials(BigDecimal requiredMaterials) 
-    {
-        this.requiredMaterials = requiredMaterials;
-    }
-
-    public BigDecimal getRequiredMaterials() 
-    {
-        return requiredMaterials;
-    }
-    public void setDeliveryTime(Date deliveryTime) 
-    {
-        this.deliveryTime = deliveryTime;
-    }
-
-    public Date getDeliveryTime() 
-    {
-        return deliveryTime;
-    }
-    public void setAutomaticAssign(Long automaticAssign) 
-    {
-        this.automaticAssign = automaticAssign;
-    }
-
-    public Long getAutomaticAssign() 
-    {
-        return automaticAssign;
-    }
-
-    public Long getStatus() {
-        return status;
-    }
-
-    public void setStatus(Long status) {
-        this.status = status;
-    }
-
-    public Long getMi_id() {
-        return mi_id;
-    }
-
-    public void setMi_id(Long mi_id) {
-        this.mi_id = mi_id;
+        return taskCode;
     }
 
     @Override
     public String toString() {
-        return "MaterialRequirement{" +
-                "requirementId=" + requirementId +
-                ", requirementCode='" + requirementCode + '\'' +
-                ", requirementCreator='" + requirementCreator + '\'' +
-                ", requirementTitle='" + requirementTitle + '\'' +
-                ", createDepartment='" + createDepartment + '\'' +
-                ", demander='" + demander + '\'' +
-                ", demandDepartment='" + demandDepartment + '\'' +
-                ", requirementType=" + requirementType +
-                ", companiesId=" + companiesId +
-                ", totalAmount=" + totalAmount +
-                ", contactPerson='" + contactPerson + '\'' +
-                ", expenseDepartment='" + expenseDepartment + '\'' +
-                ", description='" + description + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
-                ", annex='" + annex + '\'' +
-                ", currencyId=" + currencyId +
-                ", relatedProjects='" + relatedProjects + '\'' +
-                ", materialId=" + materialId +
-                ", requiredMaterials=" + requiredMaterials +
-                ", deliveryTime=" + deliveryTime +
-                ", automaticAssign=" + automaticAssign +
-                ", status=" + status +
-                ", mi_id=" + mi_id +
-                '}';
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("requirementId", getRequirementId())
+                .append("requirementCode", getRequirementCode())
+                .append("requirementCreator", getRequirementCreator())
+                .append("requirementTitle", getRequirementTitle())
+                .append("createDepartment", getCreateDepartment())
+                .append("createTime", getCreateTime())
+                .append("demander", getDemander())
+                .append("demandDepartment", getDemandDepartment())
+                .append("requirementType", getRequirementType())
+                .append("companiesId", getCompaniesId())
+                .append("totalAmount", getTotalAmount())
+                .append("contactPerson", getContactPerson())
+                .append("expenseDepartment", getExpenseDepartment())
+                .append("description", getDescription())
+                .append("address", getAddress())
+                .append("phone", getPhone())
+                .append("annex", getAnnex())
+                .append("currencyId", getCurrencyId())
+                .append("relatedProjects", getRelatedProjects())
+                .append("taskCode", getTaskCode())
+                .toString();
+    }
+
+
+    /**  需求物料  */
+    private List<MaterialInformation> materialInformations;
+
+    public List<MaterialInformation> getMaterialInformations() {
+        return materialInformations;
+    }
+
+    public void setMaterialInformations(List<MaterialInformation> materialInformations) {
+        this.materialInformations = materialInformations;
     }
 }

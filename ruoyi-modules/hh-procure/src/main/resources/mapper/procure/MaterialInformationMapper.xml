@@ -24,6 +24,25 @@
         <result property="remarks"    column="remarks"    />
         <result property="annex"    column="annex"    />
         <result property="purchaser"    column="purchaser"    />
+        <result property="requirementCode"    column="requirement_code"    />
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="requirementCreator"    column="requirement_creator"    />
+        <result property="requirementTitle"    column="requirement_title"    />
+        <result property="createDepartment"    column="create_department"    />
+        <result property="demander"    column="demander"    />
+        <result property="demandDepartment"    column="demand_department"    />
+        <result property="requirementType"    column="requirement_type"    />
+        <result property="companiesId"    column="companies_id"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="contactPerson"    column="contact_person"    />
+        <result property="expenseDepartment"    column="expense_department"    />
+        <result property="description"    column="description"    />
+        <result property="address"    column="address"    />
+        <result property="phone"    column="phone"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="relatedProjects"    column="related_projects"    />
+        <result property="status"    column="status"    />
+        <result property="taskCode"    column="taskCode"    />
     </resultMap>
 
     <resultMap id="MaterialInformationMaterialResult" type="MaterialInformation" extends="MaterialInformationResult">
@@ -56,7 +75,10 @@
     </resultMap>
 
     <sql id="selectMaterialInformationVo">
-        select mi_id, material_code, material_name, material_category, material_specification, material_model, material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price, tax, rate_value, budget_amount, remarks, annex, purchaser from material_information
+        select mi_id, material_code, material_name, material_category, material_specification, material_model,
+        material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price,
+        tax, rate_value, budget_amount, remarks, m.annex, purchaser, m.requirement_code,related_projects,demand_department,description,demander,`status` from material_information m
+        LEFT JOIN  material_requirement  r  ON m.requirement_code=r.requirement_code
     </sql>
 
     <select id="selectMaterialInformationList" parameterType="MaterialInformation" resultMap="MaterialInformationResult">
@@ -80,13 +102,17 @@
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
             <if test="annex != null  and annex != ''"> and annex = #{annex}</if>
             <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
+            <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
     </select>
 
     <select id="selectMaterialInformationByMiId" parameterType="Integer" resultMap="MaterialInformationMaterialResult">
-        select a.mi_id, a.material_code, a.material_name, a.material_category, a.material_specification, a.material_model, a.material_brand, a.material_unit, a.must_number, a.must_date, a.currency_name, a.reference_price, a.unit_price, a.tax, a.rate_value, a.budget_amount, a.remarks, a.annex, a.purchaser,
-               b.material_id as sub_material_id, b.material_code as sub_material_code, b.material_name as sub_material_name, b.calculation_unit as sub_calculation_unit, b.purchaser as sub_purchaser, b.l_updated as sub_l_updated, b.l_update_time as sub_l_update_time, b.source_system as sub_source_system, b.enable as sub_enable, b.m_category as sub_m_category, b.specifications as sub_specifications, b.model as sub_model, b.brand as sub_brand, b.categories_taxes as sub_categories_taxes, b.image as sub_image, b.g_weight as sub_g_weight, b.n_weight as sub_n_weight, b.weight as sub_weight, b.volume as sub_volume, b.v_unit as sub_v_unit, b.abc_attribute as sub_abc_attribute, b.avoid_inspect as sub_avoid_inspect
-        from material_information a
+        select a.mi_id, a.material_code, a.material_name, a.material_category, a.material_specification, a.material_model, a.material_brand, a.material_unit, a.must_number, a.must_date, a.currency_name, a.reference_price, a.unit_price, a.tax, a.rate_value, a.budget_amount, a.remarks, a.annex, a.purchaser, a.requirement_code,
+               b.material_id as sub_material_id, b.material_code as sub_material_code, b.material_name as sub_material_name, b.calculation_unit as sub_calculation_unit, b.purchaser as sub_purchaser, b.l_updated as sub_l_updated, b.l_update_time as sub_l_update_time, b.source_system as sub_source_system, b.enable as sub_enable,
+               b.m_category as sub_m_category, b.specifications as sub_specifications, b.model as sub_model, b.brand as sub_brand, b.categories_taxes as sub_categories_taxes, b.image as sub_image, b.g_weight as sub_g_weight, b.n_weight as sub_n_weight, b.weight as sub_weight, b.volume as sub_volume, b.v_unit as sub_v_unit,
+               b.abc_attribute as sub_abc_attribute, b.avoid_inspect as sub_avoid_inspect
+        ,status from material_information a
                  left join material b on b.material_id = a.mi_id
         where a.mi_id = #{miId}
     </select>
@@ -112,6 +138,8 @@
             <if test="remarks != null">remarks,</if>
             <if test="annex != null">annex,</if>
             <if test="purchaser != null">purchaser,</if>
+            <if test="requirementCode != null">requirement_code,</if>
+            <if test="status != null">status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="materialCode != null">#{materialCode},</if>
@@ -132,8 +160,11 @@
             <if test="remarks != null">#{remarks},</if>
             <if test="annex != null">#{annex},</if>
             <if test="purchaser != null">#{purchaser},</if>
+            <if test="requirementCode != null">#{requirementCode},</if>
+            <if test="status != null">#{status},</if>
         </trim>
     </insert>
+
 
     <update id="updateMaterialInformation" parameterType="MaterialInformation">
         update material_information
@@ -156,6 +187,8 @@
             <if test="remarks != null">remarks = #{remarks},</if>
             <if test="annex != null">annex = #{annex},</if>
             <if test="purchaser != null">purchaser = #{purchaser},</if>
+            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>
+            <if test="status != null">status = #{status},</if>
         </trim>
         where mi_id = #{miId}
     </update>
@@ -188,4 +221,20 @@
             ( #{item.materialId}, #{item.materialCode}, #{item.materialName}, #{item.calculationUnit}, #{item.purchaser}, #{item.lUpdated}, #{item.lUpdateTime}, #{item.sourceSystem}, #{item.enable}, #{item.mCategory}, #{item.specifications}, #{item.model}, #{item.brand}, #{item.categoriesTaxes}, #{item.image}, #{item.gWeight}, #{item.nWeight}, #{item.weight}, #{item.volume}, #{item.vUnit}, #{item.abcAttribute}, #{item.avoidInspect})
         </foreach>
     </insert>
+
+    <update id="updateRequirementStatus" parameterType="String">
+        UPDATE material_information SET `status`=2 WHERE mi_id in
+        <foreach collection="array" item="miId" open="(" separator="," close=")">
+            #{miId}
+        </foreach>
+    </update>
+
+    <update id="updateRequirementStatusCancel" parameterType="String">
+        UPDATE material_information SET `status`=4 WHERE mi_id in
+        <foreach collection="array" item="miId" open="(" separator="," close=")">
+            #{miId}
+        </foreach>
+    </update>
+
+
 </mapper>

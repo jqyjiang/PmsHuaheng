@@ -73,8 +73,26 @@
 			<groupId>com.ruoyi</groupId>
 			<artifactId>ruoyi-common-swagger</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>hh-mast</artifactId>
+            <version>3.6.3</version>
+            <scope>compile</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.ruoyi</groupId>
+			<artifactId>jqy-hh-supplier</artifactId>
+			<version>3.6.3</version>
+			<scope>compile</scope>
+		</dependency>
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>hh-pms</artifactId>
+            <version>3.6.3</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>

@@ -56,7 +56,35 @@ export function listInformation(query) {
 // 查询需求类型列表
 export function listTable(query) {
   return request({
-    url: '/procure/table/list',
+    url: '/procure/table/listRequirementTableName',
+    method: 'get',
+    params: query
+  })
+}
+
+
+// 查询币种列表
+export function listCurrency(query) {
+  return request({
+    url: '/procure/requirement/listCurrency',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询公司表列表
+export function listCompanies(query) {
+  return request({
+    url: '/procure/companies/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询物料维护列表
+export function listMaterial(query) {
+  return request({
+    url: '/pms/OrderManager/listMaterial',
     method: 'get',
     params: query
   })

@@ -1,56 +1,40 @@
 import request from '@/utils/request'
 
-// 查询采购需求池列表
-export function listPool(query) {
-  return request({
-    url: '/procure/pool/list',
-    method: 'get',
-    params: query
-  })
-}
 
 // 查询采购需求池详细
-export function getPool(materialId) {
+export function getInformation(miId) {
   return request({
-    url: '/procure/pool/' + materialId,
+    url: '/procure/information/' + miId,
     method: 'get'
   })
 }
 
 // 新增采购需求池
-export function addPool(data) {
+export function addInformation(data) {
   return request({
-    url: '/procure/pool',
+    url: '/procure/information',
     method: 'post',
     data: data
   })
 }
 
 // 修改采购需求池
-export function updatePool(data) {
+export function updateInformation(data) {
   return request({
-    url: '/procure/pool',
+    url: '/procure/information',
     method: 'put',
     data: data
   })
 }
 
 // 删除采购需求池
-export function delPool(materialId) {
+export function delInformation(miId) {
   return request({
-    url: '/procure/pool/' + materialId,
+    url: '/procure/information/' + miId,
     method: 'delete'
   })
 }
 
-// 查询采购需求申请列表
-export function listRequirement(query) {
-  return request({
-    url: '/procure/requirement/list',
-    method: 'get',
-    params: query
-  })
-}
 
 // 查询采购需求池列表
 export function listInformation(query) {
@@ -60,4 +44,24 @@ export function listInformation(query) {
     params: query
   })
 }
+
+// 修改状态
+
+//暂挂
+export function editStatus(miId) {
+  return request({
+    url: '/procure/information/zg/'+miId,
+    method: 'put'
+  })
+}
+
+//作废
+export function editStatusCancel(miId) {
+  return request({
+    url: '/procure/information/zf/'+miId,
+    method: 'put'
+  })
+}
+
+
 

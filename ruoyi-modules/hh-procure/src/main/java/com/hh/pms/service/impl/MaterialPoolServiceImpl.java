@@ -1,11 +1,13 @@
 package com.hh.pms.service.impl;
 
 import java.util.List;
+
+import com.hh.pms.mapper.MaterialPoolMapper;
+import com.hh.pms.mast.service.IMaterialService;
+import com.hh.pms.service.IMaterialPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hh.pms.mapper.MaterialMapper;
-import com.hh.pms.domain.Material;
-import com.hh.pms.service.IMaterialService;
+import com.hh.pms.domain.MaterialPool;
 
 /**
  * 采购需求池Service业务层处理
@@ -14,10 +16,10 @@ import com.hh.pms.service.IMaterialService;
  * @date 2023-11-27
  */
 @Service
-public class MaterialServiceImpl implements IMaterialService 
+public class MaterialPoolServiceImpl implements IMaterialPoolService
 {
     @Autowired
-    private MaterialMapper materialMapper;
+    private MaterialPoolMapper materialPoolMapper;
 
     /**
      * 查询采购需求池
@@ -26,45 +28,45 @@ public class MaterialServiceImpl implements IMaterialService
      * @return 采购需求池
      */
     @Override
-    public Material selectMaterialByMaterialId(Long materialId)
+    public MaterialPool selectMaterialByMaterialId(Long materialId)
     {
-        return materialMapper.selectMaterialByMaterialId(materialId);
+        return materialPoolMapper.selectMaterialByMaterialId(materialId);
     }
 
     /**
      * 查询采购需求池列表
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 采购需求池
      */
     @Override
-    public List<Material> selectMaterialList(Material material)
+    public List<MaterialPool> selectMaterialList(MaterialPool materialPool)
     {
-        return materialMapper.selectMaterialList(material);
+        return materialPoolMapper.selectMaterialList(materialPool);
     }
 
     /**
      * 新增采购需求池
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 结果
      */
     @Override
-    public int insertMaterial(Material material)
+    public int insertMaterial(MaterialPool materialPool)
     {
-        return materialMapper.insertMaterial(material);
+        return materialPoolMapper.insertMaterial(materialPool);
     }
 
     /**
      * 修改采购需求池
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 结果
      */
     @Override
-    public int updateMaterial(Material material)
+    public int updateMaterial(MaterialPool materialPool)
     {
-        return materialMapper.updateMaterial(material);
+        return materialPoolMapper.updateMaterial(materialPool);
     }
 
     /**
@@ -76,7 +78,7 @@ public class MaterialServiceImpl implements IMaterialService
     @Override
     public int deleteMaterialByMaterialIds(Long[] materialIds)
     {
-        return materialMapper.deleteMaterialByMaterialIds(materialIds);
+        return materialPoolMapper.deleteMaterialByMaterialIds(materialIds);
     }
 
     /**
@@ -88,6 +90,6 @@ public class MaterialServiceImpl implements IMaterialService
     @Override
     public int deleteMaterialByMaterialId(Long materialId)
     {
-        return materialMapper.deleteMaterialByMaterialId(materialId);
+        return materialPoolMapper.deleteMaterialByMaterialId(materialId);
     }
 }

@@ -1,17 +1,12 @@
 package com.hh.pms.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.hh.pms.mast.domain.Currency;
+import com.hh.pms.model.MaterialClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
@@ -34,6 +29,10 @@ public class MaterialRequirementController extends BaseController
 {
     @Autowired
     private IMaterialRequirementService materialRequirementService;
+
+    @Autowired
+    private MaterialClient materialClient;
+
 
     /**
      * 查询采购需求申请列表
@@ -78,11 +77,13 @@ public class MaterialRequirementController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody MaterialRequirement materialRequirement)
     {
+        System.out.println("fffff:"+materialRequirement.getMaterialInformations());
         return toAjax(materialRequirementService.insertMaterialRequirement(materialRequirement));
     }
 
     /**
      * 修改采购需求申请
+     *
      */
     @RequiresPermissions("procure:requirement:edit")
     @Log(title = "采购需求申请", businessType = BusinessType.UPDATE)
@@ -101,5 +102,17 @@ public class MaterialRequirementController extends BaseController
     public AjaxResult remove(@PathVariable Long[] requirementIds)
     {
         return toAjax(materialRequirementService.deleteMaterialRequirementByRequirementIds(requirementIds));
+    }
+
+    /**
+     * 查询币种定义表
+     * @param currency
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/listCurrency")
+    public TableDataInfo listCurrency(Currency currency, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+        return materialClient.list(currency, pageNum, pageSize);
     }
 }

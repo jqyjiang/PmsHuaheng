@@ -2,6 +2,7 @@ package com.hh.pms.mapper;
 
 import java.util.List;
 import com.hh.pms.domain.MaterialInformation;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购需求池Mapper接口
@@ -13,7 +14,7 @@ public interface MaterialInformationMapper
 {
     /**
      * 查询采购需求池
-     * 
+     *
      * @param miId 采购需求池主键
      * @return 采购需求池
      */
@@ -21,7 +22,7 @@ public interface MaterialInformationMapper
 
     /**
      * 查询采购需求池列表
-     * 
+     *
      * @param materialInformation 采购需求池
      * @return 采购需求池集合
      */
@@ -29,7 +30,7 @@ public interface MaterialInformationMapper
 
     /**
      * 新增采购需求池
-     * 
+     *
      * @param materialInformation 采购需求池
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface MaterialInformationMapper
 
     /**
      * 修改采购需求池
-     * 
+     *
      * @param materialInformation 采购需求池
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface MaterialInformationMapper
 
     /**
      * 删除采购需求池
-     * 
+     *
      * @param miId 采购需求池主键
      * @return 结果
      */
@@ -53,9 +54,17 @@ public interface MaterialInformationMapper
 
     /**
      * 批量删除采购需求池
-     * 
+     *
      * @param miIds 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteMaterialInformationByMiIds(Integer[] miIds);
+
+    //  暂挂
+    public int updateRequirementStatus(Integer[] miId);
+
+    // 作废
+    public int updateRequirementStatusCancel(Integer[] miId);
+
+
 }

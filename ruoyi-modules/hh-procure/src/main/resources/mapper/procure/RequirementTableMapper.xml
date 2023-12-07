@@ -13,11 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select requirement_id, requirement_type from requirement_table
     </sql>
 
-    <select id="selectRequirementTableList" parameterType="RequirementTable" resultMap="RequirementTableResult">
+    <select id="listRequirementTableName" resultType="com.hh.pms.domain.RequirementTable">
         <include refid="selectRequirementTableVo"/>
-        <where>  
-            <if test="requirementType != null  and requirementType != ''"> and requirement_type = #{requirementType}</if>
-        </where>
     </select>
     
     <select id="selectRequirementTableByRequirementId" parameterType="Long" resultMap="RequirementTableResult">
@@ -25,32 +22,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where requirement_id = #{requirementId}
     </select>
         
-    <insert id="insertRequirementTable" parameterType="RequirementTable" useGeneratedKeys="true" keyProperty="requirementId">
-        insert into requirement_table
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="requirementType != null">requirement_type,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="requirementType != null">#{requirementType},</if>
-         </trim>
-    </insert>
 
-    <update id="updateRequirementTable" parameterType="RequirementTable">
-        update requirement_table
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="requirementType != null">requirement_type = #{requirementType},</if>
-        </trim>
-        where requirement_id = #{requirementId}
-    </update>
-
-    <delete id="deleteRequirementTableByRequirementId" parameterType="Long">
-        delete from requirement_table where requirement_id = #{requirementId}
-    </delete>
-
-    <delete id="deleteRequirementTableByRequirementIds" parameterType="String">
-        delete from requirement_table where requirement_id in 
-        <foreach item="requirementId" collection="array" open="(" separator="," close=")">
-            #{requirementId}
-        </foreach>
-    </delete>
 </mapper>

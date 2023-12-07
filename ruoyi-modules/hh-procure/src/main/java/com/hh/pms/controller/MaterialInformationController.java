@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -97,9 +98,30 @@ public class MaterialInformationController extends BaseController
      */
     @RequiresPermissions("procure:information:remove")
     @Log(title = "采购需求池", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{miIds}")
+    @DeleteMapping("/{miIds}")
     public AjaxResult remove(@PathVariable Integer[] miIds)
     {
         return toAjax(materialInformationService.deleteMaterialInformationByMiIds(miIds));
     }
+
+
+
+    /**
+     * 修改采购需求池状态
+     */
+    @RequiresPermissions("procure:information:edit")
+    @PutMapping("zg/{miId}")
+    public AjaxResult editStatus(@PathVariable("miId") Integer[] miId)
+    {
+        return toAjax(materialInformationService.updateRequirementStatus(miId));
+    }
+    @RequiresPermissions("procure:information:edit")
+    @PutMapping("zf/{miId}")
+    public AjaxResult editStatusCancel(@PathVariable("miId") Integer[] miId)
+    {
+        return toAjax(materialInformationService.updateRequirementStatusCancel(miId));
+    }
+
+
+
 }

@@ -13,7 +13,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * 采购需求池对象 material_information
  *
  * @author ruoyi
- * @date 2023-11-30
+ * @date 2023-12-06
  */
 public class MaterialInformation extends BaseEntity
 {
@@ -95,8 +95,25 @@ public class MaterialInformation extends BaseEntity
     @Excel(name = "采购员")
     private String purchaser;
 
+    /** 需求编号 */
+    @Excel(name = "需求编号")
+    private String requirementCode;
+
+    /** 状态 */
+    @Excel(name = "状态")
+    private Long status;
+
+
     /** 物料维护信息 */
-    private List<Material> materialList;
+    private List<MaterialPool> materialPoolList;
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
 
     public void setMiId(Integer miId)
     {
@@ -269,15 +286,22 @@ public class MaterialInformation extends BaseEntity
     {
         return purchaser;
     }
-
-    public List<Material> getMaterialList()
+    public void setRequirementCode(String requirementCode)
     {
-        return materialList;
+        this.requirementCode = requirementCode;
     }
 
-    public void setMaterialList(List<Material> materialList)
+    public String getRequirementCode()
     {
-        this.materialList = materialList;
+        return requirementCode;
+    }
+
+    public List<MaterialPool> getMaterialPoolList() {
+        return materialPoolList;
+    }
+
+    public void setMaterialPoolList(List<MaterialPool> materialPoolList) {
+        this.materialPoolList = materialPoolList;
     }
 
     @Override
@@ -302,7 +326,248 @@ public class MaterialInformation extends BaseEntity
                 .append("remarks", getRemarks())
                 .append("annex", getAnnex())
                 .append("purchaser", getPurchaser())
-                .append("materialList", getMaterialList())
+                .append("requirementCode", getRequirementCode())
+                .append("materialList", getMaterialPoolList())
                 .toString();
     }
+
+    /**  需求申请字段  */
+    /** 需求申请ID */
+    private Long requirementId;
+
+
+    /** 需求创建人 */
+    @Excel(name = "需求创建人")
+    private String requirementCreator;
+
+    /** 需求标题 */
+    @Excel(name = "需求标题")
+    private String requirementTitle;
+
+    /** 创建部门 */
+    @Excel(name = "创建部门")
+    private String createDepartment;
+
+    /** 需求人 */
+    @Excel(name = "需求人")
+    private String demander;
+
+    /** 需求部门 */
+    @Excel(name = "需求部门")
+    private String demandDepartment;
+
+    /** 需求类型 */
+    @Excel(name = "需求类型")
+    private Long requirementType;
+
+    /** 公司ID */
+    @Excel(name = "公司ID")
+    private Long companiesId;
+
+    /** 预估总金额 */
+    @Excel(name = "预估总金额")
+    private BigDecimal totalAmount;
+
+    /** 收货联系人 */
+    @Excel(name = "收货联系人")
+    private String contactPerson;
+
+    /** 费用部门 */
+    @Excel(name = "费用部门")
+    private String expenseDepartment;
+
+    /** 主要用途及说明 */
+    @Excel(name = "主要用途及说明")
+    private String description;
+
+    /** 地址 */
+    @Excel(name = "地址")
+    private String address;
+
+    /** 联系方式 */
+    @Excel(name = "联系方式")
+    private String phone;
+
+
+
+    /** 币种ID */
+    @Excel(name = "币种ID")
+    private Long currencyId;
+
+    /** 相关项目 */
+    @Excel(name = "相关项目")
+    private String relatedProjects;
+
+
+
+
+
+
+    /** 任务单号 */
+    @Excel(name = "任务单号")
+    private String taskCode;
+
+
+
+    public void setRequirementId(Long requirementId)
+    {
+        this.requirementId = requirementId;
+    }
+
+    public Long getRequirementId()
+    {
+        return requirementId;
+    }
+
+    public void setRequirementCreator(String requirementCreator)
+    {
+        this.requirementCreator = requirementCreator;
+    }
+
+    public String getRequirementCreator()
+    {
+        return requirementCreator;
+    }
+    public void setRequirementTitle(String requirementTitle)
+    {
+        this.requirementTitle = requirementTitle;
+    }
+
+    public String getRequirementTitle()
+    {
+        return requirementTitle;
+    }
+    public void setCreateDepartment(String createDepartment)
+    {
+        this.createDepartment = createDepartment;
+    }
+
+    public String getCreateDepartment()
+    {
+        return createDepartment;
+    }
+    public void setDemander(String demander)
+    {
+        this.demander = demander;
+    }
+
+    public String getDemander()
+    {
+        return demander;
+    }
+    public void setDemandDepartment(String demandDepartment)
+    {
+        this.demandDepartment = demandDepartment;
+    }
+
+    public String getDemandDepartment()
+    {
+        return demandDepartment;
+    }
+    public void setRequirementType(Long requirementType)
+    {
+        this.requirementType = requirementType;
+    }
+
+    public Long getRequirementType()
+    {
+        return requirementType;
+    }
+    public void setCompaniesId(Long companiesId)
+    {
+        this.companiesId = companiesId;
+    }
+
+    public Long getCompaniesId()
+    {
+        return companiesId;
+    }
+    public void setTotalAmount(BigDecimal totalAmount)
+    {
+        this.totalAmount = totalAmount;
+    }
+
+    public BigDecimal getTotalAmount()
+    {
+        return totalAmount;
+    }
+    public void setContactPerson(String contactPerson)
+    {
+        this.contactPerson = contactPerson;
+    }
+
+    public String getContactPerson()
+    {
+        return contactPerson;
+    }
+    public void setExpenseDepartment(String expenseDepartment)
+    {
+        this.expenseDepartment = expenseDepartment;
+    }
+
+    public String getExpenseDepartment()
+    {
+        return expenseDepartment;
+    }
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setAddress(String address)
+    {
+        this.address = address;
+    }
+
+    public String getAddress()
+    {
+        return address;
+    }
+    public void setPhone(String phone)
+    {
+        this.phone = phone;
+    }
+
+    public String getPhone()
+    {
+        return phone;
+    }
+
+    public void setCurrencyId(Long currencyId)
+    {
+        this.currencyId = currencyId;
+    }
+
+    public Long getCurrencyId()
+    {
+        return currencyId;
+    }
+    public void setRelatedProjects(String relatedProjects)
+    {
+        this.relatedProjects = relatedProjects;
+    }
+
+    public String getRelatedProjects()
+    {
+        return relatedProjects;
+    }
+
+
+    public void setTaskCode(String taskCode)
+    {
+        this.taskCode = taskCode;
+    }
+
+    public String getTaskCode()
+    {
+        return taskCode;
+    }
+
+
+
+
 }

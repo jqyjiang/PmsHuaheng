@@ -1,7 +1,7 @@
 package com.hh.pms.service;
 
 import java.util.List;
-import com.hh.pms.domain.Material;
+import com.hh.pms.domain.MaterialPool;
 
 /**
  * 采购需求池Service接口
@@ -9,7 +9,7 @@ import com.hh.pms.domain.Material;
  * @author ruoyi
  * @date 2023-11-27
  */
-public interface IMaterialService 
+public interface IMaterialPoolService
 {
     /**
      * 查询采购需求池
@@ -17,31 +17,31 @@ public interface IMaterialService
      * @param materialId 采购需求池主键
      * @return 采购需求池
      */
-    public Material selectMaterialByMaterialId(Long materialId);
+    public MaterialPool selectMaterialByMaterialId(Long materialId);
 
     /**
      * 查询采购需求池列表
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 采购需求池集合
      */
-    public List<Material> selectMaterialList(Material material);
+    public List<MaterialPool> selectMaterialList(MaterialPool materialPool);
 
     /**
      * 新增采购需求池
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 结果
      */
-    public int insertMaterial(Material material);
+    public int insertMaterial(MaterialPool materialPool);
 
     /**
      * 修改采购需求池
      * 
-     * @param material 采购需求池
+     * @param materialPool 采购需求池
      * @return 结果
      */
-    public int updateMaterial(Material material);
+    public int updateMaterial(MaterialPool materialPool);
 
     /**
      * 批量删除采购需求池

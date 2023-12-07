@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.MaterialRequirementMapper">
 
     <resultMap type="MaterialRequirement" id="MaterialRequirementResult">
@@ -24,16 +24,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="annex"    column="annex"    />
         <result property="currencyId"    column="currency_id"    />
         <result property="relatedProjects"    column="related_projects"    />
-        <result property="materialId"    column="material_id"    />
-        <result property="requiredMaterials"    column="required_materials"    />
-        <result property="deliveryTime"    column="delivery_time"    />
-        <result property="automaticAssign"    column="automatic_assign"    />
-        <result property="status"    column="status"    />
-        <result property="mi_id"    column="mi_id"    />
+        <result property="taskCode"    column="task_code"    />
     </resultMap>
 
     <sql id="selectMaterialRequirementVo">
-        select requirement_id, requirement_code, requirement_creator, requirement_title, create_department, create_time, demander, demand_department, requirement_type, companies_id, total_amount, contact_person, expense_department, description, address, phone, annex, currency_id, related_projects, material_id, required_materials, delivery_time, automatic_assign,status,mi_id from material_requirement
+        select requirement_id, requirement_code, requirement_creator, requirement_title, create_department, create_time, demander, demand_department, requirement_type, companies_id, total_amount, contact_person, expense_department, description, address, phone, annex, currency_id, related_projects, task_code from material_requirement
     </sql>
 
     <select id="selectMaterialRequirementList" parameterType="MaterialRequirement" resultMap="MaterialRequirementResult">
@@ -57,15 +52,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="annex != null  and annex != ''"> and annex = #{annex}</if>
             <if test="currencyId != null "> and currency_id = #{currencyId}</if>
             <if test="relatedProjects != null  and relatedProjects != ''"> and related_projects = #{relatedProjects}</if>
-            <if test="materialId != null "> and material_id = #{materialId}</if>
-            <if test="requiredMaterials != null "> and required_materials = #{requiredMaterials}</if>
-            <if test="deliveryTime != null "> and delivery_time = #{deliveryTime}</if>
-            <if test="automaticAssign != null "> and automatic_assign = #{automaticAssign}</if>
-            <if test="status != null "> and status = #{status}</if>
-            <if test="mi_id != null "> and mi_id = #{mi_id}</if>
+            <if test="taskCode != null  and taskCode != ''"> and task_code = #{taskCode}</if>
         </where>
     </select>
-
 
     <select id="selectMaterialRequirementByRequirementId" parameterType="Long" resultMap="MaterialRequirementResult">
         <include refid="selectMaterialRequirementVo"/>
@@ -93,13 +82,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="annex != null">annex,</if>
             <if test="currencyId != null">currency_id,</if>
             <if test="relatedProjects != null">related_projects,</if>
-            <if test="materialId != null">material_id,</if>
-            <if test="requiredMaterials != null">required_materials,</if>
-            <if test="deliveryTime != null">delivery_time,</if>
-            <if test="automaticAssign != null">automatic_assign,</if>
-            <if test="status != null">status,</if>
-            <if test="mi_id != null">mi_id,</if>
-         </trim>
+            <if test="taskCode != null">task_code,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="requirementCode != null">#{requirementCode},</if>
             <if test="requirementCreator != null">#{requirementCreator},</if>
@@ -119,42 +103,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="annex != null">#{annex},</if>
             <if test="currencyId != null">#{currencyId},</if>
             <if test="relatedProjects != null">#{relatedProjects},</if>
-            <if test="materialId != null">#{materialId},</if>
-            <if test="requiredMaterials != null">#{requiredMaterials},</if>
-            <if test="deliveryTime != null">#{deliveryTime},</if>
-            <if test="automaticAssign != null">#{automaticAssign},</if>
-            <if test="status != null">#{status},</if>
-            <if test="mi_id != null">#{mi_id},</if>
-         </trim>
+            <if test="taskCode != null">#{taskCode},</if>
+        </trim>
     </insert>
 
     <update id="updateMaterialRequirement" parameterType="MaterialRequirement">
         update material_requirement
         <trim prefix="SET" suffixOverrides=",">
-<!--            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>-->
-<!--            <if test="requirementCreator != null">requirement_creator = #{requirementCreator},</if>-->
-<!--            <if test="requirementTitle != null">requirement_title = #{requirementTitle},</if>-->
-<!--            <if test="createDepartment != null">create_department = #{createDepartment},</if>-->
-<!--            <if test="createTime != null">create_time = #{createTime},</if>-->
-<!--            <if test="demander != null">demander = #{demander},</if>-->
-<!--            <if test="demandDepartment != null">demand_department = #{demandDepartment},</if>-->
-<!--            <if test="requirementType != null">requirement_type = #{requirementType},</if>-->
-<!--            <if test="companiesId != null">companies_id = #{companiesId},</if>-->
-<!--            <if test="totalAmount != null">total_amount = #{totalAmount},</if>-->
-<!--            <if test="contactPerson != null">contact_person = #{contactPerson},</if>-->
-<!--            <if test="expenseDepartment != null">expense_department = #{expenseDepartment},</if>-->
-<!--            <if test="description != null">description = #{description},</if>-->
-<!--            <if test="address != null">address = #{address},</if>-->
-<!--            <if test="phone != null">phone = #{phone},</if>-->
-<!--            <if test="annex != null">annex = #{annex},</if>-->
-<!--            <if test="currencyId != null">currency_id = #{currencyId},</if>-->
-<!--            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>-->
-<!--            <if test="materialId != null">material_id = #{materialId},</if>-->
-<!--            <if test="requiredMaterials != null">required_materials = #{requiredMaterials},</if>-->
-<!--            <if test="deliveryTime != null">delivery_time = #{deliveryTime},</if>-->
-<!--            <if test="automaticAssign != null">automatic_assign = #{automaticAssign},</if>-->
-            <if test="status != null">status = #{status},</if>
-<!--            <if test="mi_id != null">mi_id = #{mi_id},</if>-->
+            <if test="requirementCode != null">requirement_code = #{requirementCode},</if>
+            <if test="requirementCreator != null">requirement_creator = #{requirementCreator},</if>
+            <if test="requirementTitle != null">requirement_title = #{requirementTitle},</if>
+            <if test="createDepartment != null">create_department = #{createDepartment},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="demander != null">demander = #{demander},</if>
+            <if test="demandDepartment != null">demand_department = #{demandDepartment},</if>
+            <if test="requirementType != null">requirement_type = #{requirementType},</if>
+            <if test="companiesId != null">companies_id = #{companiesId},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="contactPerson != null">contact_person = #{contactPerson},</if>
+            <if test="expenseDepartment != null">expense_department = #{expenseDepartment},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>
+            <if test="taskCode != null">task_code = #{taskCode},</if>
         </trim>
         where requirement_id = #{requirementId}
     </update>
@@ -169,4 +143,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{requirementId}
         </foreach>
     </delete>
+    <insert id="insertRequirementInformations" parameterType="MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
+        INSERT INTO material_information (
+        material_code, material_name, material_category,material_specification, material_model, material_brand, material_unit, must_number,
+        must_date, currency_name, reference_price, unit_price, tax,rate_value, budget_amount, remarks, annex, purchaser, requirement_code, status
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.materialCode}, #{item.materialName},  #{item.materialCategory}, #{item.materialSpecification},
+            #{item.materialModel}, #{item.materialBrand}, #{item.materialUnit}, #{item.mustNumber},
+            #{item.mustDate}, #{item.currencyName}, #{item.referencePrice}, #{item.unitPrice},
+            #{item.tax},#{item.rateValue}, #{item.budgetAmount}, #{item.remarks},
+            #{item.annex}, #{item.purchaser}, #{item.requirementCode},#{status} )
+        </foreach>
+    </insert>
+
 </mapper>

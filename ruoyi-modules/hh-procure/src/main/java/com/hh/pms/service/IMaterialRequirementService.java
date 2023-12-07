@@ -1,6 +1,9 @@
 package com.hh.pms.service;
 
 import java.util.List;
+
+import com.hh.pms.domain.MaterialInformation;
+import com.hh.pms.domain.MaterialPool;
 import com.hh.pms.domain.MaterialRequirement;
 
 /**
@@ -58,4 +61,15 @@ public interface IMaterialRequirementService
      * @return 结果
      */
     public int deleteMaterialRequirementByRequirementId(Long requirementId);
+
+    public int insertRequirementInformations(List<MaterialInformation> materialInformations);
+
+    /**
+     * 查询采购需求池列表
+     *
+     * @param materialPool 采购需求池
+     * @return 采购需求池集合
+     */
+    public List<MaterialPool> selectMaterialList(MaterialPool materialPool);
+
 }

@@ -14,7 +14,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
  * @author ruoyi
  * @date 2023-11-29
  */
-public class Material extends BaseEntity
+public class MaterialPool extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

@@ -2,6 +2,7 @@ package com.hh.pms.service;
 
 import java.util.List;
 import com.hh.pms.domain.MaterialInformation;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购需求池Service接口
@@ -58,4 +59,13 @@ public interface IMaterialInformationService
      * @return 结果
      */
     public int deleteMaterialInformationByMiId(Integer miId);
+
+
+    //  暂挂
+    public int updateRequirementStatus(Integer[] miId);
+
+    // 作废
+    public int updateRequirementStatusCancel(Integer[] miId);
+
+
 }

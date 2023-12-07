@@ -1,8 +1,9 @@
 package com.hh.pms.controller;
 
 import java.util.List;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+
+import com.hh.pms.service.IMaterialPoolService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.hh.pms.domain.Material;
-import com.hh.pms.service.IMaterialService;
+import com.hh.pms.domain.MaterialPool;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.common.core.utils.poi.ExcelUtil;
@@ -30,20 +30,20 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/pool")
-public class MaterialController extends BaseController
+public class MaterialPoolController extends BaseController
 {
     @Autowired
-    private IMaterialService materialService;
+    private IMaterialPoolService materialService;
 
     /**
      * 查询采购需求池列表
      */
     @RequiresPermissions("procure:pool:list")
     @GetMapping("/list")
-    public TableDataInfo list(Material material)
+    public TableDataInfo list(MaterialPool materialPool)
     {
         startPage();
-        List<Material> list = materialService.selectMaterialList(material);
+        List<MaterialPool> list = materialService.selectMaterialList(materialPool);
         return getDataTable(list);
     }
 
@@ -53,10 +53,10 @@ public class MaterialController extends BaseController
     @RequiresPermissions("procure:pool:export")
     @Log(title = "采购需求池", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Material material)
+    public void export(HttpServletResponse response, MaterialPool materialPool)
     {
-        List<Material> list = materialService.selectMaterialList(material);
-        ExcelUtil<Material> util = new ExcelUtil<Material>(Material.class);
+        List<MaterialPool> list = materialService.selectMaterialList(materialPool);
+        ExcelUtil<MaterialPool> util = new ExcelUtil<MaterialPool>(MaterialPool.class);
         util.exportExcel(response, list, "采购需求池数据");
     }
 
@@ -76,9 +76,9 @@ public class MaterialController extends BaseController
     @RequiresPermissions("procure:pool:add")
     @Log(title = "采购需求池", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Material material)
+    public AjaxResult add(@RequestBody MaterialPool materialPool)
     {
-        return toAjax(materialService.insertMaterial(material));
+        return toAjax(materialService.insertMaterial(materialPool));
     }
 
     /**
@@ -87,9 +87,9 @@ public class MaterialController extends BaseController
     @RequiresPermissions("procure:pool:edit")
     @Log(title = "采购需求池", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Material material)
+    public AjaxResult edit(@RequestBody MaterialPool materialPool)
     {
-        return toAjax(materialService.updateMaterial(material));
+        return toAjax(materialService.updateMaterial(materialPool));
     }
 
     /**

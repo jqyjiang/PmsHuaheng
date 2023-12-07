@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.CompaniesMapper">
+    
+    <resultMap type="Companies" id="CompaniesResult">
+        <result property="companiesId"    column="companies_id"    />
+        <result property="companiesName"    column="companies_name"    />
+        <result property="creditCode"    column="credit_code"    />
+        <result property="companiesAbbreviation"    column="companies_abbreviation"    />
+        <result property="isgroup"    column="isgroup"    />
+        <result property="companiesCode"    column="companies_code"    />
+        <result property="registrationNumber"    column="registration_number"    />
+        <result property="enterpriseType"    column="enterprise_type"    />
+        <result property="registeredCountry"    column="registered_country"    />
+        <result property="representative"    column="representative"    />
+        <result property="registeredCapital"    column="registered_capital"    />
+        <result property="establishmentDate"    column="establishment_date"    />
+        <result property="operatingPeriod"    column="operating_period"    />
+        <result property="basicDivision"    column="basic_division"    />
+        <result property="businessLicense"    column="business_license"    />
+        <result property="taxpayer"    column="taxpayer"    />
+        <result property="province"    column="province"    />
+        <result property="address"    column="address"    />
+        <result property="currencyId2"    column="currency_id2"    />
+        <result property="dengCode"    column="deng_code"    />
+        <result property="profile"    column="profile"    />
+    </resultMap>
+
+    <sql id="selectCompaniesVo">
+        select companies_id, companies_name, credit_code, companies_abbreviation, isgroup, companies_code, registration_number, enterprise_type, registered_country, representative, registered_capital, establishment_date, operating_period, basic_division, business_license, taxpayer, province, address, currency_id2, deng_code, profile from companies
+    </sql>
+
+    <select id="selectCompaniesList" parameterType="Companies" resultMap="CompaniesResult">
+        <include refid="selectCompaniesVo"/>
+        <where>  
+            <if test="companiesName != null  and companiesName != ''"> and companies_name like concat('%', #{companiesName}, '%')</if>
+            <if test="creditCode != null  and creditCode != ''"> and credit_code = #{creditCode}</if>
+            <if test="companiesAbbreviation != null  and companiesAbbreviation != ''"> and companies_abbreviation = #{companiesAbbreviation}</if>
+            <if test="isgroup != null "> and isgroup = #{isgroup}</if>
+            <if test="companiesCode != null  and companiesCode != ''"> and companies_code = #{companiesCode}</if>
+            <if test="registrationNumber != null  and registrationNumber != ''"> and registration_number = #{registrationNumber}</if>
+            <if test="enterpriseType != null  and enterpriseType != ''"> and enterprise_type = #{enterpriseType}</if>
+            <if test="registeredCountry != null  and registeredCountry != ''"> and registered_country = #{registeredCountry}</if>
+            <if test="representative != null  and representative != ''"> and representative = #{representative}</if>
+            <if test="registeredCapital != null "> and registered_capital = #{registeredCapital}</if>
+            <if test="establishmentDate != null "> and establishment_date = #{establishmentDate}</if>
+            <if test="operatingPeriod != null "> and operating_period = #{operatingPeriod}</if>
+            <if test="basicDivision != null  and basicDivision != ''"> and basic_division = #{basicDivision}</if>
+            <if test="businessLicense != null  and businessLicense != ''"> and business_license = #{businessLicense}</if>
+            <if test="taxpayer != null  and taxpayer != ''"> and taxpayer = #{taxpayer}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="currencyId2 != null "> and currency_id2 = #{currencyId2}</if>
+            <if test="dengCode != null  and dengCode != ''"> and deng_code = #{dengCode}</if>
+            <if test="profile != null  and profile != ''"> and profile = #{profile}</if>
+        </where>
+    </select>
+    
+    <select id="selectCompaniesByCompaniesId" parameterType="Long" resultMap="CompaniesResult">
+        <include refid="selectCompaniesVo"/>
+        where companies_id = #{companiesId}
+    </select>
+        
+    <insert id="insertCompanies" parameterType="Companies" useGeneratedKeys="true" keyProperty="companiesId">
+        insert into companies
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companiesName != null">companies_name,</if>
+            <if test="creditCode != null">credit_code,</if>
+            <if test="companiesAbbreviation != null">companies_abbreviation,</if>
+            <if test="isgroup != null">isgroup,</if>
+            <if test="companiesCode != null">companies_code,</if>
+            <if test="registrationNumber != null">registration_number,</if>
+            <if test="enterpriseType != null">enterprise_type,</if>
+            <if test="registeredCountry != null">registered_country,</if>
+            <if test="representative != null">representative,</if>
+            <if test="registeredCapital != null">registered_capital,</if>
+            <if test="establishmentDate != null">establishment_date,</if>
+            <if test="operatingPeriod != null">operating_period,</if>
+            <if test="basicDivision != null">basic_division,</if>
+            <if test="businessLicense != null">business_license,</if>
+            <if test="taxpayer != null">taxpayer,</if>
+            <if test="province != null">province,</if>
+            <if test="address != null">address,</if>
+            <if test="currencyId2 != null">currency_id2,</if>
+            <if test="dengCode != null">deng_code,</if>
+            <if test="profile != null">profile,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companiesName != null">#{companiesName},</if>
+            <if test="creditCode != null">#{creditCode},</if>
+            <if test="companiesAbbreviation != null">#{companiesAbbreviation},</if>
+            <if test="isgroup != null">#{isgroup},</if>
+            <if test="companiesCode != null">#{companiesCode},</if>
+            <if test="registrationNumber != null">#{registrationNumber},</if>
+            <if test="enterpriseType != null">#{enterpriseType},</if>
+            <if test="registeredCountry != null">#{registeredCountry},</if>
+            <if test="representative != null">#{representative},</if>
+            <if test="registeredCapital != null">#{registeredCapital},</if>
+            <if test="establishmentDate != null">#{establishmentDate},</if>
+            <if test="operatingPeriod != null">#{operatingPeriod},</if>
+            <if test="basicDivision != null">#{basicDivision},</if>
+            <if test="businessLicense != null">#{businessLicense},</if>
+            <if test="taxpayer != null">#{taxpayer},</if>
+            <if test="province != null">#{province},</if>
+            <if test="address != null">#{address},</if>
+            <if test="currencyId2 != null">#{currencyId2},</if>
+            <if test="dengCode != null">#{dengCode},</if>
+            <if test="profile != null">#{profile},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompanies" parameterType="Companies">
+        update companies
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companiesName != null">companies_name = #{companiesName},</if>
+            <if test="creditCode != null">credit_code = #{creditCode},</if>
+            <if test="companiesAbbreviation != null">companies_abbreviation = #{companiesAbbreviation},</if>
+            <if test="isgroup != null">isgroup = #{isgroup},</if>
+            <if test="companiesCode != null">companies_code = #{companiesCode},</if>
+            <if test="registrationNumber != null">registration_number = #{registrationNumber},</if>
+            <if test="enterpriseType != null">enterprise_type = #{enterpriseType},</if>
+            <if test="registeredCountry != null">registered_country = #{registeredCountry},</if>
+            <if test="representative != null">representative = #{representative},</if>
+            <if test="registeredCapital != null">registered_capital = #{registeredCapital},</if>
+            <if test="establishmentDate != null">establishment_date = #{establishmentDate},</if>
+            <if test="operatingPeriod != null">operating_period = #{operatingPeriod},</if>
+            <if test="basicDivision != null">basic_division = #{basicDivision},</if>
+            <if test="businessLicense != null">business_license = #{businessLicense},</if>
+            <if test="taxpayer != null">taxpayer = #{taxpayer},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="currencyId2 != null">currency_id2 = #{currencyId2},</if>
+            <if test="dengCode != null">deng_code = #{dengCode},</if>
+            <if test="profile != null">profile = #{profile},</if>
+        </trim>
+        where companies_id = #{companiesId}
+    </update>
+
+    <delete id="deleteCompaniesByCompaniesId" parameterType="Long">
+        delete from companies where companies_id = #{companiesId}
+    </delete>
+
+    <delete id="deleteCompaniesByCompaniesIds" parameterType="String">
+        delete from companies where companies_id in 
+        <foreach item="companiesId" collection="array" open="(" separator="," close=")">
+            #{companiesId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,5 +1,6 @@
 package com.hh.pms.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,4 +91,16 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
     {
         return materialInformationMapper.deleteMaterialInformationByMiId(miId);
     }
+
+    @Override
+    public int updateRequirementStatus(Integer[] miId) {
+        return materialInformationMapper.updateRequirementStatus(miId);
+    }
+
+    @Override
+    public int updateRequirementStatusCancel(Integer[] miId) {
+        return materialInformationMapper.updateRequirementStatusCancel(miId);
+    }
+
+
 }
