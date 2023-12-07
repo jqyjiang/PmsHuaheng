@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.MaterialInformationMapper">
 
-    <resultMap type="MaterialInformation" id="MaterialInformationResult">
+    <resultMap type="com.ruoyi.system.api.domain.MaterialInformation" id="MaterialInformationResult">
         <result property="miId"    column="mi_id"    />
         <result property="materialCode"    column="material_code"    />
         <result property="materialName"    column="material_name"    />
@@ -45,11 +45,11 @@
         <result property="taskCode"    column="taskCode"    />
     </resultMap>
 
-    <resultMap id="MaterialInformationMaterialResult" type="MaterialInformation" extends="MaterialInformationResult">
+    <resultMap id="MaterialInformationMaterialResult" type="com.ruoyi.system.api.domain.MaterialInformation" extends="MaterialInformationResult">
         <collection property="materialList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MaterialResult" />
     </resultMap>
 
-    <resultMap type="Material" id="MaterialResult">
+    <resultMap type="com.ruoyi.system.api.domain.MaterialPool" id="MaterialResult">
         <result property="materialId"    column="sub_material_id"    />
         <result property="materialCode"    column="sub_material_code"    />
         <result property="materialName"    column="sub_material_name"    />
@@ -81,7 +81,7 @@
         LEFT JOIN  material_requirement  r  ON m.requirement_code=r.requirement_code
     </sql>
 
-    <select id="selectMaterialInformationList" parameterType="MaterialInformation" resultMap="MaterialInformationResult">
+    <select id="selectMaterialInformationList" parameterType="com.ruoyi.system.api.domain.MaterialInformation" resultMap="MaterialInformationResult">
         <include refid="selectMaterialInformationVo"/>
         <where>
             <if test="materialCode != null  and materialCode != ''"> and material_code = #{materialCode}</if>
@@ -117,7 +117,7 @@
         where a.mi_id = #{miId}
     </select>
 
-    <insert id="insertMaterialInformation" parameterType="MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
+    <insert id="insertMaterialInformation" parameterType="com.ruoyi.system.api.domain.MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
         insert into material_information
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="materialCode != null">material_code,</if>
@@ -166,7 +166,7 @@
     </insert>
 
 
-    <update id="updateMaterialInformation" parameterType="MaterialInformation">
+    <update id="updateMaterialInformation" parameterType="com.ruoyi.system.api.domain.MaterialInformation">
         update material_information
         <trim prefix="SET" suffixOverrides=",">
             <if test="materialCode != null">material_code = #{materialCode},</if>

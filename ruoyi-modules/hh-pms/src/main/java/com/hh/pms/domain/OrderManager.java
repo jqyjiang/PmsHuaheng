@@ -5,11 +5,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.hh.pms.mast.domain.Currency;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import com.ruoyi.system.api.domain.Companies;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -111,7 +112,6 @@ public class OrderManager extends BaseEntity
     public Date getCreateTime() {
         return createTime;
     }
-
     @Override
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;

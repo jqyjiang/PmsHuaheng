@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.RequirementTableMapper">
     
-    <resultMap type="RequirementTable" id="RequirementTableResult">
+    <resultMap type="com.ruoyi.system.api.domain.RequirementTable" id="RequirementTableResult">
         <result property="requirementId"    column="requirement_id"    />
         <result property="requirementType"    column="requirement_type"    />
     </resultMap>
@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select requirement_id, requirement_type from requirement_table
     </sql>
 
-    <select id="listRequirementTableName" resultType="com.hh.pms.domain.RequirementTable">
+    <select id="listRequirementTableName" resultType="com.ruoyi.system.api.domain.RequirementTable">
         <include refid="selectRequirementTableVo"/>
     </select>
     

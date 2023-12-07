@@ -58,4 +58,6 @@ public interface IOrderMaterialService
      * @return 结果
      */
     public int deleteOrderMaterialByOrId(Long orId);
+
+    List<OrderMaterial> findTaskMaterial(String taskCode);
 }

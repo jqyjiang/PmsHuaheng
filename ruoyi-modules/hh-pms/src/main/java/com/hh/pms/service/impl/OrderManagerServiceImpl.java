@@ -1,20 +1,22 @@
 package com.hh.pms.service.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import com.hh.pms.domain.OrderMaterial;
+
 import com.hh.pms.mapper.OrderMaterialMapper;
+import com.hh.pms.model.ProcurementTaskServiceClient;
+import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.OrderManagerMapper;
 import com.hh.pms.domain.OrderManager;
 import com.hh.pms.service.IOrderManagerService;
 import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  * 采购订单管理Service业务层处理
@@ -30,8 +32,12 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     @Autowired
     private OrderMaterialMapper orderMaterialMapper;
 
+    @Autowired
+    private ProcurementTaskServiceClient procurementTaskServiceClient;
+
     /**
      * 根据执行状态Id查询采购订单列表
+     *
      * @param orId
      * @return
      */
@@ -42,6 +48,7 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
 
     /**
      * 查询执行状态个数
+     *
      * @return
      */
     @Override
@@ -86,24 +93,64 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
         String orderCode = createOrderCode(date);
         orderManager.setOrderCode(orderCode);
         //添加物料基础表
+        //物料需求总数
+       // BigDecimal totalDemandQuantity = BigDecimal.ZERO;
         List<OrderMaterial> orderMaterialList = orderManager.getOrderMaterialList();
-        orderMaterialList.forEach(item -> {
-            item.setOrderCode(orderCode);
-        });
-        int i = orderMaterialMapper.insertOrderMaterials(orderMaterialList);
-        // 获取自增Id集合
-        // 获取自增Id集合并转换为逗号隔开的字符串形式
-        StringBuilder orIdBuilder = new StringBuilder();
-        for (OrderMaterial item : orderMaterialList) {
-            if (orIdBuilder.length() > 0) {
-                orIdBuilder.append(",");
+        System.out.println("这是查出来的物料明细表:"+orderMaterialList);
+        if (orderMaterialList != null && !orderMaterialList.isEmpty()) {
+            boolean allOrderCodesExist = orderMaterialList.stream().allMatch(item -> item.getOrderCode() != null && !item.getOrderCode().isEmpty());
+            if (allOrderCodesExist) {
+                // 所有OrderMaterial对象的orderCode都存在的逻辑处理,有来源单号说明是需求转订单或者是合同转订单
+                // 改变任务单号的受理数量根据物料所添加的数据来修改
+                BigDecimal totalDemandQuantity = orderMaterialList.stream()
+                        .map(OrderMaterial::getRequireNumber)
+                        .filter(Objects::nonNull)
+                        .filter(num -> num.compareTo(BigDecimal.ZERO) > 0)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+                System.out.println("这是总需求量:"+totalDemandQuantity);
+                //先根据任务单号查询任务表
+                ProcurementTask procurementTask = procurementTaskServiceClient.selectProcurementTaskByTaskId(orderMaterialList.get(0).getOrderCode());
+                System.out.println("这是任务单表:"+procurementTask);
+                // 修改任务表状态
+                BigDecimal taskAccepted = procurementTask.getTaskAccepted();
+                System.out.println("这是查询之后返回的待受理数量:"+taskAccepted);
+//                if (taskAccepted.compareTo(totalDemandQuantity) > 0) {
+                    BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
+                    System.out.println("这是相减之后的数"+newTaskAccepted);
+                    procurementTask.setTaskAccepted(newTaskAccepted);
+                //}
+                procurementTask.setTaskStatus(2l);
+                procurementTaskServiceClient.updateProcurement(procurementTask);
+                // 如果物料明细有修改还要考虑修改物料明细表的数据
+                orderMaterialMapper.updateOrderMaterials(orderMaterialList);
+                // 修改需求申请表状态
+            } else {
+                // 存在某些OrderMaterial对象的orderCode不存在或为空的逻辑处理
+                // ...
+                orderMaterialList.forEach(item -> {
+                    item.setOrderCode(orderCode);
+                });
+                // 执行物料明细插入操作
+                orderMaterialMapper.insertOrderMaterials(orderMaterialList);
+                // 获取自增Id集合
+                // 获取自增Id集合并转换为逗号隔开的字符串形式
+                StringBuilder orIdBuilder = new StringBuilder();
+                for (OrderMaterial item : orderMaterialList) {
+                    if (orIdBuilder.length() > 0) {
+                        orIdBuilder.append(",");
+                    }
+                    orIdBuilder.append(item.getOrId());
+                }
+                String orIdString = orIdBuilder.toString();
+                orderManager.setMaterialId(orIdString);
+                String connectCode = generateContractNumber();
+                orderManager.setContractCode(connectCode);
             }
-            orIdBuilder.append(item.getOrId());
+        } else {
+            // 订单物料列表为空的逻辑处理
+            // ...
+
         }
-        String orIdString = orIdBuilder.toString();
-        orderManager.setMaterialId(orIdString);
-        String connectCode=generateContractNumber();
-        orderManager.setContractCode(connectCode);
         return orderManagerMapper.insertOrderManager(orderManager);
     }
 
@@ -161,7 +208,7 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                 String code = "PO" + newBidDate + idNum;
                 return code;
             } else if (num < 100) {
-                String idNum = String.format("%02d", num);//num<100,说明是两位数，前面要补一个0
+                String idNum = String.format("%03d", num);//num<100,说明是两位数，前面要补一个0
                 String code = "PO" + newBidDate + idNum;
                 return code;
             } else {
@@ -178,6 +225,7 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
 
     /**
      * 根据uuid生成13位的随机数作为合同编号
+     *
      * @return
      */
     public static String generateContractNumber() {

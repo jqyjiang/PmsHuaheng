@@ -28,7 +28,7 @@
         <result property="remarks" column="remarks"/>
         <result property="orderCode" column="order_code"/>
         <result property="omState" column="om_state"/>
-        <result property="sbiName"    column="sbi_name"    />
+        <result property="sbiName" column="sbi_name"/>
     </resultMap>
 
     <sql id="selectOrderMaterialVo">
@@ -98,6 +98,10 @@
     <select id="selectOrderMaterialOrName" resultType="com.hh.pms.domain.OrderMaterial">
         <include refid="selectOrderMaterialVo"/>
         where
+    </select>
+    <select id="findTaskMaterial" resultType="com.hh.pms.domain.OrderMaterial" parameterType="String" resultMap="OrderMaterialResult">
+        <include refid="selectOrderMaterialVo"/>
+        where orm.order_code = #{taskCode}
     </select>
 
     <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">
@@ -228,6 +232,34 @@
             <if test="remarks != null">remarks = #{remarks},</if>
         </trim>
         where or_id = #{orId}
+    </update>
+    <update id="updateOrderMaterials" parameterType="OrderMaterial">
+        <foreach collection="list" item="item" separator=";">
+            update order_material
+            set
+            or_code = #{item.orCode},
+            or_name = #{item.orName},
+            category_code = #{item.categoryCode},
+            material_category = #{item.materialCategory},
+            material_specification = #{item.materialSpecification},
+            material_model = #{item.materialModel},
+            material_unit = #{item.materialUnit},
+            require_number = #{item.requireNumber},
+            require_time = #{item.requireTime},
+            lower_price = #{item.lowerPrice},
+            new_price = #{item.newPrice},
+            no_tax_price = #{item.noTaxPrice},
+            tax_code = #{item.taxCode},
+            tax = #{item.tax},
+            tax_price = #{item.taxPrice},
+            line_tax_amount = #{item.lineTaxAmount},
+            consignee = #{item.consignee},
+            receiving_phone = #{item.receivingPhone},
+            receiving_address = #{item.receivingAddress},
+            remarks = #{item.remarks},
+            om_state = #{item.omState}
+            where order_code = #{item.orderCode}
+        </foreach>
     </update>
 
     <delete id="deleteOrderMaterialByOrId" parameterType="Long">

@@ -17,6 +17,14 @@ export function getMaterial(orId) {
   })
 }
 
+// 根据任务单号查询订单物料明细详细
+export function findTaskMaterial(taskCode) {
+  return request({
+    url: '/pms/materials/findTaskMaterial/' + taskCode,
+    method: 'get'
+  })
+}
+
 // 新增订单物料明细
 export function addMaterial(data) {
   return request({

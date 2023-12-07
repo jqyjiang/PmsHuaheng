@@ -52,6 +52,8 @@ public interface ProcurementTaskMapper
      */
     public int deleteProcurementTaskByTaskId(Long taskId);
 
+    ProcurementTask selectProcurementTaskByTaskCode(String taskCode);
+
     /**
      * 批量删除我的需求任务
      * 
@@ -59,4 +61,6 @@ public interface ProcurementTaskMapper
      * @return 结果
      */
     public int deleteProcurementTaskByTaskIds(Long[] taskIds);
+
+    int updateProcurementTasks(ProcurementTask procurementTask);
 }

@@ -12,8 +12,8 @@
         <div>
           <!-- 右边的三个按钮 -->
           <el-button type="primary" size="small" label="rtl" @click="drawer = true">需求转订单</el-button>
-          <el-button type="primary" size="small" @click="handleContractToOrder">合同转订单</el-button>
-          <el-button type="primary" size="small" @click="handleCloseOrder">关闭订单</el-button>
+          <el-button type="primary" size="small">合同转订单</el-button>
+          <el-button type="primary" size="small" @click="orderCancel">关闭订单</el-button>
         </div>
       </div>
     </div>
@@ -46,18 +46,26 @@
           </el-row>
         </el-form>
       </div>
-      <el-drawer title="需求任务转订单" :visible.sync="drawer" :direction="direction" :before-close="handleClose" :width="60">
-        <el-table :data="gridData">
-          <el-table-column property="date" label="任务单号" width="150"></el-table-column>
-          <el-table-column property="name" label="需求编号" width="200"></el-table-column>
-          <el-table-column property="address" label="公司"></el-table-column>
-          <el-table-column property="address" label="采购员"></el-table-column>
-          <el-table-column property="address" label="任务总数量"></el-table-column>
-          <el-table-column property="address" label="任务总金额"></el-table-column>
-          <el-table-column property="address" label="已受理数量"></el-table-column>
-          <el-table-column property="address" label="占用任务数量"></el-table-column>
-        <el-table-column property="address" label="待受理数量"></el-table-column>
+      <el-drawer title="需求任务转订单" :visible.sync="drawer" :direction="direction" :width="60">
+        <el-button type="primary" @click="transferToOrder">确定</el-button>
+        <el-table v-loading="loading" :data="taskList" @selection-change="SelectionChange">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="任务单号" align="center" prop="taskCode" />
+          <el-table-column label="采购策略" align="center" prop="procurementStrategy" />
+          <el-table-column label="任务总金额" align="center" prop="taskTotal" />
+          <el-table-column label="需求编号-行号" align="center" prop="requirementId" />
+          <el-table-column label="公司" align="center" prop="companiesId" />
+          <el-table-column label="采购员" align="center" prop="purchaser" />
+          <el-table-column label="物料名称" align="center" prop="materialId" />
+          <el-table-column label="币种" align="center" prop="currencyId" />
+          <el-table-column label="受理策略" align="center" prop="acceptanceStrategy" />
+          <el-table-column label="任务总数量" align="center" prop="taskNumber" />
+          <el-table-column label="已受理数量" align="center" prop="acceptedQuantity" />
+          <el-table-column label="占用任务数量" align="center" prop="taskOccupied" />
+          <el-table-column label="待受理数量" align="center" prop="taskAccepted" />
         </el-table>
+        <pagination v-show="rwtotal > 0" :total="rwtotal" :page.sync="rwqueryParams.pageNum"
+          :limit.sync="rwqueryParams.pageSize" @pagination="getList5" />
       </el-drawer>
       <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px; margin-bottom: 10px;">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px"
@@ -241,6 +249,9 @@
           <el-form-item label="需求总数量" prop="totalDemand">
             <el-input :value="totalDemand" disabled placeholder="请输入需求总数量" />
           </el-form-item>
+          <el-form-item label="含税总金额(元)" prop="taxTotal">
+            <el-input :value="calculateTotalAmount" disabled placeholder="请输入需求总数量" />
+          </el-form-item>
           <el-form-item label="采购员" prop="purchaser">
             <el-input v-model="form.purchaser" placeholder="请输入采购员" />
           </el-form-item>
@@ -324,7 +335,7 @@
               <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button type="primary" @click="showBatchAddDialog">批量新增</el-button>
+              <el-button type="primary" @click="showBatchAddDialog">批量维护</el-button>
             </el-col>
           </el-row>
           <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
@@ -646,16 +657,25 @@
 
 <script>
 import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber } from "@/api/pms/manager";
-import { listMaterials, getMaterial, delMaterial, addMaterial, updateMaterial } from "@/api/pms/materials";
+import { listMaterials, getMaterial, delMaterial, addMaterial, updateMaterial, findTaskMaterial } from "@/api/pms/materials";
+import { listTask, getTask, delTask, addTask, updateTask } from "@/api/procure/task";
 export default {
   name: "Manager",
   dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method', 'om_state'],
   data() {
     return {
       isWholeOrder: true, // 默认显示整单信息
+      // 查询参数
+      rwqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        taskCode: null,
+      },
+      rwtotal: 0,
       headerImages: require('../../../assets/images/order_main_header1.png'),
       // 遮罩层
       loading: true,
+      taskList: [],
       //用于展示执行状态的个数
       runNumber: [],
       // 选中数组
@@ -790,27 +810,37 @@ export default {
       // 批量新增数据列表
       batchAddDataList: [],
       checkedOrderMaterials: null,
-      batchRequireTime: '', // 批量修改的需求日期
-      batchRequireNumber: '', // 批量修改的需求数量
-      batchConsignee: '', // 批量修改的收货人
-      batchReceivingAddress: '', // 批量修改的收货地址
-      batchReceivingPhone: '', // 批量修改的收货电话
+
       //执行状态查询
       formData: {},
       selectedRoute: null,
       ormtotal: 0,
       drawer: false,
       direction: 'rtl',
+      checkedOrderMaterials: []
     };
   },
+  watch: {
+  'orderMaterialList': {
+    deep: true,
+    handler(newVal, oldVal) {
+      newVal.forEach((item) => {
+        this.calculateLineTaxAmount(item);
+        this.calculateTaxPrice(item);
+      });
+    }
+  }
+},
   created() {
     this.getListMaterial();
     this.getlistNumber();
     this.getList();
     this.getlistOrderMaterials();
     this.getlistTypeRun();
+    this.getList5();
   },
   computed: {
+    //计算总需求量
     totalDemand() {
       let sum = 0;
       this.orderMaterialList.forEach(item => {
@@ -822,11 +852,79 @@ export default {
       this.form.totalDemand = total; // 将计算得到的总价赋值给 form.totalDemand
       return total;
     },
+    // // 计算行含税金额
+    // lineTaxAmount() {
+    //   return this.orderMaterialList.map(item => {
+    //     const basePrice = parseFloat(item.newPrice);
+    //     const taxRate = parseFloat(item.tax);
+    //     const requireNumber = parseFloat(item.requireNumber);
+    //     if (taxRate !== 0) { // 如果税率不为0，则计算行含税金额
+    //       const lineAmount = (basePrice * (1 + taxRate)) * requireNumber;
+    //       return isNaN(lineAmount) ? 0.00 : lineAmount.toFixed(2);
+    //     } else { // 如果税率为0，则行含税金额为0
+    //       return '0.00';
+    //     }
+    //   });
+    // },
+
+    // // 计算含税单价
+    // taxPrice() {
+    //   return this.orderMaterialList.map(item => {
+    //     const basePrice = parseFloat(item.newPrice);
+    //     const taxRate = parseFloat(item.tax);
+    //     if (taxRate !== 0) { // 如果税率不为0，则计算含税单价
+    //       const taxIncludedPrice = basePrice * (1 + taxRate);
+    //       return isNaN(taxIncludedPrice) ? 0.00 : taxIncludedPrice.toFixed(2);
+    //     } else { // 如果税率为0，则含税单价为0
+    //       return '0.00';
+    //     }
+    //   });
+    // },
+    //计算税后总金额
+    calculateTotalAmount() {
+      let sum = 0;
+      for (let i = 0; i < this.orderMaterialList.length; i++) {
+        const item = this.orderMaterialList[i];
+        if (item.tax !== '' && item.tax !== 0) {
+          const basePrice = parseFloat(item.newPrice);
+          const taxRate = parseFloat(item.tax);
+          if (taxRate !== 0) { // 如果税率不为0，则继续计算
+            const taxIncludedPrice = basePrice * (1 + taxRate);
+            const requireNumber = parseFloat(item.requireNumber);
+            const afterTaxAmount = taxIncludedPrice * requireNumber;
+            sum += afterTaxAmount;
+          }
+        }
+      }
+      const totalAfterTax = isNaN(sum) ? 0.00 : sum.toFixed(2);
+      this.form.taxTotal = totalAfterTax; // 将总税后金额赋值给 this.form.taxTotal
+      return totalAfterTax;
+    },
     isSelfPickupSelected() {
       return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
     }
   },
   methods: {
+    //关闭订单
+    orderCancel(){
+
+    },
+    calculateLineTaxAmount(row) {
+      row.lineTaxAmount = row.noTaxPrice * row.requireNumber * (1 + row.tax);
+    },
+
+    calculateTaxPrice(row) {
+      row.taxPrice = row.noTaxPrice * (1 + row.tax);
+    },
+    /** 查询我的需求任务列表 */
+    getList5() {
+      this.loading = true;
+      listTask(this.rwqueryParams).then(response => {
+        this.taskList = response.rows;
+        this.rwtotal = response.total;
+        this.loading = false;
+      });
+    },
     calculateTotal(prop) {
       const total = this.materiaslList.reduce((sum, item) => {
         const value = Number(item[prop]);
@@ -864,7 +962,6 @@ export default {
     },
     //控制订单审批状态的颜色
     getStatusClass(orderState) {
-      console.log("这是一个:" + orderState)
       if (orderState === 1) {
         return 'status-pending'; // 新建样式类
       } else if (orderState === 2) {
@@ -907,7 +1004,7 @@ export default {
     },
     /**
      * 计算各个执行状态的总数
-     * @param {} ortId 
+     * @param {} ortId
      */
     getTotalCount(ortId) {
       if (ortId === null) {
@@ -918,6 +1015,54 @@ export default {
         const count = this.runNumber.filter(item => item.orId === ortId).length;
         return count;
       }
+    },
+    /**
+     * 需求转订单选择对应的需求订单号转成采购订货单
+     */
+    SelectionChange(selection) {
+      if (selection.length === 0) {
+        // 没有选择任何任务
+        this.$notify({
+          title: '警告',
+          message: '请至少选择一项任务',
+          type: 'warning'
+        });
+      } else {
+        for (let i = 0; i < selection.length; i++) {
+          const selectedTask = selection[i];
+          if (selectedTask.taskAccepted === 0.00 || selectedTask.taskAccepted === null || selectedTask.taskAccepted === '') {
+            // 说明该条需求订单已经没有可改为采购申请单的必要了
+            // 给出提示，重新选择
+            this.$notify({
+              title: '警告',
+              message: '存在代理数量为0的任务，请重新选择',
+              type: 'warning'
+            });
+          } else {
+            // 执行转换为采购申请单的操作
+            this.transferToOrder(selectedTask);
+          }
+        }
+      }
+    },
+    /**
+     * 需求转订单里面的确定按钮
+     * @param {} row
+     */
+    transferToOrder(row) {
+      this.open = true;
+      this.title = "需求订单转采购订单";
+      console.log("点击确定得到的数据:", row);
+      // 这里可以执行转换为采购申请单的操作
+      console.log("这是返回的orderMaterialList:" + findTaskMaterial(row.taskCode).data)
+      this.getList6(row.taskCode)
+      this.orderMaterialList = findTaskMaterial(row.taskCode).data
+      //首先查询根据任务订单号查询该任务订单号下面的物料明细
+      //查询之后复制给this.orderMaterialList以便展示数据
+      //给几个字段加上默认值 状态  订单类型 订单审批状态
+      this.form.orderSource = "3"
+      this.form.orderState = 1
+      this.form.orderType = 4
     },
     /** 物料明细复选框选中数据 */
     handleOrderMaterialSelectionChange(selection) {
@@ -1069,6 +1214,16 @@ export default {
         this.loading = false;
       });
     },
+    /**
+     * 物料信息列表
+     */
+    getList6(taskCode) {
+      this.loading = true;
+      findTaskMaterial(taskCode).then(response => {
+        this.orderMaterialList = response.data;
+        this.loading = false;
+      });
+    },
     showDiagSupplie() {
       this.dialogVisible = true;
       this.getList1();
@@ -1158,6 +1313,7 @@ export default {
     // 订单物料明细多选框选中数据
     handleSelectionChange1(selection) {
       this.ids = selection.map(item => item.orderId)
+
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -1277,7 +1433,7 @@ export default {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
-
+              this.getList5();
             });
           } else {
             addManager(this.form).then(response => {
@@ -1331,11 +1487,12 @@ export default {
     },
     /** 订单物料明细删除按钮操作 */
     handleDeleteOrderMaterial() {
-      if (this.checkedOrderMaterial.length == 0) {
+      if (this.checkedOrderMaterials.length == 0) {
+        console.log(this.checkedOrderMaterials)
         this.$modal.msgError("请先选择要删除的订单物料明细数据");
       } else {
         const orderMaterialList = this.orderMaterialList;
-        const checkedOrderMaterial = this.checkedOrderMaterial;
+        const checkedOrderMaterial = this.checkedOrderMaterials;
         this.orderMaterialList = orderMaterialList.filter(function (item) {
           return checkedOrderMaterial.indexOf(item.index) == -1
         });
@@ -1386,9 +1543,12 @@ span.active {
   right: 15px;
   top: 21.5px;
 }
+
 .el-drawer.rtl {
-  width: 85%!important; /* 修改宽度为85% */
+  width: 85% !important;
+  /* 修改宽度为85% */
 }
+
 .el-form-item__label {
   padding-right: 0;
 }

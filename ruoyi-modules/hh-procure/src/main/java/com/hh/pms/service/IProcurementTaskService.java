@@ -59,4 +59,8 @@ public interface IProcurementTaskService
      * @return 结果
      */
     public int deleteProcurementTaskByTaskId(Long taskId);
+
+    ProcurementTask selectProcurementTaskByTaskCode(String taskCode);
+
+    int updateProcurement(ProcurementTask procurementTask);
 }

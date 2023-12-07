@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.CompaniesMapper">
     
-    <resultMap type="Companies" id="CompaniesResult">
+    <resultMap type="com.ruoyi.system.api.domain.Companies" id="CompaniesResult">
         <result property="companiesId"    column="companies_id"    />
         <result property="companiesName"    column="companies_name"    />
         <result property="creditCode"    column="credit_code"    />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select companies_id, companies_name, credit_code, companies_abbreviation, isgroup, companies_code, registration_number, enterprise_type, registered_country, representative, registered_capital, establishment_date, operating_period, basic_division, business_license, taxpayer, province, address, currency_id2, deng_code, profile from companies
     </sql>
 
-    <select id="selectCompaniesList" parameterType="Companies" resultMap="CompaniesResult">
+    <select id="selectCompaniesList" parameterType="com.ruoyi.system.api.domain.Companies" resultMap="CompaniesResult">
         <include refid="selectCompaniesVo"/>
         <where>  
             <if test="companiesName != null  and companiesName != ''"> and companies_name like concat('%', #{companiesName}, '%')</if>
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where companies_id = #{companiesId}
     </select>
         
-    <insert id="insertCompanies" parameterType="Companies" useGeneratedKeys="true" keyProperty="companiesId">
+    <insert id="insertCompanies" parameterType="com.ruoyi.system.api.domain.Companies" useGeneratedKeys="true" keyProperty="companiesId">
         insert into companies
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="companiesName != null">companies_name,</if>
@@ -111,7 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateCompanies" parameterType="Companies">
+    <update id="updateCompanies" parameterType="com.ruoyi.system.api.domain.Companies">
         update companies
         <trim prefix="SET" suffixOverrides=",">
             <if test="companiesName != null">companies_name = #{companiesName},</if>

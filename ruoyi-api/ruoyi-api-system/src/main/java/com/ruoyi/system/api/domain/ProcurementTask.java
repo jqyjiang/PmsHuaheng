@@ -34,23 +34,23 @@ public class ProcurementTask extends BaseEntity
 
     /** 需求申请ID */
     @Excel(name = "需求申请ID")
-    private Long requirementId1;
+    private Long requirementId;
 
     /** 公司ID */
     @Excel(name = "公司ID")
-    private String companiesId1;
+    private String companiesId;
 
     /** 采购员 */
     @Excel(name = "采购员")
     private String purchaser;
 
     /** 物料ID */
-    @Excel(name = "物料ID")
-    private Long materialId2;
+//    @Excel(name = "物料ID")
+//    private Long materialId;
 
     /** 币种ID */
     @Excel(name = "币种ID")
-    private Long currencyId2;
+    private Long currencyId;
 
     /** 受理策略 */
     @Excel(name = "受理策略")
@@ -73,8 +73,8 @@ public class ProcurementTask extends BaseEntity
     private BigDecimal taskAccepted;
 
     /** 是否自动合单 */
-    @Excel(name = "是否自动合单")
-    private Long mergeOrders;
+//    @Excel(name = "是否自动合单")
+//    private Long mergeOrders;
 
     /** 状态 */
     @Excel(name = "状态")
@@ -116,25 +116,16 @@ public class ProcurementTask extends BaseEntity
     {
         return taskTotal;
     }
-    public void setRequirementId1(Long requirementId1) 
-    {
-        this.requirementId1 = requirementId1;
+
+    public Long getRequirementId() {
+        return requirementId;
     }
 
-    public Long getRequirementId1() 
-    {
-        return requirementId1;
-    }
-    public void setCompaniesId1(String companiesId1) 
-    {
-        this.companiesId1 = companiesId1;
+    public void setRequirementId(Long requirementId) {
+        this.requirementId = requirementId;
     }
 
-    public String getCompaniesId1() 
-    {
-        return companiesId1;
-    }
-    public void setPurchaser(String purchaser) 
+    public void setPurchaser(String purchaser)
     {
         this.purchaser = purchaser;
     }
@@ -143,25 +134,32 @@ public class ProcurementTask extends BaseEntity
     {
         return purchaser;
     }
-    public void setMaterialId2(Long materialId2) 
-    {
-        this.materialId2 = materialId2;
+
+    public String getCompaniesId() {
+        return companiesId;
     }
 
-    public Long getMaterialId2() 
-    {
-        return materialId2;
-    }
-    public void setCurrencyId2(Long currencyId2) 
-    {
-        this.currencyId2 = currencyId2;
+    public void setCompaniesId(String companiesId) {
+        this.companiesId = companiesId;
     }
 
-    public Long getCurrencyId2() 
-    {
-        return currencyId2;
+//    public Long getMaterialId() {
+//        return materialId;
+//    }
+//
+//    public void setMaterialId(Long materialId) {
+//        this.materialId = materialId;
+//    }
+
+    public Long getCurrencyId() {
+        return currencyId;
     }
-    public void setAcceptanceStrategy(String acceptanceStrategy) 
+
+    public void setCurrencyId(Long currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public void setAcceptanceStrategy(String acceptanceStrategy)
     {
         this.acceptanceStrategy = acceptanceStrategy;
     }
@@ -206,15 +204,7 @@ public class ProcurementTask extends BaseEntity
     {
         return taskAccepted;
     }
-    public void setMergeOrders(Long mergeOrders) 
-    {
-        this.mergeOrders = mergeOrders;
-    }
 
-    public Long getMergeOrders() 
-    {
-        return mergeOrders;
-    }
     public void setTaskStatus(Long taskStatus) 
     {
         this.taskStatus = taskStatus;
@@ -227,23 +217,21 @@ public class ProcurementTask extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("taskId", getTaskId())
-            .append("taskCode", getTaskCode())
-            .append("procurementStrategy", getProcurementStrategy())
-            .append("taskTotal", getTaskTotal())
-            .append("requirementId1", getRequirementId1())
-            .append("companiesId1", getCompaniesId1())
-            .append("purchaser", getPurchaser())
-            .append("materialId2", getMaterialId2())
-            .append("currencyId2", getCurrencyId2())
-            .append("acceptanceStrategy", getAcceptanceStrategy())
-            .append("taskNumber", getTaskNumber())
-            .append("acceptedQuantity", getAcceptedQuantity())
-            .append("taskOccupied", getTaskOccupied())
-            .append("taskAccepted", getTaskAccepted())
-            .append("mergeOrders", getMergeOrders())
-            .append("taskStatus", getTaskStatus())
-            .toString();
+        return "ProcurementTask{" +
+                "taskId=" + taskId +
+                ", taskCode='" + taskCode + '\'' +
+                ", procurementStrategy='" + procurementStrategy + '\'' +
+                ", taskTotal=" + taskTotal +
+                ", requirementId=" + requirementId +
+                ", companiesId='" + companiesId + '\'' +
+                ", purchaser='" + purchaser + '\'' +
+                ", currencyId=" + currencyId +
+                ", acceptanceStrategy='" + acceptanceStrategy + '\'' +
+                ", taskNumber=" + taskNumber +
+                ", acceptedQuantity=" + acceptedQuantity +
+                ", taskOccupied=" + taskOccupied +
+                ", taskAccepted=" + taskAccepted +
+                ", taskStatus=" + taskStatus +
+                '}';
     }
 }

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.MaterialRequirementMapper">
 
-    <resultMap type="MaterialRequirement" id="MaterialRequirementResult">
+    <resultMap type="com.ruoyi.system.api.domain.MaterialRequirement" id="MaterialRequirementResult">
         <result property="requirementId"    column="requirement_id"    />
         <result property="requirementCode"    column="requirement_code"    />
         <result property="requirementCreator"    column="requirement_creator"    />
@@ -31,7 +31,7 @@
         select requirement_id, requirement_code, requirement_creator, requirement_title, create_department, create_time, demander, demand_department, requirement_type, companies_id, total_amount, contact_person, expense_department, description, address, phone, annex, currency_id, related_projects, task_code from material_requirement
     </sql>
 
-    <select id="selectMaterialRequirementList" parameterType="MaterialRequirement" resultMap="MaterialRequirementResult">
+    <select id="selectMaterialRequirementList" parameterType="com.ruoyi.system.api.domain.MaterialRequirement" resultMap="MaterialRequirementResult">
         <include refid="selectMaterialRequirementVo"/>
         <where>
             <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
@@ -61,7 +61,7 @@
         where requirement_id = #{requirementId}
     </select>
 
-    <insert id="insertMaterialRequirement" parameterType="MaterialRequirement" useGeneratedKeys="true" keyProperty="requirementId">
+    <insert id="insertMaterialRequirement" parameterType="com.ruoyi.system.api.domain.MaterialRequirement" useGeneratedKeys="true" keyProperty="requirementId">
         insert into material_requirement
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="requirementCode != null">requirement_code,</if>
@@ -107,7 +107,7 @@
         </trim>
     </insert>
 
-    <update id="updateMaterialRequirement" parameterType="MaterialRequirement">
+    <update id="updateMaterialRequirement" parameterType="com.ruoyi.system.api.domain.MaterialRequirement">
         update material_requirement
         <trim prefix="SET" suffixOverrides=",">
             <if test="requirementCode != null">requirement_code = #{requirementCode},</if>
@@ -143,7 +143,7 @@
             #{requirementId}
         </foreach>
     </delete>
-    <insert id="insertRequirementInformations" parameterType="MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
+    <insert id="insertRequirementInformations" parameterType="com.ruoyi.system.api.domain.MaterialInformation" useGeneratedKeys="true" keyProperty="miId">
         INSERT INTO material_information (
         material_code, material_name, material_category,material_specification, material_model, material_brand, material_unit, must_number,
         must_date, currency_name, reference_price, unit_price, tax,rate_value, budget_amount, remarks, annex, purchaser, requirement_code, status

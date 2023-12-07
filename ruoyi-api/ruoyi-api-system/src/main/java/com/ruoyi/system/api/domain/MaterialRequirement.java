@@ -89,10 +89,6 @@ public class MaterialRequirement extends BaseEntity
     @Excel(name = "相关项目")
     private String relatedProjects;
 
-
-
-
-
     /** 任务单号 */
     @Excel(name = "任务单号")
     private String taskCode;

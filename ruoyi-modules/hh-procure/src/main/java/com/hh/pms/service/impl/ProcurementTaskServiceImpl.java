@@ -91,4 +91,14 @@ public class ProcurementTaskServiceImpl implements IProcurementTaskService
     {
         return procurementTaskMapper.deleteProcurementTaskByTaskId(taskId);
     }
+
+    @Override
+    public ProcurementTask selectProcurementTaskByTaskCode(String taskCode) {
+        return procurementTaskMapper.selectProcurementTaskByTaskCode(taskCode);
+    }
+
+    @Override
+    public int updateProcurement(ProcurementTask procurementTask) {
+        return procurementTaskMapper.updateProcurementTasks(procurementTask);
+    }
 }

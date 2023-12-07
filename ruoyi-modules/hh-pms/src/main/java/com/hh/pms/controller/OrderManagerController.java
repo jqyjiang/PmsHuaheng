@@ -115,8 +115,6 @@ public class OrderManagerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody OrderManager orderManager)
     {
-        System.out.println("这是OrderManager对象:"+orderManager);
-        //System.out.println("这是OrderMaterial对象:"+orderMaterial);
         return toAjax(orderManagerService.insertOrderManager(orderManager));
     }
 

@@ -90,4 +90,9 @@ public class OrderMaterialServiceImpl implements IOrderMaterialService
     {
         return orderMaterialMapper.deleteOrderMaterialByOrId(orId);
     }
+
+    @Override
+    public List<OrderMaterial> findTaskMaterial(String taskCode) {
+        return orderMaterialMapper.findTaskMaterial(taskCode);
+    }
 }

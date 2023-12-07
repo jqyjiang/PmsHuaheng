@@ -35,7 +35,19 @@ public interface OrderMaterialMapper
      */
     public int insertOrderMaterial(OrderMaterial orderMaterial);
 
+    /**
+     * 批量新增订单物料明细
+     * @param orderMaterials 订单物料明细
+     * @return 结束
+     */
     public int insertOrderMaterials(List<OrderMaterial> orderMaterials);
+
+    /**
+     * 根据任务单号查询物料明细
+     * @param taskCode
+     * @return
+     */
+    List<OrderMaterial> findTaskMaterial(String taskCode);
 
     /**
      * 修改订单物料明细
@@ -45,6 +57,12 @@ public interface OrderMaterialMapper
      */
     public int updateOrderMaterial(OrderMaterial orderMaterial);
 
+    /**
+     * 批量修改订单物料明细
+     * @param orderMaterial
+     * @return
+     */
+    public int updateOrderMaterials(List<OrderMaterial> orderMaterial);
     /**
      * 删除订单物料明细
      * 

@@ -5,14 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
@@ -68,6 +61,21 @@ public class ProcurementTaskController extends BaseController
     public AjaxResult getInfo(@PathVariable("taskId") Long taskId)
     {
         return success(procurementTaskService.selectProcurementTaskByTaskId(taskId));
+    }
+
+    /**
+     * 获取我的需求任务详细信息
+     */
+    @GetMapping(value = "/selectProcurementTaskByTaskId/{taskCode}")
+    public ProcurementTask selectProcurementTaskByTaskId(@PathVariable("taskCode") String taskCode)
+    {
+        return procurementTaskService.selectProcurementTaskByTaskCode(taskCode);
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value = "/updateProcurement")
+    public int updateProcurement(@RequestBody ProcurementTask procurementTask)
+    {
+        return procurementTaskService.updateProcurement(procurementTask);
     }
 
     /**
