@@ -1,8 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.MaterialInformation;
+
 import java.util.List;
-import com.hh.pms.domain.MaterialInformation;
-import org.apache.ibatis.annotations.Select;
 
 /**
  * 采购需求池Service接口

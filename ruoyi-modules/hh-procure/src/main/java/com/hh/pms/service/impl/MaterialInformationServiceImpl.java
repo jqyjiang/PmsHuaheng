@@ -1,11 +1,11 @@
 package com.hh.pms.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.system.api.domain.MaterialInformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.MaterialInformationMapper;
-import com.hh.pms.domain.MaterialInformation;
 import com.hh.pms.service.IMaterialInformationService;
 
 /**

@@ -3,11 +3,10 @@ package com.hh.pms.service.impl;
 import java.util.List;
 
 import com.hh.pms.mapper.MaterialPoolMapper;
-import com.hh.pms.mast.service.IMaterialService;
 import com.hh.pms.service.IMaterialPoolService;
+import com.ruoyi.system.api.domain.MaterialPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hh.pms.domain.MaterialPool;
 
 /**
  * 采购需求池Service业务层处理

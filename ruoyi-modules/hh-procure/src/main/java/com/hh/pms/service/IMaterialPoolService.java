@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.MaterialPool;
+
 import java.util.List;
-import com.hh.pms.domain.MaterialPool;
 
 /**
  * 采购需求池Service接口

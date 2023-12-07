@@ -1,10 +1,11 @@
 package com.hh.pms.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.ProcurementTaskMapper;
-import com.hh.pms.domain.ProcurementTask;
 import com.hh.pms.service.IProcurementTaskService;
 
 /**

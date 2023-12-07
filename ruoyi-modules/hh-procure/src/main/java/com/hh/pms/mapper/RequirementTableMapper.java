@@ -1,7 +1,8 @@
 package com.hh.pms.mapper;
 
+import com.ruoyi.system.api.domain.RequirementTable;
+
 import java.util.List;
-import com.hh.pms.domain.RequirementTable;
 
 /**
  * 需求类型Mapper接口

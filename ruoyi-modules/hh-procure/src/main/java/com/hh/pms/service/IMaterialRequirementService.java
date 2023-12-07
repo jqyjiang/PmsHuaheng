@@ -1,10 +1,10 @@
 package com.hh.pms.service;
 
-import java.util.List;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.MaterialPool;
+import com.ruoyi.system.api.domain.MaterialRequirement;
 
-import com.hh.pms.domain.MaterialInformation;
-import com.hh.pms.domain.MaterialPool;
-import com.hh.pms.domain.MaterialRequirement;
+import java.util.List;
 
 /**
  * 采购需求申请Service接口

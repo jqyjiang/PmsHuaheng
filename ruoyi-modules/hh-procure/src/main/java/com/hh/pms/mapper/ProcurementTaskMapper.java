@@ -1,7 +1,8 @@
 package com.hh.pms.mapper;
 
+import com.ruoyi.system.api.domain.ProcurementTask;
+
 import java.util.List;
-import com.hh.pms.domain.ProcurementTask;
 
 /**
  * 我的需求任务Mapper接口

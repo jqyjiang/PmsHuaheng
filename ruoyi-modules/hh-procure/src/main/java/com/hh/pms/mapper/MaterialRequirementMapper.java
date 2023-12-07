@@ -3,8 +3,8 @@ package com.hh.pms.mapper;
 import java.util.Date;
 import java.util.List;
 
-import com.hh.pms.domain.MaterialInformation;
-import com.hh.pms.domain.MaterialRequirement;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.MaterialRequirement;
 import org.apache.ibatis.annotations.Select;
 
 /**

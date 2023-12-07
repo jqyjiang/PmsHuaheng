@@ -3,17 +3,15 @@ package com.hh.pms.service.impl;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-import com.hh.pms.domain.MaterialInformation;
-import com.hh.pms.domain.MaterialPool;
 import com.hh.pms.mapper.MaterialInformationMapper;
 import com.hh.pms.mapper.MaterialPoolMapper;
-import com.ruoyi.common.core.utils.DateUtils;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.MaterialPool;
+import com.ruoyi.system.api.domain.MaterialRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.MaterialRequirementMapper;
-import com.hh.pms.domain.MaterialRequirement;
 import com.hh.pms.service.IMaterialRequirementService;
 
 /**

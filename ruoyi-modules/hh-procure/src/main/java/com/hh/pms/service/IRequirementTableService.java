@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.RequirementTable;
+
 import java.util.List;
-import com.hh.pms.domain.RequirementTable;
 
 /**
  * 需求类型Service接口

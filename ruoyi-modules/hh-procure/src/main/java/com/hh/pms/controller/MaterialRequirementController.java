@@ -5,12 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.model.MaterialClient;
+import com.ruoyi.system.api.domain.MaterialRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.hh.pms.domain.MaterialRequirement;
 import com.hh.pms.service.IMaterialRequirementService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
