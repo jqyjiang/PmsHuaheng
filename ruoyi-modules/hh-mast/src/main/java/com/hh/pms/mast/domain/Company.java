@@ -10,11 +10,11 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 公司表对象 companies
- * 
+ *
  * @author ruoyi
  * @date 2023-12-05
  */
-public class Companies extends BaseEntity
+public class Company extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -102,192 +102,192 @@ public class Companies extends BaseEntity
     @Excel(name = "公司简介")
     private String profile;
 
-    public void setCompaniesId(Long companiesId) 
+    public void setCompaniesId(Long companiesId)
     {
         this.companiesId = companiesId;
     }
 
-    public Long getCompaniesId() 
+    public Long getCompaniesId()
     {
         return companiesId;
     }
-    public void setCompaniesName(String companiesName) 
+    public void setCompaniesName(String companiesName)
     {
         this.companiesName = companiesName;
     }
 
-    public String getCompaniesName() 
+    public String getCompaniesName()
     {
         return companiesName;
     }
-    public void setCreditCode(String creditCode) 
+    public void setCreditCode(String creditCode)
     {
         this.creditCode = creditCode;
     }
 
-    public String getCreditCode() 
+    public String getCreditCode()
     {
         return creditCode;
     }
-    public void setCompaniesAbbreviation(String companiesAbbreviation) 
+    public void setCompaniesAbbreviation(String companiesAbbreviation)
     {
         this.companiesAbbreviation = companiesAbbreviation;
     }
 
-    public String getCompaniesAbbreviation() 
+    public String getCompaniesAbbreviation()
     {
         return companiesAbbreviation;
     }
-    public void setIsgroup(Long isgroup) 
+    public void setIsgroup(Long isgroup)
     {
         this.isgroup = isgroup;
     }
 
-    public Long getIsgroup() 
+    public Long getIsgroup()
     {
         return isgroup;
     }
-    public void setCompaniesCode(String companiesCode) 
+    public void setCompaniesCode(String companiesCode)
     {
         this.companiesCode = companiesCode;
     }
 
-    public String getCompaniesCode() 
+    public String getCompaniesCode()
     {
         return companiesCode;
     }
-    public void setRegistrationNumber(String registrationNumber) 
+    public void setRegistrationNumber(String registrationNumber)
     {
         this.registrationNumber = registrationNumber;
     }
 
-    public String getRegistrationNumber() 
+    public String getRegistrationNumber()
     {
         return registrationNumber;
     }
-    public void setEnterpriseType(String enterpriseType) 
+    public void setEnterpriseType(String enterpriseType)
     {
         this.enterpriseType = enterpriseType;
     }
 
-    public String getEnterpriseType() 
+    public String getEnterpriseType()
     {
         return enterpriseType;
     }
-    public void setRegisteredCountry(String registeredCountry) 
+    public void setRegisteredCountry(String registeredCountry)
     {
         this.registeredCountry = registeredCountry;
     }
 
-    public String getRegisteredCountry() 
+    public String getRegisteredCountry()
     {
         return registeredCountry;
     }
-    public void setRepresentative(String representative) 
+    public void setRepresentative(String representative)
     {
         this.representative = representative;
     }
 
-    public String getRepresentative() 
+    public String getRepresentative()
     {
         return representative;
     }
-    public void setRegisteredCapital(BigDecimal registeredCapital) 
+    public void setRegisteredCapital(BigDecimal registeredCapital)
     {
         this.registeredCapital = registeredCapital;
     }
 
-    public BigDecimal getRegisteredCapital() 
+    public BigDecimal getRegisteredCapital()
     {
         return registeredCapital;
     }
-    public void setEstablishmentDate(Date establishmentDate) 
+    public void setEstablishmentDate(Date establishmentDate)
     {
         this.establishmentDate = establishmentDate;
     }
 
-    public Date getEstablishmentDate() 
+    public Date getEstablishmentDate()
     {
         return establishmentDate;
     }
-    public void setOperatingPeriod(BigDecimal operatingPeriod) 
+    public void setOperatingPeriod(BigDecimal operatingPeriod)
     {
         this.operatingPeriod = operatingPeriod;
     }
 
-    public BigDecimal getOperatingPeriod() 
+    public BigDecimal getOperatingPeriod()
     {
         return operatingPeriod;
     }
-    public void setBasicDivision(String basicDivision) 
+    public void setBasicDivision(String basicDivision)
     {
         this.basicDivision = basicDivision;
     }
 
-    public String getBasicDivision() 
+    public String getBasicDivision()
     {
         return basicDivision;
     }
-    public void setBusinessLicense(String businessLicense) 
+    public void setBusinessLicense(String businessLicense)
     {
         this.businessLicense = businessLicense;
     }
 
-    public String getBusinessLicense() 
+    public String getBusinessLicense()
     {
         return businessLicense;
     }
-    public void setTaxpayer(String taxpayer) 
+    public void setTaxpayer(String taxpayer)
     {
         this.taxpayer = taxpayer;
     }
 
-    public String getTaxpayer() 
+    public String getTaxpayer()
     {
         return taxpayer;
     }
-    public void setProvince(String province) 
+    public void setProvince(String province)
     {
         this.province = province;
     }
 
-    public String getProvince() 
+    public String getProvince()
     {
         return province;
     }
-    public void setAddress(String address) 
+    public void setAddress(String address)
     {
         this.address = address;
     }
 
-    public String getAddress() 
+    public String getAddress()
     {
         return address;
     }
-    public void setCurrencyId2(Long currencyId2) 
+    public void setCurrencyId2(Long currencyId2)
     {
         this.currencyId2 = currencyId2;
     }
 
-    public Long getCurrencyId2() 
+    public Long getCurrencyId2()
     {
         return currencyId2;
     }
-    public void setDengCode(String dengCode) 
+    public void setDengCode(String dengCode)
     {
         this.dengCode = dengCode;
     }
 
-    public String getDengCode() 
+    public String getDengCode()
     {
         return dengCode;
     }
-    public void setProfile(String profile) 
+    public void setProfile(String profile)
     {
         this.profile = profile;
     }
 
-    public String getProfile() 
+    public String getProfile()
     {
         return profile;
     }

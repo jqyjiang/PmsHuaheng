@@ -312,38 +312,38 @@
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddOrderMaterial">添加</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddCategory">添加</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteCategory">删除</el-button>
           </el-col>
-          <!-- <el-col :span="1.5">
-            <el-button type="primary" @click="showBatchAddDialog">批量新增</el-button>
-          </el-col> -->
         </el-row>
-        <el-table :data="categoryList1" :row-class-name="rowOrderMaterialIndex"
-          @selection-change="categorySelectionChange" ref="category">
+          <el-table :data="categoryList5" :row-class-name="rowCategoryIndex" @selection-change="handleCategorySelectionChange" ref="category">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="品类序号" align="center" prop="categoryId" width="100" />
           <el-table-column label="品类编码" prop="categoryCode" width="150">
             <template slot-scope="scope">
-               <el-input v-model="scope.row.categoryCode1" placeholder="请输入品类编码" />
+               <el-input v-model="scope.row.categoryCode" placeholder="请输入品类编码" />
              </template>
           </el-table-column>
-          <el-table-column label="物料名称" prop="categoryName" width="150">
+          <el-table-column label="品类名称" prop="categoryName" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.categoryName1" placeholder="请输入物料名称" />
+              <el-input v-model="scope.row.categoryName" placeholder="请输入品类名称" />
             </template>
           </el-table-column>
           <el-table-column label="启用" prop="enable" width="50">
-          <el-checkbox v-model="forms.categoryEnable" ></el-checkbox>
+            <template slot-scope="scope">
+          <el-checkbox v-model="scope.row.enable" ></el-checkbox>
+        </template>
           </el-table-column>
           <el-table-column label="是否允许超量送货" prop="isNo" width="150">
-          <el-checkbox v-model="forms.categoryIsNo" ></el-checkbox>
+            <template slot-scope="scope">
+          <el-checkbox v-model="scope.row.categoryIsNo" ></el-checkbox>
+          </template>
           </el-table-column>
 
           <el-table-column label="上级品类" prop="superiorCategory">
-          <el-input v-model="forms.superiorCategory" placeholder="请选择上级品类"/>
+          <template slot-scope="scope">
+          <el-input v-model="scope.row.superiorCategory" placeholder="请选择上级品类"/>
           <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
               <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
 
@@ -358,28 +358,30 @@
                   <el-button @click="dialogMaterial1 = false">取消</el-button>
                 </div>
               </el-dialog>
+            </template>
           </el-table-column>
 
           <el-table-column label="创建时间" prop="creationTime" width="240">
             <template slot-scope="scope">
-              <el-date-picker clearable v-model="scope.row.categoryCreatTime" type="date" value-format="yyyy-MM-dd"
+              <el-date-picker clearable v-model="scope.row.creationTime" type="date" value-format="yyyy-MM-dd"
                 placeholder="请选择创建时间" />
             </template>
           </el-table-column>
           <el-table-column label="最后更新人" prop="lUpdated" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.categoryUpdated" placeholder="请输入最后更新人" />
+              <el-input v-model="scope.row.lUpdated" placeholder="请输入最后更新人" />
             </template>
           </el-table-column>
           <el-table-column label="最后更新时间" prop="lUpdateTime" width="240">
             <template slot-scope="scope">
-              <el-date-picker clearable v-model="scope.row.categoryUpdateTime" type="date" value-format="yyyy-MM-dd"
+              <el-date-picker clearable v-model="scope.row.lUpdateTime" type="date" value-format="yyyy-MM-dd"
                 placeholder="请选择最后更新时间" />
             </template>
           </el-table-column>
 
           <el-table-column label="公司" prop="companiesName">
-          <el-input v-model="forms.companiesName" placeholder="请选择公司"/>
+            <template slot-scope="scope">
+          <el-input v-model="scope.row.companiesName" placeholder="请选择公司"/>
           <i class="el-icon-search" id="serachOne2" @click="showMaterial2()"></i>
               <el-dialog :visible.sync="dialogMaterial2" title="公司-浏览框" :modal="false">
 
@@ -393,9 +395,11 @@
                   <el-button @click="dialogMaterial2 = false">取消</el-button>
                 </div>
               </el-dialog>
+              </template>
         </el-table-column>
         <el-table-column label="基本计算单位" prop="meteringUnit">
-          <el-select v-model="forms.meteringUnit" placeholder="请选择基本计算单位" >
+          <template slot-scope="scope">
+          <el-select v-model="scope.row.meteringUnit" placeholder="请选择基本计算单位" >
             <el-option
               v-for="dict in accountList"
               :key="dict.unitId"
@@ -403,16 +407,17 @@
               :value="dict.unitId"
             />
           </el-select>
+          </template>
         </el-table-column>
 
           <el-table-column label="来源系统" prop="sourceSystem" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.categorySystem" placeholder="请输入来源系统" />
+              <el-input v-model="scope.row.sourceSystem" placeholder="请输入来源系统" />
             </template>
           </el-table-column>
           <el-table-column label="分配采购人" prop="assignPurchaser" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.categoryPurchaser" placeholder="请输入分配采购人" />
+              <el-input v-model="scope.row.assignPurchaser" placeholder="请输入分配采购人" />
             </template>
           </el-table-column>
 
@@ -457,6 +462,7 @@ export default {
       accountList: [],
       categoryList1:[],
       companiesList:[],
+      categoryList5:[],//批量新增
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -499,6 +505,9 @@ export default {
 
       // 批量新增对话框的可见性
       batchAddDialogVisible: false,
+
+      checkedCategorys: null,
+
     };
   },
   created() {
@@ -507,6 +516,24 @@ export default {
     this.getList2();
     this.getList3();
   },
+
+  computed: {
+    totalDemand() {
+      let sum = 0;
+      this.categoryList5.forEach(item => {
+        if (item.requireNumber !== '') {
+          sum += parseFloat(item.requireNumber);
+        }
+      });
+      const total = isNaN(sum) ? 0.00 : sum.toFixed(2);
+      this.form.totalDemand = total; // 将计算得到的总价赋值给 form.totalDemand
+      return total;
+    },
+    isSelfPickupSelected() {
+      return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
+    }
+  },
+
   methods: {
     /** 查询品类列表 */
     getList() {
@@ -544,12 +571,9 @@ export default {
       });
     },
 
-    /**品类明细复选框选中数据 */
-    categorySelectionChange(selection) {
-      let checkedOrderMaterial = selection.map(item => item)
-      this.checkedOrderMaterials = checkedOrderMaterial
-      console.log(this.checkedOrderMaterials)
-      console.log(checkedOrderMaterial)
+     /** 复选框选中数据 */
+     handleCategorySelectionChange(selection) {
+      this.checkedCategory = selection.map(item => item.index)
     },
 
      // 显示批量新增对话框
@@ -564,19 +588,19 @@ export default {
 
     // 执行批量新增
     doBatchAdd() {
-      if (this.checkedOrderMaterials.length === 0) {
+      if (this.checkedCategorys.length === 0) {
         this.$message.warning('请至少选择一条记录');
         return;
       }
       // 对选中的行数据进行修改
-      this.checkedOrderMaterials.forEach(row => {
+      this.checkedCategorys.forEach(row => {
         row.categoryCode = this.forms.categoryCode;
         row.requireNumber = this.forms.batchRequireNumber;
         row.consignee = this.forms.batchConsignee;
         row.receivingAddress = this.forms.batchReceivingAddress;
         row.receivingPhone = this.forms.batchReceivingPhone;
       });
-      console.log(this.checkedOrderMaterials)
+      // console.log(this.checkedCategorys)
       // 清空批量修改的值
       this.categoryCode = '';
       this.batchRequireNumber = '';
@@ -587,6 +611,7 @@ export default {
       this.$message.success('批量修改成功');
       this.batchAddDialogVisible = false;
     },
+
 
     showMaterial1() {
       this.dialogMaterial1 = true;
@@ -620,6 +645,7 @@ export default {
         introductionRequirements: null,
         assignPurchaser: null
       };
+      this.categoryList5=[];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -747,7 +773,7 @@ export default {
       row.index = rowIndex + 1;
     },
     /** 品类明细添加按钮操作 */
-    handleAddOrderMaterial() {
+    handleAddCategory() {
       let obj = {};
       obj.categoryCode = "";
       obj.categoryName = "";
@@ -762,17 +788,17 @@ export default {
       obj.sourceSystem = "";
       obj.introductionRequirements = "";
       obj.assignPurchaser = "";
-      this.categoryList.push(obj);
+      this.categoryList5.push(obj);
     },
-    /** 订单物料明细删除按钮操作 */
-    handleDeleteOrderMaterial() {
-      if (this.checkedOrderMaterial.length == 0) {
-        this.$modal.msgError("请先选择要删除的订单物料明细数据");
+    /** 品类明细删除按钮操作 */
+    handleDeleteCategory() {
+      if (this.checkedCategory.length == 0) {
+        this.$modal.msgError("请先选择要删除的品类明细数据");
       } else {
-        const orderMaterialList = this.orderMaterialList;
-        const checkedOrderMaterial = this.checkedOrderMaterial;
-        this.orderMaterialList = orderMaterialList.filter(function (item) {
-          return checkedOrderMaterial.indexOf(item.index) == -1
+        const categoryList5 = this.categoryList5;
+        const checkedCategory = this.checkedCategory;
+        this.categoryList5 = categoryList5.filter(function (item) {
+          return checkedCategory.indexOf(item.index) == -1
         });
       }
     },
