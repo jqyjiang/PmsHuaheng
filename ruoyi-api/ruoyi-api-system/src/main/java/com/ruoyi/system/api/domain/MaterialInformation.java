@@ -326,9 +326,11 @@ public class MaterialInformation extends BaseEntity
                 .append("budgetAmount", getBudgetAmount())
                 .append("remarks", getRemarks())
                 .append("annex", getAnnex())
+                .append("annex", getAnnex())
                 .append("purchaser", getPurchaser())
                 .append("requirementCode", getRequirementCode())
                 .append("materialList", getMaterialPoolList())
+                .append("status",getStatus())
                 .toString();
     }
 

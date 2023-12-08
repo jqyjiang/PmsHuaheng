@@ -6,9 +6,11 @@ import java.util.List;
 
 import com.hh.pms.mapper.MaterialInformationMapper;
 import com.hh.pms.mapper.MaterialPoolMapper;
+import com.hh.pms.mapper.ProcurementTaskMapper;
 import com.ruoyi.system.api.domain.MaterialInformation;
 import com.ruoyi.system.api.domain.MaterialPool;
 import com.ruoyi.system.api.domain.MaterialRequirement;
+import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.MaterialRequirementMapper;
@@ -31,6 +33,9 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
 
     @Autowired
     private MaterialPoolMapper materialPoolMapper;
+
+    @Autowired
+    private ProcurementTaskMapper procurementTaskMapper;
 
     /**
      * 查询采购需求申请
@@ -80,6 +85,7 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
             item.setStatus(1L);
         });
         int i=materialRequirementMapper.insertRequirementInformations(materialInformationsList);
+        System.out.println("----------i"+i);
         // 添加物料ID
         StringBuilder stringBuilder = new StringBuilder();
         for (MaterialInformation item : materialInformationsList){
@@ -91,6 +97,14 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
         String miIdString=stringBuilder.toString();
         System.out.println("----------------");
         System.out.println(miIdString);
+        //  给采购任务表添加数据
+        List<ProcurementTask> procurementTasks=materialRequirement.getProcurementTasks();
+        procurementTasks.forEach(item->{
+            item.setTaskCode(task_code);
+            item.setTaskStatus(4L);
+        });
+        int i2=materialRequirementMapper.insertProcurementTask(procurementTasks);
+        System.out.println("----------i2"+i2);
         return materialRequirementMapper.insertMaterialRequirement(materialRequirement);
     }
 

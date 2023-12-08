@@ -74,6 +74,9 @@ public interface MaterialRequirementMapper {
     String selectRequirementCode(Date requirementTime);
 
 
+    /**
+     * 添加物料信息
+     */
     public int insertRequirementInformations(List<MaterialInformation> materialInformations);
 
 
@@ -85,13 +88,9 @@ public interface MaterialRequirementMapper {
      */
     public List<MaterialInformation> selectMaterialInformationList(MaterialInformation materialInformation);
 
+
     /**
-     * 新增我的需求任务
-     *
-     * @param procurementTask 我的需求任务
-     * @return 结果
+     * 添加采购任务
      */
-    public int insertProcurementTask(ProcurementTask procurementTask);
-
-
+    public int insertProcurementTask(List<ProcurementTask> procurementTasks);
 }
