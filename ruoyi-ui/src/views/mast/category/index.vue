@@ -164,16 +164,12 @@
         <el-form-item label="是否允许超量送货" prop="isNo">
         <el-checkbox v-model="form.isNo" ></el-checkbox>
         </el-form-item>
-        <!-- <el-form-item label="上级品类" prop="superiorCategory">
-          <el-input v-model="form.superiorCategory" placeholder="请输入上级品类" />
-        </el-form-item> -->
 
 
         <el-form-item label="上级品类" prop="superiorCategory">
           <el-input v-model="form.superiorCategory" placeholder="请选择上级品类"/>
           <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
               <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
-
                 <el-table :data="categoryList1" v-loading="loading" @row-click="handleRowClickMaterial1">
                   <el-table-column label="品类名称" align="center" prop="categoryName" />
                   <el-table-column label="品类代码" align="center" prop="categoryCode" />
@@ -210,6 +206,7 @@
         <el-form-item v-if="false" label="公司" prop="company">
         <el-input v-model="form.company" placeholder="请输入公司" />
         </el-form-item>
+        
         <el-form-item label="公司" prop="companiesName">
           <el-input v-model="form.companiesName" placeholder="请选择公司"/>
           <i class="el-icon-search" id="serachOne2" @click="showMaterial2()"></i>
@@ -397,6 +394,7 @@
               </el-dialog>
               </template>
         </el-table-column>
+
         <el-table-column label="基本计算单位" prop="meteringUnit">
           <template slot-scope="scope">
           <el-select v-model="scope.row.meteringUnit" placeholder="请选择基本计算单位" >

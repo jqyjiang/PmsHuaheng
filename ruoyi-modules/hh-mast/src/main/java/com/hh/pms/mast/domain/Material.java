@@ -33,6 +33,10 @@ public class Material extends BaseEntity
     @Excel(name = "基本计算单位")
     private Integer calculationUnit;
 
+    /**单位*/
+    @Excel(name = "单位名")
+    private String unitName;
+
     //计量单位
     @Excel(name = "计算单位")
     private String metering_unit;
@@ -76,7 +80,7 @@ public class Material extends BaseEntity
     private String brand;
 
     /** 默认税种/税率 */
-    private Integer categoriesTaxes;
+    private String categoriesTaxes;
 
     /** 物料图片 */
     private String image;
@@ -89,12 +93,16 @@ public class Material extends BaseEntity
 
     /** 重量单位 */
     private Long weight;
+    /**重量单位显示*/
+    private String weightName;
 
     /** 体积 */
     private BigDecimal volume;
 
     /** 体积单位 */
     private Integer vUnit;
+    /**体积单位显示*/
+    private String vUnitName;
 
     /** 物料ABC属性 */
     private String abcAttribute;
@@ -102,9 +110,40 @@ public class Material extends BaseEntity
     /** 是否免检 */
     private Long avoidInspect;
 
+    public String getvUnitName() {
+        return vUnitName;
+    }
+
+    public void setvUnitName(String vUnitName) {
+        this.vUnitName = vUnitName;
+    }
+
+    public String getWeightName() {
+        return weightName;
+    }
+
+    public void setWeightName(String weightName) {
+        this.weightName = weightName;
+    }
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
 
     public String getMetering_unit() {
         return metering_unit;
+    }
+
+    public String getCategoriesTaxes() {
+        return categoriesTaxes;
+    }
+
+    public void setCategoriesTaxes(String categoriesTaxes) {
+        this.categoriesTaxes = categoriesTaxes;
     }
 
     public void setMetering_unit(String metering_unit) {
@@ -236,15 +275,7 @@ public class Material extends BaseEntity
     {
         return brand;
     }
-    public void setCategoriesTaxes(Integer categoriesTaxes)
-    {
-        this.categoriesTaxes = categoriesTaxes;
-    }
 
-    public Integer getCategoriesTaxes()
-    {
-        return categoriesTaxes;
-    }
     public void setImage(String image)
     {
         this.image = image;
@@ -325,6 +356,7 @@ public class Material extends BaseEntity
             .append("materialCode", getMaterialCode())
             .append("materialName", getMaterialName())
             .append("calculationUnit", getCalculationUnit())
+            .append("unitName",getUnitName())
             .append("meteringUnit",getMetering_unit())
             .append("purchaser", getPurchaser())
             .append("lUpdated", getlUpdated())
@@ -343,6 +375,7 @@ public class Material extends BaseEntity
             .append("weight", getWeight())
             .append("volume", getVolume())
             .append("vUnit", getvUnit())
+            .append("vUnitName",getvUnitName())
             .append("abcAttribute", getAbcAttribute())
             .append("avoidInspect", getAvoidInspect())
             .toString();

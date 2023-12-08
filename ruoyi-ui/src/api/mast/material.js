@@ -17,11 +17,36 @@ export function listAccount(query) {
     params: query
   })
 }
+// 查询计算单位定义列表弹框
+export function listAccount1(query) {
+  return request({
+    url: '/mast/account/list',
+    method: 'get',
+    params: query
+  })
+}
 
 // 查询品类列表
 export function listCategory(query) {
   return request({
     url: '/mast/category/listAll',
+    method: 'get',
+    params: query
+  })
+}
+// 查询品类列表弹框
+export function listCategory1(query) {
+  return request({
+    url: '/mast/category/listAll',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询税率列表
+export function listRate(query) {
+  return request({
+    url: '/mast/rate/list',
     method: 'get',
     params: query
   })

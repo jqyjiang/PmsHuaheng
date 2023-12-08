@@ -34,28 +34,6 @@
           v-hasPermi="['mast:material:add']"
         >新增</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['mast:material:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['mast:material:remove']"
-        >删除</el-button>
-      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -76,7 +54,7 @@
       <el-table-column label="物料名称" align="center" prop="materialName" />
       <el-table-column label="基本计算单位" align="center" prop="calculationUnit" >
         <template slot-scope="scope">
-          <span v-for="item in accountList" :key="index">
+          <span v-for="item in accountList">
             <template v-if="scope.row.calculationUnit===item.unitId">
               {{item.meteringUnit}}
             </template>
@@ -147,9 +125,6 @@
           <el-input v-model="form.materialName" placeholder="请输入物料名称" />
         </el-form-item>
         <!-- <el-form-item label="基本计算单位" prop="calculationUnit">
-          <el-input v-model="form.calculationUnit" placeholder="请输入基本计算单位" />
-        </el-form-item> -->
-        <el-form-item label="基本计算单位" prop="calculationUnit">
           <el-select v-model="form.calculationUnit" placeholder="请选择基本计算单位" >
             <el-option
               v-for="dict in accountList"
@@ -158,7 +133,27 @@
               :value="dict.unitId"
             />
           </el-select>
+        </el-form-item> -->
+
+        <el-form-item v-if="false" label="计算单位" prop="calculationUnit">
+          <el-input v-model="form.calculationUnit" placeholder="请输入计算单位" />
         </el-form-item>
+        <el-form-item label="基本计算单位" prop="unitName">
+          <el-input v-model="form.unitName" placeholder="请选择基本计算单位"/>
+          <i class="el-icon-search" id="serachOne2" @click="showAccount()"></i>
+              <el-dialog :visible.sync="dialogAccount" title="计算单位-浏览框" :modal="false">
+                <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount">
+                  <el-table-column label="计算单位" align="center" prop="meteringUnit" />
+                  <el-table-column label="计算单位编码" align="center" prop="calculationUnitCode" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
+                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogAccount = false">取消</el-button>
+                </div>
+              </el-dialog>
+        </el-form-item>
+
         <el-form-item label="采购员" prop="purchaser">
           <el-input v-model="form.purchaser" placeholder="请输入采购员" />
         </el-form-item>
@@ -176,9 +171,29 @@
         <el-form-item label="来源系统" prop="sourceSystem">
           <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
         </el-form-item>
-        <el-form-item label="主品类" prop="mCategory">
+        <!-- <el-form-item label="主品类" prop="mCategory">
           <el-input v-model="form.mCategory" placeholder="请输入主品类" />
+        </el-form-item> -->
+
+        <el-form-item v-if="false" label="主品类" prop="mCategory">
+          <el-input v-model="form.mCategory" placeholder="请输入计算单位" />
         </el-form-item>
+        <el-form-item label="主品类" prop="categoryName">
+          <el-input v-model="form.categoryName" placeholder="请选择主品类"/>
+          <i class="el-icon-search" id="serachOne2" @click="showCategory()"></i>
+              <el-dialog :visible.sync="dialogCategory" title="公司-浏览框" :modal="false">
+                <el-table :data="categoryList1" v-loading="loading" @row-click="handleRowClickCategory">
+                  <el-table-column label="品类名称" align="center" prop="categoryName" />
+                  <el-table-column label="品类编码" align="center" prop="categoryCode" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
+                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogCategory = false">取消</el-button>
+                </div>
+              </el-dialog>
+        </el-form-item>
+
         <el-form-item label="规格" prop="specifications">
           <el-input v-model="form.specifications" placeholder="请输入规格" />
         </el-form-item>
@@ -188,9 +203,28 @@
         <el-form-item label="品牌" prop="brand">
           <el-input v-model="form.brand" placeholder="请输入品牌" />
         </el-form-item>
-        <el-form-item label="默认税种/税率" prop="categoriesTaxes">
+        <!-- <el-form-item label="默认税种/税率" prop="categoriesTaxes">
           <el-input v-model="form.categoriesTaxes" placeholder="请输入默认税种/税率" />
+        </el-form-item> -->
+
+        <el-form-item label="默认税种/税率" prop="categoriesTaxes">
+          <el-input v-model="form.categoriesTaxes" placeholder="请选择默认税种/税率"/>
+          <i class="el-icon-search" id="serachOne2" @click="showRate()"></i>
+              <el-dialog :visible.sync="dialogRate" title="品类对象-浏览框" :modal="false">
+                <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickRate">
+                  <el-table-column label="税种代码" align="center" prop="taxCode" />
+                  <el-table-column label="描述" align="center" prop="describes" />
+                  <el-table-column label="税率(%)" align="center" prop="taxRate" />
+                  <el-table-column label="启用" align="center" prop="enable" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
+                  :limit.sync="caqueryParams.pageSize" @pagination="getList5" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogRate = false">取消</el-button>
+                </div>
+              </el-dialog>
         </el-form-item>
+
         <el-form-item label="物料图片" prop="image">
           <image-upload v-model="form.image"/>
         </el-form-item>
@@ -200,15 +234,55 @@
         <el-form-item label="净重" prop="nWeight">
           <el-input v-model="form.nWeight" placeholder="请输入净重" />
         </el-form-item>
-        <el-form-item label="重量单位" prop="weight">
+        <!-- <el-form-item label="重量单位" prop="weight">
+          <el-input v-model="form.weight" placeholder="请输入重量单位" />
+        </el-form-item> -->
+
+        <el-form-item v-if="false" label="重量单位" prop="weight">
           <el-input v-model="form.weight" placeholder="请输入重量单位" />
         </el-form-item>
+        <el-form-item label="基本重量单位" prop="weightName">
+          <el-input v-model="form.weightName" placeholder="请选择基本重量单位"/>
+          <i class="el-icon-search" id="serachOne2" @click="showAccount1()"></i>
+              <el-dialog :visible.sync="dialogAccount1" title="计算单位-浏览框" :modal="false">
+                <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount1">
+                  <el-table-column label="重量单位" align="center" prop="meteringUnit" />
+                  <el-table-column label="重量单位编码" align="center" prop="calculationUnitCode" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
+                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogAccount1 = false">取消</el-button>
+                </div>
+              </el-dialog>
+        </el-form-item>
+
         <el-form-item label="体积" prop="volume">
           <el-input v-model="form.volume" placeholder="请输入体积" />
         </el-form-item>
-        <el-form-item label="体积单位" prop="vUnit">
+        <!-- <el-form-item label="体积单位" prop="vUnit">
           <el-input v-model="form.vUnit" placeholder="请输入体积单位" />
+        </el-form-item> -->
+
+        <el-form-item v-if="false" label="体积单位" prop="vUnit">
+          <el-input v-model="form.vUnit" placeholder="请输入重量单位" />
         </el-form-item>
+        <el-form-item label="体积单位" prop="vUnitName">
+          <el-input v-model="form.vUnitName" placeholder="请选择体积单位"/>
+          <i class="el-icon-search" id="serachOne2" @click="showAccount2()"></i>
+              <el-dialog :visible.sync="dialogAccount2" title="体积单位-浏览框" :modal="false">
+                <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount2">
+                  <el-table-column label="体积单位" align="center" prop="meteringUnit" />
+                  <el-table-column label="体积单位编码" align="center" prop="calculationUnitCode" />
+                </el-table>
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
+                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogAccount2 = false">取消</el-button>
+                </div>
+              </el-dialog>
+        </el-form-item>
+
         <el-form-item label="物料ABC属性" prop="abcAttribute">
           <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
         </el-form-item>
@@ -225,7 +299,7 @@
 </template>
 
 <script>
-import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial ,listAccount ,listCategory} from "@/api/mast/material";
+import { listMaterial, getMaterial, delMaterial, addMaterial, updateMaterial ,listAccount ,listCategory,listAccount1,listCategory1,listRate} from "@/api/mast/material";
 
 export default {
   name: "Material",
@@ -243,11 +317,15 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      catotal:0,
       // 物料维护表格数据
       materialList: [],
       accountList: [],
       enableStatus: [], // 用于存储复选框选中状态的数组
       categoryList: [],
+      accountList1:[],
+      categoryList1:[],
+      rateList:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -260,17 +338,33 @@ export default {
         materialName: null,
         enable: null,
       },
+      // 查询参数
+      caqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+
+      },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      dialogAccount:false,
+      dialogCategory:false,
+      dialogRate:false,
+      dialogAccount1:false,
+      dialogAccount2:false,
     };
   },
   created() {
     this.getList();
     this.getList1();
     this.getList2();
+    this.getList3();
+    this.getList4();
+    this.getList5();
+    this.getList6();
+    this.getList7();
   },
   methods: {
     /** 查询物料维护列表 */
@@ -289,11 +383,70 @@ export default {
         this.accountList = response.rows;
       });
     },
+    /** 查询计算单位定义列表 弹框*/
+    getList3() {
+      this.loading = true;
+      listAccount1(this.queryParams).then(response => {
+        this.accountList1 = response.rows;
+        this.catotal = response.total;
+        this.loading = false;
+      });
+    },
       /** 查询品类列表 */
     getList2() {
       listCategory(this.queryParams).then(response => {
         this.categoryList = response.rows;
       });
+    },
+     /** 查询品类列表 弹框*/
+     getList4() {
+      listCategory1(this.queryParams).then(response => {
+        this.categoryList1 = response.rows;
+      });
+    },
+    /** 查询税率列表 弹框*/
+    getList5() {
+      listRate(this.queryParams).then(response => {
+        this.rateList = response.rows;
+      });
+    },
+    /**重量单位 */
+    getList6() {
+      listAccount1(this.queryParams).then(response => {
+        this.accountList1 = response.rows;
+      });
+    },
+    /**体积单位 */
+    getList7() {
+      listAccount1(this.queryParams).then(response => {
+        this.accountList1 = response.rows;
+      });
+    },
+
+    //计量单位
+    showAccount() {
+      this.dialogAccount = true;
+      this.getList3();
+    },
+    //体积单位
+    showAccount2(){
+      this.dialogAccount2 = true;
+      this.getList7();
+    },
+    //重量单位
+    showAccount1(){
+      this.dialogAccount1 = true;
+      this.getList6();
+    },
+    //主品类
+    showCategory() {
+      this.dialogCategory = true;
+      this.getList4();
+    },
+    //税率/税种
+    showRate(){
+      this.dialogRate = true;
+      this.getList5();
     },
     // 取消按钮
     cancel() {
@@ -365,6 +518,42 @@ export default {
         this.title = "修改物料维护";
       });
     },
+
+    //计算单位
+    handleRowClickAccount(row){
+       // 修改数据的属性值
+      this.form.unitName = row.meteringUnit;
+      this.form.calculationUnit = row.unitId;
+      this.dialogAccount = false; // 关闭对话框
+    },
+    //重量单位
+    handleRowClickAccount1(row){
+       // 修改数据的属性值
+      this.form.weightName = row.meteringUnit;
+      this.form.weight = row.unitId;
+      this.dialogAccount1 = false; // 关闭对话框
+    },
+    //体积单位
+    handleRowClickAccount2(row){
+       // 修改数据的属性值
+      this.form.vUnitName = row.meteringUnit;
+      this.form.vUnit = row.unitId;
+      this.dialogAccount2 = false; // 关闭对话框
+    },
+    //品类
+    handleRowClickCategory(row){
+       // 修改数据的属性值
+      this.form.categoryName = row.categoryName;
+      this.form.mCategory = row.categoryid;
+      this.dialogCategory = false; // 关闭对话框
+    },
+    //税率
+    handleRowClickRate(row){
+       // 修改数据的属性值
+      this.form.categoriesTaxes = row.taxCode;
+      this.dialogRate = false; // 关闭对话框
+    },
+
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -414,3 +603,10 @@ export default {
   }
 };
 </script>
+<style>
+#serachOne2 {
+  position: absolute;
+  right: 15px;
+  top: 12.5px;
+}
+</style>
