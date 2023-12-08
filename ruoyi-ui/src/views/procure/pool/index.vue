@@ -28,6 +28,7 @@
           type="primary"
           plain
           size="mini"
+          :disabled="pending"
           @click="handleAdd"
           v-hasPermi="['procure:information:add']"
         >分配</el-button>
@@ -110,11 +111,34 @@
     />
 
     <!-- 添加或修改采购需求池对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="960px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="暂挂原因" prop="materialCode">
-          <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
-        </el-form-item>
+            <el-form :model="buyerqueryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+              <el-form-item label="账号" prop="loginId">
+                <el-input v-model="buyerqueryParams.loginId" placeholder="账号" clearable
+                          @keyup.enter.native="handleQueryBuyer"/>
+              </el-form-item>
+              <el-form-item label="登录名" prop="loginName">
+                <el-input v-model="buyerqueryParams.loginName" placeholder="登录名" clearable
+                          @keyup.enter.native="handleQueryBuyer"/>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQueryBuyer">搜索</el-button>
+              </el-form-item>
+              <el-table v-loading="loading" :data="buyerList" @selection-change="handleSelectionChangeBuyer">
+                <el-table-column type="selection" width="55" align="center" />
+                <el-table-column label="账号" align="center" prop="loginId" />
+                <el-table-column label="登录名" align="center" prop="loginName" />
+                <el-table-column label="性别" align="center" prop="sex" />
+              </el-table>
+              <pagination
+                v-show="buyertotal>0"
+                :total="buyertotal"
+                :page.sync="buyerqueryParams.pageNum"
+                :limit.sync="buyerqueryParams.pageSize"
+                @pagination="getListBuyer"
+              />
+            </el-form>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -125,7 +149,7 @@
 </template>
 
 <script>
-import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel } from "@/api/procure/pool";
+import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel, listBuyer } from "@/api/procure/pool";
 
 export default {
   name: "Pool",
@@ -148,6 +172,19 @@ export default {
       total: 0,
       // 采购需求池表格数据
       informationList: [],
+      // 采购员表格数据
+      buyerList: [],
+      // 采购员总条数
+      buyertotal: 0,
+      // 采购员查询参数
+      buyerqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        securityLevel: null,
+        loginId: null,
+        loginName: null,
+        sex: null
+      },
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -182,7 +219,8 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      dialogBuyer: false //用于标记采购员列表是否可见
     };
   },
   created() {
@@ -215,6 +253,16 @@ export default {
         // console.info(this.poolList)
       });
     },
+    /** 查询采购员列表 */
+    getListBuyer() {
+      this.loading = true;
+      listBuyer(this.buyerqueryParams).then(response => {
+        this.buyerList = response.rows;
+        this.buyertotal = response.total;
+        this.loading = false;
+      });
+    },
+
     getTagType(status){
       if(status==1){
         return 'success';
@@ -265,6 +313,12 @@ export default {
       this.queryParams.pageNum = 1;
       this.getList();
     },
+    /** 采购员搜索按钮操作 */
+    handleQueryBuyer() {
+      this.buyerqueryParams.pageNum = 1;
+      this.getListBuyer();
+    },
+
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
@@ -282,11 +336,24 @@ export default {
       this.selectedRows = [row]; // 将选中的行数据赋值给 selectedRows 数组
       console.info("选中的行数据：", row);
     },
-    // /** 新增按钮操作 */
+    // 选中采购员
+    handleSelectionChangeBuyer(row){
+      this.form.purchaserId=row.purchaserId;
+      for (let i=0;i<this.buyerList.length;i++){
+        const innerElement=this.buyerList[i];
+        if (innerElement.purchaserId===row.purchaserId){
+          this.loginName=innerElement.loginName
+        }
+      }
+      this.dialogBuyer=false; // 关闭对话框
+    },
+    // /** 分配按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加采购需求池";
+      this.buyerqueryParams.pageNum = 1;
+      this.getListBuyer();
+      this.title = "查询采购员";
     },
     /** 暂挂按钮操作 */
     handleUpdate() {

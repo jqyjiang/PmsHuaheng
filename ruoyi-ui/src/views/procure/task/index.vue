@@ -9,110 +9,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="采购策略" prop="procurementStrategy">
-        <el-input
-          v-model="queryParams.procurementStrategy"
-          placeholder="请输入采购策略"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="任务总金额" prop="taskTotal">
-        <el-input
-          v-model="queryParams.taskTotal"
-          placeholder="请输入任务总金额"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="需求申请ID" prop="requirementId1">
-        <el-input
-          v-model="queryParams.requirementId1"
-          placeholder="请输入需求申请ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="公司ID" prop="companiesId1">
-        <el-input
-          v-model="queryParams.companiesId1"
-          placeholder="请输入公司ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="采购员" prop="purchaser">
-        <el-input
-          v-model="queryParams.purchaser"
-          placeholder="请输入采购员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="物料ID" prop="materialId2">
-        <el-input
-          v-model="queryParams.materialId2"
-          placeholder="请输入物料ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="币种ID" prop="currencyId2">
-        <el-input
-          v-model="queryParams.currencyId2"
-          placeholder="请输入币种ID"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="受理策略" prop="acceptanceStrategy">
-        <el-input
-          v-model="queryParams.acceptanceStrategy"
-          placeholder="请输入受理策略"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="任务总数量" prop="taskNumber">
-        <el-input
-          v-model="queryParams.taskNumber"
-          placeholder="请输入任务总数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="已受理数量" prop="acceptedQuantity">
-        <el-input
-          v-model="queryParams.acceptedQuantity"
-          placeholder="请输入已受理数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="占用任务数量" prop="taskOccupied">
-        <el-input
-          v-model="queryParams.taskOccupied"
-          placeholder="请输入占用任务数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="待受理数量" prop="taskAccepted">
-        <el-input
-          v-model="queryParams.taskAccepted"
-          placeholder="请输入待受理数量"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否自动合单" prop="mergeOrders">
-        <el-input
-          v-model="queryParams.mergeOrders"
-          placeholder="请输入是否自动合单"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -167,42 +63,21 @@
 
     <el-table v-loading="loading" :data="taskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="任务ID" align="center" prop="taskId" />
       <el-table-column label="任务单号" align="center" prop="taskCode" />
       <el-table-column label="采购策略" align="center" prop="procurementStrategy" />
       <el-table-column label="任务总金额" align="center" prop="taskTotal" />
-      <el-table-column label="需求申请ID" align="center" prop="requirementId1" />
-      <el-table-column label="公司ID" align="center" prop="companiesId1" />
+      <el-table-column label="公司" align="center" prop="companiesId1" />
       <el-table-column label="采购员" align="center" prop="purchaser" />
-      <el-table-column label="物料ID" align="center" prop="materialId2" />
-      <el-table-column label="币种ID" align="center" prop="currencyId2" />
+      <el-table-column label="物料名称" align="center" prop="materialId2" />
+      <el-table-column label="币种" align="center" prop="currencyId2" />
       <el-table-column label="受理策略" align="center" prop="acceptanceStrategy" />
       <el-table-column label="任务总数量" align="center" prop="taskNumber" />
       <el-table-column label="已受理数量" align="center" prop="acceptedQuantity" />
       <el-table-column label="占用任务数量" align="center" prop="taskOccupied" />
       <el-table-column label="待受理数量" align="center" prop="taskAccepted" />
-      <el-table-column label="是否自动合单" align="center" prop="mergeOrders" />
       <el-table-column label="状态" align="center" prop="taskStatus" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['procure:task:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['procure:task:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

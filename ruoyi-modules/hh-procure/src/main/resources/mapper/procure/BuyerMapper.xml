@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.BuyerMapper">
+    
+    <resultMap type="com.ruoyi.system.api.domain.Buyer" id="BuyerResult">
+        <result property="purchaserId"    column="purchaserId"    />
+        <result property="securityLevel"    column="security_Level"    />
+        <result property="loginId"    column="loginId"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="sex"    column="sex"    />
+    </resultMap>
+
+    <sql id="selectBuyerVo">
+        select purchaserId, security_Level, loginId, login_name, sex from buyer
+    </sql>
+
+    <select id="selectBuyerList" parameterType="com.ruoyi.system.api.domain.Buyer" resultMap="BuyerResult">
+        <include refid="selectBuyerVo"/>
+        <where>  
+            <if test="securityLevel != null "> and security_Level = #{securityLevel}</if>
+            <if test="loginId != null  and loginId != ''"> and loginId = #{loginId}</if>
+            <if test="loginName != null  and loginName != ''"> and login_name like concat('%', #{loginName}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+        </where>
+    </select>
+    
+    <select id="selectBuyerByPurchaserId" parameterType="Long" resultMap="BuyerResult">
+        <include refid="selectBuyerVo"/>
+        where purchaserId = #{purchaserId}
+    </select>
+        
+    <insert id="insertBuyer" parameterType="com.ruoyi.system.api.domain.Buyer" useGeneratedKeys="true" keyProperty="purchaserId">
+        insert into buyer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="securityLevel != null">security_Level,</if>
+            <if test="loginId != null">loginId,</if>
+            <if test="loginName != null">login_name,</if>
+            <if test="sex != null">sex,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="securityLevel != null">#{securityLevel},</if>
+            <if test="loginId != null">#{loginId},</if>
+            <if test="loginName != null">#{loginName},</if>
+            <if test="sex != null">#{sex},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBuyer" parameterType="com.ruoyi.system.api.domain.Buyer">
+        update buyer
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="securityLevel != null">security_Level = #{securityLevel},</if>
+            <if test="loginId != null">loginId = #{loginId},</if>
+            <if test="loginName != null">login_name = #{loginName},</if>
+            <if test="sex != null">sex = #{sex},</if>
+        </trim>
+        where purchaserId = #{purchaserId}
+    </update>
+
+    <delete id="deleteBuyerByPurchaserId" parameterType="Long">
+        delete from buyer where purchaserId = #{purchaserId}
+    </delete>
+
+    <delete id="deleteBuyerByPurchaserIds" parameterType="String">
+        delete from buyer where purchaserId in 
+        <foreach item="purchaserId" collection="array" open="(" separator="," close=")">
+            #{purchaserId}
+        </foreach>
+    </delete>
+</mapper>

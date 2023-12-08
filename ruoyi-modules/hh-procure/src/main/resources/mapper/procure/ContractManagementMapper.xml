@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.ContractManagementMapper">
+    
+    <resultMap type="ContractManagement" id="ContractManagementResult">
+        <result property="contractManagementId"    column="contract_management_id"    />
+        <result property="purchasingCode"    column="purchasing_code"    />
+        <result property="projectRelatedContracts"    column="project_related_contracts"    />
+        <result property="applicant"    column="applicant"    />
+        <result property="applicationDate"    column="application_date"    />
+        <result property="departmentId"    column="department_id"    />
+        <result property="companiesId"    column="companies_id"    />
+        <result property="relatedProjects"    column="related_projects"    />
+        <result property="isMainContract"    column="is_main_contract"    />
+        <result property="relatedMainContract"    column="related_main_contract"    />
+        <result property="budgetRelatedContracts"    column="budget_related_contracts"    />
+        <result property="costCenter"    column="cost_center"    />
+        <result property="head"    column="head"    />
+        <result property="signingDate"    column="signing_date"    />
+        <result property="totalAmount"    column="total_amount"    />
+        <result property="paymentProportion"    column="payment_proportion"    />
+        <result property="contractstatusId"    column="contractstatus_id"    />
+        <result property="sdId"    column="sd_id"    />
+        <result property="totalProjectBudget"    column="total_project_budget"    />
+        <result property="projectAvailableBudget"    column="project_available_budget"    />
+        <result property="contractName"    column="contract_name"    />
+        <result property="contractCode"    column="contract_code"    />
+        <result property="contractType"    column="contract_type"    />
+        <result property="dense"    column="dense"    />
+        <result property="beginTime"    column="begin_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="contractPrice"    column="contract_price"    />
+        <result property="capitalization"    column="capitalization"    />
+        <result property="stampDutyAmount"    column="stamp_duty_amount"    />
+        <result property="contractDescription"    column="contract_description"    />
+        <result property="procurementMethod"    column="procurement_method"    />
+        <result property="frameworkAgreements"    column="framework_agreements"    />
+        <result property="purchasingList"    column="purchasing_list"    />
+    </resultMap>
+
+    <sql id="selectContractManagementVo">
+        select contract_management_id, purchasing_code, project_related_contracts, applicant, application_date, department_id, companies_id, related_projects, is_main_contract, related_main_contract, budget_related_contracts, cost_center, head, signing_date, total_amount, payment_proportion, contractstatus_id, sd_id, total_project_budget, project_available_budget, contract_name, contract_code, contract_type, dense, begin_time, end_time, contract_price, capitalization, stamp_duty_amount, contract_description, procurement_method, framework_agreements, purchasing_list from contract_management
+    </sql>
+
+    <select id="selectContractManagementList" parameterType="ContractManagement" resultMap="ContractManagementResult">
+        <include refid="selectContractManagementVo"/>
+        <where>  
+            <if test="purchasingCode != null  and purchasingCode != ''"> and purchasing_code = #{purchasingCode}</if>
+            <if test="projectRelatedContracts != null  and projectRelatedContracts != ''"> and project_related_contracts = #{projectRelatedContracts}</if>
+            <if test="applicant != null  and applicant != ''"> and applicant = #{applicant}</if>
+            <if test="applicationDate != null "> and application_date = #{applicationDate}</if>
+            <if test="departmentId != null "> and department_id = #{departmentId}</if>
+            <if test="companiesId != null "> and companies_id = #{companiesId}</if>
+            <if test="relatedProjects != null  and relatedProjects != ''"> and related_projects = #{relatedProjects}</if>
+            <if test="isMainContract != null "> and is_main_contract = #{isMainContract}</if>
+            <if test="relatedMainContract != null  and relatedMainContract != ''"> and related_main_contract = #{relatedMainContract}</if>
+            <if test="budgetRelatedContracts != null  and budgetRelatedContracts != ''"> and budget_related_contracts = #{budgetRelatedContracts}</if>
+            <if test="costCenter != null  and costCenter != ''"> and cost_center = #{costCenter}</if>
+            <if test="head != null  and head != ''"> and head = #{head}</if>
+            <if test="signingDate != null "> and signing_date = #{signingDate}</if>
+            <if test="totalAmount != null "> and total_amount = #{totalAmount}</if>
+            <if test="paymentProportion != null "> and payment_proportion = #{paymentProportion}</if>
+            <if test="contractstatusId != null "> and contractstatus_id = #{contractstatusId}</if>
+            <if test="sdId != null "> and sd_id like concat('%', #{sdId}, '%')</if>
+            <if test="totalProjectBudget != null "> and total_project_budget = #{totalProjectBudget}</if>
+            <if test="projectAvailableBudget != null "> and project_available_budget = #{projectAvailableBudget}</if>
+            <if test="contractName != null  and contractName != ''"> and contract_name like concat('%', #{contractName}, '%')</if>
+            <if test="contractCode != null  and contractCode != ''"> and contract_code = #{contractCode}</if>
+            <if test="contractType != null "> and contract_type = #{contractType}</if>
+            <if test="dense != null  and dense != ''"> and dense = #{dense}</if>
+            <if test="beginTime != null "> and begin_time = #{beginTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="contractPrice != null "> and contract_price = #{contractPrice}</if>
+            <if test="capitalization != null  and capitalization != ''"> and capitalization = #{capitalization}</if>
+            <if test="stampDutyAmount != null  and stampDutyAmount != ''"> and stamp_duty_amount = #{stampDutyAmount}</if>
+            <if test="contractDescription != null  and contractDescription != ''"> and contract_description = #{contractDescription}</if>
+            <if test="procurementMethod != null "> and procurement_method = #{procurementMethod}</if>
+            <if test="frameworkAgreements != null  and frameworkAgreements != ''"> and framework_agreements = #{frameworkAgreements}</if>
+            <if test="purchasingList != null  and purchasingList != ''"> and purchasing_list = #{purchasingList}</if>
+        </where>
+    </select>
+    
+    <select id="selectContractManagementByContractManagementId" parameterType="Long" resultMap="ContractManagementResult">
+        <include refid="selectContractManagementVo"/>
+        where contract_management_id = #{contractManagementId}
+    </select>
+        
+    <insert id="insertContractManagement" parameterType="ContractManagement" useGeneratedKeys="true" keyProperty="contractManagementId">
+        insert into contract_management
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="purchasingCode != null">purchasing_code,</if>
+            <if test="projectRelatedContracts != null">project_related_contracts,</if>
+            <if test="applicant != null">applicant,</if>
+            <if test="applicationDate != null">application_date,</if>
+            <if test="departmentId != null">department_id,</if>
+            <if test="companiesId != null">companies_id,</if>
+            <if test="relatedProjects != null">related_projects,</if>
+            <if test="isMainContract != null">is_main_contract,</if>
+            <if test="relatedMainContract != null">related_main_contract,</if>
+            <if test="budgetRelatedContracts != null">budget_related_contracts,</if>
+            <if test="costCenter != null">cost_center,</if>
+            <if test="head != null">head,</if>
+            <if test="signingDate != null">signing_date,</if>
+            <if test="totalAmount != null">total_amount,</if>
+            <if test="paymentProportion != null">payment_proportion,</if>
+            <if test="contractstatusId != null">contractstatus_id,</if>
+            <if test="sdId != null">sd_id,</if>
+            <if test="totalProjectBudget != null">total_project_budget,</if>
+            <if test="projectAvailableBudget != null">project_available_budget,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="contractCode != null">contract_code,</if>
+            <if test="contractType != null">contract_type,</if>
+            <if test="dense != null">dense,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="contractPrice != null">contract_price,</if>
+            <if test="capitalization != null">capitalization,</if>
+            <if test="stampDutyAmount != null">stamp_duty_amount,</if>
+            <if test="contractDescription != null">contract_description,</if>
+            <if test="procurementMethod != null">procurement_method,</if>
+            <if test="frameworkAgreements != null">framework_agreements,</if>
+            <if test="purchasingList != null">purchasing_list,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="purchasingCode != null">#{purchasingCode},</if>
+            <if test="projectRelatedContracts != null">#{projectRelatedContracts},</if>
+            <if test="applicant != null">#{applicant},</if>
+            <if test="applicationDate != null">#{applicationDate},</if>
+            <if test="departmentId != null">#{departmentId},</if>
+            <if test="companiesId != null">#{companiesId},</if>
+            <if test="relatedProjects != null">#{relatedProjects},</if>
+            <if test="isMainContract != null">#{isMainContract},</if>
+            <if test="relatedMainContract != null">#{relatedMainContract},</if>
+            <if test="budgetRelatedContracts != null">#{budgetRelatedContracts},</if>
+            <if test="costCenter != null">#{costCenter},</if>
+            <if test="head != null">#{head},</if>
+            <if test="signingDate != null">#{signingDate},</if>
+            <if test="totalAmount != null">#{totalAmount},</if>
+            <if test="paymentProportion != null">#{paymentProportion},</if>
+            <if test="contractstatusId != null">#{contractstatusId},</if>
+            <if test="sdId != null">#{sdId},</if>
+            <if test="totalProjectBudget != null">#{totalProjectBudget},</if>
+            <if test="projectAvailableBudget != null">#{projectAvailableBudget},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="contractCode != null">#{contractCode},</if>
+            <if test="contractType != null">#{contractType},</if>
+            <if test="dense != null">#{dense},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="contractPrice != null">#{contractPrice},</if>
+            <if test="capitalization != null">#{capitalization},</if>
+            <if test="stampDutyAmount != null">#{stampDutyAmount},</if>
+            <if test="contractDescription != null">#{contractDescription},</if>
+            <if test="procurementMethod != null">#{procurementMethod},</if>
+            <if test="frameworkAgreements != null">#{frameworkAgreements},</if>
+            <if test="purchasingList != null">#{purchasingList},</if>
+         </trim>
+    </insert>
+
+    <update id="updateContractManagement" parameterType="ContractManagement">
+        update contract_management
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="purchasingCode != null">purchasing_code = #{purchasingCode},</if>
+            <if test="projectRelatedContracts != null">project_related_contracts = #{projectRelatedContracts},</if>
+            <if test="applicant != null">applicant = #{applicant},</if>
+            <if test="applicationDate != null">application_date = #{applicationDate},</if>
+            <if test="departmentId != null">department_id = #{departmentId},</if>
+            <if test="companiesId != null">companies_id = #{companiesId},</if>
+            <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>
+            <if test="isMainContract != null">is_main_contract = #{isMainContract},</if>
+            <if test="relatedMainContract != null">related_main_contract = #{relatedMainContract},</if>
+            <if test="budgetRelatedContracts != null">budget_related_contracts = #{budgetRelatedContracts},</if>
+            <if test="costCenter != null">cost_center = #{costCenter},</if>
+            <if test="head != null">head = #{head},</if>
+            <if test="signingDate != null">signing_date = #{signingDate},</if>
+            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
+            <if test="paymentProportion != null">payment_proportion = #{paymentProportion},</if>
+            <if test="contractstatusId != null">contractstatus_id = #{contractstatusId},</if>
+            <if test="sdId != null">sd_id = #{sdId},</if>
+            <if test="totalProjectBudget != null">total_project_budget = #{totalProjectBudget},</if>
+            <if test="projectAvailableBudget != null">project_available_budget = #{projectAvailableBudget},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="contractCode != null">contract_code = #{contractCode},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="dense != null">dense = #{dense},</if>
+            <if test="beginTime != null">begin_time = #{beginTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="contractPrice != null">contract_price = #{contractPrice},</if>
+            <if test="capitalization != null">capitalization = #{capitalization},</if>
+            <if test="stampDutyAmount != null">stamp_duty_amount = #{stampDutyAmount},</if>
+            <if test="contractDescription != null">contract_description = #{contractDescription},</if>
+            <if test="procurementMethod != null">procurement_method = #{procurementMethod},</if>
+            <if test="frameworkAgreements != null">framework_agreements = #{frameworkAgreements},</if>
+            <if test="purchasingList != null">purchasing_list = #{purchasingList},</if>
+        </trim>
+        where contract_management_id = #{contractManagementId}
+    </update>
+
+    <delete id="deleteContractManagementByContractManagementId" parameterType="Long">
+        delete from contract_management where contract_management_id = #{contractManagementId}
+    </delete>
+
+    <delete id="deleteContractManagementByContractManagementIds" parameterType="String">
+        delete from contract_management where contract_management_id in 
+        <foreach item="contractManagementId" collection="array" open="(" separator="," close=")">
+            #{contractManagementId}
+        </foreach>
+    </delete>
+</mapper>

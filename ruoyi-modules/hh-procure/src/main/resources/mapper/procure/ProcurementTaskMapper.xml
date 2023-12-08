@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="acceptedQuantity"    column="accepted_quantity"    />
         <result property="taskOccupied"    column="task_occupied"    />
         <result property="taskAccepted"    column="task_accepted"    />
-
         <result property="taskStatus"    column="task_status"    />
     </resultMap>
 
@@ -35,14 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementId != null "> and requirement_id = #{requirementId}</if>
             <if test="companiesId != null  and companiesId != ''"> and companies_id = #{companiesId}</if>
             <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
-
             <if test="currencyId != null "> and currency_id = #{currencyId}</if>
             <if test="acceptanceStrategy != null  and acceptanceStrategy != ''"> and acceptance_strategy = #{acceptanceStrategy}</if>
             <if test="taskNumber != null "> and task_number = #{taskNumber}</if>
             <if test="acceptedQuantity != null "> and accepted_quantity = #{acceptedQuantity}</if>
             <if test="taskOccupied != null "> and task_occupied = #{taskOccupied}</if>
             <if test="taskAccepted != null "> and task_accepted = #{taskAccepted}</if>
-
             <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
         </where>
     </select>
@@ -65,14 +62,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementId != null">requirement_id,</if>
             <if test="companiesId != null">companies_id,</if>
             <if test="purchaser != null">purchaser,</if>
-
             <if test="currencyId != null">currency_id,</if>
             <if test="acceptanceStrategy != null">acceptance_strategy,</if>
             <if test="taskNumber != null">task_number,</if>
             <if test="acceptedQuantity != null">accepted_quantity,</if>
             <if test="taskOccupied != null">task_occupied,</if>
             <if test="taskAccepted != null">task_accepted,</if>
-
             <if test="taskStatus != null">task_status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -82,14 +77,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementId != null">#{requirementId},</if>
             <if test="companiesId != null">#{companiesId},</if>
             <if test="purchaser != null">#{purchaser},</if>
-
             <if test="currencyId != null">#{currencyId},</if>
             <if test="acceptanceStrategy != null">#{acceptanceStrategy},</if>
             <if test="taskNumber != null">#{taskNumber},</if>
             <if test="acceptedQuantity != null">#{acceptedQuantity},</if>
             <if test="taskOccupied != null">#{taskOccupied},</if>
             <if test="taskAccepted != null">#{taskAccepted},</if>
-
             <if test="taskStatus != null">#{taskStatus},</if>
          </trim>
     </insert>
@@ -103,14 +96,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementId != null">requirement_id = #{requirementId},</if>
             <if test="companiesId != null">companies_id = #{companiesId},</if>
             <if test="purchaser != null">purchaser = #{purchaser},</if>
-
             <if test="currencyId != null">currency_id = #{currencyId},</if>
             <if test="acceptanceStrategy != null">acceptance_strategy = #{acceptanceStrategy},</if>
             <if test="taskNumber != null">task_number = #{taskNumber},</if>
             <if test="acceptedQuantity != null">accepted_quantity = #{acceptedQuantity},</if>
             <if test="taskOccupied != null">task_occupied = #{taskOccupied},</if>
             <if test="taskAccepted != null">task_accepted = #{taskAccepted},</if>
-
             <if test="taskStatus != null">task_status = #{taskStatus},</if>
         </trim>
         where task_id = #{taskId}
@@ -129,7 +120,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="acceptedQuantity != null">accepted_quantity = #{acceptedQuantity},</if>
             <if test="taskOccupied != null">task_occupied = #{taskOccupied},</if>
             <if test="taskAccepted != null">task_accepted = #{taskAccepted},</if>
-
             <if test="taskStatus != null">task_status = #{taskStatus},</if>
         </trim>
         where task_Code = #{taskCode}

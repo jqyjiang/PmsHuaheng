@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.ruoyi.system.api.domain.MaterialInformation;
 import com.ruoyi.system.api.domain.MaterialRequirement;
+import com.ruoyi.system.api.domain.ProcurementTask;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -83,6 +84,14 @@ public interface MaterialRequirementMapper {
      * @return 采购需求池集合
      */
     public List<MaterialInformation> selectMaterialInformationList(MaterialInformation materialInformation);
+
+    /**
+     * 新增我的需求任务
+     *
+     * @param procurementTask 我的需求任务
+     * @return 结果
+     */
+    public int insertProcurementTask(ProcurementTask procurementTask);
 
 
 }

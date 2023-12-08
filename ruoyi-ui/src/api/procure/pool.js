@@ -63,5 +63,13 @@ export function editStatusCancel(miId) {
   })
 }
 
+// 查询采购员列表
+export function listBuyer(query) {
+  return request({
+    url: '/procure/buyer/list',
+    method: 'get',
+    params: query
+  })
+}
 
 

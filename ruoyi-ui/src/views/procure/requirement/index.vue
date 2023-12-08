@@ -203,7 +203,7 @@
           <el-input v-model="currencyName" readonly placeholder="请输入币种" />
           <i class="el-icon-search" id="serachOne" @click="showDiagCurrency"></i>
           <el-dialog :visible.sync="dialogCurrency" title="币种定义" :modal="false">
-            <el-form :model="queryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
+            <el-form :model="cqueryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
                      label-width="68px">
               <el-form-item label="币种编码" prop="currencyCode">
                 <el-input v-model="cqueryParams.currencyCode" placeholder="请输入币种编码" clearable
