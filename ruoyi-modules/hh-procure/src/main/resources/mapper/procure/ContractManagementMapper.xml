@@ -37,13 +37,13 @@
         <result property="procurementMethod" column="procurement_method"/>
         <result property="frameworkAgreements" column="framework_agreements"/>
         <result property="purchasingList" column="purchasing_list"/>
-        <association property="supplierDetails" javaType="com.hh.pms.domain.SupplierDetails">
+        <association property="supplierDetails" javaType="SupplierDetails">
             <id property="sdId" column="sd_id"/>
             <result property="sdTime" column="sd_time"/>
             <result property="sdCode" column="sd_code"/>
             <result property="sbiName" column="sbi_name"/>
         </association>
-        <collection property="delivery" ofType="com.hh.pms.domain.Delivery">
+        <collection property="delivery" ofType="Delivery">
             <result property="deliveryId" column="delivery_id"/>
             <result property="productInfo" column="product_info"/>
             <result property="productSpecifications" column="product_specifications"/>

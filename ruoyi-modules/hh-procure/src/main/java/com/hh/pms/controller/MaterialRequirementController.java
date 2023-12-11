@@ -4,6 +4,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.model.MaterialClient;
+import com.ruoyi.system.api.domain.Currency;
 import com.ruoyi.system.api.domain.MaterialRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

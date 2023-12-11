@@ -29,17 +29,17 @@
         <result property="invoiceMethod" column="invoice_method"/>
         <result property="createTime" column="create_time"/>
         <result property="materialId" column="material_id"/>
-        <association property="orderTypeRunning" javaType="com.hh.pms.domain.OrderTypeRunning">
+        <association property="orderTypeRunning" javaType="OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
         </association>
-        <association property="supplierDetails" javaType="com.hh.pms.domain.SupplierDetails">
+        <association property="supplierDetails" javaType="SupplierDetails">
             <id property="sdId" column="sd_id"/>
             <result property="sdTime" column="sd_time"/>
             <result property="sdCode" column="sd_code"/>
             <result property="sbiName" column="sbi_name"/>
         </association>
-        <association property="currency" javaType="com.hh.pms.mast.domain.Currency">
+        <association property="currency" javaType="Currency">
             <result property="currencyId" column="currency_id"/>
             <result property="currencyCode" column="currency_code"/>
             <result property="currencyName" column="currency_name"/>
@@ -72,7 +72,7 @@
             <result property="dengCode" column="deng_code"/>
             <result property="profile" column="profile"/>
         </association>
-        <collection property="orderMaterialList" ofType="com.hh.pms.domain.OrderMaterial">
+        <collection property="orderMaterialList" ofType="OrderMaterial">
             <id property="orId" column="or_id"/>
             <result property="orCode" column="or_code"/>
             <result property="orName" column="or_name"/>
@@ -149,11 +149,11 @@
         <include refid="selectOrderManagerVo"/>
         where order_id = #{orderId}
     </select>
-    <select id="selectByOrderTypeRunning" resultType="com.hh.pms.domain.OrderManager">
+    <select id="selectByOrderTypeRunning" resultType="OrderManager">
         <include refid="selectOrderManagerVo"/>
         where or_id = #{orId}
     </select>
-    <select id="findRunTypeNumber" resultType="com.hh.pms.domain.OrderManager" resultMap="OrderManagerResult">
+    <select id="findRunTypeNumber" resultType="OrderManager" resultMap="OrderManagerResult">
         select order_id,or_id from order_manager
     </select>
 

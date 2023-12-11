@@ -1,6 +1,8 @@
 package com.hh.pms.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.api.domain.ContractManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.ContractManagementMapper;

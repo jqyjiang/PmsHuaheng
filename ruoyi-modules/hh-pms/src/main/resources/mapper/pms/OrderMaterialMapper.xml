@@ -95,11 +95,11 @@
         </where>
     </select>
 
-    <select id="selectOrderMaterialOrName" resultType="com.hh.pms.domain.OrderMaterial">
+    <select id="selectOrderMaterialOrName" resultType="OrderMaterial">
         <include refid="selectOrderMaterialVo"/>
         where
     </select>
-    <select id="findTaskMaterial" resultType="com.hh.pms.domain.OrderMaterial" parameterType="String" resultMap="OrderMaterialResult">
+    <select id="findTaskMaterial" resultType="OrderMaterial" parameterType="String" resultMap="OrderMaterialResult">
         <include refid="selectOrderMaterialVo"/>
         where orm.order_code = #{taskCode}
     </select>

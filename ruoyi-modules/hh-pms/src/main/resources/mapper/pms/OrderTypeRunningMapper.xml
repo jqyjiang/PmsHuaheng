@@ -9,7 +9,7 @@
     <sql id="selectOrderTypeRunningVo">
         select ort_id, ort_name from order_type_running
     </sql>
-    <select id="listName" resultType="com.hh.pms.domain.OrderTypeRunning" resultMap="OrderTypeRunningResult">
+    <select id="listName" resultType="OrderTypeRunning" resultMap="OrderTypeRunningResult">
         <include refid="selectOrderTypeRunningVo"/>
     </select>
 

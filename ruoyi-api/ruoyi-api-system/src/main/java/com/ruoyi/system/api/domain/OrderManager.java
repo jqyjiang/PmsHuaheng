@@ -1,7 +1,7 @@
 package com.ruoyi.system.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.hh.pms.mast.domain.Currency;
+
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
 import org.springframework.format.annotation.DateTimeFormat;

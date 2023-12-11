@@ -1,5 +1,7 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.ContractManagement;
+
 import java.util.List;
 
 /**
