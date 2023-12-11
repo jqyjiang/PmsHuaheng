@@ -7,12 +7,7 @@
       </el-form-item>
       <el-form-item label="送货单状态" prop="deliveryNoteState">
         <el-select v-model="queryParams.deliveryNoteState" placeholder="请选择送货单状态" clearable>
-          <el-option
-            v-for="dict in dict.type.delivery_state"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.delivery_state" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="送货方式" prop="deliveryMethod">
@@ -56,7 +51,7 @@
       <el-table-column label="送货单号" align="center" prop="orderDeliveryCode" />
       <el-table-column label="送货单状态" align="center" prop="deliveryNoteState">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.delivery_state" :value="scope.row.deliveryNoteState"/>
+          <dict-tag :options="dict.type.delivery_state" :value="scope.row.deliveryNoteState" />
         </template>
       </el-table-column>
       <el-table-column label="发货人联系方式" align="center" prop="shipperPhone" />
@@ -90,7 +85,7 @@
         <el-form-item label="关联订单" prop="orderConnectionId">
           <el-input v-model="form.orderConnectionId" placeholder="请输入关联订单" />
           <i class="el-icon-search" id="serachOne" @click="showDiagOrder()"></i>
-          <el-dialog :visible.sync="dialogVisible7" title="供应商名称" :modal="false">
+          <el-dialog :visible.sync="dialogVisible7" title="采购订单" :modal="false">
             <!-- 这里是关联订单的内容 -->
             <el-table v-loading="loading" :data="contractOrderList" @row-click="handleRowClickOrder">
               <el-table-column type="selection" width="55" align="center" />
@@ -106,12 +101,8 @@
         </el-form-item>
         <el-form-item label="送货单状态" prop="deliveryNoteState">
           <el-select v-model="form.deliveryNoteState" placeholder="请选择送货单状态">
-            <el-option
-              v-for="dict in dict.type.delivery_state"
-              :key="dict.value"
-              :label="dict.label"
-              :value="parseInt(dict.value)"
-            ></el-option>
+            <el-option v-for="dict in dict.type.delivery_state" :key="dict.value" :label="dict.label"
+              :value="parseInt(dict.value)"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="收货地址" prop="deliveryAddress">
@@ -182,6 +173,25 @@
           <el-table-column label="产品信息" prop="productInfo" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.productInfo" placeholder="请输入产品信息" />
+              <i class="el-icon-search" id="serachOne" @click="showDiagProduct()"></i>
+              <el-dialog :visible.sync="dialogVisible8" title="产品信息" :modal="false">
+                <!-- 这里是关联订单的内容 -->
+                <el-table v-loading="loading" :data="productList" @row-click="handleRowClickProduct">
+                  <el-table-column type="selection" width="55" align="center" />
+                  <el-table-column label="产品id" align="center" prop="productId" />
+                  <el-table-column label="产品名称" align="center" prop="productName" />
+                  <el-table-column label="产品编码" align="center" prop="productCode" />
+                  <el-table-column label="产品规格" align="center" prop="specifications" />
+                  <el-table-column label="单位" align="center" prop="unit" />
+                  <el-table-column label="价格" align="center" prop="price" />
+                  <el-table-column label="税率" align="center" prop="taxRate" />
+                </el-table>
+                <pagination v-show="producttotal > 0" :total="producttotal" :page.sync="productqueryParams.pageNum"
+                  :limit.sync="productqueryParams.pageSize" @pagination="getList8" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogVisible8 = false">取消</el-button>
+                </div>
+              </el-dialog>
             </template>
           </el-table-column>
           <el-table-column label="产品规格" prop="productSpecifications" width="150">
@@ -231,6 +241,7 @@
 
 <script>
 import { listNote, getNote, delNote, addNote, updateNote, listManagement } from "@/api/pms/note";
+import { listProducts } from "@/api/pms/products";
 
 export default {
   name: "Note",
@@ -279,29 +290,40 @@ export default {
         pageNum: 1,
         pageSize: 10
       },
+      productqueryParams: {
+        pageNum: 1,
+        pageSize: 10
+      },
       //关联订单列表
-      contractOrderList: []
+      contractOrderList: [],
+      productList: [],
+      dialogVisible8: false,
+      producttotal: 0
     };
   },
   created() {
     this.getList();
   },
   methods: {
-    //获取关联订单的信息
-    getList7() {
+    //点击每一行的产品信息显示到文本框里面
+    handleRowClickProduct(row){
 
     },
     //点击每一行显示到文本框里面
     handleRowClickOrder(row) {
-      console.log(row)
       this.deliveryList = row.delivery
-      console.log("这是产品明细:"+this.deliveryList);
-      this.form.orderConnectionId=row.purchasingCode
+      this.form.orderConnectionId = row.purchasingCode
+      this.dialogVisible7 = false;
     },
     //控制关联订单的显示
     showDiagOrder() {
       this.dialogVisible7 = true;
       this.getList7();
+    },
+    //控制产品信息的显示
+    showDiagProduct() {
+      this.dialogVisible8 = true;
+      this.getList8();
     },
     /** 查询订单送货管理列表 */
     getList() {
@@ -312,12 +334,21 @@ export default {
         this.loading = false;
       });
     },
-    /** 查询关联订单列表 */
+    /** 查询采购订单列表 */
     getList7() {
       this.loading = true;
       listManagement(this.orderqueryParams).then(response => {
         this.contractOrderList = response.rows;
         this.ordertotal = response.total;
+        this.loading = false;
+      });
+    },
+    /** 查询产品信息列表 */
+    getList8() {
+      this.loading = true;
+      listProducts(this.productqueryParams).then(response => {
+        this.productList = response.rows;
+        this.producttotal = response.total;
         this.loading = false;
       });
     },

@@ -4,6 +4,7 @@ import com.hh.pms.model.MaterialClient;
 import com.hh.pms.model.ProcurementTaskServiceClient;
 import com.hh.pms.model.SupplierClient;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import com.ruoyi.common.security.annotation.RequiresPermissions;
 import com.ruoyi.system.api.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listManagement")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listManagement( @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
         return procurementTaskServiceClient.listOrderList(pageNum,pageSize);
     }
@@ -33,6 +35,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listSupplier")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listSupplier(SupplierDetails supplierDetails, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
         return supplierClient.list(supplierDetails,pageNum,pageSize);
     }
@@ -41,6 +44,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listCategory")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listCategory(Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
         return materialClient.listCategory(category,pageNum,pageSize);
     }
@@ -52,6 +56,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/listMaterial")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listMaterial(Material material, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
         return materialClient.list(material,pageNum,pageSize);
     }
@@ -64,6 +69,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/listCurrency")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listCurrency(Currency currency, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         return materialClient.list(currency, pageNum, pageSize);
     }
@@ -75,6 +81,7 @@ public class OrderManagerFeignController {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/listRate")
+    @RequiresPermissions("pms:manager:list")
     public TableDataInfo listRate(TaxRate taxRate, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         return materialClient.listRate(taxRate, pageNum, pageSize);
     }

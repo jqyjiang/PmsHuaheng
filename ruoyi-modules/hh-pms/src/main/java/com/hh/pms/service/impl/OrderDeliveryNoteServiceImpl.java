@@ -8,7 +8,9 @@ import com.ruoyi.system.api.domain.Delivery;
 import com.ruoyi.system.api.domain.OrderDeliveryNote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
+
 import com.ruoyi.common.core.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 import com.hh.pms.mapper.OrderDeliveryNoteMapper;
@@ -16,50 +18,46 @@ import com.hh.pms.service.IOrderDeliveryNoteService;
 
 /**
  * 订单送货管理Service业务层处理
- * 
+ *
  * @author yt
  * @date 2023-12-08
  */
 @Service
-public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService 
-{
+public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService {
     @Autowired
     private OrderDeliveryNoteMapper orderDeliveryNoteMapper;
 
     /**
      * 查询订单送货管理
-     * 
+     *
      * @param orderDeliveryNoteId 订单送货管理主键
      * @return 订单送货管理
      */
     @Override
-    public OrderDeliveryNote selectOrderDeliveryNoteByOrderDeliveryNoteId(Long orderDeliveryNoteId)
-    {
+    public OrderDeliveryNote selectOrderDeliveryNoteByOrderDeliveryNoteId(Long orderDeliveryNoteId) {
         return orderDeliveryNoteMapper.selectOrderDeliveryNoteByOrderDeliveryNoteId(orderDeliveryNoteId);
     }
 
     /**
      * 查询订单送货管理列表
-     * 
+     *
      * @param orderDeliveryNote 订单送货管理
      * @return 订单送货管理
      */
     @Override
-    public List<OrderDeliveryNote> selectOrderDeliveryNoteList(OrderDeliveryNote orderDeliveryNote)
-    {
+    public List<OrderDeliveryNote> selectOrderDeliveryNoteList(OrderDeliveryNote orderDeliveryNote) {
         return orderDeliveryNoteMapper.selectOrderDeliveryNoteList(orderDeliveryNote);
     }
 
     /**
      * 新增订单送货管理
-     * 
+     *
      * @param orderDeliveryNote 订单送货管理
      * @return 结果
      */
     @Transactional
     @Override
-    public int insertOrderDeliveryNote(OrderDeliveryNote orderDeliveryNote)
-    {
+    public int insertOrderDeliveryNote(OrderDeliveryNote orderDeliveryNote) {
         Date date = new Date();
         String deliveryCode = createOrderCode(date);
         orderDeliveryNote.setOrderDeliveryCode(deliveryCode);
@@ -70,14 +68,13 @@ public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService
 
     /**
      * 修改订单送货管理
-     * 
+     *
      * @param orderDeliveryNote 订单送货管理
      * @return 结果
      */
     @Transactional
     @Override
-    public int updateOrderDeliveryNote(OrderDeliveryNote orderDeliveryNote)
-    {
+    public int updateOrderDeliveryNote(OrderDeliveryNote orderDeliveryNote) {
         orderDeliveryNoteMapper.deleteDeliveryByDeliveryId(orderDeliveryNote.getOrderDeliveryNoteId());
         insertDelivery(orderDeliveryNote);
         return orderDeliveryNoteMapper.updateOrderDeliveryNote(orderDeliveryNote);
@@ -85,55 +82,50 @@ public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService
 
     /**
      * 批量删除订单送货管理
-     * 
+     *
      * @param orderDeliveryNoteIds 需要删除的订单送货管理主键
      * @return 结果
      */
     @Transactional
     @Override
-    public int deleteOrderDeliveryNoteByOrderDeliveryNoteIds(Long[] orderDeliveryNoteIds)
-    {
+    public int deleteOrderDeliveryNoteByOrderDeliveryNoteIds(Long[] orderDeliveryNoteIds) {
         orderDeliveryNoteMapper.deleteDeliveryByDeliveryIds(orderDeliveryNoteIds);
         return orderDeliveryNoteMapper.deleteOrderDeliveryNoteByOrderDeliveryNoteIds(orderDeliveryNoteIds);
     }
 
     /**
      * 删除订单送货管理信息
-     * 
+     *
      * @param orderDeliveryNoteId 订单送货管理主键
      * @return 结果
      */
     @Transactional
     @Override
-    public int deleteOrderDeliveryNoteByOrderDeliveryNoteId(Long orderDeliveryNoteId)
-    {
+    public int deleteOrderDeliveryNoteByOrderDeliveryNoteId(Long orderDeliveryNoteId) {
         orderDeliveryNoteMapper.deleteDeliveryByDeliveryId(orderDeliveryNoteId);
         return orderDeliveryNoteMapper.deleteOrderDeliveryNoteByOrderDeliveryNoteId(orderDeliveryNoteId);
     }
 
     /**
      * 新增产品明细信息
-     * 
+     *
      * @param orderDeliveryNote 订单送货管理对象
      */
-    public void insertDelivery(OrderDeliveryNote orderDeliveryNote)
-    {
+    public void insertDelivery(OrderDeliveryNote orderDeliveryNote) {
         List<Delivery> deliveryList = orderDeliveryNote.getDeliveryList();
         Long orderDeliveryNoteId = orderDeliveryNote.getOrderDeliveryNoteId();
-        if (StringUtils.isNotNull(deliveryList))
-        {
+        if (StringUtils.isNotNull(deliveryList)) {
             List<Delivery> list = new ArrayList<Delivery>();
-            for (Delivery delivery : deliveryList)
-            {
+            for (Delivery delivery : deliveryList) {
                 delivery.setDeliveryId(orderDeliveryNoteId);
                 list.add(delivery);
             }
-            if (list.size() > 0)
-            {
+            if (list.size() > 0) {
                 orderDeliveryNoteMapper.batchDelivery(list);
             }
         }
     }
+
     /**
      * 送货单号生成方法
      *
@@ -169,4 +161,30 @@ public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService
             return code;
         }
     }
+
+    /**
+     * //中通、韵达、艾斯客、闵鑫 自动加 1
+     *
+     * @param deliverynum 物流单号
+     * @return 后一个物流单号
+     */
+    public static String getTwoNum(String deliverynum) {
+        String deliveryvalue = "";
+        int num = Integer.parseInt(deliverynum);
+        num++;
+        System.out.println(num);
+        int intnum = String.valueOf(num).trim().length();//num 字符长度
+        int strnum = deliverynum.trim().length();//输入的物流单号字符长度
+            //判断int类型数据是否小于原来值的长度
+           //如物流单号是已’0‘开头的，需要把零补上
+        String value = "";
+        if (intnum < strnum) {
+            for (int j = 0; j < (strnum - intnum); j++) {
+                value += "0";
+            }
+        }
+        deliveryvalue = value + num;
+        return deliveryvalue;
+    }
+
 }

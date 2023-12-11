@@ -40,6 +40,7 @@ public class OrderManagerController extends BaseController
      * @return
      */
     @GetMapping("/managerList")
+    @RequiresPermissions("pms:manager:list")
     public List<OrderManager> managerList(@RequestParam("orId") Long orId){
         return orderManagerService.selectByOrderTypeRunning(orId);
     }
@@ -48,13 +49,14 @@ public class OrderManagerController extends BaseController
      * @return
      */
     @GetMapping("/runTypeNumber")
+    @RequiresPermissions("pms:manager:list")
     public List<OrderManager> runTypeNumber(){
         return orderManagerService.findRunTypeNumber();
     }
     /**
      * 查询订单物料明细列表
      */
-    @RequiresPermissions("pms:material:listOrderMaterial")
+    @RequiresPermissions("pms:manager:list")
     @GetMapping("/listOrderMaterial")
     public TableDataInfo listOrderMaterial(OrderMaterial orderMaterial)
     {

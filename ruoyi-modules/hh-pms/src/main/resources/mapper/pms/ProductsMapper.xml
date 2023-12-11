@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.ProductsMapper">
+    
+    <resultMap type="Products" id="ProductsResult">
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="specifications"    column="specifications"    />
+        <result property="unit"    column="unit"    />
+        <result property="price"    column="price"    />
+        <result property="taxRate"    column="tax_rate"    />
+    </resultMap>
+
+    <sql id="selectProductsVo">
+        select product_id, product_name, product_code, specifications, unit, price, tax_rate from products
+    </sql>
+
+    <select id="selectProductsList" parameterType="Products" resultMap="ProductsResult">
+        <include refid="selectProductsVo"/>
+        <where>  
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="productCode != null  and productCode != ''"> and product_code = #{productCode}</if>
+            <if test="specifications != null  and specifications != ''"> and specifications = #{specifications}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="taxRate != null "> and tax_rate = #{taxRate}</if>
+        </where>
+    </select>
+    
+    <select id="selectProductsByProductId" parameterType="Long" resultMap="ProductsResult">
+        <include refid="selectProductsVo"/>
+        where product_id = #{productId}
+    </select>
+        
+    <insert id="insertProducts" parameterType="Products" useGeneratedKeys="true" keyProperty="productId">
+        insert into products
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productName != null">product_name,</if>
+            <if test="productCode != null">product_code,</if>
+            <if test="specifications != null">specifications,</if>
+            <if test="unit != null">unit,</if>
+            <if test="price != null">price,</if>
+            <if test="taxRate != null">tax_rate,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productName != null">#{productName},</if>
+            <if test="productCode != null">#{productCode},</if>
+            <if test="specifications != null">#{specifications},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="price != null">#{price},</if>
+            <if test="taxRate != null">#{taxRate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProducts" parameterType="Products">
+        update products
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="specifications != null">specifications = #{specifications},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="taxRate != null">tax_rate = #{taxRate},</if>
+        </trim>
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteProductsByProductId" parameterType="Long">
+        delete from products where product_id = #{productId}
+    </delete>
+
+    <delete id="deleteProductsByProductIds" parameterType="String">
+        delete from products where product_id in 
+        <foreach item="productId" collection="array" open="(" separator="," close=")">
+            #{productId}
+        </foreach>
+    </delete>
+</mapper>
