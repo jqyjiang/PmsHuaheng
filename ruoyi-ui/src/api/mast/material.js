@@ -37,7 +37,7 @@ export function listCategory(query) {
 // 查询品类列表弹框
 export function listCategory1(query) {
   return request({
-    url: '/mast/category/listAll',
+    url: '/mast/category/lists',
     method: 'get',
     params: query
   })

@@ -46,6 +46,16 @@ public class CategoryController extends BaseController
         List<Category> list = categoryService.selectCategoryList(category);
         return getDataTable(list);
     }
+
+    //有分页弹框
+    @RequiresPermissions("mast:category:list")
+    @GetMapping("/lists")
+    public TableDataInfo lists1(Category category)
+    {
+        startPage();//分页
+        List<Category> list = categoryService.selectCategoryList(category);
+        return getDataTable(list);
+    }
     //无分页
     @RequiresPermissions("mast:category:list")
     @GetMapping("/listAll")

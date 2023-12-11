@@ -45,7 +45,6 @@ public class MaterialController extends BaseController
         System.out.println("传递的对象:"+material);
         startPage();
         List<Material> list = materialService.selectMaterialList(material);
-        System.out.println(list);
         return getDataTable(list);
     }
     @RequiresPermissions("mast:material:list")
