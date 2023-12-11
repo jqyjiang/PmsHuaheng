@@ -16,6 +16,12 @@ export function listFilter(query) {
     params: query
   })
 }
+export function canSupplier(){
+  return request({
+    url: '/supplierpms/details/canSupplier',
+    method: 'get'
+  })
+}
 // 查询供应商列表详细
 export function getDetails(sdId) {
   return request({
@@ -47,7 +53,7 @@ export function delClassDetails(sdId) {
   return request({
     url: '/supplierpms/details/updateDetails/' + sdId,
     method: 'delete',
-    
+
   })
 }
 

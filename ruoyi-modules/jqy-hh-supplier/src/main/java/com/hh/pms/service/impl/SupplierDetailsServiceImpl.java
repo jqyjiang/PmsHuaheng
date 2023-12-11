@@ -91,8 +91,14 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
         return supplierDetailsMapper.deleteSupplierDetailsBySdId(sdId);
     }
 
+    //删除供应商类别
     @Override
     public int deleteSupplierClassBySdIds(Long[] sdIds) {
         return supplierDetailsMapper.deleteSupplierClassBySdIds(sdIds);
+    }
+    //查询注册好的供应商(一般能做供应商操作的数据)
+    @Override
+    public List<SupplierDetails> selectCanSupplier() {
+        return supplierDetailsMapper.selectCanSupplier();
     }
 }

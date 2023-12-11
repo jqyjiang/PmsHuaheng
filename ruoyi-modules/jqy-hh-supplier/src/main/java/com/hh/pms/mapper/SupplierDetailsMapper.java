@@ -61,4 +61,7 @@ public interface SupplierDetailsMapper
 
     //删除供应商类别
     int deleteSupplierClassBySdIds(Long[] sdIds);
+
+    //查询注册好的供应商(一般能做供应商操作的数据)
+    List<SupplierDetails> selectCanSupplier();
 }

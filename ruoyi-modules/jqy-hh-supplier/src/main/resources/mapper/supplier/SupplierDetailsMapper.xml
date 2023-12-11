@@ -49,13 +49,15 @@
         <result property="dataTatus"    column="data_tatus"    />
         <result property="classCode"    column="class_code"    />
         <result property="classDescribe"    column="class_describe"    />
+        <result property="lifecycleId"    column="lifecycle_id"    />
+        <result property="slStatus"    column="sl_status"    />
     </resultMap>
 
 <!--    <sql id="selectSupplierDetailsVo">-->
 <!--        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details-->
 <!--    </sql>-->
     <sql id="selectSupplierDetailsVo">
-        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus, class_code,class_describe
+        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus, class_code,class_describe,lifecycle_id, sl_status
         from supplier_details sd left join supplier_classification sc on sd.sd_class = sc.class_code
     </sql>
     <select id="selectSupplierDetailsList" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
@@ -101,6 +103,8 @@
             <if test="certificateName != null  and certificateName != ''"> and certificate_name like concat('%', #{certificateName}, '%')</if>
             <if test="filingDate != null "> and filing_date = #{filingDate}</if>
             <if test="filing != null  and filing != ''"> and filing = #{filing}</if>
+            <if test="lifecycleId != null "> and lifecycle_id = #{lifecycleId}</if>
+            <if test="slStatus != null "> and sl_status = #{slStatus}</if>
             and data_tatus = 0
         </where>
     </select>
@@ -108,6 +112,11 @@
     <select id="selectSupplierDetailsBySdId" parameterType="Long" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
         where sd_id = #{sdId}
+    </select>
+
+    <select id="selectCanSupplier" resultMap="SupplierDetailsResult">
+        <include refid="selectSupplierDetailsVo"/>
+        where sd_status = 2
     </select>
 
     <insert id="insertSupplierDetails" parameterType="SupplierDetails" useGeneratedKeys="true" keyProperty="sdId">
@@ -154,6 +163,8 @@
             <if test="filingDate != null">filing_date,</if>
             <if test="filing != null and filing != ''">filing,</if>
             <if test="dataTatus != null">data_tatus,</if>
+            <if test="lifecycleId != null">lifecycle_id,</if>
+            <if test="slStatus != null">sl_status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="sdTime != null">#{sdTime},</if>
@@ -197,6 +208,8 @@
             <if test="filingDate != null">#{filingDate},</if>
             <if test="filing != null and filing != ''">#{filing},</if>
             <if test="dataTatus != null">#{dataTatus},</if>
+            <if test="lifecycleId != null">#{lifecycleId},</if>
+            <if test="slStatus != null">#{slStatus},</if>
         </trim>
     </insert>
 
@@ -244,6 +257,8 @@
             <if test="filingDate != null">filing_date = #{filingDate},</if>
             <if test="filing != null and filing != ''">filing = #{filing},</if>
             <if test="dataTatus != null">data_tatus = #{dataTatus},</if>
+            <if test="lifecycleId != null">lifecycle_id = #{lifecycleId},</if>
+            <if test="slStatus != null">sl_status = #{slStatus},</if>
         </trim>
         where sd_id = #{sdId}
     </update>

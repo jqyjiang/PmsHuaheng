@@ -122,7 +122,7 @@ public class SupplierDetailsController extends BaseController
         return ajaxResult;
     }
     /**
-     * 修改供应商列表
+     * 批量删除供应商的供应商分类
      */
     @RequiresPermissions("supplierpms:details:edit")
     @Log(title = "供应商列表", businessType = BusinessType.UPDATE)
@@ -130,7 +130,7 @@ public class SupplierDetailsController extends BaseController
     @DeleteMapping("/updateDetails/{sdId}")
     public AjaxResult updateDetails(@PathVariable("sdId") Long[] sdId)
     {
-        System.out.println("ssssssss");
+        //System.out.println("ssssssss");
         AjaxResult ajaxResult = toAjax(supplierDetailsService.deleteSupplierClassBySdIds(sdId));
         return ajaxResult;
     }
@@ -143,5 +143,18 @@ public class SupplierDetailsController extends BaseController
     public AjaxResult remove(@PathVariable Long[] sdIds)
     {
         return toAjax(supplierDetailsService.deleteSupplierDetailsBySdIds(sdIds));
+    }
+
+
+    /**
+     * 查询注册好的供应商
+     * (一般能做供应商操作的数据)
+     */
+    @RequiresPermissions("supplierpms:details:list")
+    @RequestMapping(method = RequestMethod.GET,value = "/canSupplier")
+    public TableDataInfo canSupplierlist()
+    {
+        List<SupplierDetails> list = supplierDetailsService.selectCanSupplier();
+        return getDataTable(list);
     }
 }

@@ -195,6 +195,20 @@ public class SupplierDetails extends BaseEntity
     /** 分类描述 */
     @Excel(name = "分类描述")
     private String classDescribe;
+
+
+
+    /** 生命周期id */
+    @Excel(name = "生命周期id")
+    private Long lifecycleId;
+
+    /** 生命周期 */
+    @Excel(name = "生命周期")
+    private String cycle;
+
+    /** 升降级状态 */
+    @Excel(name = "升降级状态")
+    private Long slStatus;
     public void setClassCode(String classCode)
     {
         this.classCode = classCode;
@@ -592,7 +606,21 @@ public class SupplierDetails extends BaseEntity
     {
         return dataTatus;
     }
+    public Long getLifecycleId() {
+        return lifecycleId;
+    }
 
+    public void setLifecycleId(Long lifecycleId) {
+        this.lifecycleId = lifecycleId;
+    }
+
+    public Long getSlStatus() {
+        return slStatus;
+    }
+
+    public void setSlStatus(Long slStatus) {
+        this.slStatus = slStatus;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

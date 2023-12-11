@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.SupplyMapper">
+    
+    <resultMap type="Supply" id="SupplyResult">
+        <result property="supplyId"    column="supply_id"    />
+        <result property="sdId"    column="sd_id"    />
+        <result property="companiesId"    column="companies_id"    />
+        <result property="founder"    column="founder"    />
+        <result property="creationTime"    column="creation_time"    />
+        <result property="lastUpdatedBy"    column="last_updated_by"    />
+        <result property="lastUpdateTime"    column="last_update_time"    />
+        <result property="notes"    column="notes"    />
+        <result property="createdByEpartment"    column="created_by_epartment"    />
+        <result property="sbiName"    column="sbi_name"    />
+        <result property="lifecycleId"    column="lifecycle_id"    />
+        <result property="cycle"    column="cycle"    />
+        <result property="sdCode"    column="sd_code"    />
+        <result property="companiesName"    column="companies_name"    />
+    </resultMap>
+
+    <sql id="selectSupplyVo">
+        select a.supply_id, a.sd_id, a.companies_id, a.founder, a.creation_time, a.last_updated_by,
+               a.last_update_time, a.notes, a.created_by_epartment, b.sd_code, b.sbi_name, b.lifecycle_id,c.cycle,d.companies_name
+            from supply a
+        left join supplier_details b on b.sd_id = a.supply_id
+        left join supplier_lifecycle c on c.lifecycle_id = b.lifecycle_id
+        left join companies d on a.companies_id = d.companies_id
+    </sql>
+
+    <select id="selectSupplyList" parameterType="Supply" resultMap="SupplyResult">
+        <include refid="selectSupplyVo"/>
+        <where>  
+            <if test="sdId != null "> and sd_id = #{sdId}</if>
+            <if test="companiesId != null  and companiesId != ''"> and a.companies_id = #{companiesId}</if>
+            <if test="founder != null  and founder != ''"> and founder = #{founder}</if>
+            <if test="creationTime != null "> and creation_time = #{creationTime}</if>
+            <if test="lastUpdatedBy != null  and lastUpdatedBy != ''"> and last_updated_by = #{lastUpdatedBy}</if>
+            <if test="lastUpdateTime != null "> and last_update_time = #{lastUpdateTime}</if>
+            <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
+            <if test="createdByEpartment != null  and createdByEpartment != ''"> and created_by_epartment = #{createdByEpartment}</if>
+            <if test="sbiName != null  and sbiName != ''"> and sbi_name like concat('%', #{sbiName}, '%')</if>
+            <if test="lifecycleId != null  and lifecycleId != ''"> and lifecycle_id = #{lifecycleId}</if>
+            <if test="cycle != null  and cycle != ''"> and cycle = #{cycle}</if>
+            <if test="sdCode != null  and sdCode != ''"> and sd_code = #{sdCode}</if>
+            and data_tatus = 0
+        </where>
+    </select>
+    
+    <select id="selectSupplyBySupplyId" parameterType="Long" resultMap="SupplyResult">
+        <include refid="selectSupplyVo"/>
+        where supply_id = #{supplyId}
+    </select>
+
+    <select id="selectCompanies" resultMap="SupplyResult">
+        select companies_id,companies_name from companies
+    </select>
+    <insert id="insertSupply" parameterType="Supply" useGeneratedKeys="true" keyProperty="supplyId">
+        insert into supply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sdId != null">sd_id,</if>
+            <if test="companiesId != null and companiesId != ''">companies_id,</if>
+            <if test="founder != null">founder,</if>
+            <if test="creationTime != null">creation_time,</if>
+            <if test="lastUpdatedBy != null">last_updated_by,</if>
+            <if test="lastUpdateTime != null">last_update_time,</if>
+            <if test="notes != null">notes,</if>
+            <if test="createdByEpartment != null">created_by_epartment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sdId != null">#{sdId},</if>
+            <if test="companiesId != null and companiesId != ''">#{companiesId},</if>
+            <if test="founder != null">#{founder},</if>
+            <if test="creationTime != null">#{creationTime},</if>
+            <if test="lastUpdatedBy != null">#{lastUpdatedBy},</if>
+            <if test="lastUpdateTime != null">#{lastUpdateTime},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="createdByEpartment != null">#{createdByEpartment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupply" parameterType="Supply">
+        update supply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sdId != null">sd_id = #{sdId},</if>
+            <if test="companiesId != null and companiesId != ''">companies_id = #{companiesId},</if>
+            <if test="founder != null">founder = #{founder},</if>
+            <if test="creationTime != null">creation_time = #{creationTime},</if>
+            <if test="lastUpdatedBy != null">last_updated_by = #{lastUpdatedBy},</if>
+            <if test="lastUpdateTime != null">last_update_time = #{lastUpdateTime},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="createdByEpartment != null">created_by_epartment = #{createdByEpartment},</if>
+        </trim>
+        where supply_id = #{supplyId}
+    </update>
+
+    <delete id="deleteSupplyBySupplyId" parameterType="Long">
+        delete from supply where supply_id = #{supplyId}
+    </delete>
+
+    <delete id="deleteSupplyBySupplyIds" parameterType="String">
+        delete from supply where supply_id in 
+        <foreach item="supplyId" collection="array" open="(" separator="," close=")">
+            #{supplyId}
+        </foreach>
+    </delete>
+</mapper>

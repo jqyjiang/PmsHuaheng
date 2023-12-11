@@ -40,6 +40,10 @@
           v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
+        <el-button type="warning" plain icon="el-icon-s-check" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['supplierpms:supplier:edit']">审核</el-button>
+      </el-col>
+      <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['supplierpms:supplier:export']">导出</el-button>
       </el-col>
@@ -77,8 +81,8 @@
 
           <el-button v-if="scope.row.sdStatus === '0'" size="mini" type="text" @click="authentication(scope.row)"
             icon="el-icon-coordinate" v-hasPermi="['supplierpms:supplier:remove']">企业认证</el-button>
-          <!-- <el-button v-if="scope.row.sdStatus === '0'" type="text" size="mini" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['supplierpms:details:edit']">修改</el-button> -->
+          <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check" @click="handleUpdate(scope.row)"
+            v-hasPermi="['supplierpms:details:edit']">审核</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
             v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
 
@@ -143,15 +147,11 @@
             <li v-for="item in tableData" :key="item.name">{{ item.name }}</li>
           </ul> -->
           <el-form-item label="主要联系人性别" prop="sdPcg">
-          <el-select v-model="form.sdPcg" placeholder="请选择主要联系人性别">
-            <el-option
-              v-for="dict in dict.type.sys_user_sex"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+            <el-select v-model="form.sdPcg" placeholder="请选择主要联系人性别">
+              <el-option v-for="dict in dict.type.sys_user_sex" :key="dict.value" :label="dict.label"
+                :value="dict.value"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="主要联系人职务" prop="sdMct">
             <el-input v-model="form.sdMct" placeholder="请输入主要联系人职务" />
           </el-form-item>
@@ -500,7 +500,7 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {
+    resetQuery() {ids
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -516,24 +516,26 @@ export default {
       this.open = true;
       this.title = "添加供应商详细";
     },
-    /** 修改按钮操作 */
-    // handleUpdate(row) {
-    //   this.reset();
-    //   const sdId = row.sdId || this.ids;
-    //   getDetails(sdId).then((response) => {
-    //     this.form = response.data;
-    //     this.form.sbiServe = this.form.sbiServe.split(",");
-    //     this.open = true;
-    //     this.title = "修改供应商详细";
-    //   });
-    // },
+    /** 点击审核按钮操作 */
+    handleUpdate(row) {
+      this.reset();
+      // const sdId = row.sdId || this.ids;
+      // const ss = 1;
+      this.form = row;
+      this.form.sdStatus = "2";
+      this.form.lifecycleId=1;
+
+      updateDetails(this.form).then((response) => {
+        this.$modal.msgSuccess("审核成功");
+        this.getList();
+      });
+    },
     /** 点击企业认证按钮 */
-    authentication(row) {
+    authentication(selection) {
       // this.$refs["companyForm"].validate((valid) => {});
       this.drawer = true;
       this.reset();
       const sdId = row.sdId || this.ids;
-      //this.form.sdId=row.sdId;
       getDetails(sdId).then((response) => {
         this.form = response.data;
       });
@@ -541,9 +543,8 @@ export default {
     /** 提交企业认证*/
     authentications() {
       this.$refs["form"].validate((valid) => {
-        console.log("ggg"+valid);
         if (valid) {
-          this.form.sdStatus="1";
+          this.form.sdStatus = "1";
           this.form.sdRt = new Date();
           updateDetails(this.form).then((response) => {
             this.$modal.msgSuccess("提交成功");

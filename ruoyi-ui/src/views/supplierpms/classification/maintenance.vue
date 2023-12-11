@@ -88,7 +88,6 @@
                                 </el-table>
                                 <i class="el-icon-search" slot="reference"></i>
                             </el-popover>
-
                         </template>
                     </el-input>
                 </el-form-item>
@@ -121,7 +120,7 @@
 
     </div>
 </template>
-  
+
 <script>
 import { listClassification, getClassification, delClassification, addClassification, updateClassification } from "@/api/supplierpms/classification";
 import { listDetails, listFilter, getDetails, delDetails, addDetails, updateDetails,delClassDetails } from "@/api/supplierpms/details";
@@ -344,4 +343,3 @@ export default {
     }
 };
 </script>
-  
