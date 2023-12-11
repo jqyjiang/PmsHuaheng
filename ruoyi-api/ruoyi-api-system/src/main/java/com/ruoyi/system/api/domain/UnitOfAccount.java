@@ -1,10 +1,11 @@
-package com.hh.pms.mast.domain;
+package com.ruoyi.system.api.domain;
 
-import java.math.BigDecimal;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.math.BigDecimal;
 
 /**
  * 计算单位定义对象 unit_of_account

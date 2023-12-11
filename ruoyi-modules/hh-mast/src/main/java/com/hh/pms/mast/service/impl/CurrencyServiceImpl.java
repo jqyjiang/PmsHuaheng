@@ -1,10 +1,11 @@
 package com.hh.pms.mast.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.api.domain.Currency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mast.mapper.CurrencyMapper;
-import com.hh.pms.mast.domain.Currency;
 import com.hh.pms.mast.service.ICurrencyService;
 
 /**

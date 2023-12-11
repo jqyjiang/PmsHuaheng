@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
 import java.util.List;
-import com.hh.pms.domain.OrderManager;
+
+import com.ruoyi.system.api.domain.OrderManager;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -71,4 +72,11 @@ public interface IOrderManagerService
      * @return 结果
      */
     public int deleteOrderManagerByOrderId(Long orderId);
+
+    /**
+     * 修改订单状态
+     * @param orderManager
+     * @return
+     */
+    int updateOrderManagerState(OrderManager orderManager);
 }

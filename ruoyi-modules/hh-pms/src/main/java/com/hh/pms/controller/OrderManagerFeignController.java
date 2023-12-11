@@ -1,19 +1,12 @@
 package com.hh.pms.controller;
 
-import com.hh.pms.domain.OrderMaterial;
-import com.hh.pms.domain.SupplierDetails;
-import com.hh.pms.mast.domain.Category;
-import com.hh.pms.mast.domain.Currency;
-import com.hh.pms.mast.domain.Material;
-import com.hh.pms.mast.domain.TaxRate;
 import com.hh.pms.model.MaterialClient;
+import com.hh.pms.model.ProcurementTaskServiceClient;
 import com.hh.pms.model.SupplierClient;
 import com.ruoyi.common.core.web.page.TableDataInfo;
-import com.ruoyi.common.security.annotation.RequiresPermissions;
+import com.ruoyi.system.api.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/OrderManager")
@@ -24,6 +17,17 @@ public class OrderManagerFeignController {
     @Autowired
     private MaterialClient materialClient;
 
+    @Autowired
+    private ProcurementTaskServiceClient procurementTaskServiceClient;
+
+    /**
+     * 查询供应商列表
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET,value = "/listManagement")
+    public TableDataInfo listManagement( @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize){
+        return procurementTaskServiceClient.listOrderList(pageNum,pageSize);
+    }
     /**
      * 查询供应商列表
      * @return

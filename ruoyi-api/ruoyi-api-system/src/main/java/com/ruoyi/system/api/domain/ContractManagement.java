@@ -1,12 +1,12 @@
-package com.hh.pms.domain;
+package com.ruoyi.system.api.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.core.annotation.Excel;
+import com.ruoyi.common.core.web.domain.BaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.core.annotation.Excel;
-import com.ruoyi.common.core.web.domain.BaseEntity;
+import java.util.List;
 
 /**
  * 采购合同管理对象 contract_management
@@ -153,7 +153,27 @@ public class ContractManagement extends BaseEntity
     @Excel(name = "采购清单")
     private String purchasingList;
 
-    public void setContractManagementId(Long contractManagementId) 
+    private SupplierDetails supplierDetails;
+
+    private List<Delivery> delivery;
+
+    public List<Delivery> getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(List<Delivery> delivery) {
+        this.delivery = delivery;
+    }
+
+    public SupplierDetails getSupplierDetails() {
+        return supplierDetails;
+    }
+
+    public void setSupplierDetails(SupplierDetails supplierDetails) {
+        this.supplierDetails = supplierDetails;
+    }
+
+    public void setContractManagementId(Long contractManagementId)
     {
         this.contractManagementId = contractManagementId;
     }
@@ -453,40 +473,42 @@ public class ContractManagement extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("contractManagementId", getContractManagementId())
-            .append("purchasingCode", getPurchasingCode())
-            .append("projectRelatedContracts", getProjectRelatedContracts())
-            .append("applicant", getApplicant())
-            .append("applicationDate", getApplicationDate())
-            .append("departmentId", getDepartmentId())
-            .append("companiesId", getCompaniesId())
-            .append("relatedProjects", getRelatedProjects())
-            .append("isMainContract", getIsMainContract())
-            .append("relatedMainContract", getRelatedMainContract())
-            .append("budgetRelatedContracts", getBudgetRelatedContracts())
-            .append("costCenter", getCostCenter())
-            .append("head", getHead())
-            .append("signingDate", getSigningDate())
-            .append("totalAmount", getTotalAmount())
-            .append("paymentProportion", getPaymentProportion())
-            .append("contractstatusId", getContractstatusId())
-            .append("sdId", getSdId())
-            .append("totalProjectBudget", getTotalProjectBudget())
-            .append("projectAvailableBudget", getProjectAvailableBudget())
-            .append("contractName", getContractName())
-            .append("contractCode", getContractCode())
-            .append("contractType", getContractType())
-            .append("dense", getDense())
-            .append("beginTime", getBeginTime())
-            .append("endTime", getEndTime())
-            .append("contractPrice", getContractPrice())
-            .append("capitalization", getCapitalization())
-            .append("stampDutyAmount", getStampDutyAmount())
-            .append("contractDescription", getContractDescription())
-            .append("procurementMethod", getProcurementMethod())
-            .append("frameworkAgreements", getFrameworkAgreements())
-            .append("purchasingList", getPurchasingList())
-            .toString();
+        return "ContractManagement{" +
+                "contractManagementId=" + contractManagementId +
+                ", purchasingCode='" + purchasingCode + '\'' +
+                ", projectRelatedContracts='" + projectRelatedContracts + '\'' +
+                ", applicant='" + applicant + '\'' +
+                ", applicationDate=" + applicationDate +
+                ", departmentId=" + departmentId +
+                ", companiesId=" + companiesId +
+                ", relatedProjects='" + relatedProjects + '\'' +
+                ", isMainContract=" + isMainContract +
+                ", relatedMainContract='" + relatedMainContract + '\'' +
+                ", budgetRelatedContracts='" + budgetRelatedContracts + '\'' +
+                ", costCenter='" + costCenter + '\'' +
+                ", head='" + head + '\'' +
+                ", signingDate=" + signingDate +
+                ", totalAmount=" + totalAmount +
+                ", paymentProportion=" + paymentProportion +
+                ", contractstatusId=" + contractstatusId +
+                ", sdId=" + sdId +
+                ", totalProjectBudget=" + totalProjectBudget +
+                ", projectAvailableBudget=" + projectAvailableBudget +
+                ", contractName='" + contractName + '\'' +
+                ", contractCode='" + contractCode + '\'' +
+                ", contractType=" + contractType +
+                ", dense='" + dense + '\'' +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", contractPrice=" + contractPrice +
+                ", capitalization='" + capitalization + '\'' +
+                ", stampDutyAmount='" + stampDutyAmount + '\'' +
+                ", contractDescription='" + contractDescription + '\'' +
+                ", procurementMethod=" + procurementMethod +
+                ", frameworkAgreements='" + frameworkAgreements + '\'' +
+                ", purchasingList='" + purchasingList + '\'' +
+                ", supplierDetails=" + supplierDetails +
+                ", delivery=" + delivery +
+                '}';
     }
 }

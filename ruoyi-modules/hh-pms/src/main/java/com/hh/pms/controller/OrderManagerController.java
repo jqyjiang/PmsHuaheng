@@ -3,22 +3,14 @@ package com.hh.pms.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
-import com.hh.pms.domain.OrderMaterial;
-import com.hh.pms.domain.SupplierDetails;
-import com.hh.pms.mast.domain.Category;
-import com.hh.pms.mast.domain.Currency;
-import com.hh.pms.mast.domain.Material;
-import com.hh.pms.mast.domain.TaxRate;
-import com.hh.pms.model.MaterialClient;
-import com.hh.pms.model.SupplierClient;
 import com.hh.pms.service.IOrderMaterialService;
+import com.ruoyi.system.api.domain.OrderManager;
+import com.ruoyi.system.api.domain.OrderMaterial;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
-import com.hh.pms.domain.OrderManager;
 import com.hh.pms.service.IOrderManagerService;
 import com.ruoyi.common.core.web.controller.BaseController;
 import com.ruoyi.common.core.web.domain.AjaxResult;
@@ -128,7 +120,16 @@ public class OrderManagerController extends BaseController
     {
         return toAjax(orderManagerService.updateOrderManager(orderManager));
     }
-
+    /**
+     * 修改采购订单管理
+     */
+//    @RequiresPermissions("pms:manager:edit")
+    @Log(title = "采购订单管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/editState")
+    public int editState(@RequestBody OrderManager orderManager)
+    {
+        return orderManagerService.updateOrderManagerState(orderManager);
+    }
     /**
      * 删除采购订单管理
      */

@@ -1,7 +1,8 @@
 package com.hh.pms.mast.mapper;
 
+import com.ruoyi.system.api.domain.Category;
+
 import java.util.List;
-import com.hh.pms.mast.domain.Category;
 
 /**
  * 品类Mapper接口

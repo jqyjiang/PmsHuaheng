@@ -13,7 +13,7 @@
           <!-- 右边的三个按钮 -->
           <el-button type="primary" size="small" label="rtl" @click="drawer = true">需求转订单</el-button>
           <el-button type="primary" size="small">合同转订单</el-button>
-          <el-button type="primary" size="small" @click="orderCancel">关闭订单</el-button>
+          <el-button type="primary" size="small" @click="orderCancelbutton">关闭订单</el-button>
         </div>
       </div>
     </div>
@@ -135,7 +135,7 @@
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
-      <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChangeCurrency">
+      <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="关联合同名称" align="center" prop="contractName" />
         <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
@@ -656,7 +656,7 @@
 </template>
 
 <script>
-import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber } from "@/api/pms/manager";
+import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber, updateManagerState } from "@/api/pms/manager";
 import { listMaterials, getMaterial, delMaterial, addMaterial, updateMaterial, findTaskMaterial } from "@/api/pms/materials";
 import { listTask, getTask, delTask, addTask, updateTask } from "@/api/procure/task";
 export default {
@@ -817,20 +817,22 @@ export default {
       ormtotal: 0,
       drawer: false,
       direction: 'rtl',
-      checkedOrderMaterials: []
+      checkedOrderMaterials: [],
+      //关闭订单的集合或对象
+      orderCancel: []
     };
   },
   watch: {
-  'orderMaterialList': {
-    deep: true,
-    handler(newVal, oldVal) {
-      newVal.forEach((item) => {
-        this.calculateLineTaxAmount(item);
-        this.calculateTaxPrice(item);
-      });
+    'orderMaterialList': {
+      deep: true,
+      handler(newVal, oldVal) {
+        newVal.forEach((item) => {
+          this.calculateLineTaxAmount(item);
+          this.calculateTaxPrice(item);
+        });
+      }
     }
-  }
-},
+  },
   created() {
     this.getListMaterial();
     this.getlistNumber();
@@ -906,8 +908,32 @@ export default {
   },
   methods: {
     //关闭订单
-    orderCancel(){
-
+    orderCancelbutton() {
+      if (this.orderCancel.length === 1) {
+        if (this.orderCancel.some(element => element.orderState === 3)) {
+          // 如果数组中有元素的'orderState'等于3，则执行下一步操作
+          //nextStep();
+          this.orderCancel.forEach(element => {
+            element.orId = 6
+          })
+          updateManagerState(this.orderCancel[0])
+          this.getList();
+        } else {
+          // 如果数组中没有元素的'orderState'等于3，则提示错误
+          // alert("订单状态不正确，无法执行该操作。");
+          this.$notify({
+            title: '警告',
+            message: '订单状态不正确，无法执行该操作。',
+            type: 'warning'
+          });
+        }
+      }else{
+        this.$notify({
+            title: '警告',
+            message: '请选择一条数据',
+            type: 'warning'
+          });
+      }
     },
     calculateLineTaxAmount(row) {
       row.lineTaxAmount = row.noTaxPrice * row.requireNumber * (1 + row.tax);
@@ -1306,6 +1332,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
+      this.orderCancel = selection
+      console.log("这是orderCancel:" + this.orderCancel)
       this.ids = selection.map(item => item.orderId)
       this.single = selection.length !== 1
       this.multiple = !selection.length

@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.SupplierClassification;
+
 import java.util.List;
-import com.hh.pms.domain.SupplierClassification;
 
 /**
  * 供应商分类定义Service接口

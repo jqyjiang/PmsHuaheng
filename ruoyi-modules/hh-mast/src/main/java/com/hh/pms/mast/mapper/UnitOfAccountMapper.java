@@ -1,7 +1,8 @@
 package com.hh.pms.mast.mapper;
 
+import com.ruoyi.system.api.domain.UnitOfAccount;
+
 import java.util.List;
-import com.hh.pms.mast.domain.UnitOfAccount;
 
 /**
  * 计算单位定义Mapper接口

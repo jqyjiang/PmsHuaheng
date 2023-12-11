@@ -1,7 +1,6 @@
 package com.hh.pms.service;
 
 import java.util.List;
-import com.hh.pms.domain.ContractManagement;
 
 /**
  * 采购合同管理Service接口

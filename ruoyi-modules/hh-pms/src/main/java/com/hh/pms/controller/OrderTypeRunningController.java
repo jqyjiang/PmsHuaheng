@@ -1,6 +1,5 @@
 package com.hh.pms.controller;
 
-import com.hh.pms.domain.OrderTypeRunning;
 import com.hh.pms.service.IOrderTypeRunningService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

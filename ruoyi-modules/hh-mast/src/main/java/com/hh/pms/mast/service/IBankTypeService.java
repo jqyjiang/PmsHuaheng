@@ -1,7 +1,8 @@
 package com.hh.pms.mast.service;
 
+import com.ruoyi.system.api.domain.BankType;
+
 import java.util.List;
-import com.hh.pms.mast.domain.BankType;
 
 /**
  * 银行类型Service接口

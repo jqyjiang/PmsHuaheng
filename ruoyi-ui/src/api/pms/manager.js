@@ -42,7 +42,14 @@ export function updateManager(data) {
     data: data
   })
 }
-
+// 修改采购订单管理状态
+export function updateManagerState(data) {
+  return request({
+    url: '/pms/manager/editState',
+    method: 'put',
+    data: data
+  })
+}
 // 删除采购订单管理
 export function delManager(orderId) {
   return request({
@@ -121,3 +128,4 @@ export function managerList(query) {
     params: query
   })
 }
+

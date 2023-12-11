@@ -1,17 +1,14 @@
-package com.hh.pms.domain;
+package com.ruoyi.system.api.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hh.pms.mast.domain.Currency;
+import com.ruoyi.common.core.annotation.Excel;
+import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import com.hh.pms.mast.domain.Currency;
-
-import com.ruoyi.common.core.annotation.Excel;
-import com.ruoyi.common.core.web.domain.BaseEntity;
-import com.ruoyi.system.api.domain.Companies;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 采购订单管理对象 order_manager

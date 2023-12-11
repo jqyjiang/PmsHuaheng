@@ -1,7 +1,8 @@
 package com.hh.pms.mast.service;
 
+import com.ruoyi.system.api.domain.Bank;
+
 import java.util.List;
-import com.hh.pms.mast.domain.Bank;
 
 /**
  * 银行Service接口

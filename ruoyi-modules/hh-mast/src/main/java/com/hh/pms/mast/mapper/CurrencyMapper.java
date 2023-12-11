@@ -1,7 +1,8 @@
 package com.hh.pms.mast.mapper;
 
+import com.ruoyi.system.api.domain.Currency;
+
 import java.util.List;
-import com.hh.pms.mast.domain.Currency;
 
 /**
  * 币种Mapper接口

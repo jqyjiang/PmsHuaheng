@@ -1,7 +1,8 @@
 package com.hh.pms.mapper;
 
+import com.ruoyi.system.api.domain.SupplierDetails;
+
 import java.util.List;
-import com.hh.pms.domain.SupplierDetails;
 
 /**
  * 供应商列表Mapper接口

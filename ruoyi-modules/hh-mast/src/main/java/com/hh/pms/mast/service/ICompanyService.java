@@ -1,7 +1,8 @@
 package com.hh.pms.mast.service;
 
+import com.ruoyi.system.api.domain.Company;
+
 import java.util.List;
-import com.hh.pms.mast.domain.Company;
 
 /**
  * 公司表Service接口

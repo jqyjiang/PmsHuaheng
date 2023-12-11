@@ -4,7 +4,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.ContractManagementMapper;
-import com.hh.pms.domain.ContractManagement;
 import com.hh.pms.service.IContractManagementService;
 
 /**

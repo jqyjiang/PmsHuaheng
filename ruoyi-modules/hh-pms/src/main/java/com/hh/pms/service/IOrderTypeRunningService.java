@@ -1,6 +1,6 @@
 package com.hh.pms.service;
 
-import com.hh.pms.domain.OrderTypeRunning;
+import com.ruoyi.system.api.domain.OrderTypeRunning;
 
 import java.util.List;
 

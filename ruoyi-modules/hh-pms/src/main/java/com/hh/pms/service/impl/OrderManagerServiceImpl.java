@@ -2,18 +2,16 @@ package com.hh.pms.service.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
-
-import com.hh.pms.domain.OrderMaterial;
 
 import com.hh.pms.mapper.OrderMaterialMapper;
 import com.hh.pms.model.ProcurementTaskServiceClient;
+import com.ruoyi.system.api.domain.OrderManager;
+import com.ruoyi.system.api.domain.OrderMaterial;
 import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.OrderManagerMapper;
-import com.hh.pms.domain.OrderManager;
 import com.hh.pms.service.IOrderManagerService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -185,6 +183,11 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     @Override
     public int deleteOrderManagerByOrderId(Long orderId) {
         return orderManagerMapper.deleteOrderManagerByOrderId(orderId);
+    }
+
+    @Override
+    public int updateOrderManagerState(OrderManager orderManager) {
+        return orderManagerMapper.updateOrderManagerState(orderManager);
     }
 
     /**

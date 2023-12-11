@@ -240,6 +240,35 @@
         </trim>
         where order_id = #{orderId}
     </update>
+    <update id="updateOrderManagerState" parameterType="OrderManager">
+        update order_manager
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="orderType != null">order_type = #{orderType},</if>
+            <if test="orderSource != null">order_source = #{orderSource},</if>
+            <if test="purOrganization != null">pur_organization = #{purOrganization},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="isSelfPickup != null">is_self_pickup = #{isSelfPickup},</if>
+            <if test="licensePlateNumber != null">license_plate_number = #{licensePlateNumber},</if>
+            <if test="concatInfomation != null">concat_infomation = #{concatInfomation},</if>
+            <if test="contractCode != null">contract_code = #{contractCode},</if>
+            <if test="contractName != null">contract_name = #{contractName},</if>
+            <if test="orderDescription != null">order_description = #{orderDescription},</if>
+            <if test="totalDemand != null">total_demand = #{totalDemand},</if>
+            <if test="purchaser != null">purchaser = #{purchaser},</if>
+            <if test="orderState != null">order_state = #{orderState},</if>
+            <if test="orId != null">or_id = #{orId},</if>
+            <if test="currencyId != null">currency_id = #{currencyId},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="contacts != null">contacts = #{contacts},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="invoiceMethod != null">invoice_method = #{invoiceMethod},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
 
     <delete id="deleteOrderManagerByOrderId" parameterType="Long">
         delete

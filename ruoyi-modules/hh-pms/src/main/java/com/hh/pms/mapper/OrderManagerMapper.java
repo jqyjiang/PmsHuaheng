@@ -2,7 +2,8 @@ package com.hh.pms.mapper;
 
 import java.util.Date;
 import java.util.List;
-import com.hh.pms.domain.OrderManager;
+
+import com.ruoyi.system.api.domain.OrderManager;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -82,4 +83,10 @@ public interface OrderManagerMapper
      * @return
      */
     List<OrderManager> selectByOrderTypeRunning(Long orId);
+    /**
+     * 修改订单状态
+     * @param orderManager
+     * @return
+     */
+    int updateOrderManagerState(OrderManager orderManager);
 }

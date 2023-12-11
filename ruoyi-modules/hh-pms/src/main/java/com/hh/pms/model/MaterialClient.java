@@ -1,10 +1,10 @@
 package com.hh.pms.model;
 
-import com.hh.pms.mast.domain.Category;
-import com.hh.pms.mast.domain.Currency;
-import com.hh.pms.mast.domain.Material;
-import com.hh.pms.mast.domain.TaxRate;
 import com.ruoyi.common.core.web.page.TableDataInfo;
+import com.ruoyi.system.api.domain.Category;
+import com.ruoyi.system.api.domain.Currency;
+import com.ruoyi.system.api.domain.Material;
+import com.ruoyi.system.api.domain.TaxRate;
 import org.springframework.cloud.openfeign.FeignClient;
 
 import org.springframework.stereotype.Component;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component("materialClientBean")
 public interface MaterialClient {
     @RequestMapping(method = RequestMethod.GET,value = "/material/list")
-    public TableDataInfo list(@RequestParam("mqueryParams") Material material,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
+    public TableDataInfo list(@RequestParam("mqueryParams") Material material, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/currency/list")
-    public TableDataInfo list(@RequestParam("currency") Currency currency,@RequestParam("pageNum") Integer pageNum,@RequestParam("pageSize") Integer pageSize);
+    public TableDataInfo list(@RequestParam("currency") Currency currency, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/category/list")
     public TableDataInfo listCategory(@RequestParam("category") Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/rate/list")

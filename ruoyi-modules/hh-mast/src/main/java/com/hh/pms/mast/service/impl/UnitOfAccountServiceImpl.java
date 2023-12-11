@@ -1,10 +1,11 @@
 package com.hh.pms.mast.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.api.domain.UnitOfAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mast.mapper.UnitOfAccountMapper;
-import com.hh.pms.mast.domain.UnitOfAccount;
 import com.hh.pms.mast.service.IUnitOfAccountService;
 
 /**

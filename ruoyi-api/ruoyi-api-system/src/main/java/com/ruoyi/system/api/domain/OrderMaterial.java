@@ -1,10 +1,11 @@
-package com.hh.pms.domain;
+package com.ruoyi.system.api.domain;
 
-import java.math.BigDecimal;
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 订单物料明细对象 order_material

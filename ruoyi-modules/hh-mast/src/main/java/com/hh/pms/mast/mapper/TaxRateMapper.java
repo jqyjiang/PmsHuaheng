@@ -1,7 +1,8 @@
 package com.hh.pms.mast.mapper;
 
+import com.ruoyi.system.api.domain.TaxRate;
+
 import java.util.List;
-import com.hh.pms.mast.domain.TaxRate;
 
 /**
  * 税率Mapper接口

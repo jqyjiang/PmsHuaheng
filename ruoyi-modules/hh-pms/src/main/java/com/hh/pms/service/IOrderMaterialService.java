@@ -1,7 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.OrderMaterial;
+
 import java.util.List;
-import com.hh.pms.domain.OrderMaterial;
 
 /**
  * 订单物料明细Service接口

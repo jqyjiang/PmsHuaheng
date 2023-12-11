@@ -1,10 +1,11 @@
 package com.hh.pms.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.system.api.domain.SupplierClassification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.SupplierClassificationMapper;
-import com.hh.pms.domain.SupplierClassification;
 import com.hh.pms.service.ISupplierClassificationService;
 
 /**

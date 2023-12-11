@@ -1,6 +1,5 @@
 package com.hh.pms.service.impl;
 
-import com.hh.pms.domain.OrderTypeRunning;
 import com.hh.pms.mapper.OrderTypeRunningMapper;
 import com.hh.pms.service.IOrderTypeRunningService;
 import org.springframework.beans.factory.annotation.Autowired;

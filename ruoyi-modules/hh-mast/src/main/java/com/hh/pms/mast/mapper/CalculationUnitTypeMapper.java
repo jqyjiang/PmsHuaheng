@@ -1,7 +1,8 @@
 package com.hh.pms.mast.mapper;
 
+import com.ruoyi.system.api.domain.CalculationUnitType;
+
 import java.util.List;
-import com.hh.pms.mast.domain.CalculationUnitType;
 
 /**
  * 计量单位类型定义Mapper接口

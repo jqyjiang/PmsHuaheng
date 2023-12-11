@@ -1,7 +1,8 @@
 package com.hh.pms.mapper;
 
+import com.ruoyi.system.api.domain.ContractManagement;
+
 import java.util.List;
-import com.hh.pms.domain.ContractManagement;
 
 /**
  * 采购合同管理Mapper接口
