@@ -1,4 +1,4 @@
-package com.hh.pms.domain;
+package com.ruoyi.system.api.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -9,7 +9,7 @@ import com.ruoyi.common.core.web.domain.BaseEntity;
 
 /**
  * 供货管理对象 supply
- * 
+ *
  * @author ruoyi
  * @date 2023-12-06
  */
@@ -88,21 +88,21 @@ public class Supply extends BaseEntity
     @Excel(name = "企业名称")
     private String companiesName;
 
-    public void setSupplyId(Long supplyId) 
+    public void setSupplyId(Long supplyId)
     {
         this.supplyId = supplyId;
     }
 
-    public Long getSupplyId() 
+    public Long getSupplyId()
     {
         return supplyId;
     }
-    public void setSdId(Long sdId) 
+    public void setSdId(Long sdId)
     {
         this.sdId = sdId;
     }
 
-    public Long getSdId() 
+    public Long getSdId()
     {
         return sdId;
     }
@@ -111,43 +111,43 @@ public class Supply extends BaseEntity
         this.founder = founder;
     }
 
-    public String getFounder() 
+    public String getFounder()
     {
         return founder;
     }
-    public void setCreationTime(Date creationTime) 
+    public void setCreationTime(Date creationTime)
     {
         this.creationTime = creationTime;
     }
 
-    public Date getCreationTime() 
+    public Date getCreationTime()
     {
         return creationTime;
     }
-    public void setLastUpdatedBy(String lastUpdatedBy) 
+    public void setLastUpdatedBy(String lastUpdatedBy)
     {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public String getLastUpdatedBy() 
+    public String getLastUpdatedBy()
     {
         return lastUpdatedBy;
     }
-    public void setLastUpdateTime(Date lastUpdateTime) 
+    public void setLastUpdateTime(Date lastUpdateTime)
     {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-    public Date getLastUpdateTime() 
+    public Date getLastUpdateTime()
     {
         return lastUpdateTime;
     }
-    public void setNotes(String notes) 
+    public void setNotes(String notes)
     {
         this.notes = notes;
     }
 
-    public String getNotes() 
+    public String getNotes()
     {
         return notes;
     }
@@ -157,7 +157,7 @@ public class Supply extends BaseEntity
         this.createdByEpartment = createdByEpartment;
     }
 
-    public String getCreatedByEpartment() 
+    public String getCreatedByEpartment()
     {
         return createdByEpartment;
     }

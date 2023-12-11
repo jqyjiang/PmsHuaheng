@@ -135,19 +135,23 @@
           </el-select>
         </el-form-item> -->
 
-        <el-form-item v-if="false" label="计算单位" prop="calculationUnit">
+        <el-form-item label="计算单位" prop="calculationUnit">
           <el-input v-model="form.calculationUnit" placeholder="请输入计算单位" />
         </el-form-item>
-        <el-form-item label="基本计算单位" prop="unitName">
-          <el-input v-model="form.unitName" placeholder="请选择基本计算单位"/>
+        <el-form-item label="基本计算单位" prop="UnitName">
+          <el-input v-model="form.UnitName" placeholder="请选择基本计算单位"/>
           <i class="el-icon-search" id="serachOne2" @click="showAccount()"></i>
               <el-dialog :visible.sync="dialogAccount" title="计算单位-浏览框" :modal="false">
                 <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount">
                   <el-table-column label="计算单位" align="center" prop="meteringUnit" />
                   <el-table-column label="计算单位编码" align="center" prop="calculationUnitCode" />
                 </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
-                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <pagination
+                 v-show="total3>0"
+                  :total="total3"
+                  :page.sync="queryParams3.pageNum"
+                  :limit.sync="queryParams3.pageSize"
+                   @pagination="getList3" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogAccount = false">取消</el-button>
                 </div>
@@ -169,7 +173,10 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="来源系统" prop="sourceSystem">
-          <el-input v-model="form.sourceSystem" placeholder="请输入来源系统" />
+          <el-select v-model="form.sourceSystem" placeholder="请输入来源系统" >
+            <el-option value="SRM">SRM</el-option>
+            <el-option value="SAP">SAP</el-option>
+          </el-select>
         </el-form-item>
         <!-- <el-form-item label="主品类" prop="mCategory">
           <el-input v-model="form.mCategory" placeholder="请输入主品类" />
@@ -181,13 +188,13 @@
         <el-form-item label="主品类" prop="categoryName">
           <el-input v-model="form.categoryName" placeholder="请选择主品类"/>
           <i class="el-icon-search" id="serachOne2" @click="showCategory()"></i>
-              <el-dialog :visible.sync="dialogCategory" title="公司-浏览框" :modal="false">
+              <el-dialog :visible.sync="dialogCategory" title="主品类-浏览框" :modal="false">
                 <el-table :data="categoryList1" v-loading="loading" @row-click="handleRowClickCategory">
                   <el-table-column label="品类名称" align="center" prop="categoryName" />
                   <el-table-column label="品类编码" align="center" prop="categoryCode" />
                 </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
-                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
+                  :limit.sync="caqueryParams.pageSize" @pagination="getList4" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogCategory = false">取消</el-button>
                 </div>
@@ -210,15 +217,15 @@
         <el-form-item label="默认税种/税率" prop="categoriesTaxes">
           <el-input v-model="form.categoriesTaxes" placeholder="请选择默认税种/税率"/>
           <i class="el-icon-search" id="serachOne2" @click="showRate()"></i>
-              <el-dialog :visible.sync="dialogRate" title="品类对象-浏览框" :modal="false">
+              <el-dialog :visible.sync="dialogRate" title="默认税种/税率-浏览框" :modal="false">
                 <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickRate">
                   <el-table-column label="税种代码" align="center" prop="taxCode" />
                   <el-table-column label="描述" align="center" prop="describes" />
                   <el-table-column label="税率(%)" align="center" prop="taxRate" />
                   <el-table-column label="启用" align="center" prop="enable" />
                 </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="caqueryParams.pageNum"
-                  :limit.sync="caqueryParams.pageSize" @pagination="getList5" />
+                <pagination v-show="total5 > 0" :total="total5" :page.sync="queryParams5.pageNum"
+                  :limit.sync="queryParams5.pageSize" @pagination="getList5" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogRate = false">取消</el-button>
                 </div>
@@ -244,13 +251,13 @@
         <el-form-item label="基本重量单位" prop="weightName">
           <el-input v-model="form.weightName" placeholder="请选择基本重量单位"/>
           <i class="el-icon-search" id="serachOne2" @click="showAccount1()"></i>
-              <el-dialog :visible.sync="dialogAccount1" title="计算单位-浏览框" :modal="false">
+              <el-dialog :visible.sync="dialogAccount1" title="重量单位-浏览框" :modal="false">
                 <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount1">
                   <el-table-column label="重量单位" align="center" prop="meteringUnit" />
                   <el-table-column label="重量单位编码" align="center" prop="calculationUnitCode" />
                 </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
-                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <pagination v-show="total6 > 0" :total="total6" :page.sync="queryParams6.pageNum"
+                  :limit.sync="queryParams6.pageSize" @pagination="getList6" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogAccount1 = false">取消</el-button>
                 </div>
@@ -275,8 +282,8 @@
                   <el-table-column label="体积单位" align="center" prop="meteringUnit" />
                   <el-table-column label="体积单位编码" align="center" prop="calculationUnitCode" />
                 </el-table>
-                <pagination v-show="catotal > 0" :total="catotal" :page.sync="queryParams.pageNum"
-                  :limit.sync="queryParams.pageSize" @pagination="getList3" />
+                <pagination v-show="total7 > 0" :total="total7" :page.sync="queryParams7.pageNum"
+                  :limit.sync="queryParams7.pageSize" @pagination="getList7" />
                 <div slot="footer" class="dialog-footer">
                   <el-button @click="dialogAccount2 = false">取消</el-button>
                 </div>
@@ -284,7 +291,11 @@
         </el-form-item>
 
         <el-form-item label="物料ABC属性" prop="abcAttribute">
-          <el-input v-model="form.abcAttribute" placeholder="请输入物料ABC属性" />
+          <el-select v-model="form.abcAttribute" placeholder="请选择物料ABC属性" >
+          <el-option value="A">A</el-option>
+          <el-option value="B">B</el-option>
+          <el-option value="C">C</el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="启用" prop="enable">
         <el-checkbox v-model="form.enable" ></el-checkbox>
@@ -318,6 +329,13 @@ export default {
       // 总条数
       total: 0,
       catotal:0,
+      total3:0,
+      total5:0,
+      total6:0,
+      total7:0,
+      //------------
+      // rowCategoryIndex:10,
+
       // 物料维护表格数据
       materialList: [],
       accountList: [],
@@ -330,7 +348,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 查询参数
+      // 查询参数物料
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -338,11 +356,30 @@ export default {
         materialName: null,
         enable: null,
       },
-      // 查询参数
+      // 查询计算单位物料
+      queryParams3: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      // 查询参数品类
       caqueryParams: {
         pageNum: 1,
         pageSize: 10,
-
+      },
+      // 查询参数税率
+      queryParams5: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      // 查询参数重量单位
+      queryParams6: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      // 查询参数体积单位
+      queryParams7: {
+        pageNum: 1,
+        pageSize: 10,
       },
       // 表单参数
       form: {},
@@ -361,7 +398,6 @@ export default {
     this.getList1();
     this.getList2();
     this.getList3();
-    this.getList4();
     this.getList5();
     this.getList6();
     this.getList7();
@@ -381,45 +417,50 @@ export default {
      getList1() {
       listAccount(this.queryParams).then(response => {
         this.accountList = response.rows;
+
       });
     },
     /** 查询计算单位定义列表 弹框*/
     getList3() {
-      this.loading = true;
-      listAccount1(this.queryParams).then(response => {
+      listAccount1(this.queryParams3).then(response => {
         this.accountList1 = response.rows;
-        this.catotal = response.total;
-        this.loading = false;
+        this.total3 = response.total;
       });
     },
       /** 查询品类列表 */
     getList2() {
       listCategory(this.queryParams).then(response => {
         this.categoryList = response.rows;
+
       });
     },
      /** 查询品类列表 弹框*/
      getList4() {
-      listCategory1(this.queryParams).then(response => {
+      listCategory1(this.caqueryParams).then(response => {
         this.categoryList1 = response.rows;
+        this.catotal=response.total;
+        console.info(this.catotal);
       });
     },
     /** 查询税率列表 弹框*/
     getList5() {
-      listRate(this.queryParams).then(response => {
+      listRate(this.queryParams5).then(response => {
         this.rateList = response.rows;
+        this.total5=response.total;
       });
     },
     /**重量单位 */
     getList6() {
-      listAccount1(this.queryParams).then(response => {
+      listAccount1(this.queryParams6).then(response => {
         this.accountList1 = response.rows;
+        this.total6=response.total;
       });
     },
     /**体积单位 */
     getList7() {
-      listAccount1(this.queryParams).then(response => {
+      listAccount1(this.queryParams7).then(response => {
         this.accountList1 = response.rows;
+        this.total7=response.total;
       });
     },
 
@@ -522,7 +563,7 @@ export default {
     //计算单位
     handleRowClickAccount(row){
        // 修改数据的属性值
-      this.form.unitName = row.meteringUnit;
+      this.form.UnitName = row.meteringUnit;
       this.form.calculationUnit = row.unitId;
       this.dialogAccount = false; // 关闭对话框
     },
