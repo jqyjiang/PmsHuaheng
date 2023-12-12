@@ -647,8 +647,8 @@
           </el-table-column>
         </el-table>
 
-        <pagination v-show="ormtotal > 0" :total="ormtotal" :page.sync="ormqueryParams.pageNum"
-          :limit.sync="ormqueryParams.pageSize" @pagination="getListMaterial" />
+<!--        <pagination v-show="ormtotal > 0" :total="ormtotal" :page.sync="ormqueryParams.pageNum"-->
+<!--          :limit.sync="ormqueryParams.pageSize" @pagination="getListMaterial" />-->
 
       </div>
     </div>
@@ -810,14 +810,12 @@ export default {
       // 批量新增数据列表
       batchAddDataList: [],
       checkedOrderMaterials: null,
-
       //执行状态查询
       formData: {},
       selectedRoute: null,
       ormtotal: 0,
       drawer: false,
       direction: 'rtl',
-      checkedOrderMaterials: [],
       //关闭订单的集合或对象
       orderCancel: []
     };
@@ -1324,11 +1322,6 @@ export default {
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
-    },
-    /** 币种定义重置按钮操作 */
-    resetQuery() {
-      this.resetForm("cqueryForm");
-      // this.handleQuery2();
     },
     // 多选框选中数据
     handleSelectionChange(selection) {

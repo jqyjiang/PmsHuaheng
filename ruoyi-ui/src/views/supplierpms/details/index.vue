@@ -78,7 +78,6 @@
       <el-table-column label="负责人" align="center" prop="sdHead" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-
           <el-button v-if="scope.row.sdStatus === '0'" size="mini" type="text" @click="authentication(scope.row)"
             icon="el-icon-coordinate" v-hasPermi="['supplierpms:supplier:remove']">企业认证</el-button>
           <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check" @click="handleUpdate(scope.row)"
@@ -531,7 +530,7 @@ export default {
       });
     },
     /** 点击企业认证按钮 */
-    authentication(selection) {
+    authentication(row) {
       // this.$refs["companyForm"].validate((valid) => {});
       this.drawer = true;
       this.reset();

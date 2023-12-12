@@ -39,8 +39,8 @@ public class OrderManagerController extends BaseController
      * @param orId
      * @return
      */
-    @GetMapping("/managerList")
     @RequiresPermissions("pms:manager:list")
+    @GetMapping("/managerList")
     public List<OrderManager> managerList(@RequestParam("orId") Long orId){
         return orderManagerService.selectByOrderTypeRunning(orId);
     }
@@ -48,8 +48,8 @@ public class OrderManagerController extends BaseController
      * 查询执行状态个数
      * @return
      */
-    @GetMapping("/runTypeNumber")
     @RequiresPermissions("pms:manager:list")
+    @GetMapping("/runTypeNumber")
     public List<OrderManager> runTypeNumber(){
         return orderManagerService.findRunTypeNumber();
     }

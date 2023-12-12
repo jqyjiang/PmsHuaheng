@@ -3,7 +3,10 @@ package com.hh.pms.controller;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.hh.pms.service.ISupplierMaterialListService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,6 +38,8 @@ public class SupplyController extends BaseController
     @Autowired
     private ISupplyService supplyService;
 
+//    @Autowired
+//    private ISupplierMaterialListService supplierMaterialListService;
     /**
      * 查询供货管理列表
      */
@@ -44,6 +49,8 @@ public class SupplyController extends BaseController
     {
         startPage();
         List<Supply> list = supplyService.selectSupplyList(supply);
+
+        System.out.println(list);
         return getDataTable(list);
     }
 
@@ -73,6 +80,7 @@ public class SupplyController extends BaseController
     /**
      * 新增供货管理
      */
+    @Transactional
     @RequiresPermissions("supplierpms:supply:add")
     @Log(title = "供货管理", businessType = BusinessType.INSERT)
     @PostMapping
@@ -80,7 +88,9 @@ public class SupplyController extends BaseController
     {
         Date day = new Date();
         supply.setCreationTime(day);
-        return toAjax(supplyService.insertSupply(supply));
+        int i = supplyService.insertSupply(supply);
+
+        return toAjax(i);
     }
 
     /**

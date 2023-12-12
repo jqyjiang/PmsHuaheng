@@ -1,11 +1,13 @@
 package com.ruoyi.system.api.domain;
 
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * 供货管理对象 supply
@@ -67,6 +69,9 @@ public class Supply extends BaseEntity
     /** 创建人部门 */
     @Excel(name = "创建人部门")
     private String createdByEpartment;
+
+    /** 供应商物料信息 */
+    private List<SupplierMaterialList> supplierMaterialListList;
 
     public Long getCompaniesId() {
         return companiesId;
@@ -194,6 +199,14 @@ public class Supply extends BaseEntity
         this.cycle = cycle;
     }
 
+    public List<SupplierMaterialList> getSupplierMaterialListList() {
+        return supplierMaterialListList;
+    }
+
+    public void setSupplierMaterialListList(List<SupplierMaterialList> supplierMaterialListList) {
+        this.supplierMaterialListList = supplierMaterialListList;
+    }
+
     @Override
     public String toString() {
         return "Supply{" +
@@ -210,6 +223,7 @@ public class Supply extends BaseEntity
                 ", lastUpdateTime=" + lastUpdateTime +
                 ", notes='" + notes + '\'' +
                 ", createdByEpartment='" + createdByEpartment + '\'' +
+                ", supplierMaterialListList=" + supplierMaterialListList +
                 ", companiesName='" + companiesName + '\'' +
                 '}';
     }

@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select a.supply_id, a.sd_id, a.companies_id, a.founder, a.creation_time, a.last_updated_by,
                a.last_update_time, a.notes, a.created_by_epartment, b.sd_code, b.sbi_name, b.lifecycle_id,c.cycle,d.companies_name
             from supply a
-        left join supplier_details b on b.sd_id = a.supply_id
+        left join supplier_details b on b.sd_id = a.sd_id
         left join supplier_lifecycle c on c.lifecycle_id = b.lifecycle_id
         left join companies d on a.companies_id = d.companies_id
     </sql>

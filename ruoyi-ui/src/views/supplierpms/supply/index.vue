@@ -132,6 +132,44 @@
         <el-form-item label="创建人部门" prop="createdByEpartment">
           <el-input v-model="form.createdByEpartment" placeholder="请输入创建人部门" />
         </el-form-item>
+        <el-divider content-position="center">供应商物料信息</el-divider>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddSupplierMaterialList">添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteSupplierMaterialList">删除</el-button>
+          </el-col>
+        </el-row>
+        <el-table :data="supplierMaterialListList" :row-class-name="rowSupplierMaterialListIndex" @selection-change="handleSupplierMaterialListSelectionChange" ref="supplierMaterialList">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="物料编码" prop="materialCode" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.materialCode" placeholder="请输入物料编码" />
+            </template>
+          </el-table-column>
+          <el-table-column label="生产厂家" prop="manufacturer" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.manufacturer" placeholder="请输入生产厂家" />
+            </template>
+          </el-table-column>
+          <el-table-column label="供货能力评级" prop="supplyCapacity" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.supplyCapacity" placeholder="请输入供货能力评级" />
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" prop="notes" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.notes" placeholder="请输入备注" />
+            </template>
+          </el-table-column>
+          <el-table-column label="文件上传" prop="upload" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.upload" placeholder="请输入文件上传" />
+            </template>
+          </el-table-column>
+        </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -164,6 +202,10 @@ export default {
       supplyList: [],
       // 能新增的供应商数据、
       supplyCanList:[],
+      // 供应商物料表格数据
+      supplierMaterialListList: [],
+      // 供应商物料表选中数据
+      checkedSupplierMaterialList: [],
       //公司数据
       companiesList: [],
       // 弹出层标题
@@ -244,6 +286,7 @@ export default {
         createdByEpartment: null,
         sbiName: null
       };
+      this.supplierMaterialListList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -276,6 +319,7 @@ export default {
       this.reset();
       const supplyId = row.supplyId || this.ids
       getSupply(supplyId).then(response => {
+        this.supplierMaterialListList = response.data.supplierMaterialListList;
         this.form = response.data;
         this.open = true;
         this.title = "修改供货管理";
@@ -285,6 +329,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.supplierMaterialListList = this.supplierMaterialListList;
           if (this.form.supplyId != null) {
             updateSupply(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -333,7 +378,38 @@ export default {
       this.download('supplierpms/supply/export', {
         ...this.queryParams
       }, `supply_${new Date().getTime()}.xlsx`)
-    }
+    },
+    /** 供应商物料序号 */
+    rowSupplierMaterialListIndex({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+    },
+    /** 供应商物料添加按钮操作 */
+    handleAddSupplierMaterialList() {
+      let obj = {};
+      obj.materialCode = "";
+      obj.materialName = "";
+      obj.manufacturer = "";
+      obj.supplyCapacity = "";
+      obj.notes = "";
+      obj.upload = "";
+      this.supplierMaterialListList.push(obj);
+    },
+    /** 供应商物料删除按钮操作 */
+    handleDeleteSupplierMaterialList() {
+      if (this.checkedSupplierMaterialList.length == 0) {
+        this.$modal.msgError("请先选择要删除的供应商物料数据");
+      } else {
+        const supplierMaterialListList = this.supplierMaterialListList;
+        const checkedSupplierMaterialList = this.checkedSupplierMaterialList;
+        this.supplierMaterialListList = supplierMaterialListList.filter(function(item) {
+          return checkedSupplierMaterialList.indexOf(item.index) == -1
+        });
+      }
+    },
+    /** 复选框选中数据 */
+    handleSupplierMaterialListSelectionChange(selection) {
+      this.checkedSupplierMaterialList = selection.map(item => item.index)
+    },
   }
 };
 </script>
