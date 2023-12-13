@@ -1,11 +1,15 @@
 package com.hh.pms.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.hh.pms.service.ISupplierMaterialListService;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.SupplierMaterialList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +42,8 @@ public class SupplyController extends BaseController
     @Autowired
     private ISupplyService supplyService;
 
-//    @Autowired
-//    private ISupplierMaterialListService supplierMaterialListService;
+    @Autowired
+    private ISupplierMaterialListService supplierMaterialListService;
     /**
      * 查询供货管理列表
      */
@@ -70,11 +74,17 @@ public class SupplyController extends BaseController
     /**
      * 获取供货管理详细信息
      */
+    @Transactional
     @RequiresPermissions("supplierpms:supply:query")
     @GetMapping(value = "/{supplyId}")
     public AjaxResult getInfo(@PathVariable("supplyId") Long supplyId)
     {
-        return success(supplyService.selectSupplyBySupplyId(supplyId));
+        Supply supply = supplyService.selectSupplyBySupplyId(supplyId);
+
+        List<SupplierMaterialList> supplierMaterialLists = supplierMaterialListService.selectSupplierMaterialListBySupplyId(supplyId);
+        supply.setSupplierMaterialList(supplierMaterialLists);
+        System.out.println("ssdsdsdsadsadsasda"+supply);
+        return success(supply);
     }
 
     /**

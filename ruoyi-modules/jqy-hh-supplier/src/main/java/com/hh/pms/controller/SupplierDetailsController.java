@@ -58,6 +58,14 @@ public class SupplierDetailsController extends BaseController
         }
         return getDataTable(filteredList);
     }
+    @RequiresPermissions("supplierpms:details:list")
+    @RequestMapping(method = RequestMethod.GET,value = "/lifeStage")
+    public TableDataInfo lifeStage(SupplierDetails supplierDetails)
+    {
+        startPage();
+        List<SupplierDetails> list = supplierDetailsService.selectSupplierLifeStage(supplierDetails);
+        return getDataTable(list);
+    }
     /**
      * 导出供应商列表列表
      */
@@ -117,6 +125,18 @@ public class SupplierDetailsController extends BaseController
     public AjaxResult edit(@RequestBody SupplierDetails supplierDetails)
     {
         AjaxResult ajaxResult = toAjax(supplierDetailsService.updateSupplierDetails(supplierDetails));
+        return ajaxResult;
+    }
+
+    /**
+     * 修改供应商列表
+     */
+    @RequiresPermissions("supplierpms:details:edit")
+    @Log(title = "供应商列表", businessType = BusinessType.UPDATE)
+    @PutMapping("/updateExamine")
+    public AjaxResult SupplierExamine(@RequestBody SupplierDetails supplierDetails)
+    {
+        AjaxResult ajaxResult = toAjax(supplierDetailsService.updateSupplierExamine(supplierDetails));
         return ajaxResult;
     }
     /**

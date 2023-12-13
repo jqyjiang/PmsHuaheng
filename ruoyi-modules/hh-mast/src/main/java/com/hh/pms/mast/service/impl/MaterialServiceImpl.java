@@ -91,4 +91,15 @@ public class MaterialServiceImpl implements IMaterialService
     {
         return materialMapper.deleteMaterialByMaterialId(materialId);
     }
+
+    /**
+     * 查询供应商一个供货能力字段提供的物料
+     *
+     * @param materialCode 需要删除的数据主键集合
+     * @return 结果
+     */
+    @Override
+    public List<Material> supplyCapacityMaterials(String[] materialCode) {
+        return materialMapper.supplyCapacityMaterials(materialCode);
+    }
 }

@@ -40,10 +40,26 @@ export function addDetails(data) {
   })
 }
 
+//查询供应商审核过了的列表
+export function lifeStage(query) {
+  return request({
+    url: '/supplierpms/details/lifeStage',
+    method: 'get',
+    params: query
+  })
+}
 // 修改供应商列表
 export function updateDetails(data) {
   return request({
     url: '/supplierpms/details',
+    method: 'put',
+    data: data
+  })
+}
+// 审核供应商周期
+export function updateExamine(data){
+  return request({
+    url: '/supplierpms/details/updateExamine',
     method: 'put',
     data: data
   })

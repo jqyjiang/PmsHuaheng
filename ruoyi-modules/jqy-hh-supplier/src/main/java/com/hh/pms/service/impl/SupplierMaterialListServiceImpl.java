@@ -91,4 +91,9 @@ public class SupplierMaterialListServiceImpl implements ISupplierMaterialListSer
     {
         return supplierMaterialListMapper.deleteSupplierMaterialListBySupplierMaterialId(supplierMaterialId);
     }
+
+    @Override
+    public List<SupplierMaterialList> selectSupplierMaterialListBySupplyId(Long supplyId) {
+        return supplierMaterialListMapper.selectSupplierMaterialListBySupplyId(supplyId);
+    }
 }

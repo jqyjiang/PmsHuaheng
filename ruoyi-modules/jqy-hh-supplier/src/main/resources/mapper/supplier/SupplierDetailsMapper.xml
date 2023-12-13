@@ -50,15 +50,17 @@
         <result property="classCode"    column="class_code"    />
         <result property="classDescribe"    column="class_describe"    />
         <result property="lifecycleId"    column="lifecycle_id"    />
+        <result property="cycle"    column="cycle"    />
         <result property="slStatus"    column="sl_status"    />
+        <result property="slAdvance"    column="sl_advance"    />
     </resultMap>
 
 <!--    <sql id="selectSupplierDetailsVo">-->
 <!--        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus from supplier_details-->
 <!--    </sql>-->
     <sql id="selectSupplierDetailsVo">
-        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus, class_code,class_describe,lifecycle_id, sl_status
-        from supplier_details sd left join supplier_classification sc on sd.sd_class = sc.class_code
+        select sd_id, sd_time, sd_code, sbi_name, sd_uscc, sbi_abbreviation, sbi_serve, sd_industry, sd_en, sd_rt, sd_head, sd_head_phone, sd_pcn, sd_pce, sd_pcp, sd_pcg, sd_mct, sd_country, sd_region, sd_class, sd_website, sd_brief, sd_legal, sd_ri, sd_br, sd_rc, sd_status, sd_phone, sd_email, sd_fax, sd_save, sd_city, sd_county, sd_sm, sd_bank, sd_currency, sd_account, id_code, certificate_name, filing_date, filing, data_tatus, class_code,class_describe,sd.lifecycle_id, sl_status ,cycle,sl_advance
+        from supplier_details sd left join supplier_classification sc on sd.sd_class = sc.class_code left join supplier_lifecycle sl on sd.lifecycle_id=sl.lifecycle_id
     </sql>
     <select id="selectSupplierDetailsList" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
@@ -118,7 +120,54 @@
         <include refid="selectSupplierDetailsVo"/>
         where sd_status = 2
     </select>
-
+    <select id="selectSupplierLifeStage" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
+        <include refid="selectSupplierDetailsVo"/>
+        <where>
+            <if test="sdTime != null "> and sd_time = #{sdTime}</if>
+            <if test="sdCode != null  and sdCode != ''"> and sd_code = #{sdCode}</if>
+            <if test="sbiName != null  and sbiName != ''"> and sbi_name like concat('%', #{sbiName}, '%')</if>
+            <if test="sdUscc != null  and sdUscc != ''"> and sd_uscc = #{sdUscc}</if>
+            <if test="sbiAbbreviation != null  and sbiAbbreviation != ''"> and sbi_abbreviation = #{sbiAbbreviation}</if>
+            <if test="sbiServe != null  and sbiServe != ''"> and sbi_serve = #{sbiServe}</if>
+            <if test="sdIndustry != null  and sdIndustry != ''"> and sd_industry = #{sdIndustry}</if>
+            <if test="sdEn != null  and sdEn != ''"> and sd_en = #{sdEn}</if>
+            <if test="sdRt != null "> and sd_rt = #{sdRt}</if>
+            <if test="sdHead != null  and sdHead != ''"> and sd_head = #{sdHead}</if>
+            <if test="sdHeadPhone != null  and sdHeadPhone != ''"> and sd_head_phone = #{sdHeadPhone}</if>
+            <if test="sdPcn != null  and sdPcn != ''"> and sd_pcn = #{sdPcn}</if>
+            <if test="sdPce != null  and sdPce != ''"> and sd_pce = #{sdPce}</if>
+            <if test="sdPcp != null  and sdPcp != ''"> and sd_pcp = #{sdPcp}</if>
+            <if test="sdPcg != null  and sdPcg != ''"> and sd_pcg = #{sdPcg}</if>
+            <if test="sdMct != null  and sdMct != ''"> and sd_mct = #{sdMct}</if>
+            <if test="sdCountry != null  and sdCountry != ''"> and sd_country = #{sdCountry}</if>
+            <if test="sdRegion != null  and sdRegion != ''"> and sd_region = #{sdRegion}</if>
+            <if test="sdClass != null  and sdClass != ''"> and sd_class = #{sdClass}</if>
+            <if test="sdWebsite != null  and sdWebsite != ''"> and sd_website = #{sdWebsite}</if>
+            <if test="sdBrief != null  and sdBrief != ''"> and sd_brief = #{sdBrief}</if>
+            <if test="sdLegal != null  and sdLegal != ''"> and sd_legal = #{sdLegal}</if>
+            <if test="sdRi != null  and sdRi != ''"> and sd_ri = #{sdRi}</if>
+            <if test="sdBr != null  and sdBr != ''"> and sd_br = #{sdBr}</if>
+            <if test="sdRc != null  and sdRc != ''"> and sd_rc = #{sdRc}</if>
+            <if test="sdStatus != null  and sdStatus != ''"> and sd_status = #{sdStatus}</if>
+            <if test="sdPhone != null  and sdPhone != ''"> and sd_phone = #{sdPhone}</if>
+            <if test="sdEmail != null  and sdEmail != ''"> and sd_email = #{sdEmail}</if>
+            <if test="sdFax != null  and sdFax != ''"> and sd_fax = #{sdFax}</if>
+            <if test="sdSave != null  and sdSave != ''"> and sd_save = #{sdSave}</if>
+            <if test="sdCity != null  and sdCity != ''"> and sd_city = #{sdCity}</if>
+            <if test="sdCounty != null  and sdCounty != ''"> and sd_county = #{sdCounty}</if>
+            <if test="sdSm != null  and sdSm != ''"> and sd_sm = #{sdSm}</if>
+            <if test="sdBank != null  and sdBank != ''"> and sd_bank = #{sdBank}</if>
+            <if test="sdCurrency != null  and sdCurrency != ''"> and sd_currency = #{sdCurrency}</if>
+            <if test="sdAccount != null  and sdAccount != ''"> and sd_account = #{sdAccount}</if>
+            <if test="idCode != null  and idCode != ''"> and id_code = #{idCode}</if>
+            <if test="certificateName != null  and certificateName != ''"> and certificate_name like concat('%', #{certificateName}, '%')</if>
+            <if test="filingDate != null "> and filing_date = #{filingDate}</if>
+            <if test="filing != null  and filing != ''"> and filing = #{filing}</if>
+            <if test="lifecycleId != null "> and sd.lifecycle_id = #{lifecycleId}</if>
+            <if test="slStatus != null "> and sl_status = #{slStatus}</if>
+            and data_tatus = 0 and sd_status = 2
+        </where>
+    </select>
     <insert id="insertSupplierDetails" parameterType="SupplierDetails" useGeneratedKeys="true" keyProperty="sdId">
         insert into supplier_details
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -212,7 +261,9 @@
             <if test="slStatus != null">#{slStatus},</if>
         </trim>
     </insert>
-
+    <update id="updateSupplierExamine" parameterType="SupplierDetails">
+        update supplier_details set lifecycle_id= #{slAdvance},sl_status=1,sl_advance=null where sd_id = #{sdId}
+    </update>
     <update id="updateSupplierDetails" parameterType="SupplierDetails">
         update supplier_details
         <trim prefix="SET" suffixOverrides=",">
@@ -259,6 +310,7 @@
             <if test="dataTatus != null">data_tatus = #{dataTatus},</if>
             <if test="lifecycleId != null">lifecycle_id = #{lifecycleId},</if>
             <if test="slStatus != null">sl_status = #{slStatus},</if>
+            <if test="slAdvance != null">sl_advance = #{slAdvance},</if>
         </trim>
         where sd_id = #{sdId}
     </update>

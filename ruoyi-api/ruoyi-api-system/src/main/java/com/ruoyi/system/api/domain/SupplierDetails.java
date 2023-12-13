@@ -197,8 +197,6 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "分类描述")
     private String classDescribe;
 
-
-
     /** 生命周期id */
     @Excel(name = "生命周期id")
     private Long lifecycleId;
@@ -210,6 +208,80 @@ public class SupplierDetails extends BaseEntity
     /** 升降级状态 */
     @Excel(name = "升降级状态")
     private Long slStatus;
+
+    /** 预升降级周期 */
+    @Excel(name = "预升降级周期")
+    private Long slAdvance;
+
+    @Override
+    public String toString() {
+        return "SupplierDetails{" +
+                "sdId=" + sdId +
+                ", sdTime=" + sdTime +
+                ", sdCode='" + sdCode + '\'' +
+                ", sbiName='" + sbiName + '\'' +
+                ", sdUscc='" + sdUscc + '\'' +
+                ", sbiAbbreviation='" + sbiAbbreviation + '\'' +
+                ", sbiServe='" + sbiServe + '\'' +
+                ", sdIndustry='" + sdIndustry + '\'' +
+                ", sdEn='" + sdEn + '\'' +
+                ", sdRt=" + sdRt +
+                ", sdHead='" + sdHead + '\'' +
+                ", sdHeadPhone='" + sdHeadPhone + '\'' +
+                ", sdPcn='" + sdPcn + '\'' +
+                ", sdPce='" + sdPce + '\'' +
+                ", sdPcp='" + sdPcp + '\'' +
+                ", sdPcg='" + sdPcg + '\'' +
+                ", sdMct='" + sdMct + '\'' +
+                ", sdCountry='" + sdCountry + '\'' +
+                ", sdRegion='" + sdRegion + '\'' +
+                ", sdClass='" + sdClass + '\'' +
+                ", sdWebsite='" + sdWebsite + '\'' +
+                ", sdBrief='" + sdBrief + '\'' +
+                ", sdLegal='" + sdLegal + '\'' +
+                ", sdRi='" + sdRi + '\'' +
+                ", sdBr='" + sdBr + '\'' +
+                ", sdRc='" + sdRc + '\'' +
+                ", sdStatus='" + sdStatus + '\'' +
+                ", sdPhone='" + sdPhone + '\'' +
+                ", sdEmail='" + sdEmail + '\'' +
+                ", sdFax='" + sdFax + '\'' +
+                ", sdSave='" + sdSave + '\'' +
+                ", sdCity='" + sdCity + '\'' +
+                ", sdCounty='" + sdCounty + '\'' +
+                ", sdSm='" + sdSm + '\'' +
+                ", sdBank='" + sdBank + '\'' +
+                ", sdCurrency='" + sdCurrency + '\'' +
+                ", sdAccount='" + sdAccount + '\'' +
+                ", idCode='" + idCode + '\'' +
+                ", certificateName='" + certificateName + '\'' +
+                ", filingDate=" + filingDate +
+                ", filing='" + filing + '\'' +
+                ", dataTatus='" + dataTatus + '\'' +
+                ", classCode='" + classCode + '\'' +
+                ", classDescribe='" + classDescribe + '\'' +
+                ", lifecycleId=" + lifecycleId +
+                ", cycle='" + cycle + '\'' +
+                ", slStatus=" + slStatus +
+                ", slAdvance=" + slAdvance +
+                '}';
+    }
+
+    public Long getSlAdvance() {
+        return slAdvance;
+    }
+
+    public void setSlAdvance(Long slAdvance) {
+        this.slAdvance = slAdvance;
+    }
+
+    public String getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
+    }
     public void setClassCode(String classCode)
     {
         this.classCode = classCode;
@@ -621,54 +693,5 @@ public class SupplierDetails extends BaseEntity
 
     public void setSlStatus(Long slStatus) {
         this.slStatus = slStatus;
-    }
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("sdId", getSdId())
-                .append("sdTime", getSdTime())
-                .append("sdCode", getSdCode())
-                .append("sbiName", getSbiName())
-                .append("sdUscc", getSdUscc())
-                .append("sbiAbbreviation", getSbiAbbreviation())
-                .append("sbiServe", getSbiServe())
-                .append("sdIndustry", getSdIndustry())
-                .append("sdEn", getSdEn())
-                .append("sdRt", getSdRt())
-                .append("sdHead", getSdHead())
-                .append("sdHeadPhone", getSdHeadPhone())
-                .append("sdPcn", getSdPcn())
-                .append("sdPce", getSdPce())
-                .append("sdPcp", getSdPcp())
-                .append("sdPcg", getSdPcg())
-                .append("sdMct", getSdMct())
-                .append("sdCountry", getSdCountry())
-                .append("sdRegion", getSdRegion())
-                .append("sdClass", getSdClass())
-                .append("sdWebsite", getSdWebsite())
-                .append("sdBrief", getSdBrief())
-                .append("sdLegal", getSdLegal())
-                .append("sdRi", getSdRi())
-                .append("sdBr", getSdBr())
-                .append("sdRc", getSdRc())
-                .append("sdStatus", getSdStatus())
-                .append("sdPhone", getSdPhone())
-                .append("sdEmail", getSdEmail())
-                .append("sdFax", getSdFax())
-                .append("sdSave", getSdSave())
-                .append("sdCity", getSdCity())
-                .append("sdCounty", getSdCounty())
-                .append("sdSm", getSdSm())
-                .append("sdBank", getSdBank())
-                .append("sdCurrency", getSdCurrency())
-                .append("sdAccount", getSdAccount())
-                .append("idCode", getIdCode())
-                .append("certificateName", getCertificateName())
-                .append("filingDate", getFilingDate())
-                .append("filing", getFiling())
-                .append("dataTatus", getDataTatus())
-                .append("classCode", getClassCode())
-                .append("classDescribe", getClassDescribe())
-                .toString();
     }
 }

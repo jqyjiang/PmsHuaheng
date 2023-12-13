@@ -29,6 +29,12 @@ public interface ISupplierDetailsService
     public List<SupplierDetails> selectSupplierDetailsList(SupplierDetails supplierDetails);
 
     /**
+     * 查询供应商审核过了的列表
+     * @param supplierDetails
+     * @return
+     */
+    public List<SupplierDetails> selectSupplierLifeStage(SupplierDetails supplierDetails);
+    /**
      * 新增供应商列表
      * 
      * @param supplierDetails 供应商列表
@@ -65,4 +71,9 @@ public interface ISupplierDetailsService
 
     //查询注册好的供应商(一般能做供应商操作的数据)
     List<SupplierDetails> selectCanSupplier();
+
+    /**
+     * 审核供应商生命周期
+     */
+    public int updateSupplierExamine(SupplierDetails supplierDetails);
 }

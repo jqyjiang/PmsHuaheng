@@ -43,6 +43,15 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
     {
         return supplierDetailsMapper.selectSupplierDetailsList(supplierDetails);
     }
+    /**
+     * 查询供应商审核过了的列表
+     * @param supplierDetails
+     * @return
+     */
+    @Override
+    public List<SupplierDetails> selectSupplierLifeStage(SupplierDetails supplierDetails) {
+        return supplierDetailsMapper.selectSupplierLifeStage(supplierDetails);
+    }
 
     /**
      * 新增供应商列表
@@ -101,5 +110,12 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
     @Override
     public List<SupplierDetails> selectCanSupplier() {
         return supplierDetailsMapper.selectCanSupplier();
+    }
+    /**
+     * 审核供应商生命周期
+     */
+    @Override
+    public int updateSupplierExamine(SupplierDetails supplierDetails) {
+        return supplierDetailsMapper.updateSupplierExamine(supplierDetails);
     }
 }

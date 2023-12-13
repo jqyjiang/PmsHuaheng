@@ -141,12 +141,17 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteSupplierMaterialList">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="supplierMaterialListList" :row-class-name="rowSupplierMaterialListIndex" @selection-change="handleSupplierMaterialListSelectionChange" ref="supplierMaterialList">
+        <el-table :data="supplierMaterialList" :row-class-name="rowSupplierMaterialListIndex" @selection-change="handleSupplierMaterialListSelectionChange" ref="supplierMaterialList">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="物料编码" prop="materialCode" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.materialCode" placeholder="请输入物料编码" />
+            </template>
+          </el-table-column>
+          <el-table-column label="物料名称" prop="materialName" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.materialName" placeholder="请输入物料名称" />
             </template>
           </el-table-column>
           <el-table-column label="生产厂家" prop="manufacturer" width="150">
@@ -203,7 +208,7 @@ export default {
       // 能新增的供应商数据、
       supplyCanList:[],
       // 供应商物料表格数据
-      supplierMaterialListList: [],
+      supplierMaterialList: [],
       // 供应商物料表选中数据
       checkedSupplierMaterialList: [],
       //公司数据
@@ -286,7 +291,7 @@ export default {
         createdByEpartment: null,
         sbiName: null
       };
-      this.supplierMaterialListList = [];
+      this.supplierMaterialList = [];
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -319,7 +324,7 @@ export default {
       this.reset();
       const supplyId = row.supplyId || this.ids
       getSupply(supplyId).then(response => {
-        this.supplierMaterialListList = response.data.supplierMaterialListList;
+        this.supplierMaterialList = response.data.supplierMaterialList;
         this.form = response.data;
         this.open = true;
         this.title = "修改供货管理";
@@ -329,7 +334,7 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.supplierMaterialListList = this.supplierMaterialListList;
+          this.form.supplierMaterialList = this.supplierMaterialList;
           if (this.form.supplyId != null) {
             updateSupply(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -392,16 +397,17 @@ export default {
       obj.supplyCapacity = "";
       obj.notes = "";
       obj.upload = "";
-      this.supplierMaterialListList.push(obj);
+      console.log(this.supplierMaterialList);
+      this.supplierMaterialList.push(obj);
     },
     /** 供应商物料删除按钮操作 */
     handleDeleteSupplierMaterialList() {
       if (this.checkedSupplierMaterialList.length == 0) {
         this.$modal.msgError("请先选择要删除的供应商物料数据");
       } else {
-        const supplierMaterialListList = this.supplierMaterialListList;
+        const supplierMaterialList = this.supplierMaterialList;
         const checkedSupplierMaterialList = this.checkedSupplierMaterialList;
-        this.supplierMaterialListList = supplierMaterialListList.filter(function(item) {
+        this.supplierMaterialList = supplierMaterialList.filter(function(item) {
           return checkedSupplierMaterialList.indexOf(item.index) == -1
         });
       }

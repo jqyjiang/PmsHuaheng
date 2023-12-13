@@ -39,10 +39,10 @@
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
           v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-s-check" size="mini" :disabled="single" @click="handleUpdate"
           v-hasPermi="['supplierpms:supplier:edit']">审核</el-button>
-      </el-col>
+      </el-col> -->
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['supplierpms:supplier:export']">导出</el-button>

@@ -70,8 +70,11 @@ public class Supply extends BaseEntity
     @Excel(name = "创建人部门")
     private String createdByEpartment;
 
+    @Excel(name = "企业名称")
+    private String companiesName;
+
     /** 供应商物料信息 */
-    private List<SupplierMaterialList> supplierMaterialListList;
+    private List<SupplierMaterialList> supplierMaterialList;
 
     public Long getCompaniesId() {
         return companiesId;
@@ -90,8 +93,6 @@ public class Supply extends BaseEntity
     }
 
     /** 企业名称 */
-    @Excel(name = "企业名称")
-    private String companiesName;
 
     public void setSupplyId(Long supplyId)
     {
@@ -199,12 +200,12 @@ public class Supply extends BaseEntity
         this.cycle = cycle;
     }
 
-    public List<SupplierMaterialList> getSupplierMaterialListList() {
-        return supplierMaterialListList;
+    public List<SupplierMaterialList> getSupplierMaterialList() {
+        return supplierMaterialList;
     }
 
-    public void setSupplierMaterialListList(List<SupplierMaterialList> supplierMaterialListList) {
-        this.supplierMaterialListList = supplierMaterialListList;
+    public void setSupplierMaterialList(List<SupplierMaterialList> supplierMaterialList) {
+        this.supplierMaterialList = supplierMaterialList;
     }
 
     @Override
@@ -223,8 +224,8 @@ public class Supply extends BaseEntity
                 ", lastUpdateTime=" + lastUpdateTime +
                 ", notes='" + notes + '\'' +
                 ", createdByEpartment='" + createdByEpartment + '\'' +
-                ", supplierMaterialListList=" + supplierMaterialListList +
                 ", companiesName='" + companiesName + '\'' +
+                ", supplierMaterialList=" + supplierMaterialList +
                 '}';
     }
 }

@@ -28,6 +28,10 @@ public class SupplierMaterialList extends BaseEntity
     @Excel(name = "供货id")
     private Long supplyId;
 
+    /** 物料名称 */
+    @Excel(name = "物料名称")
+    private String materialName;
+
     /** 生产厂家 */
     @Excel(name = "生产厂家")
     private Long manufacturer;
@@ -44,15 +48,12 @@ public class SupplierMaterialList extends BaseEntity
     @Excel(name = "文件上传")
     private String upload;
 
-    /** 采购需求池信息 */
-    private List<MaterialInformation> materialInformationList;
-
-    public List<MaterialInformation> getMaterialInformationList() {
-        return materialInformationList;
+    public String getMaterialName() {
+        return materialName;
     }
 
-    public void setMaterialInformationList(List<MaterialInformation> materialInformationList) {
-        this.materialInformationList = materialInformationList;
+    public void setMaterialName(String materialName) {
+        this.materialName = materialName;
     }
 
     public void setSupplierMaterialId(Long supplierMaterialId)
@@ -125,11 +126,11 @@ public class SupplierMaterialList extends BaseEntity
                 .append("supplierMaterialId", getSupplierMaterialId())
                 .append("materialCode", getMaterialCode())
                 .append("supplyId", getSupplyId())
+                .append("materialName", getMaterialName())
                 .append("manufacturer", getManufacturer())
                 .append("supplyCapacity", getSupplyCapacity())
                 .append("notes", getNotes())
                 .append("upload", getUpload())
-                .append("materialInformationList", getMaterialInformationList())
                 .toString();
     }
 }

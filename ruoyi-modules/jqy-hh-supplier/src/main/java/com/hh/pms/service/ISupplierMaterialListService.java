@@ -59,4 +59,7 @@ public interface ISupplierMaterialListService
      * @return 结果
      */
     public int deleteSupplierMaterialListBySupplierMaterialId(Long supplierMaterialId);
+
+    //根据供货单id查询供应商物料编码
+    public List<SupplierMaterialList> selectSupplierMaterialListBySupplyId(Long supplyId);
 }

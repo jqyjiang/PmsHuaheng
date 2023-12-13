@@ -25,6 +25,4 @@ public interface MaterialClient {
     public TableDataInfo listCategory(@RequestParam("category") Category category, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
     @RequestMapping(method = RequestMethod.GET,value = "/rate/list")
     public TableDataInfo listRate(@RequestParam("taxRate") TaxRate taxRate, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize);
-
-
 }

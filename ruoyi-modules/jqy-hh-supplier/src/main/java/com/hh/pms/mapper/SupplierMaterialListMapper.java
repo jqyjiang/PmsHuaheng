@@ -19,7 +19,6 @@ public interface SupplierMaterialListMapper
      * @return 供应商物料
      */
     public SupplierMaterialList selectSupplierMaterialListBySupplierMaterialId(Long supplierMaterialId);
-
     /**
      * 查询供应商物料列表
      * 
@@ -59,4 +58,7 @@ public interface SupplierMaterialListMapper
      * @return 结果
      */
     public int deleteSupplierMaterialListBySupplierMaterialIds(Long[] supplierMaterialIds);
+
+    //根据供货单id查询供应商物料编码
+    public List<SupplierMaterialList> selectSupplierMaterialListBySupplyId(Long supplyId);
 }

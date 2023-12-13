@@ -2,47 +2,22 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.api.mapper.SupplierMaterialListMapper">
+<mapper namespace="com.hh.pms.mapper.SupplierMaterialListMapper">
 
     <resultMap type="SupplierMaterialList" id="SupplierMaterialListResult">
         <result property="supplierMaterialId"    column="supplier_material_id"    />
         <result property="materialCode"    column="material_code"    />
         <result property="supplyId"    column="supply_id"    />
+        <result property="materialName"    column="material_name"    />
         <result property="manufacturer"    column="manufacturer"    />
         <result property="supplyCapacity"    column="supply_capacity"    />
         <result property="notes"    column="notes"    />
         <result property="upload"    column="upload"    />
     </resultMap>
 
-    <resultMap id="SupplierMaterialListMaterialInformationResult" type="SupplierMaterialList" extends="SupplierMaterialListResult">
-        <collection property="materialInformationList" notNullColumn="sub_mi_id" javaType="java.util.List" resultMap="MaterialInformationResult" />
-    </resultMap>
-
-    <resultMap type="MaterialInformation" id="MaterialInformationResult">
-        <result property="miId"    column="sub_mi_id"    />
-        <result property="materialCode"    column="sub_material_code"    />
-        <result property="materialName"    column="sub_material_name"    />
-        <result property="materialCategory"    column="sub_material_category"    />
-        <result property="materialSpecification"    column="sub_material_specification"    />
-        <result property="materialModel"    column="sub_material_model"    />
-        <result property="materialBrand"    column="sub_material_brand"    />
-        <result property="materialUnit"    column="sub_material_unit"    />
-        <result property="mustNumber"    column="sub_must_number"    />
-        <result property="mustDate"    column="sub_must_date"    />
-        <result property="currencyName"    column="sub_currency_name"    />
-        <result property="referencePrice"    column="sub_reference_price"    />
-        <result property="unitPrice"    column="sub_unit_price"    />
-        <result property="tax"    column="sub_tax"    />
-        <result property="rateValue"    column="sub_rate_value"    />
-        <result property="budgetAmount"    column="sub_budget_amount"    />
-        <result property="remarks"    column="sub_remarks"    />
-        <result property="annex"    column="sub_annex"    />
-        <result property="purchaser"    column="sub_purchaser"    />
-        <result property="requirementCode"    column="sub_requirement_code"    />
-    </resultMap>
-
     <sql id="selectSupplierMaterialListVo">
-        select supplier_material_id, material_code, supply_id, manufacturer, supply_capacity, notes, upload from supplier_material_list
+        select a.supplier_material_id, a.material_code,b.material_name, a.supply_id, a.manufacturer, a.supply_capacity, a.notes, a.upload
+            from supplier_material_list a left join material b on a.material_code= b.material_code
     </sql>
 
     <select id="selectSupplierMaterialListList" parameterType="SupplierMaterialList" resultMap="SupplierMaterialListResult">
@@ -57,14 +32,15 @@
         </where>
     </select>
 
-    <select id="selectSupplierMaterialListBySupplierMaterialId" parameterType="Long" resultMap="SupplierMaterialListMaterialInformationResult">
-        select a.supplier_material_id, a.material_code, a.supply_id, a.manufacturer, a.supply_capacity, a.notes, a.upload,
-               b.mi_id as sub_mi_id, b.material_code as sub_material_code, b.material_name as sub_material_name, b.material_category as sub_material_category, b.material_specification as sub_material_specification, b.material_model as sub_material_model, b.material_brand as sub_material_brand, b.material_unit as sub_material_unit, b.must_number as sub_must_number, b.must_date as sub_must_date, b.currency_name as sub_currency_name, b.reference_price as sub_reference_price, b.unit_price as sub_unit_price, b.tax as sub_tax, b.rate_value as sub_rate_value, b.budget_amount as sub_budget_amount, b.remarks as sub_remarks, b.annex as sub_annex, b.purchaser as sub_purchaser, b.requirement_code as sub_requirement_code
-        from supplier_material_list a
-                 left join material_information b on b.material_code = a.material_code
-        where a.supplier_material_id = #{supplierMaterialId}
+    <select id="selectSupplierMaterialListBySupplierMaterialId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where supplier_material_id = #{supplierMaterialId}
     </select>
 
+    <select id="selectSupplierMaterialListBySupplyId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where supply_id = #{supplyId}
+    </select>
     <insert id="insertSupplierMaterialList" parameterType="SupplierMaterialList" useGeneratedKeys="true" keyProperty="supplierMaterialId">
         insert into supplier_material_list
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -108,22 +84,4 @@
             #{supplierMaterialId}
         </foreach>
     </delete>
-
-    <delete id="deleteMaterialInformationByMaterialCodes" parameterType="String">
-        delete from material_information where material_code in
-        <foreach item="materialCode" collection="array" open="(" separator="," close=")">
-            #{materialCode}
-        </foreach>
-    </delete>
-
-    <delete id="deleteMaterialInformationByMaterialCode" parameterType="Long">
-        delete from material_information where material_code = #{materialCode}
-    </delete>
-
-    <insert id="batchMaterialInformation">
-        insert into material_information( mi_id, material_code, material_name, material_category, material_specification, material_model, material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price, tax, rate_value, budget_amount, remarks, annex, purchaser, requirement_code) values
-        <foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.miId}, #{item.materialCode}, #{item.materialName}, #{item.materialCategory}, #{item.materialSpecification}, #{item.materialModel}, #{item.materialBrand}, #{item.materialUnit}, #{item.mustNumber}, #{item.mustDate}, #{item.currencyName}, #{item.referencePrice}, #{item.unitPrice}, #{item.tax}, #{item.rateValue}, #{item.budgetAmount}, #{item.remarks}, #{item.annex}, #{item.purchaser}, #{item.requirementCode})
-        </foreach>
-    </insert>
 </mapper>

@@ -55,7 +55,6 @@ public class MaterialController extends BaseController
 //        System.out.println(list);
         return getDataTable(list);
     }
-
     /**
      * 导出物料维护列表
      */
@@ -78,7 +77,6 @@ public class MaterialController extends BaseController
     {
         return success(materialService.selectMaterialByMaterialId(materialId));
     }
-
     /**
      * 新增物料维护
      */

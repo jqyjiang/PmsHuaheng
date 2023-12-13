@@ -55,9 +55,8 @@
                     <el-table-column type="selection" width="55" align="center" />
                     <el-table-column label="供应商编码" align="center" prop="sdCode" />
                     <el-table-column label="供应商名称" align="center" prop="sbiName" />
-                    <el-table-column label="供应商分类" align="center" prop="classDescribe">
-                    </el-table-column>
-                    <el-table-column label="操作" align="center" class-name="small-padding fixed-width">/
+                    <el-table-column label="供应商分类" align="center" prop="classDescribe" />
+                    <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
                         <template slot-scope="scope">
                             <!-- <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                                 v-hasPermi="['supplierpms:classification:edit']">修改</el-button> -->
@@ -123,7 +122,7 @@
 
 <script>
 import { listClassification, getClassification, delClassification, addClassification, updateClassification } from "@/api/supplierpms/classification";
-import { listDetails, listFilter, getDetails, delDetails, addDetails, updateDetails,delClassDetails } from "@/api/supplierpms/details";
+import { listDetails, listFilter, getDetails, delDetails, addDetails, updateDetails,delClassDetails,lifeStage } from "@/api/supplierpms/details";
 export default {
     name: "Classification",
     data() {
@@ -206,28 +205,28 @@ export default {
             });
         },
         listDetailss() {
-            listDetails().then(response => {
+            lifeStage(this.queryParams).then(response => {
                 this.classificationList1 = response.rows;
             })
         },
         /** 分类定义列表 */
         getList1() {
             this.loading = true;
-            listFilter(this.queryParams).then(response => {
+            lifeStage(this.queryParams).then(response => {
                 this.classificationList = response.rows;
                 this.total = response.total;
                 this.loading = false;
             });
         },
-        /** 分类定义列表 */
-        getUndefinedList() {
-            this.loading = true;
-            listFilter(this.queryParams).then(response => {
-                this.classificationList = response.rows;
-                this.total = response.total;
-                this.loading = false;
-            });
-        },
+        // /** 分类定义列表 */
+        // getUndefinedList() {
+        //     this.loading = true;
+        //     listFilter(this.queryParams).then(response => {
+        //         this.classificationList = response.rows;
+        //         this.total = response.total;
+        //         this.loading = false;
+        //     });
+        // },
         // 取消按钮
         cancel() {
             this.open = false;

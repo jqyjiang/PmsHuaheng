@@ -29,6 +29,12 @@ public interface SupplierDetailsMapper
     public List<SupplierDetails> selectSupplierDetailsList(SupplierDetails supplierDetails);
 
     /**
+     * 查询供应商审核过了的列表
+     * @param supplierDetails
+     * @return
+     */
+    public List<SupplierDetails> selectSupplierLifeStage(SupplierDetails supplierDetails);
+    /**
      * 新增供应商列表
      * 
      * @param supplierDetails 供应商列表
@@ -43,7 +49,10 @@ public interface SupplierDetailsMapper
      * @return 结果
      */
     public int updateSupplierDetails(SupplierDetails supplierDetails);
-
+    /**
+     * 审核供应商生命周期
+     */
+    public int updateSupplierExamine(SupplierDetails supplierDetails);
     /**
      * 删除供应商列表
      * 
