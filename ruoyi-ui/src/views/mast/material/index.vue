@@ -135,11 +135,11 @@
           </el-select>
         </el-form-item> -->
 
-        <el-form-item label="计算单位" prop="calculationUnit">
+        <el-form-item v-if="false" label="计算单位" prop="calculationUnit">
           <el-input v-model="form.calculationUnit" placeholder="请输入计算单位" />
         </el-form-item>
-        <el-form-item label="基本计算单位" prop="UnitName">
-          <el-input v-model="form.UnitName" placeholder="请选择基本计算单位"/>
+        <el-form-item label="基本计算单位" prop="metering_unit">
+          <el-input v-model="form.metering_unit" placeholder="请选择基本计算单位"/>
           <i class="el-icon-search" id="serachOne2" @click="showAccount()"></i>
               <el-dialog :visible.sync="dialogAccount" title="计算单位-浏览框" :modal="false">
                 <el-table :data="accountList1" v-loading="loading" @row-click="handleRowClickAccount">
@@ -300,6 +300,9 @@
         <el-form-item label="启用" prop="enable">
         <el-checkbox v-model="form.enable" ></el-checkbox>
         </el-form-item>
+        <el-form-item label="是否免检" prop="avoidInspect">
+        <el-checkbox v-model="form.avoidInspect" ></el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -340,6 +343,7 @@ export default {
       materialList: [],
       accountList: [],
       enableStatus: [], // 用于存储复选框选中状态的数组
+      avStatus:[],
       categoryList: [],
       accountList1:[],
       categoryList1:[],
@@ -411,6 +415,7 @@ export default {
         this.total = response.total;
         this.loading = false;
         this.enableStatus = this.materialList.map((account) => account.enable === 1);
+        this.avStatus=this.materialList.map((account)=>account.avoidInspect===1);
       });
     },
      /** 查询计算单位定义列表 */
@@ -554,6 +559,11 @@ export default {
         }else{
           response.data.enable=false
         }
+        if(response.data.avoidInspect==1){
+          response.data.avoidInspect=true
+        }else{
+          response.data.avoidInspect=false
+        }
         this.form = response.data;
         this.open = true;
         this.title = "修改物料维护";
@@ -563,14 +573,14 @@ export default {
     //计算单位
     handleRowClickAccount(row){
        // 修改数据的属性值
-      this.form.UnitName = row.meteringUnit;
+      this.form.metering_unit = row.meteringUnit;
       this.form.calculationUnit = row.unitId;
       this.dialogAccount = false; // 关闭对话框
     },
     //重量单位
     handleRowClickAccount1(row){
        // 修改数据的属性值
-      this.form.weightName = row.meteringUnit;
+      this.form.weightName = row.weightName;
       this.form.weight = row.unitId;
       this.dialogAccount1 = false; // 关闭对话框
     },
@@ -605,6 +615,11 @@ export default {
             }else{
               this.form.enable=0
             }
+            if(this.form.avoidInspect==true){
+              this.form.avoidInspect=1
+            }else{
+              this.form.avoidInspect=0
+            }
             updateMaterial(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
@@ -615,6 +630,11 @@ export default {
               this.form.enable=1
             }else{
               this.form.enable=0
+            }
+            if(this.form.avoidInspect==true){
+              this.form.avoidInspect=1
+            }else{
+              this.form.avoidInspect=0
             }
             addMaterial(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");

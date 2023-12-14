@@ -10,19 +10,19 @@ import com.hh.pms.mast.service.IMaterialService;
 
 /**
  * 物料维护Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
 @Service
-public class MaterialServiceImpl implements IMaterialService 
+public class MaterialServiceImpl implements IMaterialService
 {
     @Autowired
     private MaterialMapper materialMapper;
 
     /**
      * 查询物料维护
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 物料维护
      */
@@ -34,7 +34,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 查询物料维护列表
-     * 
+     *
      * @param material 物料维护
      * @return 物料维护
      */
@@ -46,7 +46,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 新增物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -58,7 +58,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 修改物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -70,7 +70,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 批量删除物料维护
-     * 
+     *
      * @param materialIds 需要删除的物料维护主键
      * @return 结果
      */
@@ -82,7 +82,7 @@ public class MaterialServiceImpl implements IMaterialService
 
     /**
      * 删除物料维护信息
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 结果
      */
@@ -90,16 +90,5 @@ public class MaterialServiceImpl implements IMaterialService
     public int deleteMaterialByMaterialId(Long materialId)
     {
         return materialMapper.deleteMaterialByMaterialId(materialId);
-    }
-
-    /**
-     * 查询供应商一个供货能力字段提供的物料
-     *
-     * @param materialCode 需要删除的数据主键集合
-     * @return 结果
-     */
-    @Override
-    public List<Material> supplyCapacityMaterials(String[] materialCode) {
-        return materialMapper.supplyCapacityMaterials(materialCode);
     }
 }

@@ -6,15 +6,15 @@ import java.util.List;
 
 /**
  * 供应商列表Service接口
- * 
+ *
  * @author ruoyi
  * @date 2023-11-24
  */
-public interface ISupplierDetailsService 
+public interface ISupplierDetailsService
 {
     /**
      * 查询供应商列表
-     * 
+     *
      * @param sdId 供应商列表主键
      * @return 供应商列表
      */
@@ -22,7 +22,7 @@ public interface ISupplierDetailsService
 
     /**
      * 查询供应商列表列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 供应商列表集合
      */
@@ -36,7 +36,7 @@ public interface ISupplierDetailsService
     public List<SupplierDetails> selectSupplierLifeStage(SupplierDetails supplierDetails);
     /**
      * 新增供应商列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 结果
      */
@@ -44,7 +44,7 @@ public interface ISupplierDetailsService
 
     /**
      * 修改供应商列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 结果
      */
@@ -52,7 +52,7 @@ public interface ISupplierDetailsService
 
     /**
      * 批量删除供应商列表
-     * 
+     *
      * @param sdIds 需要删除的供应商列表主键集合
      * @return 结果
      */
@@ -60,7 +60,7 @@ public interface ISupplierDetailsService
 
     /**
      * 删除供应商列表信息
-     * 
+     *
      * @param sdId 供应商列表主键
      * @return 结果
      */
@@ -71,6 +71,13 @@ public interface ISupplierDetailsService
 
     //查询注册好的供应商(一般能做供应商操作的数据)
     List<SupplierDetails> selectCanSupplier();
+
+    //统计分析供应商分类
+    List<SupplierDetails> selectClass();
+
+    //统计分析供应商生命周期
+    List<SupplierDetails> selectLife();
+
 
     /**
      * 审核供应商生命周期

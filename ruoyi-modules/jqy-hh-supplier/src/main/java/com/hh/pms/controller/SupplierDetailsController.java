@@ -20,7 +20,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 供应商列表Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-11-24
  */
@@ -163,7 +163,6 @@ public class SupplierDetailsController extends BaseController
         return toAjax(supplierDetailsService.deleteSupplierDetailsBySdIds(sdIds));
     }
 
-
     /**
      * 查询注册好的供应商
      * (一般能做供应商操作的数据)
@@ -175,4 +174,25 @@ public class SupplierDetailsController extends BaseController
         List<SupplierDetails> list = supplierDetailsService.selectCanSupplier();
         return getDataTable(list);
     }
+
+    /** 统计分析供应商分类*/
+    @RequiresPermissions("supplierpms:details:list")
+    @RequestMapping(method = RequestMethod.GET,value = "/listClass")
+    public TableDataInfo list1()
+    {
+        List<SupplierDetails> list = supplierDetailsService.selectClass();
+//        System.out.println(list);
+        return getDataTable(list);
+    }
+
+    /** 统计分析供应商生命周期*/
+    @RequiresPermissions("supplierpms:details:list")
+    @RequestMapping(method = RequestMethod.GET,value = "/listLife")
+    public TableDataInfo list2()
+    {
+        List<SupplierDetails> list = supplierDetailsService.selectLife();
+        System.out.println(list);
+        return getDataTable(list);
+    }
+
 }

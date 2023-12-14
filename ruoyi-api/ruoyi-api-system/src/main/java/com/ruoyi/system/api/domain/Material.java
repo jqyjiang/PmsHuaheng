@@ -42,6 +42,7 @@ public class Material extends BaseEntity
     @Excel(name = "计算单位")
     private String metering_unit;
 
+
     /** 采购员 */
     @Excel(name = "采购员")
     private String purchaser;
@@ -110,6 +111,8 @@ public class Material extends BaseEntity
 
     /** 是否免检 */
     private Long avoidInspect;
+
+
 
     public String getvUnitName() {
         return vUnitName;
@@ -358,7 +361,7 @@ public class Material extends BaseEntity
             .append("materialName", getMaterialName())
             .append("calculationUnit", getCalculationUnit())
             .append("unitName",getUnitName())
-            .append("meteringUnit",getMetering_unit())
+            .append("metering_unit",getMetering_unit())
             .append("purchaser", getPurchaser())
             .append("lUpdated", getlUpdated())
             .append("lUpdateTime", getlUpdateTime())

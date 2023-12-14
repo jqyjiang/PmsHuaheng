@@ -99,6 +99,10 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "供应商分类")
     private String sdClass;
 
+    /**供应商类型数量*/
+    @Excel(name = "供应商分类数量")
+    private String num;
+
     /** 网址 */
     @Excel(name = "网址")
     private String sdWebsite;
@@ -205,67 +209,35 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "生命周期")
     private String cycle;
 
+    @Excel(name = "生命周期数量")
+    private String lifeNum;
+
     /** 升降级状态 */
     @Excel(name = "升降级状态")
     private Long slStatus;
+
 
     /** 预升降级周期 */
     @Excel(name = "预升降级周期")
     private Long slAdvance;
 
-    @Override
-    public String toString() {
-        return "SupplierDetails{" +
-                "sdId=" + sdId +
-                ", sdTime=" + sdTime +
-                ", sdCode='" + sdCode + '\'' +
-                ", sbiName='" + sbiName + '\'' +
-                ", sdUscc='" + sdUscc + '\'' +
-                ", sbiAbbreviation='" + sbiAbbreviation + '\'' +
-                ", sbiServe='" + sbiServe + '\'' +
-                ", sdIndustry='" + sdIndustry + '\'' +
-                ", sdEn='" + sdEn + '\'' +
-                ", sdRt=" + sdRt +
-                ", sdHead='" + sdHead + '\'' +
-                ", sdHeadPhone='" + sdHeadPhone + '\'' +
-                ", sdPcn='" + sdPcn + '\'' +
-                ", sdPce='" + sdPce + '\'' +
-                ", sdPcp='" + sdPcp + '\'' +
-                ", sdPcg='" + sdPcg + '\'' +
-                ", sdMct='" + sdMct + '\'' +
-                ", sdCountry='" + sdCountry + '\'' +
-                ", sdRegion='" + sdRegion + '\'' +
-                ", sdClass='" + sdClass + '\'' +
-                ", sdWebsite='" + sdWebsite + '\'' +
-                ", sdBrief='" + sdBrief + '\'' +
-                ", sdLegal='" + sdLegal + '\'' +
-                ", sdRi='" + sdRi + '\'' +
-                ", sdBr='" + sdBr + '\'' +
-                ", sdRc='" + sdRc + '\'' +
-                ", sdStatus='" + sdStatus + '\'' +
-                ", sdPhone='" + sdPhone + '\'' +
-                ", sdEmail='" + sdEmail + '\'' +
-                ", sdFax='" + sdFax + '\'' +
-                ", sdSave='" + sdSave + '\'' +
-                ", sdCity='" + sdCity + '\'' +
-                ", sdCounty='" + sdCounty + '\'' +
-                ", sdSm='" + sdSm + '\'' +
-                ", sdBank='" + sdBank + '\'' +
-                ", sdCurrency='" + sdCurrency + '\'' +
-                ", sdAccount='" + sdAccount + '\'' +
-                ", idCode='" + idCode + '\'' +
-                ", certificateName='" + certificateName + '\'' +
-                ", filingDate=" + filingDate +
-                ", filing='" + filing + '\'' +
-                ", dataTatus='" + dataTatus + '\'' +
-                ", classCode='" + classCode + '\'' +
-                ", classDescribe='" + classDescribe + '\'' +
-                ", lifecycleId=" + lifecycleId +
-                ", cycle='" + cycle + '\'' +
-                ", slStatus=" + slStatus +
-                ", slAdvance=" + slAdvance +
-                '}';
+    public String getLifeNum() {
+        return lifeNum;
     }
+
+    public void setLifeNum(String lifeNum) {
+        this.lifeNum = lifeNum;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+
 
     public Long getSlAdvance() {
         return slAdvance;
@@ -693,5 +665,61 @@ public class SupplierDetails extends BaseEntity
 
     public void setSlStatus(Long slStatus) {
         this.slStatus = slStatus;
+    }
+
+
+    @Override
+    public String toString() {
+        return "SupplierDetails{" +
+            "sdId=" + sdId +
+            ", sdTime=" + sdTime +
+            ", sdCode='" + sdCode + '\'' +
+            ", sbiName='" + sbiName + '\'' +
+            ", sdUscc='" + sdUscc + '\'' +
+            ", sbiAbbreviation='" + sbiAbbreviation + '\'' +
+            ", sbiServe='" + sbiServe + '\'' +
+            ", sdIndustry='" + sdIndustry + '\'' +
+            ", sdEn='" + sdEn + '\'' +
+            ", sdRt=" + sdRt +
+            ", sdHead='" + sdHead + '\'' +
+            ", sdHeadPhone='" + sdHeadPhone + '\'' +
+            ", sdPcn='" + sdPcn + '\'' +
+            ", sdPce='" + sdPce + '\'' +
+            ", sdPcp='" + sdPcp + '\'' +
+            ", sdPcg='" + sdPcg + '\'' +
+            ", sdMct='" + sdMct + '\'' +
+            ", sdCountry='" + sdCountry + '\'' +
+            ", sdRegion='" + sdRegion + '\'' +
+            ", sdClass='" + sdClass + '\'' +
+            ", num='" + num + '\'' +
+            ", sdWebsite='" + sdWebsite + '\'' +
+            ", sdBrief='" + sdBrief + '\'' +
+            ", sdLegal='" + sdLegal + '\'' +
+            ", sdRi='" + sdRi + '\'' +
+            ", sdBr='" + sdBr + '\'' +
+            ", sdRc='" + sdRc + '\'' +
+            ", sdStatus='" + sdStatus + '\'' +
+            ", sdPhone='" + sdPhone + '\'' +
+            ", sdEmail='" + sdEmail + '\'' +
+            ", sdFax='" + sdFax + '\'' +
+            ", sdSave='" + sdSave + '\'' +
+            ", sdCity='" + sdCity + '\'' +
+            ", sdCounty='" + sdCounty + '\'' +
+            ", sdSm='" + sdSm + '\'' +
+            ", sdBank='" + sdBank + '\'' +
+            ", sdCurrency='" + sdCurrency + '\'' +
+            ", sdAccount='" + sdAccount + '\'' +
+            ", idCode='" + idCode + '\'' +
+            ", certificateName='" + certificateName + '\'' +
+            ", filingDate=" + filingDate +
+            ", filing='" + filing + '\'' +
+            ", dataTatus='" + dataTatus + '\'' +
+            ", classCode='" + classCode + '\'' +
+            ", classDescribe='" + classDescribe + '\'' +
+            ", lifecycleId=" + lifecycleId +
+            ", cycle='" + cycle + '\'' +
+            ", lifeNum='" + lifeNum + '\'' +
+            ", slStatus=" + slStatus +
+            '}';
     }
 }

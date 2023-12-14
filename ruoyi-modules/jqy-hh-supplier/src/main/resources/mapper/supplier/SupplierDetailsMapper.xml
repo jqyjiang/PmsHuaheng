@@ -25,6 +25,7 @@
         <result property="sdCountry"    column="sd_country"    />
         <result property="sdRegion"    column="sd_region"    />
         <result property="sdClass"    column="sd_class"    />
+        <result property="num"    column="num"    />
         <result property="sdWebsite"    column="sd_website"    />
         <result property="sdBrief"    column="sd_brief"    />
         <result property="sdLegal"    column="sd_legal"    />
@@ -53,6 +54,7 @@
         <result property="cycle"    column="cycle"    />
         <result property="slStatus"    column="sl_status"    />
         <result property="slAdvance"    column="sl_advance"    />
+        <result property="cycle"    column="cycle"    />
     </resultMap>
 
 <!--    <sql id="selectSupplierDetailsVo">-->
@@ -332,4 +334,16 @@
             #{sdId}
         </foreach>
     </delete>
+
+    <select id="selectClass" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
+        SELECT a.class_describe,COUNT(b.sd_id) as num from supplier_classification a
+         LEFT JOIN supplier_details b on a.class_code=b.sd_class
+        GROUP BY a.class_describe
+    </select>
+
+    <select id="selectLife" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
+        SELECT a.cycle,COUNT(b.lifecycle_id) as lifeNum FROM supplier_lifecycle a
+         LEFT JOIN supplier_details b on a.lifecycle_id=b.lifecycle_id
+        GROUP BY a.cycle
+    </select>
 </mapper>

@@ -10,19 +10,19 @@ import com.hh.pms.service.ISupplierDetailsService;
 
 /**
  * 供应商列表Service业务层处理
- * 
+ *
  * @author ruoyi
  * @date 2023-11-24
  */
 @Service
-public class SupplierDetailsServiceImpl implements ISupplierDetailsService 
+public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 {
     @Autowired
     private SupplierDetailsMapper supplierDetailsMapper;
 
     /**
      * 查询供应商列表
-     * 
+     *
      * @param sdId 供应商列表主键
      * @return 供应商列表
      */
@@ -34,7 +34,7 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 
     /**
      * 查询供应商列表列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 供应商列表
      */
@@ -55,7 +55,7 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 
     /**
      * 新增供应商列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 结果
      */
@@ -67,7 +67,7 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 
     /**
      * 修改供应商列表
-     * 
+     *
      * @param supplierDetails 供应商列表
      * @return 结果
      */
@@ -79,7 +79,7 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 
     /**
      * 批量删除供应商列表
-     * 
+     *
      * @param sdIds 需要删除的供应商列表主键
      * @return 结果
      */
@@ -91,7 +91,7 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
 
     /**
      * 删除供应商列表信息
-     * 
+     *
      * @param sdId 供应商列表主键
      * @return 结果
      */
@@ -117,5 +117,16 @@ public class SupplierDetailsServiceImpl implements ISupplierDetailsService
     @Override
     public int updateSupplierExamine(SupplierDetails supplierDetails) {
         return supplierDetailsMapper.updateSupplierExamine(supplierDetails);
+    }
+
+    //统计分析供应商分类
+    @Override
+    public List<SupplierDetails> selectClass() {
+        return supplierDetailsMapper.selectClass();
+    }
+
+    @Override
+    public List<SupplierDetails> selectLife() {
+        return supplierDetailsMapper.selectLife();
     }
 }
