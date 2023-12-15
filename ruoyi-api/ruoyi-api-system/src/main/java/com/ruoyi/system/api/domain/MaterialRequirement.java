@@ -93,7 +93,28 @@ public class MaterialRequirement extends BaseEntity
     @Excel(name = "任务单号")
     private String taskCode;
 
+    /**扩展字段 需求类型数量*/
+    @Excel(name = "需求类型数量")
+    private String demandTypeNum;
+    /**扩展字段 需求类型*/
+    @Excel(name = "需求类型")
+    private String requirementTypeName;
 
+    public String getRequirementTypeName() {
+        return requirementTypeName;
+    }
+
+    public void setRequirementTypeName(String requirementTypeName) {
+        this.requirementTypeName = requirementTypeName;
+    }
+
+    public String getDemandTypeNum() {
+        return demandTypeNum;
+    }
+
+    public void setDemandTypeNum(String demandTypeNum) {
+        this.demandTypeNum = demandTypeNum;
+    }
 
     public void setRequirementId(Long requirementId)
     {
@@ -291,6 +312,8 @@ public class MaterialRequirement extends BaseEntity
                 .append("currencyId", getCurrencyId())
                 .append("relatedProjects", getRelatedProjects())
                 .append("taskCode", getTaskCode())
+                .append("demandTypeNum",getDemandTypeNum())
+                .append("requirementTypeName",getRequirementTypeName())
                 .toString();
     }
 

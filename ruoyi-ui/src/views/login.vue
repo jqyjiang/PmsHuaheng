@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">华恒后台管理系统</h3>
+      <h1 class="title" style="font-weight: bold;">华恒后台管理系统</h1>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"

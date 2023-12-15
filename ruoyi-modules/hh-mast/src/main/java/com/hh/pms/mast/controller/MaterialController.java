@@ -4,6 +4,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.system.api.domain.Material;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -109,5 +111,43 @@ public class MaterialController extends BaseController
     public AjaxResult remove(@PathVariable Long[] materialIds)
     {
         return toAjax(materialService.deleteMaterialByMaterialIds(materialIds));
+    }
+
+    //统计分析月度需求数量统计
+    @RequiresPermissions("mast:material:listMonthDemand")
+    @GetMapping("/listMonthDemand")
+    public TableDataInfo listDemand()
+    {
+        List<MaterialInformation> list = materialService.selectMonthDemand();
+//        System.out.println(list);
+        return getDataTable(list);
+    }
+    //统计分析月度需求状态统计
+    @RequiresPermissions("mast:material:listDemandStatus")
+    @GetMapping("/listDemandStatus")
+    public TableDataInfo listDemandStatus()
+    {
+        List<MaterialInformation> list = materialService.selectDemandStatus();
+//        System.out.println(list);
+        return getDataTable(list);
+    }
+
+    //统计分析月度需求状态统计
+    @RequiresPermissions("mast:material:listOrderSource")
+    @GetMapping("/listOrderSource")
+    public TableDataInfo listOrderSource()
+    {
+        List<OrderManager> list = materialService.selectOrderSource();
+//        System.out.println(list);
+        return getDataTable(list);
+    }
+    //统计分析月度订单统计
+    @RequiresPermissions("mast:material:listMonthOrder")
+    @GetMapping("/listMonthOrder")
+    public TableDataInfo listMonthOrder()
+    {
+        List<OrderManager> list = materialService.selectMonthOrder();
+        System.out.println(list);
+        return getDataTable(list);
     }
 }

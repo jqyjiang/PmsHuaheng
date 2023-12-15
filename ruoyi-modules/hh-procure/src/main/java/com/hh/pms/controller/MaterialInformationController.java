@@ -24,7 +24,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 采购需求池Controller
- * 
+ *
  * @author ruoyi
  * @date 2023-11-27
  */
@@ -120,7 +120,5 @@ public class MaterialInformationController extends BaseController
     {
         return toAjax(materialInformationService.updateRequirementStatusCancel(miId));
     }
-
-
 
 }

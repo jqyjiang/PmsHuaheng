@@ -1,20 +1,22 @@
 package com.hh.pms.mast.service;
 
 import com.ruoyi.system.api.domain.Material;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.OrderManager;
 
 import java.util.List;
 
 /**
  * 物料维护Service接口
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
-public interface IMaterialService 
+public interface IMaterialService
 {
     /**
      * 查询物料维护
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 物料维护
      */
@@ -22,7 +24,7 @@ public interface IMaterialService
 
     /**
      * 查询物料维护列表
-     * 
+     *
      * @param material 物料维护
      * @return 物料维护集合
      */
@@ -30,7 +32,7 @@ public interface IMaterialService
 
     /**
      * 新增物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -38,7 +40,7 @@ public interface IMaterialService
 
     /**
      * 修改物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -46,7 +48,7 @@ public interface IMaterialService
 
     /**
      * 批量删除物料维护
-     * 
+     *
      * @param materialIds 需要删除的物料维护主键集合
      * @return 结果
      */
@@ -54,9 +56,18 @@ public interface IMaterialService
 
     /**
      * 删除物料维护信息
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 结果
      */
     public int deleteMaterialByMaterialId(Long materialId);
+
+    //统计分析月度需求数量统计
+    List<MaterialInformation> selectMonthDemand();
+    //统计分析需求状态
+    List<MaterialInformation> selectDemandStatus();
+    //统计分析订单来源系统
+    List<OrderManager> selectOrderSource();
+    //统计分析月度订单
+    List<OrderManager> selectMonthOrder();
 }

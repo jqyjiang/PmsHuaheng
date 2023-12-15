@@ -115,4 +115,15 @@ public class MaterialRequirementController extends BaseController
     public TableDataInfo listCurrency(Currency currency, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         return materialClient.list(currency, pageNum, pageSize);
     }
+
+    /**采购需求类型统计分析*/
+    @RequiresPermissions("procure:requirement:listDemandType")
+    @GetMapping("/listDemandType")
+    public TableDataInfo listDemandType()
+    {
+        List<MaterialRequirement> list = materialRequirementService.selectDemandType();
+        System.out.println(list);
+        return getDataTable(list);
+    }
+
 }

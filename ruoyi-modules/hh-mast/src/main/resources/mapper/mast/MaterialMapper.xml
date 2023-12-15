@@ -32,6 +32,15 @@
         <result property="abcAttribute" column="abc_attribute"/>
         <result property="avoidInspect" column="avoid_inspect"/>
 
+        <result property="demandMonth"    column="demandMonth"    />
+        <result property="demandNum"    column="demandNum"    />
+        <result property="demandStatus"    column="demandStatus"    />
+        <result property="count"    column="count"    />
+        <result property="orderSource"    column="orderSource"    />
+        <result property="oCount"    column="oCount"    />
+        <result property="mCount"    column="mCount"    />
+        <result property="Month"    column="Month"    />
+
     </resultMap>
 
     <sql id="selectMaterialVo">
@@ -174,4 +183,43 @@
             #{materialId}
         </foreach>
     </delete>
+
+    <select id="selectMonthDemand" parameterType="MaterialInformation" resultMap="MaterialResult">
+        SELECT DATE_FORMAT(must_date, '%Y-%m') AS demandMonth, COUNT(*) AS demandNum
+        FROM material_information GROUP BY demandMonth
+    </select>
+    <select id="selectDemandStatus" parameterType="MaterialInformation" resultMap="MaterialResult">
+        SELECT '待分配' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 1
+        UNION ALL
+        SELECT '已分配' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 2
+        UNION ALL
+        SELECT '已完成' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 3
+        UNION ALL
+        SELECT '已暂挂' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 4
+        UNION ALL
+        SELECT '已作废' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 5
+    </select>
+    <select id="selectOrderSource" parameterType="OrderManager" resultMap="MaterialResult">
+        SELECT '合同转订单' AS orderSource, COUNT(*) AS oCount FROM order_manager WHERE order_source = 1
+        UNION ALL
+        SELECT '新建订单' AS orderSource, COUNT(*) AS oCount FROM order_manager WHERE order_source = 2
+        UNION ALL
+        SELECT '需求转订单' AS orderSource, COUNT(*) AS oCount FROM order_manager WHERE order_source = 3
+        UNION ALL
+        SELECT '寻源转订单' AS orderSource, COUNT(*) AS oCount FROM order_manager WHERE order_source = 4
+    </select>
+    <select id="selectMonthOrder" parameterType="OrderManager" resultMap="MaterialResult">
+        SELECT
+            months.Month,
+            COUNT(create_time) AS mCount
+        FROM
+            (SELECT 1 AS Month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL
+             SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL
+             SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL
+             SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months
+                LEFT JOIN order_manager ON EXTRACT(MONTH FROM create_time) = months.Month
+                AND EXTRACT(YEAR FROM create_time) = '2023'
+        GROUP BY months.Month
+        ORDER BY months.Month
+    </select>
 </mapper>

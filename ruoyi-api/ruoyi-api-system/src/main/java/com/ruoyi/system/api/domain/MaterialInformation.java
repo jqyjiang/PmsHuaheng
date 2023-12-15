@@ -104,7 +104,6 @@ public class MaterialInformation extends BaseEntity
     @Excel(name = "状态")
     private Long status;
 
-
     /** 物料维护信息 */
     private List<MaterialPool> materialPoolList;
 

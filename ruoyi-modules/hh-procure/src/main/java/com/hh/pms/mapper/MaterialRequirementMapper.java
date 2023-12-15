@@ -93,4 +93,7 @@ public interface MaterialRequirementMapper {
      * 添加采购任务
      */
     public int insertProcurementTask(List<ProcurementTask> procurementTasks);
+
+    /**采购需求类型统计分析*/
+    public List<MaterialRequirement> selectDemandType();
 }

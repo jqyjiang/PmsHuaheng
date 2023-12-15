@@ -6,11 +6,11 @@ import java.util.List;
 
 /**
  * 采购需求池Mapper接口
- * 
+ *
  * @author ruoyi
  * @date 2023-11-27
  */
-public interface MaterialInformationMapper 
+public interface MaterialInformationMapper
 {
     /**
      * 查询采购需求池
@@ -65,6 +65,7 @@ public interface MaterialInformationMapper
 
     // 作废
     public int updateRequirementStatusCancel(Integer[] miId);
+
 
 
 }
