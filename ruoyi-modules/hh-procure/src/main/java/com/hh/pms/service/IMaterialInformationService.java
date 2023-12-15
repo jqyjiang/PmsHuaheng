@@ -67,5 +67,9 @@ public interface IMaterialInformationService
     // 作废
     public int updateRequirementStatusCancel(Integer[] miId);
 
+    // 分配
+    public int updateRequirementStatusAllocation(String purchaser,Integer[] miId);
+    public int updateProcurementTask(String purchaser,Integer[] miId);
+
 
 }

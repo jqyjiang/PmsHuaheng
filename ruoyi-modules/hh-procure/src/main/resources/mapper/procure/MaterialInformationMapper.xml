@@ -43,6 +43,7 @@
         <result property="relatedProjects"    column="related_projects"    />
         <result property="status"    column="status"    />
         <result property="taskCode"    column="taskCode"    />
+        <result property="taskId"    column="task_id"    />
     </resultMap>
 
     <resultMap id="MaterialInformationMaterialResult" type="com.ruoyi.system.api.domain.MaterialInformation" extends="MaterialInformationResult">
@@ -75,10 +76,10 @@
     </resultMap>
 
     <sql id="selectMaterialInformationVo">
-        select mi_id, material_code, material_name, material_category, material_specification, material_model,
-        material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price,
-        tax, rate_value, budget_amount, remarks, m.annex, purchaser, m.requirement_code,related_projects,demand_department,description,demander,`status` from material_information m
+        select m.mi_id, material_code, material_name, material_category, material_specification, material_model,material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price,
+        tax, rate_value, budget_amount, remarks, m.annex, m.purchaser, m.requirement_code,related_projects,demand_department,description,demander,`status`,task_id from material_information m
         LEFT JOIN  material_requirement  r  ON m.requirement_code=r.requirement_code
+        LEFT JOIN procurement_task p ON m.mi_id=p.mi_id
     </sql>
 
     <select id="selectMaterialInformationList" parameterType="com.ruoyi.system.api.domain.MaterialInformation" resultMap="MaterialInformationResult">
@@ -104,6 +105,7 @@
             <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
             <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
         </where>
     </select>
 
@@ -236,5 +238,18 @@
         </foreach>
     </update>
 
+    <update id="updateRequirementStatusAllocation" parameterType="String">
+        UPDATE material_information SET `status`=3,purchaser=#{purchaser} WHERE mi_id in
+        <foreach collection="miId" item="miId" open="(" separator="," close=")">
+            #{miId}
+        </foreach>
+    </update>
+
+    <update id="updateProcurementTask" parameterType="String">
+        UPDATE procurement_task SET `task_status`=1,purchaser=#{purchaser} WHERE mi_id in
+        <foreach collection="miId" item="miId" open="(" separator="," close=")">
+            #{miId}
+        </foreach>
+    </update>
 
 </mapper>

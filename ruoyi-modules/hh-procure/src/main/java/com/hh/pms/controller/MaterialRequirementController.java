@@ -77,7 +77,7 @@ public class MaterialRequirementController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody MaterialRequirement materialRequirement)
     {
-        System.out.println("fffff:"+materialRequirement.getMaterialInformations());
+        // System.out.println("fffff:"+materialRequirement.getProcurementTasks());
         return toAjax(materialRequirementService.insertMaterialRequirement(materialRequirement));
     }
 

@@ -10,19 +10,19 @@ import com.hh.pms.service.IMaterialInformationService;
 
 /**
  * 采购需求池Service业务层处理
- *
+ * 
  * @author ruoyi
  * @date 2023-11-27
  */
 @Service
-public class MaterialInformationServiceImpl implements IMaterialInformationService
+public class MaterialInformationServiceImpl implements IMaterialInformationService 
 {
     @Autowired
     private MaterialInformationMapper materialInformationMapper;
 
     /**
      * 查询采购需求池
-     *
+     * 
      * @param miId 采购需求池主键
      * @return 采购需求池
      */
@@ -34,7 +34,7 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
 
     /**
      * 查询采购需求池列表
-     *
+     * 
      * @param materialInformation 采购需求池
      * @return 采购需求池
      */
@@ -46,7 +46,7 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
 
     /**
      * 新增采购需求池
-     *
+     * 
      * @param materialInformation 采购需求池
      * @return 结果
      */
@@ -58,7 +58,7 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
 
     /**
      * 修改采购需求池
-     *
+     * 
      * @param materialInformation 采购需求池
      * @return 结果
      */
@@ -70,7 +70,7 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
 
     /**
      * 批量删除采购需求池
-     *
+     * 
      * @param miIds 需要删除的采购需求池主键
      * @return 结果
      */
@@ -82,7 +82,7 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
 
     /**
      * 删除采购需求池信息
-     *
+     * 
      * @param miId 采购需求池主键
      * @return 结果
      */
@@ -101,4 +101,16 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
     public int updateRequirementStatusCancel(Integer[] miId) {
         return materialInformationMapper.updateRequirementStatusCancel(miId);
     }
+
+    @Override
+    public int updateRequirementStatusAllocation(String purchaser,Integer[] miId) {
+        return materialInformationMapper.updateRequirementStatusAllocation(purchaser,miId);
+    }
+
+    @Override
+    public int updateProcurementTask(String purchaser,Integer[] miId) {
+        return materialInformationMapper.updateProcurementTask(purchaser,miId);
+    }
+
+
 }

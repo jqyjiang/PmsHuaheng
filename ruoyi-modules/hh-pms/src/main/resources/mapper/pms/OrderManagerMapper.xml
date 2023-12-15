@@ -29,6 +29,7 @@
         <result property="invoiceMethod" column="invoice_method"/>
         <result property="createTime" column="create_time"/>
         <result property="materialId" column="material_id"/>
+        <result property="productId" column="product_id"/>
         <association property="orderTypeRunning" javaType="OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
@@ -94,7 +95,6 @@
             <result property="receivingPhone" column="receiving_phone"/>
             <result property="receivingAddress" column="receiving_address"/>
             <result property="remarks" column="remarks"/>
-            <result property="taxTotal"    column="tax_total"    />
         </collection>
     </resultMap>
 
@@ -127,7 +127,8 @@
                otr.ort_name,
                sd.sbi_name,
                c.companies_name,
-               y.currency_name
+               y.currency_name,
+               om.productId
         from order_manager om
                  left join order_type_running otr on om.or_id = otr.ort_id
                  left join supplier_details sd on sd.sd_id = om.supplier

@@ -1,6 +1,7 @@
 package com.hh.pms.mapper;
 
 import com.ruoyi.system.api.domain.ProcurementTask;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -63,4 +64,7 @@ public interface ProcurementTaskMapper
     public int deleteProcurementTaskByTaskIds(Long[] taskIds);
 
     int updateProcurementTasks(ProcurementTask procurementTask);
+
+    // 转办
+    int updateProcurementTaskPurchaser(@Param("purchaser")String purchaser,@Param("taskId") Integer[] taskId);
 }

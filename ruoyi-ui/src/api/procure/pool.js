@@ -62,7 +62,19 @@ export function editStatusCancel(miId) {
     method: 'put'
   })
 }
-
+//分配
+export function editStatusAllocation(purchaser,miId) {
+  return request({
+    url: '/procure/information/fp/'+purchaser+'/'+miId,
+    method: 'put'
+  })
+}
+export function editStatusProcurementTask(purchaser,miId) {
+  return request({
+    url: '/procure/information/dfp/'+purchaser+'/'+miId,
+    method: 'put'
+  })
+}
 // 查询采购员列表
 export function listBuyer(query) {
   return request({

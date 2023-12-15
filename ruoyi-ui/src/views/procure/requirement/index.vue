@@ -52,7 +52,7 @@
           v-hasPermi="['procure:requirement:edit']"
         >修改</el-button>
       </el-col>
-      <!--  <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -62,7 +62,7 @@
           @click="handleDelete"
           v-hasPermi="['procure:requirement:remove']"
         >删除</el-button>
-      </el-col>-->
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -96,24 +96,6 @@
           </el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['procure:requirement:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['procure:requirement:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
 
     <pagination
@@ -259,8 +241,6 @@
                   <el-table-column label="物料编码" align="center" prop="materialCode" />
                   <el-table-column label="物料名称" align="center" prop="materialName" />
                   <el-table-column label="物料品类" align="center" prop="categoryName" />
-                  <el-table-column label="物料规格" align="center" prop="materialSpecification" />
-                  <el-table-column label="物料单位" align="center" prop="materialUnit" />
                 </el-table>
 
                 <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="ququeryParams.pageNum"
@@ -317,7 +297,7 @@
             <el-date-picker clearable
                             v-model="scope.row.mustDate"
                             type="date"
-                            value-format="yyyy-MM-dd"
+                            value-format="yyyy-MM-dd hh:mm:ss"
                             placeholder="请选择需求日期">
             </el-date-picker>
           </template>

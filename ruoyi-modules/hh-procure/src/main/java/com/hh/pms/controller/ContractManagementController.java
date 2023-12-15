@@ -1,6 +1,7 @@
 package com.hh.pms.controller;
 
 import java.util.List;
+import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.system.api.domain.ContractManagement;
@@ -24,9 +25,9 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 
 /**
  * 采购合同管理Controller
- * 
+ *
  * @author ruoyi
- * @date 2023-12-08
+ * @date 2023-12-14
  */
 @RestController
 @RequestMapping("/management")
@@ -97,7 +98,7 @@ public class ContractManagementController extends BaseController
      */
     @RequiresPermissions("procure:management:remove")
     @Log(title = "采购合同管理", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{contractManagementIds}")
+    @DeleteMapping("/{contractManagementIds}")
     public AjaxResult remove(@PathVariable Long[] contractManagementIds)
     {
         return toAjax(contractManagementService.deleteContractManagementByContractManagementIds(contractManagementIds));

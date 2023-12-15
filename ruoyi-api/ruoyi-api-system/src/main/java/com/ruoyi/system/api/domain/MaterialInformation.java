@@ -325,10 +325,9 @@ public class MaterialInformation extends BaseEntity
                 .append("budgetAmount", getBudgetAmount())
                 .append("remarks", getRemarks())
                 .append("annex", getAnnex())
-                .append("annex", getAnnex())
                 .append("purchaser", getPurchaser())
                 .append("requirementCode", getRequirementCode())
-                .append("materialList", getMaterialPoolList())
+                .append("materialPoolList", getMaterialPoolList())
                 .append("status",getStatus())
                 .toString();
     }
@@ -399,9 +398,6 @@ public class MaterialInformation extends BaseEntity
     /** 相关项目 */
     @Excel(name = "相关项目")
     private String relatedProjects;
-
-
-
 
 
 
@@ -570,6 +566,122 @@ public class MaterialInformation extends BaseEntity
     }
 
 
+    private List<Material> materialList;
+
+    public List<Material> getMaterialList() {
+        return materialList;
+    }
+
+    public void setMaterialList(List<Material> materialList) {
+        this.materialList = materialList;
+    }
+
+    // 任务
+    /** 任务ID */
+    private Long taskId;
 
 
+    /** 采购策略 */
+    @Excel(name = "采购策略")
+    private String procurementStrategy;
+
+    /** 任务总金额 */
+    @Excel(name = "任务总金额")
+    private BigDecimal taskTotal;
+
+
+    /** 受理策略 */
+    @Excel(name = "受理策略")
+    private String acceptanceStrategy;
+
+    /** 任务总数量 */
+    @Excel(name = "任务总数量")
+    private BigDecimal taskNumber;
+
+    /** 已受理数量 */
+    @Excel(name = "已受理数量")
+    private BigDecimal acceptedQuantity;
+
+    /** 占用任务数量 */
+    @Excel(name = "占用任务数量")
+    private BigDecimal taskOccupied;
+
+    /** 待受理数量 */
+    @Excel(name = "待受理数量")
+    private BigDecimal taskAccepted;
+
+    @Excel(name = "状态")
+    private Long taskStatus;
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getProcurementStrategy() {
+        return procurementStrategy;
+    }
+
+    public void setProcurementStrategy(String procurementStrategy) {
+        this.procurementStrategy = procurementStrategy;
+    }
+
+    public BigDecimal getTaskTotal() {
+        return taskTotal;
+    }
+
+    public void setTaskTotal(BigDecimal taskTotal) {
+        this.taskTotal = taskTotal;
+    }
+
+    public String getAcceptanceStrategy() {
+        return acceptanceStrategy;
+    }
+
+    public void setAcceptanceStrategy(String acceptanceStrategy) {
+        this.acceptanceStrategy = acceptanceStrategy;
+    }
+
+    public BigDecimal getTaskNumber() {
+        return taskNumber;
+    }
+
+    public void setTaskNumber(BigDecimal taskNumber) {
+        this.taskNumber = taskNumber;
+    }
+
+    public BigDecimal getAcceptedQuantity() {
+        return acceptedQuantity;
+    }
+
+    public void setAcceptedQuantity(BigDecimal acceptedQuantity) {
+        this.acceptedQuantity = acceptedQuantity;
+    }
+
+    public BigDecimal getTaskOccupied() {
+        return taskOccupied;
+    }
+
+    public void setTaskOccupied(BigDecimal taskOccupied) {
+        this.taskOccupied = taskOccupied;
+    }
+
+    public BigDecimal getTaskAccepted() {
+        return taskAccepted;
+    }
+
+    public void setTaskAccepted(BigDecimal taskAccepted) {
+        this.taskAccepted = taskAccepted;
+    }
+
+    public Long getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(Long taskStatus) {
+        this.taskStatus = taskStatus;
+    }
 }

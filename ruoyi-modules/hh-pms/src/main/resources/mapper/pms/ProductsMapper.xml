@@ -12,10 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unit"    column="unit"    />
         <result property="price"    column="price"    />
         <result property="taxRate"    column="tax_rate"    />
+        <result property="number"    column="number"    />
+        <result property="subtotal"    column="subtotal"    />
     </resultMap>
 
     <sql id="selectProductsVo">
-        select product_id, product_name, product_code, specifications, unit, price, tax_rate from products
+        select product_id, product_name, product_code, specifications, unit, price, tax_rate,number,subtotal from products
     </sql>
 
     <select id="selectProductsList" parameterType="Products" resultMap="ProductsResult">
@@ -27,6 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
             <if test="price != null "> and price = #{price}</if>
             <if test="taxRate != null "> and tax_rate = #{taxRate}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="subtotal != null "> and subtotal = #{subtotal}</if>
         </where>
     </select>
     
@@ -44,6 +48,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit,</if>
             <if test="price != null">price,</if>
             <if test="taxRate != null">tax_rate,</if>
+            <if test="number != null">number,</if>
+            <if test="subtotal != null">subtotal,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productName != null">#{productName},</if>
@@ -52,6 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">#{unit},</if>
             <if test="price != null">#{price},</if>
             <if test="taxRate != null">#{taxRate},</if>
+            <if test="number != null">#{number},</if>
+            <if test="subtotal != null">#{subtotal},</if>
          </trim>
     </insert>
 
@@ -64,6 +72,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit = #{unit},</if>
             <if test="price != null">price = #{price},</if>
             <if test="taxRate != null">tax_rate = #{taxRate},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="subtotal != null">subtotal = #{subtotal},</if>
         </trim>
         where product_id = #{productId}
     </update>

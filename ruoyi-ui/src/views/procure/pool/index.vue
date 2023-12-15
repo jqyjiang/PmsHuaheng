@@ -25,12 +25,11 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="primary"
+          type="success"
           plain
           size="mini"
           :disabled="pending"
-          @click="handleAdd"
-          v-hasPermi="['procure:information:add']"
+          @click="handleUpdateAllocation"
         >分配</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -100,6 +99,7 @@
           </el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="任务Id" align="center" prop="taskId"/>
     </el-table>
 
     <pagination
@@ -149,7 +149,7 @@
 </template>
 
 <script>
-import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel, listBuyer } from "@/api/procure/pool";
+import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel, listBuyer,editStatusAllocation, editStatusProcurementTask} from "@/api/procure/pool";
 
 export default {
   name: "Pool",
@@ -161,6 +161,8 @@ export default {
       // 选中数组
       ids: [],
       status:"",
+      taskIds:null,
+      loginName:"",
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -337,18 +339,18 @@ export default {
       console.info("选中的行数据：", row);
     },
     // 选中采购员
-    handleSelectionChangeBuyer(row){
+      handleSelectionChangeBuyer(row){
       this.form.purchaserId=row.purchaserId;
       for (let i=0;i<this.buyerList.length;i++){
         const innerElement=this.buyerList[i];
-        if (innerElement.purchaserId===row.purchaserId){
+        if (innerElement.purchaserId===row[0].purchaserId){
           this.loginName=innerElement.loginName
         }
       }
       this.dialogBuyer=false; // 关闭对话框
     },
-    // /** 分配按钮操作 */
-    handleAdd() {
+     /** 分配按钮操作 */
+    handleUpdateAllocation() {
       this.reset();
       this.open = true;
       this.buyerqueryParams.pageNum = 1;
@@ -387,25 +389,23 @@ export default {
         return;
       }
     },
-    /** 提交按钮 */
+    /** 提交按钮（分配） */
     submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.miId != null) {
-            updateInformation(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addInformation(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
-        }
-      });
+      const miIds=this.ids;
+      const status=this.status;
+      const purchaser=this.loginName;
+      if (parseInt(status)===1||parseInt(status)===2){
+        this.$modal.confirm('是否确认分配编号为"' + miIds + '"的数据项？').then(function() {
+          return editStatusAllocation(purchaser,miIds);
+        }).then(() => {
+          this.getList();
+          this.$modal.msgSuccess("分配成功");
+          return editStatusProcurementTask(purchaser,miIds);
+        }).catch(() => {});
+      }else {
+        this.$message.error('存在已分配或已作废的数据,请修改后重试！');
+        return;
+      }
     },
     /** 删除按钮操作 */
     handleDelete(row) {

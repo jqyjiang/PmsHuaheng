@@ -1,6 +1,8 @@
 package com.hh.pms.mapper;
 
 import com.ruoyi.system.api.domain.MaterialInformation;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -65,6 +67,14 @@ public interface MaterialInformationMapper
 
     // 作废
     public int updateRequirementStatusCancel(Integer[] miId);
+
+    // 查询miId最大值
+    @Select("SELECT MAX(mi_id) FROM material_information")
+    public int selectMaxMiId();
+
+    // 分配
+    public int updateRequirementStatusAllocation(@Param("purchaser")String purchaser,@Param("miId") Integer[] miId);
+    public int updateProcurementTask(@Param("purchaser")String purchaser,@Param("miId") Integer[] miId);
 
 
 
