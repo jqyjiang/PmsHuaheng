@@ -1,5 +1,6 @@
 package com.hh.pms.controller;
 
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
@@ -110,4 +111,17 @@ public class ProcurementTaskController extends BaseController
     {
         return toAjax(procurementTaskService.deleteProcurementTaskByTaskIds(taskIds));
     }
+
+
+    /**
+     * 转办
+     */
+    @RequiresPermissions("procure:task:edit")
+    @PutMapping("/zb/{purchaser}/{taskId}")
+    public AjaxResult editProcurementTaskPurchaser(@PathVariable("purchaser") String purchaser,@PathVariable("taskId") Integer[] taskId)
+    {
+        System.out.println("fff:"+purchaser);
+        return toAjax(procurementTaskService.updateProcurementTaskPurchaser(purchaser,taskId));
+    }
+
 }

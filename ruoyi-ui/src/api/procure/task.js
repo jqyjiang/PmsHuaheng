@@ -42,3 +42,12 @@ export function delTask(taskId) {
     method: 'delete'
   })
 }
+
+// 转办
+export function updateTaskPurchaser(purchaser,taskId) {
+  return request({
+    url: '/procure/task/zb/'+purchaser+'/'+taskId,
+    method: 'put'
+  })
+}
+

@@ -3,6 +3,7 @@ package com.hh.pms.service;
 import com.ruoyi.system.api.domain.MaterialInformation;
 import com.ruoyi.system.api.domain.MaterialPool;
 import com.ruoyi.system.api.domain.MaterialRequirement;
+import com.ruoyi.system.api.domain.ProcurementTask;
 
 import java.util.List;
 
@@ -74,5 +75,10 @@ public interface IMaterialRequirementService
 
     /**采购需求类型 统计分析*/
     public List<MaterialRequirement> selectDemandType();
+
+    /**
+     * 添加采购任务
+     */
+    public int insertProcurementTask(List<ProcurementTask> procurementTasks);
 
 }

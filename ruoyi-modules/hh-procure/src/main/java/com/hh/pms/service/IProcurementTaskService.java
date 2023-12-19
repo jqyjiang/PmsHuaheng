@@ -63,4 +63,8 @@ public interface IProcurementTaskService
     ProcurementTask selectProcurementTaskByTaskCode(String taskCode);
 
     int updateProcurement(ProcurementTask procurementTask);
+
+    // 转办
+    int updateProcurementTaskPurchaser(String purchaser,Integer[] taskId);
+
 }

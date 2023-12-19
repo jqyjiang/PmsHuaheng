@@ -101,4 +101,11 @@ public class ProcurementTaskServiceImpl implements IProcurementTaskService
     public int updateProcurement(ProcurementTask procurementTask) {
         return procurementTaskMapper.updateProcurementTasks(procurementTask);
     }
+
+    @Override
+    public int updateProcurementTaskPurchaser(String purchaser,Integer[] taskId) {
+        return procurementTaskMapper.updateProcurementTaskPurchaser(purchaser,taskId);
+    }
+
+
 }

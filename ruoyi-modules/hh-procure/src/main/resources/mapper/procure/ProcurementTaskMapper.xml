@@ -19,10 +19,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="taskOccupied"    column="task_occupied"    />
         <result property="taskAccepted"    column="task_accepted"    />
         <result property="taskStatus"    column="task_status"    />
+        <!--   物料信息      -->
+        <result property="miId"    column="mi_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialCategory"    column="material_category"    />
+        <result property="materialSpecification"    column="material_specification"    />
+        <result property="materialModel"    column="material_model"    />
+        <result property="materialBrand"    column="material_brand"    />
+        <result property="materialUnit"    column="material_unit"    />
+        <result property="mustNumber"    column="must_number"    />
+        <result property="mustDate"    column="must_date"    />
+        <result property="currencyName"    column="currency_name"    />
+        <result property="referencePrice"    column="reference_price"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="tax"    column="tax"    />
+        <result property="rateValue"    column="rate_value"    />
+        <result property="budgetAmount"    column="budget_amount"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="annex"    column="annex"    />
+        <result property="purchaser"    column="purchaser"    />
     </resultMap>
 
     <sql id="selectProcurementTaskVo">
-        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, purchaser, currency_id, acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status from procurement_task
+        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser, currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,material_name,currency_name
+        from procurement_task t LEFT JOIN material_information m ON t.mi_id=m.mi_id
     </sql>
 
     <select id="selectProcurementTaskList" parameterType="com.ruoyi.system.api.domain.ProcurementTask" resultMap="ProcurementTaskResult">
@@ -33,17 +54,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskTotal != null "> and task_total = #{taskTotal}</if>
             <if test="requirementId != null "> and requirement_id = #{requirementId}</if>
             <if test="companiesId != null  and companiesId != ''"> and companies_id = #{companiesId}</if>
-            <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
+            <if test="purchaser != null  and purchaser != ''"> and t.purchaser = #{purchaser}</if>
             <if test="currencyId != null "> and currency_id = #{currencyId}</if>
             <if test="acceptanceStrategy != null  and acceptanceStrategy != ''"> and acceptance_strategy = #{acceptanceStrategy}</if>
             <if test="taskNumber != null "> and task_number = #{taskNumber}</if>
             <if test="acceptedQuantity != null "> and accepted_quantity = #{acceptedQuantity}</if>
             <if test="taskOccupied != null "> and task_occupied = #{taskOccupied}</if>
             <if test="taskAccepted != null "> and task_accepted = #{taskAccepted}</if>
-            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+             and task_status != 4
         </where>
     </select>
-    
+
+    <select id="selectProcurementTaskByStatus"  resultMap="ProcurementTaskResult">
+        <include refid="selectProcurementTaskVo"/>
+        WHERE task_status != 4
+    </select>
+
     <select id="selectProcurementTaskByTaskId" parameterType="Long" resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
         where task_id = #{taskId}
@@ -135,4 +161,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{taskId}
         </foreach>
     </delete>
+
+    <!--     转办       -->
+    <update id="updateProcurementTaskPurchaser" parameterType="String">
+        UPDATE procurement_task SET purchaser=#{purchaser} WHERE task_id in
+        <foreach collection="taskId" item="taskId" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </update>
 </mapper>

@@ -102,8 +102,18 @@ public class MaterialInformationController extends BaseController
     {
         return toAjax(materialInformationService.deleteMaterialInformationByMiIds(miIds));
     }
-
-
+    @RequiresPermissions("procure:information:edit")
+    @PutMapping("fp/{purchaser}/{miId}")
+    public AjaxResult editStatusAllocation(@PathVariable("purchaser") String purchaser,@PathVariable("miId") Integer[] miId)
+    {
+        return toAjax(materialInformationService.updateRequirementStatusAllocation(purchaser,miId));
+    }
+    @RequiresPermissions("procure:information:edit")
+    @PutMapping("dfp/{purchaser}/{miId}")
+    public AjaxResult editStatusProcurementTask(@PathVariable("purchaser") String purchaser,@PathVariable("miId") Integer[] miId)
+    {
+        return toAjax(materialInformationService.updateProcurementTask(purchaser,miId));
+    }
 
     /**
      * 修改采购需求池状态

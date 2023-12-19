@@ -160,15 +160,17 @@
     </insert>
 
     <insert id="insertProcurementTask" parameterType="com.ruoyi.system.api.domain.ProcurementTask" useGeneratedKeys="true" keyProperty="taskId">
-        INSERT INTO procurement_task(task_code,procurement_strategy,task_total,requirement_id,companies_id,purchaser,
-                                     currency_id,acceptance_strategy,task_number,accepted_quantity,task_occupied,
-                                     task_accepted,task_status)
+        INSERT INTO procurement_task(
+        task_code,procurement_strategy,task_total,requirement_id,companies_id,purchaser,
+        currency_id,acceptance_strategy,task_number,accepted_quantity,task_occupied,
+        task_accepted,task_status)
         VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.task_code},#{item.procurement_strategy},#{item.task_total},#{item.requirement_id},#{item.companies_id},#{item.purchaser},
-             #{item.currency_id},#{item.acceptance_strategy},#{item.task_number},#{item.accepted_quantity},#{item.task_occupied},#{item.task_accepted},
-             #{item.task_status})
-        </foreach>
+                <foreach collection="list" item="item" separator=",">
+                     (#{item.taskCode},#{item.procurementStrategy},#{item.taskTotal},#{item.requirementId},
+                      #{item.companiesId},#{item.purchaser},#{item.currencyId},#{item.acceptanceStrategy},#{item.taskNumber},
+                      #{item.acceptedQuantity},#{item.taskOccupied},#{item.taskAccepted},#{item.taskStatus})
+                </foreach>
+
     </insert>
 
     <select id="selectDemandType" parameterType="MaterialRequirement" resultMap="MaterialRequirementResult">
