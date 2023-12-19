@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.system.api.domain.OrderManager;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -23,10 +24,15 @@ public interface OrderManagerMapper
     public OrderManager selectOrderManagerByOrderId(Long orderId);
 
     /**
+     * 根据订单号查询订单信息
+     * @param orderCode
+     * @return
+     */
+    public List<OrderManager> selectOrderManagerByOrderCode(@Param("orderCode") String orderCode);
+    /**
      * 查询执行状态个数
      * @return
      */
-
     public List<OrderManager> findRunTypeNumber();
 
     /**
@@ -52,6 +58,8 @@ public interface OrderManagerMapper
      * @return 结果
      */
     public int updateOrderManager(OrderManager orderManager);
+
+
 
     /**
      * 删除采购订单管理

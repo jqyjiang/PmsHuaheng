@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="108px">
       <el-form-item label="送货单号" prop="orderDeliveryCode">
         <el-input v-model="queryParams.orderDeliveryCode" placeholder="请输入送货单号" clearable
           @keyup.enter.native="handleQuery" />
@@ -47,22 +47,23 @@
 
     <el-table v-loading="loading" :data="noteList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="送货单Id" align="center" prop="orderDeliveryNoteId" />
       <el-table-column label="送货单号" align="center" prop="orderDeliveryCode" />
       <el-table-column label="送货单状态" align="center" prop="deliveryNoteState">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.delivery_state" :value="scope.row.deliveryNoteState" />
         </template>
       </el-table-column>
-      <el-table-column label="发货人联系方式" align="center" prop="shipperPhone" />
-      <el-table-column label="供应商名称" align="center" prop="supplier" />
-      <el-table-column label="承运人联系方式" align="center" prop="carrierPhone" />
-      <el-table-column label="快递/物流单号" align="center" prop="trackingNumber" />
       <el-table-column label="预计到货日期" align="center" prop="arrivalDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.arrivalDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="供应商名称" align="center" prop="supplier" />
+      <el-table-column label="供应商联系方式" align="center" prop="shipperPhone" />
+      <el-table-column label="快递/物流单号" align="center" prop="trackingNumber" />
+      <el-table-column label="承运人联系方式" align="center" prop="carrierPhone" />
+      <el-table-column label="本次数量" align="center" prop="currentDeliveryQuantity" />
+      <el-table-column label="剩余数量" align="center" prop="remainingDeliveryQuantity" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -124,7 +125,21 @@
           <el-input v-model="form.shipperPhone" placeholder="请输入发货人联系方式" />
         </el-form-item>
         <el-form-item label="供应商名称" prop="supplier">
-          <el-input v-model="form.supplier" placeholder="请输入供应商名称" />
+          <el-input v-model="supplyName" placeholder="请输入供应商名称" />
+          <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
+          <el-dialog :visible.sync="dialogVisible" title="供应商名称" :modal="false">
+            <!-- 这里是供应商的内容 -->
+            <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
+              <el-table-column type="selection" width="55" align="center" />
+              <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
+              <el-table-column label="供应商名称" align="center" prop="sbiName" />
+            </el-table>
+            <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
+              :limit.sync="squeryParams.pageSize" @pagination="getList1" />
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogVisible = false">取消</el-button>
+            </div>
+          </el-dialog>
         </el-form-item>
         <el-form-item label="承运人" prop="carrier">
           <el-input v-model="form.carrier" placeholder="请输入承运人" />
@@ -139,23 +154,20 @@
           <el-input v-model="form.trackingNumber" placeholder="请输入快递/物流单号" />
         </el-form-item>
         <el-form-item label="预计发货日期" prop="deliveryDate">
-          <el-date-picker clearable v-model="form.deliveryDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择预计发货日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="预计到货日期" prop="arrivalDate">
-          <el-date-picker clearable v-model="form.arrivalDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择预计到货日期">
-          </el-date-picker>
-        </el-form-item>
+      <el-date-picker clearable v-model="form.deliveryDate" type="date" value-format="yyyy-MM-dd"
+        placeholder="请选择预计发货日期">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item label="预计到货日期" prop="arrivalDate">
+      <el-date-picker clearable v-model="form.arrivalDate" type="date" value-format="yyyy-MM-dd"
+        placeholder="请选择预计到货日期">
+      </el-date-picker>
+    </el-form-item>
         <el-form-item label="备注" prop="note">
           <el-input v-model="form.note" placeholder="请输入备注" />
         </el-form-item>
         <el-form-item label="附件" prop="annex">
-          <el-input v-model="form.annex" placeholder="请输入附件" />
-        </el-form-item>
-        <el-form-item label="产品订单明细" prop="deliveryId">
-          <el-input v-model="form.deliveryId" placeholder="请输入产品订单明细" />
+          <file-upload v-model="form.annex"/>
         </el-form-item>
         <el-divider content-position="center">产品明细信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -167,7 +179,7 @@
           </el-col>
         </el-row>
         <el-table :data="deliveryList" :row-class-name="rowDeliveryIndex"
-          @selection-change="handleDeliverySelectionChange" ref="delivery">
+          @selection-change="handleDeliverySelectionChange" ref="delivery" @row-click="handleRowClickPro">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50" />
           <el-table-column label="产品信息" prop="productInfo" width="150">
@@ -178,7 +190,6 @@
                 <!-- 这里是关联订单的内容 -->
                 <el-table v-loading="loading" :data="productList" @row-click="handleRowClickProduct">
                   <el-table-column type="selection" width="55" align="center" />
-                  <el-table-column label="产品id" align="center" prop="productId" />
                   <el-table-column label="产品名称" align="center" prop="productName" />
                   <el-table-column label="产品编码" align="center" prop="productCode" />
                   <el-table-column label="产品规格" align="center" prop="specifications" />
@@ -240,8 +251,11 @@
 </template>
 
 <script>
-import { listNote, getNote, delNote, addNote, updateNote, listManagement } from "@/api/pms/note";
 import { listProducts } from "@/api/pms/products";
+import { listSupplier } from "@/api/pms/manager";
+import {getDelivery} from "@/api/pms/delivery";
+import { listNote, getNote, delNote, addNote, updateNote } from "@/api/pms/note";
+import { listManagement } from "@/api/procure/management";
 
 export default {
   name: "Note",
@@ -262,6 +276,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
+      //供应商名称
+      supplyName: '',
       // 订单送货管理表格数据
       noteList: [],
       // 产品明细表格数据
@@ -285,6 +301,7 @@ export default {
       rules: {
       },
       dialogVisible7: false,
+      dialogVisible: false,
       ordertotal: 0,
       orderqueryParams: {
         pageNum: 1,
@@ -298,16 +315,82 @@ export default {
       contractOrderList: [],
       productList: [],
       dialogVisible8: false,
-      producttotal: 0
+      producttotal: 0,
+      //供应商查询参数
+      squeryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        sdCode: null,
+        sbiName: null,
+        phone: '',
+        people: '',
+      },
+      //供应商总条数
+      stotal: 0,
+      //供应商列表
+      detailsList: [],
+      //获取deliveyList下标\
+      deliveryIndex:0
     };
+  },
+  mounted() {
+    this.setInitialDate();
   },
   created() {
     this.getList();
   },
   methods: {
-    //点击每一行的产品信息显示到文本框里面
-    handleRowClickProduct(row){
+    setInitialDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = `${today.getMonth() + 1}`.padStart(2, '0');
+      const day = `${today.getDate()}`.padStart(2, '0');
+      this.form.deliveryDate = `${year}-${month}-${day}`;
+      // 如果需要预计到货日期也显示当前时间，可以类似地设置 this.form.arrivalDate
+    },
+    //点击供应商列表列数据
+    handleRowClick(row) {
+      this.form.supplier = row.sdId; // 将供应商名称填充到输入框中
+      for (let i = 0; i < this.detailsList.length; i++) {
+        const innerElement = this.detailsList[i];
+        if (innerElement.sdId === row.sdId) {
+          this.supplyName = innerElement.sbiName
+        }
+      }
+      this.dialogVisible = false; // 关闭对话框
 
+    },
+    showDiagSupplie() {
+      this.dialogVisible = true;
+      this.getList1();
+    },
+    /**
+     * 供应商列表
+     */
+    getList1() {
+      this.loading = true;
+      listSupplier(this.squeryParams).then(response => {
+        this.detailsList = response.rows;
+        this.stotal = response.total;
+        this.loading = false;
+      });
+    },
+    //点击deliveryList
+    handleRowClickPro(row, event, column) {
+    this.deliveryIndex = this.deliveryList.indexOf(row); // 获取点击的行索引
+    // console.log(clickedRowIndex)
+    // const clickedRowData = this.deliveryList[clickedRowIndex]; // 获取点击的行数据
+    // console.log(clickedRowData)
+    // 在这里处理你需要的逻辑
+  },
+    //点击每一行的产品信息显示到文本框里面
+    handleRowClickProduct(row) {
+        this.deliveryList[this.deliveryIndex].productInfo=row.productName
+        this.deliveryList[this.deliveryIndex].productSpecifications=row.specifications
+        this.deliveryList[this.deliveryIndex].unit=row.unit
+        this.deliveryList[this.deliveryIndex].remainingDeliveryQuantity=50
+        this.deliveryList[this.deliveryIndex].currentDeliveryQuantity=30
+      this.dialogVisible8=false
     },
     //点击每一行显示到文本框里面
     handleRowClickOrder(row) {
@@ -403,6 +486,12 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.form.shipper = '杨先生'
+      this.form.consigneePhone = '18116372198'
+      this.form.shipperPhone = '0642-167285'
+      this.form.carrierPhone = '1886543210'
+      this.form.companyName = '维森集团股份有限公司'
+      this.form.carrier = '张经理'
       this.open = true;
       this.title = "添加订单送货管理";
     },
@@ -412,9 +501,15 @@ export default {
       const orderDeliveryNoteId = row.orderDeliveryNoteId || this.ids
       getNote(orderDeliveryNoteId).then(response => {
         this.form = response.data;
-        this.deliveryList = response.data.deliveryList;
+        //this.deliveryList = response.data.deliveryList;
         this.open = true;
         this.title = "修改订单送货管理";
+      });
+      getDelivery(orderDeliveryNoteId).then(response => {
+        //this.form = response.data;
+        this.deliveryList = response.data;
+        //this.open = true;
+        //this.title = "修改产品明细";
       });
     },
     /** 提交按钮 */

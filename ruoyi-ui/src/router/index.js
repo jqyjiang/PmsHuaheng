@@ -5,7 +5,8 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+import SubmitResult from '@/views/components/icons/SubmitResult.vue';
+import orderInfo from '@/views/components/icons/orderInfo.vue';
 /**
  * Note: 路由配置项
  *
@@ -62,6 +63,16 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/submit-result/:formData', // 设置路由路径
+    name: 'SubmitResult', // 设置路由名称
+    component: SubmitResult // 指定要渲染的组件
+  },
+  {
+    path: '/orderInfo/:orderCode', // 设置路由路径
+    name: 'orderInfo', // 设置路由名称
+    component: orderInfo // 指定要渲染的组件
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',
@@ -100,7 +111,7 @@ export const constantRoutes = [
   //       path:'order',
   //       component:import('@/views/pms/manager/order.vue')
   //   }
-    
+
   //   ]
   // }
 ]

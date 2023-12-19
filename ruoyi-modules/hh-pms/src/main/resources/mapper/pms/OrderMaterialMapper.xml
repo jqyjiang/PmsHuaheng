@@ -6,6 +6,7 @@
 
     <resultMap type="OrderMaterial" id="OrderMaterialResult">
         <result property="orId" column="or_id"/>
+        <result property="lineNumber" column="line_number"/>
         <result property="orCode" column="or_code"/>
         <result property="orName" column="or_name"/>
         <result property="categoryCode" column="category_code"/>
@@ -27,8 +28,11 @@
         <result property="receivingAddress" column="receiving_address"/>
         <result property="remarks" column="remarks"/>
         <result property="orderCode" column="order_code"/>
+        <result property="deliveryNumNote" column="delivery_num_note"/>
         <result property="omState" column="om_state"/>
-        <result property="sbiName" column="sbi_name"/>
+        <result property="shipmentQuantity" column="shipment_quantity"/>
+        <result property="rejectedQuantity" column="rejected_quantity"/>
+        <result property="rejectedInfo" column="rejected_info"/>
     </resultMap>
 
     <sql id="selectOrderMaterialVo">
@@ -61,7 +65,37 @@
                            on orm.order_code = om.order_code
                  left join supplier_details sd on sd.sd_id = om.supplier
     </sql>
-
+    <sql id="selectOrderMaterialVo1">
+        select or_id,
+               line_number,
+               or_code,
+               or_name,
+               category_code,
+               material_category,
+               material_specification,
+               material_model,
+               material_unit,
+               require_number,
+               require_time,
+               lower_price,
+               new_price,
+               no_tax_price,
+               tax_code,
+               tax,
+               tax_price,
+               line_tax_amount,
+               consignee,
+               receiving_phone,
+               receiving_address,
+               remarks,
+               order_code,
+               delivery_num_note,
+               om_state,
+               shipment_quantity,
+               rejected_quantity,
+               rejected_info
+        from order_material
+    </sql>
     <select id="selectOrderMaterialList" parameterType="OrderMaterial" resultMap="OrderMaterialResult">
         <include refid="selectOrderMaterialVo"/>
         <where>
@@ -97,16 +131,22 @@
 
     <select id="selectOrderMaterialOrName" resultType="OrderMaterial">
         <include refid="selectOrderMaterialVo"/>
-        where
+        where orm.order_code = #{taskCode}
     </select>
     <select id="findTaskMaterial" resultType="OrderMaterial" parameterType="String" resultMap="OrderMaterialResult">
         <include refid="selectOrderMaterialVo"/>
         where orm.order_code = #{taskCode}
     </select>
+    <select id="findByOrderCodeMaterial" resultType="com.ruoyi.system.api.domain.OrderMaterial"
+            resultMap="OrderMaterialResult">
+        <include refid="selectOrderMaterialVo"/>
+        where orm.order_code = #{orderCode}
+    </select>
 
     <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">
         insert into order_material
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lineNumber != null">line_number,</if>
             <if test="orCode != null">or_code,</if>
             <if test="orName != null">or_name,</if>
             <if test="categoryCode != null">category_code,</if>
@@ -130,6 +170,7 @@
             <if test="orderCode != null">order_code,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lineNumber != null">#{lineNumber},</if>
             <if test="orCode != null">#{orCode},</if>
             <if test="orName != null">#{orName},</if>
             <if test="categoryCode != null">#{categoryCode},</if>
@@ -156,6 +197,7 @@
     <insert id="insertOrderMaterials" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="orId">
         insert into order_material
         (
+        line_number,
         or_code,
         or_name,
         category_code,
@@ -181,6 +223,7 @@
         values
         <foreach collection="list" item="item" separator=",">
             (
+            #{item.lineNumber},
             #{item.orCode},
             #{item.orName},
             #{item.categoryCode},
@@ -210,6 +253,7 @@
     <update id="updateOrderMaterial" parameterType="OrderMaterial">
         update order_material
         <trim prefix="SET" suffixOverrides=",">
+            <if test="lineNumber != null">line_number = #{lineNumber},</if>
             <if test="orCode != null">or_code = #{orCode},</if>
             <if test="orName != null">or_name = #{orName},</if>
             <if test="categoryCode != null">category_code = #{categoryCode},</if>
@@ -273,5 +317,10 @@
         <foreach item="orId" collection="array" open="(" separator="," close=")">
             #{orId}
         </foreach>
+    </delete>
+    <delete id="deleteOrderMaterialByOrderCode" parameterType="String">
+        delete
+        from order_material
+        where order_code = #{orderCode}
     </delete>
 </mapper>

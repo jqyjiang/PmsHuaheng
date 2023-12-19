@@ -96,4 +96,11 @@ public interface OrderDeliveryNoteMapper
      */
     @Select("select order_delivery_code from order_delivery_note where to_days(create_time)= to_days(#{date}) group by order_delivery_code order by create_time DESC limit 1")
     String selectOrderCode(@Param("date") Date date);
+
+    /**
+     * 查询快递单号是否存在
+     */
+
+    @Select("select count(tracking_number) from order_delivery_note where tracking_number = #{trackingNumber}")
+    int selectByTrackingNumber(@Param("trackingNumber") String trackingNumber);
 }

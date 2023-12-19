@@ -3,6 +3,8 @@ package com.ruoyi.system.api.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,6 +22,9 @@ public class OrderMaterial extends BaseEntity
     /** 主键ID */
     private Long orId;
 
+    /** 行号 */
+    @Excel(name = "行号")
+    private Long lineNumber;
     /** 物料编码 */
     @Excel(name = "物料编码")
     private String orCode;
@@ -67,7 +72,7 @@ public class OrderMaterial extends BaseEntity
 
     /** 不含税单价 */
     @Excel(name = "不含税单价")
-    private Long noTaxPrice;
+    private BigDecimal noTaxPrice;
 
     /** 税率代码 */
     @Excel(name = "税率代码")
@@ -79,7 +84,7 @@ public class OrderMaterial extends BaseEntity
 
     /** 含税单价 */
     @Excel(name = "含税单价")
-    private Long taxPrice;
+    private BigDecimal taxPrice;
 
     /** 行含税金额 */
     @Excel(name = "行含税金额")
@@ -105,28 +110,27 @@ public class OrderMaterial extends BaseEntity
     @Excel(name = "所属订单号")
     private String orderCode;
 
+    /** 发货单号 */
+    @Excel(name = "发货单号")
+    private String deliveryNumNote;
+
+    /** 订单明细执行状态 */
     @Excel(name = "订单明细执行状态")
     private Long omState;
 
-    /** 供应商名称 */
-    @Excel(name = "供应商名称")
-    private String sbiName;
+    /** 发货数量 */
+    @Excel(name = "发货数量")
+    private BigDecimal shipmentQuantity;
 
-    public String getSbiName() {
-        return sbiName;
-    }
+    /** 拒收数量 */
+    @Excel(name = "拒收数量")
+    private BigDecimal rejectedQuantity;
 
-    public void setSbiName(String sbiName) {
-        this.sbiName = sbiName;
-    }
+    /** 拒收原因 */
+    @Excel(name = "拒收原因")
+    private String rejectedInfo;
 
-    public Long getOmState() {
-        return omState;
-    }
 
-    public void setOmState(Long omState) {
-        this.omState = omState;
-    }
 
     public void setOrId(Long orId)
     {
@@ -137,6 +141,15 @@ public class OrderMaterial extends BaseEntity
     {
         return orId;
     }
+
+    public Long getLineNumber() {
+        return lineNumber;
+    }
+
+    public void setLineNumber(Long lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
     public void setOrCode(String orCode)
     {
         this.orCode = orCode;
@@ -236,15 +249,15 @@ public class OrderMaterial extends BaseEntity
     {
         return newPrice;
     }
-    public void setNoTaxPrice(Long noTaxPrice)
-    {
+
+    public BigDecimal getNoTaxPrice() {
+        return noTaxPrice;
+    }
+
+    public void setNoTaxPrice(BigDecimal noTaxPrice) {
         this.noTaxPrice = noTaxPrice;
     }
 
-    public Long getNoTaxPrice()
-    {
-        return noTaxPrice;
-    }
     public void setTaxCode(String taxCode)
     {
         this.taxCode = taxCode;
@@ -263,15 +276,15 @@ public class OrderMaterial extends BaseEntity
     {
         return tax;
     }
-    public void setTaxPrice(Long taxPrice)
-    {
+
+    public BigDecimal getTaxPrice() {
+        return taxPrice;
+    }
+
+    public void setTaxPrice(BigDecimal taxPrice) {
         this.taxPrice = taxPrice;
     }
 
-    public Long getTaxPrice()
-    {
-        return taxPrice;
-    }
     public void setLineTaxAmount(BigDecimal lineTaxAmount)
     {
         this.lineTaxAmount = lineTaxAmount;
@@ -281,15 +294,15 @@ public class OrderMaterial extends BaseEntity
     {
         return lineTaxAmount;
     }
-
-    public String getConsignee() {
-        return consignee;
-    }
-
-    public void setConsignee(String consignee) {
+    public void setConsignee(String consignee)
+    {
         this.consignee = consignee;
     }
 
+    public String getConsignee()
+    {
+        return consignee;
+    }
     public void setReceivingPhone(String receivingPhone)
     {
         this.receivingPhone = receivingPhone;
@@ -317,19 +330,66 @@ public class OrderMaterial extends BaseEntity
     {
         return remarks;
     }
-
-    public String getOrderCode() {
-        return orderCode;
+    public void setOrderCode(String orderCode)
+    {
+        this.orderCode = orderCode;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public String getOrderCode()
+    {
+        return orderCode;
+    }
+    public void setDeliveryNumNote(String deliveryNumNote)
+    {
+        this.deliveryNumNote = deliveryNumNote;
+    }
+
+    public String getDeliveryNumNote()
+    {
+        return deliveryNumNote;
+    }
+    public void setOmState(Long omState)
+    {
+        this.omState = omState;
+    }
+
+    public Long getOmState()
+    {
+        return omState;
+    }
+    public void setShipmentQuantity(BigDecimal shipmentQuantity)
+    {
+        this.shipmentQuantity = shipmentQuantity;
+    }
+
+    public BigDecimal getShipmentQuantity()
+    {
+        return shipmentQuantity;
+    }
+    public void setRejectedQuantity(BigDecimal rejectedQuantity)
+    {
+        this.rejectedQuantity = rejectedQuantity;
+    }
+
+    public BigDecimal getRejectedQuantity()
+    {
+        return rejectedQuantity;
+    }
+    public void setRejectedInfo(String rejectedInfo)
+    {
+        this.rejectedInfo = rejectedInfo;
+    }
+
+    public String getRejectedInfo()
+    {
+        return rejectedInfo;
     }
 
     @Override
     public String toString() {
         return "OrderMaterial{" +
                 "orId=" + orId +
+                ", lineNumber=" + lineNumber +
                 ", orCode='" + orCode + '\'' +
                 ", orName='" + orName + '\'' +
                 ", categoryCode='" + categoryCode + '\'' +
@@ -351,8 +411,11 @@ public class OrderMaterial extends BaseEntity
                 ", receivingAddress='" + receivingAddress + '\'' +
                 ", remarks='" + remarks + '\'' +
                 ", orderCode='" + orderCode + '\'' +
+                ", deliveryNumNote='" + deliveryNumNote + '\'' +
                 ", omState=" + omState +
-                ", sbiName='" + sbiName + '\'' +
+                ", shipmentQuantity=" + shipmentQuantity +
+                ", rejectedQuantity=" + rejectedQuantity +
+                ", rejectedInfo='" + rejectedInfo + '\'' +
                 '}';
     }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.DeliveryMapper">
+    
+    <resultMap type="Delivery" id="DeliveryResult">
+        <result property="deliveryId"    column="delivery_id"    />
+        <result property="productInfo"    column="product_info"    />
+        <result property="productSpecifications"    column="product_specifications"    />
+        <result property="requiredQuantity"    column="required_quantity"    />
+        <result property="unit"    column="unit"    />
+        <result property="remainingDeliveryQuantity"    column="remaining_delivery_quantity"    />
+        <result property="currentDeliveryQuantity"    column="current_delivery_quantity"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="sourceOrderNumber"    column="source_order_number"    />
+    </resultMap>
+
+    <sql id="selectDeliveryVo">
+        select delivery_id, product_info, product_specifications, required_quantity, unit, remaining_delivery_quantity, current_delivery_quantity, remarks, source_order_number from delivery
+    </sql>
+
+    <select id="selectDeliveryList" parameterType="Delivery" resultMap="DeliveryResult">
+        <include refid="selectDeliveryVo"/>
+        <where>  
+            <if test="productInfo != null  and productInfo != ''"> and product_info = #{productInfo}</if>
+            <if test="productSpecifications != null  and productSpecifications != ''"> and product_specifications = #{productSpecifications}</if>
+            <if test="requiredQuantity != null "> and required_quantity = #{requiredQuantity}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="remainingDeliveryQuantity != null "> and remaining_delivery_quantity = #{remainingDeliveryQuantity}</if>
+            <if test="currentDeliveryQuantity != null "> and current_delivery_quantity = #{currentDeliveryQuantity}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="sourceOrderNumber != null  and sourceOrderNumber != ''"> and source_order_number = #{sourceOrderNumber}</if>
+        </where>
+    </select>
+    
+    <select id="selectDeliveryByDeliveryId" parameterType="Long" resultMap="DeliveryResult">
+        <include refid="selectDeliveryVo"/>
+        where delivery_id = #{deliveryId}
+    </select>
+        
+    <insert id="insertDelivery" parameterType="Delivery" useGeneratedKeys="true" keyProperty="deliveryId">
+        insert into delivery
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productInfo != null">product_info,</if>
+            <if test="productSpecifications != null">product_specifications,</if>
+            <if test="requiredQuantity != null">required_quantity,</if>
+            <if test="unit != null">unit,</if>
+            <if test="remainingDeliveryQuantity != null">remaining_delivery_quantity,</if>
+            <if test="currentDeliveryQuantity != null">current_delivery_quantity,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="sourceOrderNumber != null">source_order_number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productInfo != null">#{productInfo},</if>
+            <if test="productSpecifications != null">#{productSpecifications},</if>
+            <if test="requiredQuantity != null">#{requiredQuantity},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="remainingDeliveryQuantity != null">#{remainingDeliveryQuantity},</if>
+            <if test="currentDeliveryQuantity != null">#{currentDeliveryQuantity},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="sourceOrderNumber != null">#{sourceOrderNumber},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDelivery" parameterType="Delivery">
+        update delivery
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productInfo != null">product_info = #{productInfo},</if>
+            <if test="productSpecifications != null">product_specifications = #{productSpecifications},</if>
+            <if test="requiredQuantity != null">required_quantity = #{requiredQuantity},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="remainingDeliveryQuantity != null">remaining_delivery_quantity = #{remainingDeliveryQuantity},</if>
+            <if test="currentDeliveryQuantity != null">current_delivery_quantity = #{currentDeliveryQuantity},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="sourceOrderNumber != null">source_order_number = #{sourceOrderNumber},</if>
+        </trim>
+        where delivery_id = #{deliveryId}
+    </update>
+
+    <delete id="deleteDeliveryByDeliveryId" parameterType="Long">
+        delete from delivery where delivery_id = #{deliveryId}
+    </delete>
+
+    <delete id="deleteDeliveryByDeliveryIds" parameterType="String">
+        delete from delivery where delivery_id in 
+        <foreach item="deliveryId" collection="array" open="(" separator="," close=")">
+            #{deliveryId}
+        </foreach>
+    </delete>
+</mapper>

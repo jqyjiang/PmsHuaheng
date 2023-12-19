@@ -44,6 +44,7 @@ public class OrderManagerController extends BaseController
     public List<OrderManager> managerList(@RequestParam("orId") Long orId){
         return orderManagerService.selectByOrderTypeRunning(orId);
     }
+
     /**
      * 查询执行状态个数
      * @return
@@ -100,7 +101,15 @@ public class OrderManagerController extends BaseController
     {
         return success(orderManagerService.selectOrderManagerByOrderId(orderId));
     }
-
+    /**
+     * 获取采购订单管理详细信息
+     */
+    @RequiresPermissions("pms:manager:query")
+    @GetMapping(value = "/getOrderManager/{orderCode}")
+    public AjaxResult getInfo(@PathVariable("orderCode") String orderCode)
+    {
+        return success(orderManagerService.selectOrderManagerByOrderCode(orderCode));
+    }
     /**
      * 新增采购订单管理
      */
@@ -109,7 +118,7 @@ public class OrderManagerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody OrderManager orderManager)
     {
-        return toAjax(orderManagerService.insertOrderManager(orderManager));
+        return success(orderManagerService.insertOrderManager(orderManager));
     }
 
     /**
@@ -123,7 +132,7 @@ public class OrderManagerController extends BaseController
         return toAjax(orderManagerService.updateOrderManager(orderManager));
     }
     /**
-     * 修改采购订单管理
+     * 修改采购订单管理状态
      */
 //    @RequiresPermissions("pms:manager:edit")
     @Log(title = "采购订单管理", businessType = BusinessType.UPDATE)
