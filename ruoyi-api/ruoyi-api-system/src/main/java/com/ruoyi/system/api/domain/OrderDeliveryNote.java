@@ -84,11 +84,20 @@ public class OrderDeliveryNote extends BaseEntity
     /** 附件 */
     private Long annex;
 
-    /** 产品订单明细 */
-    private Long deliveryId;
+    /** 剩余送货数量 */
+    @Excel(name = "剩余送货数量")
+    private Long remainingDeliveryQuantity;
+
+    /** 本次送货数量 */
+    @Excel(name = "本次送货数量")
+    private Long currentDeliveryQuantity;
+//
+//    /** 产品订单明细 */
+//    private Long deliveryId;
 
     /** 产品明细信息 */
     private List<Delivery> deliveryList;
+
 
     public void setOrderDeliveryNoteId(Long orderDeliveryNoteId) 
     {
@@ -261,14 +270,21 @@ public class OrderDeliveryNote extends BaseEntity
     {
         return annex;
     }
-    public void setDeliveryId(Long deliveryId) 
-    {
-        this.deliveryId = deliveryId;
+
+    public Long getRemainingDeliveryQuantity() {
+        return remainingDeliveryQuantity;
     }
 
-    public Long getDeliveryId() 
-    {
-        return deliveryId;
+    public void setRemainingDeliveryQuantity(Long remainingDeliveryQuantity) {
+        this.remainingDeliveryQuantity = remainingDeliveryQuantity;
+    }
+
+    public Long getCurrentDeliveryQuantity() {
+        return currentDeliveryQuantity;
+    }
+
+    public void setCurrentDeliveryQuantity(Long currentDeliveryQuantity) {
+        this.currentDeliveryQuantity = currentDeliveryQuantity;
     }
 
     public List<Delivery> getDeliveryList()
@@ -283,28 +299,29 @@ public class OrderDeliveryNote extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("orderDeliveryNoteId", getOrderDeliveryNoteId())
-            .append("orderDeliveryCode", getOrderDeliveryCode())
-            .append("orderConnectionId", getOrderConnectionId())
-            .append("deliveryNoteState", getDeliveryNoteState())
-            .append("deliveryAddress", getDeliveryAddress())
-            .append("consignee", getConsignee())
-            .append("companyName", getCompanyName())
-            .append("consigneePhone", getConsigneePhone())
-            .append("shipper", getShipper())
-            .append("shipperPhone", getShipperPhone())
-            .append("supplier", getSupplier())
-            .append("carrier", getCarrier())
-            .append("carrierPhone", getCarrierPhone())
-            .append("deliveryMethod", getDeliveryMethod())
-            .append("trackingNumber", getTrackingNumber())
-            .append("deliveryDate", getDeliveryDate())
-            .append("arrivalDate", getArrivalDate())
-            .append("note", getNote())
-            .append("annex", getAnnex())
-            .append("deliveryId", getDeliveryId())
-            .append("deliveryList", getDeliveryList())
-            .toString();
+        return "OrderDeliveryNote{" +
+                "orderDeliveryNoteId=" + orderDeliveryNoteId +
+                ", orderDeliveryCode='" + orderDeliveryCode + '\'' +
+                ", orderConnectionId='" + orderConnectionId + '\'' +
+                ", deliveryNoteState=" + deliveryNoteState +
+                ", deliveryAddress='" + deliveryAddress + '\'' +
+                ", consignee='" + consignee + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", consigneePhone='" + consigneePhone + '\'' +
+                ", shipper='" + shipper + '\'' +
+                ", shipperPhone='" + shipperPhone + '\'' +
+                ", supplier=" + supplier +
+                ", carrier='" + carrier + '\'' +
+                ", carrierPhone='" + carrierPhone + '\'' +
+                ", deliveryMethod='" + deliveryMethod + '\'' +
+                ", trackingNumber='" + trackingNumber + '\'' +
+                ", deliveryDate=" + deliveryDate +
+                ", arrivalDate=" + arrivalDate +
+                ", note='" + note + '\'' +
+                ", annex=" + annex +
+                ", remainingDeliveryQuantity=" + remainingDeliveryQuantity +
+                ", currentDeliveryQuantity=" + currentDeliveryQuantity +
+                ", deliveryList=" + deliveryList +
+                '}';
     }
 }

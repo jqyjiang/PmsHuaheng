@@ -44,6 +44,11 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
         return orderManagerMapper.selectByOrderTypeRunning(orId);
     }
 
+    @Override
+    public List<OrderManager> selectOrderManagerByOrderCode(String orderCode) {
+        return orderManagerMapper.selectOrderManagerByOrderCode(orderCode);
+    }
+
     /**
      * 查询执行状态个数
      *
@@ -84,17 +89,18 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
      */
     @Override
     @Transactional
-    public int insertOrderManager(OrderManager orderManager) {
+    public OrderManager insertOrderManager(OrderManager orderManager) {
         //先写订单生成
         Date date = new Date();
         orderManager.setCreateTime(date);
         String orderCode = createOrderCode(date);
         orderManager.setOrderCode(orderCode);
+        orderManager.setOrderState(1l);
         //添加物料基础表
         //物料需求总数
-       // BigDecimal totalDemandQuantity = BigDecimal.ZERO;
+        // BigDecimal totalDemandQuantity = BigDecimal.ZERO;
         List<OrderMaterial> orderMaterialList = orderManager.getOrderMaterialList();
-        System.out.println("这是查出来的物料明细表:"+orderMaterialList);
+        System.out.println("这是查出来的物料明细表:" + orderMaterialList);
         if (orderMaterialList != null && !orderMaterialList.isEmpty()) {
             boolean allOrderCodesExist = orderMaterialList.stream().allMatch(item -> item.getOrderCode() != null && !item.getOrderCode().isEmpty());
             if (allOrderCodesExist) {
@@ -105,17 +111,17 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                         .filter(Objects::nonNull)
                         .filter(num -> num.compareTo(BigDecimal.ZERO) > 0)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
-                System.out.println("这是总需求量:"+totalDemandQuantity);
+                System.out.println("这是总需求量:" + totalDemandQuantity);
                 //先根据任务单号查询任务表
                 ProcurementTask procurementTask = procurementTaskServiceClient.selectProcurementTaskByTaskId(orderMaterialList.get(0).getOrderCode());
-                System.out.println("这是任务单表:"+procurementTask);
+                System.out.println("这是任务单表:" + procurementTask);
                 // 修改任务表状态
                 BigDecimal taskAccepted = procurementTask.getTaskAccepted();
-                System.out.println("这是查询之后返回的待受理数量:"+taskAccepted);
+                System.out.println("这是查询之后返回的待受理数量:" + taskAccepted);
 //                if (taskAccepted.compareTo(totalDemandQuantity) > 0) {
-                    BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
-                    System.out.println("这是相减之后的数"+newTaskAccepted);
-                    procurementTask.setTaskAccepted(newTaskAccepted);
+                BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
+                System.out.println("这是相减之后的数" + newTaskAccepted);
+                procurementTask.setTaskAccepted(newTaskAccepted);
                 //}
                 procurementTask.setTaskStatus(2l);
                 procurementTaskServiceClient.updateProcurement(procurementTask);
@@ -149,7 +155,9 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
             // ...
 
         }
-        return orderManagerMapper.insertOrderManager(orderManager);
+        int rows = orderManagerMapper.insertOrderManager(orderManager);
+
+        return rows > 0 ? orderManager : null;
     }
 
     /**

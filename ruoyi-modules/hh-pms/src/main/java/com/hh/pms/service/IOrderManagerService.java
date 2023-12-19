@@ -3,6 +3,7 @@ package com.hh.pms.service;
 import java.util.List;
 
 import com.ruoyi.system.api.domain.OrderManager;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -19,11 +20,18 @@ public interface IOrderManagerService
      * @return
      */
     List<OrderManager> selectByOrderTypeRunning(Long orId);
+
+    /**
+     * 根据订单号查询订单信息
+     * @param orderCode
+     * @return
+     */
+    public List<OrderManager> selectOrderManagerByOrderCode(@Param("orderCode") String orderCode);
     /**
      * 查询执行状态个数
      * @return
      */
-    @Select("select order_id,or_id from order_manager")
+
     public List<OrderManager> findRunTypeNumber();
     /**
      * 查询采购订单管理
@@ -47,7 +55,7 @@ public interface IOrderManagerService
      * @param orderManager 采购订单管理
      * @return 结果
      */
-    public int insertOrderManager(OrderManager orderManager);
+    public OrderManager insertOrderManager(OrderManager orderManager);
 
     /**
      * 修改采购订单管理

@@ -51,6 +51,12 @@ public interface OrderMaterialMapper
     List<OrderMaterial> findTaskMaterial(String taskCode);
 
     /**
+     * 根据来源单号查询物料明细
+     * @param orderCode
+     * @return
+     */
+    List<OrderMaterial> findByOrderCodeMaterial(String orderCode);
+    /**
      * 修改订单物料明细
      * 
      * @param orderMaterial 订单物料明细
@@ -71,6 +77,13 @@ public interface OrderMaterialMapper
      * @return 结果
      */
     public int deleteOrderMaterialByOrId(Long orId);
+    /**
+     * 根据订单编号删除订单物料明细
+     *
+     * @param orderCode 订单物料明细主键
+     * @return 结果
+     */
+    public int deleteOrderMaterialByOrderCode(String orderCode);
 
     /**
      * 批量删除订单物料明细

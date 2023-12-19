@@ -10,7 +10,9 @@
         </div>
 
         <div>
-          <!-- 右边的三个按钮 -->
+          <!-- 右边的四个个按钮 -->
+          <el-button type="primary" size="small" @click="invoice">新建发货单</el-button>
+          <el-button type="primary" size="small" @click="drawer1 = true">审核</el-button>
           <el-button type="primary" size="small" label="rtl" @click="drawer = true">需求转订单</el-button>
           <el-button type="primary" size="small">合同转订单</el-button>
           <el-button type="primary" size="small" @click="orderCancelbutton">关闭订单</el-button>
@@ -112,9 +114,6 @@
           </el-form-item>
         </el-form>
       </div>
-
-
-
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
           <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
@@ -139,7 +138,11 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="关联合同名称" align="center" prop="contractName" />
         <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
-        <el-table-column label="订单号" align="center" prop="orderCode" width="150px" />
+        <el-table-column label="订单号" align="center" prop="orderCode" width="150px">
+          <template slot-scope="scope">
+            <span @click="redirectToOtherPage(scope.row.orderId)">{{ scope.row.orderCode }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
         <el-table-column label="物料信息" align="center" prop="materialId">
           <template slot-scope="scope">
@@ -161,7 +164,15 @@
           </template>
         </el-table-column>
         <el-table-column label="采购员" align="center" prop="purchaser" />
-        <el-table-column label="含税总金额" align="center" prop="taxTotal" />
+        <el-table-column label="含税总金额" align="center" prop="taxTotal">
+          <template slot-scope="scope">
+            <span>
+              {{ scope.row.taxTotal !== null && !isNaN(scope.row.taxTotal)
+                ? parseFloat(scope.row.taxTotal).toFixed(2)
+                : '0.00' }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="订单来源" align="center" prop="orderSource">
           <template slot-scope="scope">
             <dict-tag :options="dict.type.order_source" :value="scope.row.orderSource" />
@@ -247,19 +258,15 @@
             <el-input v-model="form.orderDescription" placeholder="请输入订单说明" />
           </el-form-item>
           <el-form-item label="需求总数量" prop="totalDemand">
-            <el-input :value="totalDemand" disabled placeholder="请输入需求总数量" />
+            <el-input :value="isCalculationNeeded ? totalDemands : (number ? number.toFixed(2) : '')" disabled
+              placeholder="请输入需求总数量" />
           </el-form-item>
           <el-form-item label="含税总金额(元)" prop="taxTotal">
-            <el-input :value="calculateTotalAmount" disabled placeholder="请输入需求总数量" />
+            <el-input :value="isCalculationNeeded ? calculateTotalAmount : (taxTotal ? taxTotal.toFixed(2) : '')" disabled
+              placeholder="请输入含税总金额" />
           </el-form-item>
           <el-form-item label="采购员" prop="purchaser">
             <el-input v-model="form.purchaser" placeholder="请输入采购员" />
-          </el-form-item>
-          <el-form-item label="采购审批状态" prop="orderState">
-            <el-select v-model="form.orderState" placeholder="请选择采购审批状态">
-              <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label"
-                :value="parseInt(dict.value)"></el-option>
-            </el-select>
           </el-form-item>
           <el-form-item label="币种" prop="currencyId">
             <el-input v-model="currencyName" placeholder="请输入币种" />
@@ -339,7 +346,7 @@
             </el-col>
           </el-row>
           <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
-            @selection-change="handleOrderMaterialSelectionChange" ref="orderMaterial">
+            @selection-change="handleOrderMaterialSelectionChange" ref="orderMaterial" @row-click="clickRowMaterial">
             <el-table-column type="selection" width="50" align="center" />
             <el-table-column label="序号" align="center" prop="index" width="50" />
             <el-table-column label="物料编码" prop="orCode" width="150">
@@ -522,148 +529,213 @@
         </div>
       </el-dialog>
     </div>
-
-
+    <!--
+  订单执行明细
+-->
     <div class="order-info" v-show="!isWholeOrder">
-      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px;">
-        <el-form :model="formData" label-width="40px">
-          <el-row>
-            <!-- 添加“全部”选项 -->
-            <div style="margin-top: 20px;">
-              <el-col :span="1.3" :inline="true" size="small">
-                <el-link :class="{ 'selected': selectedRoute === null }" type="primary" @click="selectRoute(null)">
-                  全部({{ this.runNumber.length }})
-                </el-link>
-              </el-col>
-            </div>
+      <Mingxi></Mingxi>
+    </div>
+    <!--
+      新建送货单
+    -->
+    <el-dialog title="新建送货单" :visible.sync="invoiceOrder">
+      <!--新建送货单-->
 
-            <!-- 循环显示其他选项 -->
-            <el-col v-for="dict in dict.type.om_state" :key="dict.value" :span="1.3" :inline="true" size="small">
-              <el-form-item>
-                <el-link :class="{ 'selected': selectedRoute === dict }" type="primary" @click="selectRoute(dict.value)">
-                  {{ dict.label }} ({{ getTotalCount(dict.value) }})
-                </el-link>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
-      <div style="background-color: #ffffff; border: 1px solid #eaeaea; padding: 10px;">
-        <el-form :model="ormqueryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch"
-          label-width="68px">
-          <el-form-item label="供应商名称:" prop="supplier">
-            <el-input v-model="ormqueryParams.sbiName" placeholder="" clearable @keyup.enter.native="handleQuery"
-              icon="el-icon-search" />
-            <i class="el-icon-search" id="serachOne" @click="showDiagSupplie()"></i>
-            <el-dialog :visible.sync="dialogVisible" title="供应商名称">
-              <!-- 这里是供应商的内容 -->
-              <el-table v-loading="loading" :data="detailsList" @row-click="handleRowClick">
-                <el-table-column type="selection" width="55" align="center" />
-                <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
-                <el-table-column label="供应商名称" align="center" prop="sbiName" />
-              </el-table>
-              <pagination v-show="stotal > 0" :total="stotal" :page.sync="ormqueryParams.pageNum"
-                :limit.sync="ormqueryParams.pageSize" @pagination="getList1" />
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
-              </div>
-            </el-dialog>
-          </el-form-item>
-          <el-form-item label="订单来源:" prop="orderSource">
-            <el-select v-model="ormqueryParams.orderSource" placeholder="请选择订单来源" clearable>
-              <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
-                :value="dict.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="物料名称" prop="orName">
-            <el-input v-model="ormqueryParams.orName" placeholder="请输入物料名称" clearable @keyup.enter.native="handleQuery" />
-          </el-form-item>
-          <el-form-item label="所属订单号" prop="orderCode">
-            <el-input v-model="ormqueryParams.orderCode" placeholder="请输入所属订单号" clearable
-              @keyup.enter.native="handleQuery" />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div>
-        <el-table v-loading="loading" :data="materiaslList" @selection-change="handleSelectionChange1">
-          <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="所属订单号" align="center" prop="orderCode" />
-          <el-table-column label="物料名称" align="center" prop="orName" />
-          <el-table-column label="需求总数量" align="center" prop="requireNumber">
+
+      <el-form ref="invoiceForm" :model="invoiceForm" :rules="rules" label-width="80px">
+        <!-- <el-form-item label="订单编号" prop="orderCode">
+          <el-input v-model="invoiceForm.orderCode" placeholder="请输入订单编号" />
+        </el-form-item>
+        <el-form-item label="订单状态" prop="orderStatus">
+          <el-select v-model="invoiceForm.orderStatus" placeholder="请选择订单状态">
+            <el-option v-for="dict in dict.type.om_state" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="总需求量" prop="totalDemand">
+          <el-input v-model="invoiceForm.totalDemand" placeholder="请输入总需求量" />
+        </el-form-item> -->
+        <el-divider content-position="center">订单物料明细信息</el-divider>
+        <el-table :data="invoiceOrderMaterialList" :row-class-name="rowOrderMaterialIndex" @row-click="clickRowMaterial1">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50" />
+          <el-table-column label="物料编码" prop="orCode" width="150">
             <template slot-scope="scope">
-              <span>{{ scope.row.requireNumber.toFixed(2) }}</span>
+              <el-input v-model="scope.row.orCode" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="供应商名称" align="center" prop="sbiName" />
-          <el-table-column label="订单明细执行状态" align="center" prop="omState">
+          <el-table-column label="物料名称" prop="orName" width="150">
             <template slot-scope="scope">
-              <dict-tag :options="dict.type.om_state" :value="scope.row.omState" />
+              <el-input v-model="scope.row.orName" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="含税总金额" align="center">
+          <el-table-column label="品类编码" prop="categoryCode" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('totalPrice') }}
+              <el-input v-model="scope.row.categoryCode" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="在途数量" align="center">
+          <el-table-column label="物料品类" prop="materialCategory" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('onWayNumber') }}
+              <el-input v-model="scope.row.materialCategory" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="在途金额" align="center">
+          <el-table-column label="物料规格" prop="materialSpecification" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('onWayPrice') }}
+              <el-input v-model="scope.row.materialSpecification" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="已入库数量" align="center">
+          <el-table-column label="物料型号" prop="materialModel" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('inStockNumber') }}
+              <el-input v-model="scope.row.materialModel" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="已入库金额" align="center">
+          <el-table-column label="物料单位" prop="materialUnit" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('inStockPrice') }}
+              <el-input v-model="scope.row.materialUnit" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="待发货数量" align="center">
+          <el-table-column label="需求数量" prop="requireNumber" width="150">
             <template slot-scope="scope">
-              {{ calculateTotal('toShipNumber') }}
+              <el-input v-model="scope.row.requireNumber" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="待发货金额" align="center">
+          <el-table-column label="需求日期" prop="requireTime" width="240">
             <template slot-scope="scope">
-              {{ calculateTotal('toShipPrice') }}
+              <el-date-picker clearable v-model="scope.row.requireTime" type="date" value-format="yyyy-MM-dd" disabled />
             </template>
           </el-table-column>
-          <el-table-column label="采购员" align="center" prop="buyerName" />
-          <el-table-column label="需求日期" align="center" prop="requireTime" width="180">
+          <el-table-column label="历史最低价" prop="lowerPrice" width="150">
             <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.requireTime, '{y}-{m}-{d}') }}</span>
+              <el-input v-model="scope.row.lowerPrice" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="最新价格" prop="newPrice" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.newPrice" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="不含税单价" prop="noTaxPrice" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.noTaxPrice" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="税率代码" prop="taxCode" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.taxCode" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="税率" prop="tax" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.tax" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="含税单价" prop="taxPrice" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.taxPrice" />
+            </template>
+          </el-table-column>
+          <el-table-column label="行含税金额" prop="lineTaxAmount" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.lineTaxAmount" />
+            </template>
+          </el-table-column>
+          <el-table-column label="收货人" prop="consignee" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.consignee" />
+            </template>
+          </el-table-column>
+          <el-table-column label="收货电话" prop="receivingPhone" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.receivingPhone" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="收货地址" prop="receivingAddress" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.receivingAddress" disabled />
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" prop="remarks" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.remarks" disabled />
             </template>
           </el-table-column>
         </el-table>
+        <el-divider content-position="center">订单物料发货执行</el-divider>
 
-<!--        <pagination v-show="ormtotal > 0" :total="ormtotal" :page.sync="ormqueryParams.pageNum"-->
-<!--          :limit.sync="ormqueryParams.pageSize" @pagination="getListMaterial" />-->
-
+        <el-form-item label="订单编号" prop="orderCode">
+          <el-input v-model="invoiceForm.orderCode" placeholder="请输入订单编号" />
+        </el-form-item>
+        <el-form-item label="税后总金额" prop="taxTotal">
+          <el-input v-model="invoiceForm.taxTotal" placeholder="请输入税后总金额" />
+        </el-form-item>
+        <el-form-item label="总需求量" prop="totalDemand">
+          <el-input v-model="invoiceForm.totalDemand" placeholder="请输入总需求量" />
+        </el-form-item>
+        <el-form-item label="发货数量" prop="deliveryQuantity">
+          <el-input v-model="invoiceForm.deliveryQuantity" placeholder="请输入发货数量" />
+        </el-form-item>
+        <el-form-item label="订单行号" prop="orderLineNo">
+          <el-input v-model="invoiceForm.orderLineNo" placeholder="请输入订单行号" />
+        </el-form-item>
+        <el-form-item label="物料编码" prop="materialCode">
+          <el-input v-model="invoiceForm.materialCode" placeholder="请输入物料编码" />
+        </el-form-item>
+        <el-form-item label="物料名称" prop="materialName">
+          <el-input v-model="invoiceForm.materialName" placeholder="请输入物料名称" />
+        </el-form-item>
+        <el-form-item label="物料单位" prop="materialUnit">
+          <el-input v-model="invoiceForm.materialUnit" placeholder="请输入物料单位" />
+        </el-form-item>
+        <el-form-item label="需求数量" prop="requiredQuantity">
+          <el-input v-model="invoiceForm.requiredQuantity" placeholder="请输入需求数量" />
+        </el-form-item>
+        <el-form-item label="需求日期" prop="requiredDate">
+          <el-date-picker clearable v-model="invoiceForm.requiredDate" type="date" value-format="yyyy-MM-dd"
+            placeholder="请选择需求日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="发货单号" prop="deliveryNoteNo">
+          <el-input v-model="invoiceForm.deliveryNoteNo" placeholder="请输入发货单号" disabled />
+        </el-form-item>
+        <el-form-item label="发货单行号" prop="deliveryNoteLineNo">
+          <el-input v-model="invoiceForm.deliveryNoteLineNo" placeholder="请输入发货单行号" disabled />
+        </el-form-item>
+        <!-- <el-form-item label="已发货数量" prop="deliveredQuantity">
+            <el-input v-model="invoiceForm.deliveredQuantity" placeholder="请输入已发货数量" />
+          </el-form-item> -->
+        <el-form-item label="供应商" prop="supplier">
+          <el-input v-model="invoiceForm.supplier" placeholder="请输入供应商" />
+        </el-form-item>
+        <el-form-item label="交货日期" prop="deliveryDate">
+          <el-date-picker clearable v-model="invoiceForm.deliveryDate" type="date" value-format="yyyy-MM-dd"
+            placeholder="请选择交货日期">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="invoicesubmitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber, updateManagerState } from "@/api/pms/manager";
-import { listMaterials, getMaterial, delMaterial, addMaterial, updateMaterial, findTaskMaterial } from "@/api/pms/materials";
-import { listTask, getTask, delTask, addTask, updateTask } from "@/api/procure/task";
+import { listMaterials, findTaskMaterial, findByOrderCodeMaterial, deleteMaterial, addMaterials } from "@/api/pms/materials";
+import { listTask } from "@/api/procure/task";
+import { addOrderDetails, updateOrderDetails } from "@/api/pms/orderDetail";
+import Mingxi from '../../components/icons/Pms/index.vue'
 export default {
   name: "Manager",
+  components: {
+    Mingxi
+  },
   dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method', 'om_state'],
   data() {
     return {
+      invoiceOrderMaterialList: [],//显示新建送货单的物料基本信息
+      invoiceOrder: false,//显示新建送货单的对话框
       isWholeOrder: true, // 默认显示整单信息
       // 查询参数
       rwqueryParams: {
@@ -682,6 +754,8 @@ export default {
       ids: [],
       //供应商名称
       supplyName: '',
+      //控制是否启用计算属性计算需求总数量和含税金额
+      isCalculationNeeded: true,
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -706,6 +780,10 @@ export default {
       },
       // 查询参数
       ormqueryParams: {
+        pageNum: 1,
+        pageSize: 10,
+      },
+      materialqueryParams: {
         pageNum: 1,
         pageSize: 10,
         orName: null,
@@ -810,14 +888,30 @@ export default {
       // 批量新增数据列表
       batchAddDataList: [],
       checkedOrderMaterials: null,
+      //需求总数修改
+      number: 0,
+      //含税总金额
+      taxTotal: 0,
       //执行状态查询
       formData: {},
       selectedRoute: null,
       ormtotal: 0,
       drawer: false,
       direction: 'rtl',
+      checkedOrderMaterials: [],
       //关闭订单的集合或对象
-      orderCancel: []
+      orderCancel: [],
+      //获取到订单明细表格下标
+      materialIndex: 0,
+      //获取新建送货单的订单信息
+      invoiceList: [],
+      //新建送货单参数
+      invoiceForm: {
+
+      },
+
+      materialIndex1: 0,
+
     };
   },
   watch: {
@@ -841,7 +935,7 @@ export default {
   },
   computed: {
     //计算总需求量
-    totalDemand() {
+    totalDemands() {
       let sum = 0;
       this.orderMaterialList.forEach(item => {
         if (item.requireNumber !== '') {
@@ -852,34 +946,6 @@ export default {
       this.form.totalDemand = total; // 将计算得到的总价赋值给 form.totalDemand
       return total;
     },
-    // // 计算行含税金额
-    // lineTaxAmount() {
-    //   return this.orderMaterialList.map(item => {
-    //     const basePrice = parseFloat(item.newPrice);
-    //     const taxRate = parseFloat(item.tax);
-    //     const requireNumber = parseFloat(item.requireNumber);
-    //     if (taxRate !== 0) { // 如果税率不为0，则计算行含税金额
-    //       const lineAmount = (basePrice * (1 + taxRate)) * requireNumber;
-    //       return isNaN(lineAmount) ? 0.00 : lineAmount.toFixed(2);
-    //     } else { // 如果税率为0，则行含税金额为0
-    //       return '0.00';
-    //     }
-    //   });
-    // },
-
-    // // 计算含税单价
-    // taxPrice() {
-    //   return this.orderMaterialList.map(item => {
-    //     const basePrice = parseFloat(item.newPrice);
-    //     const taxRate = parseFloat(item.tax);
-    //     if (taxRate !== 0) { // 如果税率不为0，则计算含税单价
-    //       const taxIncludedPrice = basePrice * (1 + taxRate);
-    //       return isNaN(taxIncludedPrice) ? 0.00 : taxIncludedPrice.toFixed(2);
-    //     } else { // 如果税率为0，则含税单价为0
-    //       return '0.00';
-    //     }
-    //   });
-    // },
     //计算税后总金额
     calculateTotalAmount() {
       let sum = 0;
@@ -893,6 +959,11 @@ export default {
             const requireNumber = parseFloat(item.requireNumber);
             const afterTaxAmount = taxIncludedPrice * requireNumber;
             sum += afterTaxAmount;
+          } else {
+            const requireNumber = parseFloat(item.requireNumber);
+            const basePrice = parseFloat(item.noTaxPrice);
+            const afterTaxAmount = basePrice * requireNumber;
+            sum += afterTaxAmount;
           }
         }
       }
@@ -905,6 +976,54 @@ export default {
     }
   },
   methods: {
+    //新建送货单提交按钮
+    invoicesubmitForm() {
+      this.invoiceForm.orderMaterials = this.invoiceOrderMaterialList
+      updateOrderDetails(this.invoiceForm).then(response => {
+        this.$message.success(response.msg)
+        this.invoiceOrder = false;
+      })
+    },
+    redirectToOtherPage(orderCode) {
+      // 根据你的路由规则跳转到相应的页面
+      // 示例：this.$router.push('/otherpage')
+      this.$router.push({
+        name: 'orderInfo',
+        params: {
+          orderCode: orderCode
+        }
+      })
+    },
+    //新建送货单
+    invoice() {
+      if (this.invoiceList.length === 1) {
+        //审批状态必须为通过,不然不让新建送货单
+        if (this.invoiceList.some(element => element.orderState === 3)) {
+          this.invoiceOrder = true
+          //this.invoiceForm = this.invoiceList[0]
+          this.invoiceForm.supplier = this.invoiceList[0].supplierDetails.sbiName
+          this.invoiceForm.totalDemand = this.invoiceList[0].totalDemand.toFixed(2)
+          this.invoiceForm.taxTotal = this.invoiceList[0].taxTotal.toFixed(2)
+          this.invoiceForm.orderCode = this.invoiceList[0].orderCode
+          console.log("这是invoiceList的内容:" + this.invoiceList[0].supplierDetails.sbiName)
+          findByOrderCodeMaterial(this.invoiceList[0].orderCode).then(response => {
+            this.invoiceOrderMaterialList = response.data;
+          })
+        } else {
+          this.$notify({
+          title: '警告',
+          message: '审批状态为通过',
+          type: 'warning'
+        });
+        }
+      } else {
+        this.$notify({
+          title: '警告',
+          message: '请选择一条数据,暂不支持合单',
+          type: 'warning'
+        });
+      }
+    },
     //关闭订单
     orderCancelbutton() {
       if (this.orderCancel.length === 1) {
@@ -925,20 +1044,35 @@ export default {
             type: 'warning'
           });
         }
-      }else{
+      } else {
         this.$notify({
-            title: '警告',
-            message: '请选择一条数据',
-            type: 'warning'
-          });
+          title: '警告',
+          message: '请选择一条数据',
+          type: 'warning'
+        });
       }
     },
+    /**
+     * 计算行含税金额
+     * @param {} row
+     */
     calculateLineTaxAmount(row) {
-      row.lineTaxAmount = row.noTaxPrice * row.requireNumber * (1 + row.tax);
+      if (row.noTaxPrice === 0 || row.requireNumber === 0 || row.tax === 0) {
+        row.lineTaxAmount = 0;
+      } else {
+        row.lineTaxAmount = (row.noTaxPrice * row.requireNumber * (1 + row.tax * 0.01)).toFixed(2);
+      }
     },
-
+    /**
+     * 计算含税单价
+     * @param {*} row
+     */
     calculateTaxPrice(row) {
-      row.taxPrice = row.noTaxPrice * (1 + row.tax);
+      if (row.noTaxPrice === 0 || row.tax === 0) {
+        row.taxPrice = 0;
+      } else {
+        row.taxPrice = (row.noTaxPrice * (1 + row.tax * 0.01)).toFixed(2);
+      }
     },
     /** 查询我的需求任务列表 */
     getList5() {
@@ -963,7 +1097,7 @@ export default {
     },
     getListMaterial() {
       this.loading = true;
-      listMaterials(this.queryParams).then(response => {
+      listMaterials(this.materialqueryParams).then(response => {
         this.materiaslList = response.rows;
         this.ormtotal = response.total;
         this.loading = false;
@@ -982,7 +1116,6 @@ export default {
         const statusClass = this.getOrderTypeRunningClass(row.orderTypeRunning.ortName);
         return `<span class="${statusClass}">${row.orderTypeRunning.ortName}</span>`;
       }
-
     },
     //控制订单审批状态的颜色
     getStatusClass(orderState) {
@@ -1036,7 +1169,7 @@ export default {
         return this.runNumber.length;
       } else {
         // 计算其他选项的总数
-        const count = this.runNumber.filter(item => item.orId === ortId).length;
+        const count = this.runNumber.filter(item => item.orderState === ortId).length;
         return count;
       }
     },
@@ -1214,8 +1347,6 @@ export default {
       }
       return names.join(' ');
     },
-
-
     /**
      * 供应商列表
      */
@@ -1276,6 +1407,7 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+      this.invoiceOrder = false;
     },
     // 表单重置
     reset() {
@@ -1323,10 +1455,19 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+    /** 币种定义重置按钮操作 */
+    resetQuery() {
+      this.resetForm("cqueryForm");
+      // this.handleQuery2();
+    },
     // 多选框选中数据
     handleSelectionChange(selection) {
+      //关闭按钮赋值
       this.orderCancel = selection
-      console.log("这是orderCancel:" + this.orderCancel)
+      //为新建送货单赋值
+      this.invoiceList = selection
+      console.log(this.invoiceList)
+      // console.log("这是orderCancel:" + this.orderCancel)
       this.ids = selection.map(item => item.orderId)
       this.single = selection.length !== 1
       this.multiple = !selection.length
@@ -1334,7 +1475,6 @@ export default {
     // 订单物料明细多选框选中数据
     handleSelectionChange1(selection) {
       this.ids = selection.map(item => item.orderId)
-
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -1359,89 +1499,90 @@ export default {
         }
       }
       this.dialogVisible1 = false; // 关闭对话框
-
     },
-    //点击供应商列表列数据
+    //点击整单供应商列表列数据
     handleRowClick(row) {
       this.squeryParams.sbiName = row.sbiName; // 将供应商名称填充到输入框中
       this.dialogVisible = false; // 关闭对话框
-
     },
+    //点击订单明细供应商列表列数据
+    handleRowClick2(row) {
+      this.materialqueryParams.sbiName = row.sbiName; // 将供应商名称填充到输入框中
+      this.dialogVisible = false; // 关闭对话框
+    },
+    clickRowMaterial(row, event, column) {
+      this.materialIndex = this.orderMaterialList.indexOf(row); // 获取点击的行索引
+    },
+    clickRowMaterial1(row, event, column) {
+      this.materialIndex1 = this.invoiceOrderMaterialList.indexOf(row); // 获取点击的行索引
+      console.log(row)
+      //点击哪一行赋值给invoiceForm
+      this.invoiceForm.materialCode = row.orCode
+      this.invoiceForm.materialName = row.orName
+      this.invoiceForm.materialUnit = row.materialUnit
+      this.invoiceForm.requiredQuantity = row.requireNumber
+      this.invoiceForm.requiredDate = row.requireTime
+      this.invoiceForm.orderLineNo = row.orderCode + "-" + row.lineNumber
+      this.$refs.invoiceForm.validateField('materialCode');
+      this.$refs.invoiceForm.validateField('materialName');
+      this.$refs.invoiceForm.validateField('materialUnit');
+      this.$refs.invoiceForm.validateField('requiredQuantity');
+      this.$refs.invoiceForm.validateField('requiredDate');
+      this.$refs.invoiceForm.validateField('orderLineNo');
+      this.$forceUpdate();
+      console.log(this.invoiceForm.requiredQuantity)
+      console.log("这是invoiceForm:" + this.invoiceForm.requiredDate);
+    },
+    /**
+     * 为物料编码等赋值
+     * @param {*} row
+     */
     handleRowClickMaterial(row) {
-      const data = {
-        orName: row.materialName,
-        orCode: row.materialCode,
-        materialModel: row.model,
-        materialSpecification: row.specifications,
-        materialUnit: row.calculationUnit,
-        materialCategory: row.mCategory,
-        // tax: row.tax,
-      };
-      let index = this.orderMaterialList.length;
-      if (this.orderMaterialList.length === 1) {
-        // 修改第一条数据的属性值
-        this.orderMaterialList[0].orCode = row.materialCode;
-        this.orderMaterialList[0].orName = row.materialName;
-        this.orderMaterialList[0].categoryCode = row.categoryName;
-        this.orderMaterialList[0].materialCategory = row.categoryName;
-        this.orderMaterialList[0].materialSpecification = row.specifications;
-        this.orderMaterialList[0].materialModel = row.model;
-        this.orderMaterialList[0].materialUnit = row.metering_unit;
-      } else {
-        this.orderMaterialList[index - 1].orCode = row.materialCode;
-        this.orderMaterialList[index - 1].orName = row.materialName;
-        this.orderMaterialList[index - 1].categoryCode = row.categoryName;
-        this.orderMaterialList[index - 1].materialCategory = row.categoryName;
-        this.orderMaterialList[index - 1].materialSpecification = row.specifications;
-        this.orderMaterialList[index - 1].materialModel = row.model;
-        this.orderMaterialList[index - 1].materialUnit = row.metering_unit;
-      }
+      // 修改某一条数据的属性值
+      this.orderMaterialList[this.materialIndex].orCode = row.materialCode;
+      this.orderMaterialList[this.materialIndex].orName = row.materialName;
+      this.orderMaterialList[this.materialIndex].categoryCode = row.categoryName;
+      this.orderMaterialList[this.materialIndex].materialCategory = row.categoryName;
+      this.orderMaterialList[this.materialIndex].materialSpecification = row.specifications;
+      this.orderMaterialList[this.materialIndex].materialModel = row.model;
+      this.orderMaterialList[this.materialIndex].materialUnit = row.metering_unit;
       this.dialogMaterial = false; // 关闭对话框
     },
     handleRowClickMaterial1(row) {
-      let index = this.orderMaterialList.length;
-      if (this.orderMaterialList.length === 1) {
-        // 修改第一条数据的属性值
-        this.orderMaterialList[0].categoryCode = row.categoryName;
-        this.orderMaterialList[0].materialCategory = row.categoryName;
-      } else {
-        this.orderMaterialList[index - 1].categoryCode = row.categoryName;
-        this.orderMaterialList[index - 1].materialCategory = row.categoryName;
-      }
+      // 修改第某一条数据的属性值
+      this.orderMaterialList[this.materialIndex].categoryCode = row.categoryName;
+      this.orderMaterialList[this.materialIndex].materialCategory = row.categoryName;
       this.dialogMaterial1 = false; // 关闭对话框
     },
     handleRowClickMaterial2(row) {
-      let index = this.orderMaterialList.length;
-      if (this.orderMaterialList.length === 1) {
-        // 修改第一条数据的属性值
-        this.orderMaterialList[0].taxCode = row.taxCode;
-        this.orderMaterialList[0].tax = row.taxRate;
-      } else {
-        this.orderMaterialList[index - 1].taxCode = row.taxCode;
-        this.orderMaterialList[index - 1].tax = row.taxRate;
-      }
+      // 修改某一条数据的属性值
+      this.orderMaterialList[this.materialIndex].taxCode = row.taxCode;
+      this.orderMaterialList[this.materialIndex].tax = row.taxRate;
       this.dialogMaterial2 = false; // 关闭对话框
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.number = 0.00
+      this.taxTotal = 0.00
       this.open = true;
       this.title = "添加采购订单管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      for (let i = 0; i < this.listOrderMaterial.length; i++) {
-        const innerElement = this.listOrderMaterial[i];
-        if (innerElement.orderCode === row.orderCode) {
-          this.orderMaterialList[i] = this.listOrderMaterial[i];
-        }
-      }
+      findByOrderCodeMaterial(row.orderCode).then(response => {
+        this.orderMaterialList = response.data;
+      })
       const orderId = row.orderId || this.ids
+      //修改订单管理表的数据
       getManager(orderId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改采购订单管理";
+        this.isCalculationNeeded = false
+        this.number = response.data.totalDemand
+        this.taxTotal = response.data.taxTotal
       });
     },
     /** 提交按钮 */
@@ -1451,8 +1592,18 @@ export default {
           this.form.orderMaterialList = this.orderMaterialList;
           if (this.form.orderId != null) {
             updateManager(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+              //this.$modal.msgSuccess("修改成功");
               this.open = false;
+              //修改物料基础表的数据
+              //先删除原有数据后插入
+              deleteMaterial(this.form.orderCode);
+              addMaterials(this.form).then(response => {
+                this.$notify({
+                  title: '成功',
+                  message: '操作成功完成！',
+                  type: 'success'
+                });
+              })
               this.getList();
               this.getList5();
             });
@@ -1462,6 +1613,13 @@ export default {
               this.open = false;
               this.getList();
               this.getlistNumber();
+              // 导航到 SubmitResult 组件，并传递提交的内容作为参数
+              this.$router.push({
+                name: 'SubmitResult',
+                params: {
+                  formData: response.data, // 传递提交的数据
+                }
+              });
             });
           }
         }
@@ -1480,11 +1638,13 @@ export default {
     /** 订单物料明细序号 */
     rowOrderMaterialIndex({ row, rowIndex }) {
       row.index = rowIndex + 1;
+      row.lineNumber = row.index
     },
     /** 订单物料明细添加按钮操作 */
     handleAddOrderMaterial() {
       let obj = {};
-      obj.orCode = "";
+      obj.lineNumber = "",
+        obj.orCode = "";
       obj.orName = "";
       obj.categoryCode = "";
       obj.materialCategory = "";

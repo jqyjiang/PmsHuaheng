@@ -1,71 +1,123 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.OrderDeliveryNoteMapper">
-    
+
     <resultMap type="OrderDeliveryNote" id="OrderDeliveryNoteResult">
-        <result property="orderDeliveryNoteId"    column="order_delivery_note_id"    />
-        <result property="orderDeliveryCode"    column="order_delivery_code"    />
-        <result property="orderConnectionId"    column="order_connection_id"    />
-        <result property="deliveryNoteState"    column="delivery_note_state"    />
-        <result property="deliveryAddress"    column="delivery_address"    />
-        <result property="consignee"    column="consignee"    />
-        <result property="companyName"    column="company_name"    />
-        <result property="consigneePhone"    column="consignee_phone"    />
-        <result property="shipper"    column="shipper"    />
-        <result property="shipperPhone"    column="shipper_phone"    />
-        <result property="supplier"    column="supplier"    />
-        <result property="carrier"    column="carrier"    />
-        <result property="carrierPhone"    column="carrier_phone"    />
-        <result property="deliveryMethod"    column="delivery_method"    />
-        <result property="trackingNumber"    column="tracking_number"    />
-        <result property="deliveryDate"    column="delivery_date"    />
-        <result property="arrivalDate"    column="arrival_date"    />
-        <result property="note"    column="note"    />
-        <result property="annex"    column="annex"    />
-        <result property="deliveryId"    column="delivery_id"    />
+        <result property="orderDeliveryNoteId" column="order_delivery_note_id"/>
+        <result property="orderDeliveryCode" column="order_delivery_code"/>
+        <result property="orderConnectionId" column="order_connection_id"/>
+        <result property="deliveryNoteState" column="delivery_note_state"/>
+        <result property="deliveryAddress" column="delivery_address"/>
+        <result property="consignee" column="consignee"/>
+        <result property="companyName" column="company_name"/>
+        <result property="consigneePhone" column="consignee_phone"/>
+        <result property="shipper" column="shipper"/>
+        <result property="shipperPhone" column="shipper_phone"/>
+        <result property="supplier" column="supplier"/>
+        <result property="carrier" column="carrier"/>
+        <result property="carrierPhone" column="carrier_phone"/>
+        <result property="deliveryMethod" column="delivery_method"/>
+        <result property="trackingNumber" column="tracking_number"/>
+        <result property="deliveryDate" column="delivery_date"/>
+        <result property="arrivalDate" column="arrival_date"/>
+        <result property="note" column="note"/>
+        <result property="annex" column="annex"/>
+        <result property="remainingDeliveryQuantity" column="remaining_delivery_quantity"/>
+        <result property="currentDeliveryQuantity" column="current_delivery_quantity"/>
+        <result property="createTime" column="create_time"/>
     </resultMap>
 
     <resultMap id="OrderDeliveryNoteDeliveryResult" type="OrderDeliveryNote" extends="OrderDeliveryNoteResult">
-        <collection property="deliveryList" notNullColumn="sub_delivery_id" javaType="java.util.List" resultMap="DeliveryResult" />
+        <collection property="deliveryList" notNullColumn="delivery_id" javaType="java.util.List"
+                    resultMap="DeliveryResult"/>
     </resultMap>
 
     <resultMap type="Delivery" id="DeliveryResult">
-        <result property="deliveryId"    column="sub_delivery_id"    />
-        <result property="productInfo"    column="sub_product_info"    />
-        <result property="productSpecifications"    column="sub_product_specifications"    />
-        <result property="requiredQuantity"    column="sub_required_quantity"    />
-        <result property="unit"    column="sub_unit"    />
-        <result property="remainingDeliveryQuantity"    column="sub_remaining_delivery_quantity"    />
-        <result property="currentDeliveryQuantity"    column="sub_current_delivery_quantity"    />
-        <result property="remarks"    column="sub_remarks"    />
-        <result property="sourceOrderNumber"    column="sub_source_order_number"    />
+        <result property="deliveryId" column="delivery_id"/>
+        <result property="productInfo" column="product_info"/>
+        <result property="productSpecifications" column="product_specifications"/>
+        <result property="requiredQuantity" column="required_quantity"/>
+        <result property="unit" column="unit"/>
+        <result property="remainingDeliveryQuantity" column="remaining_delivery_quantity"/>
+        <result property="currentDeliveryQuantity" column="current_delivery_quantity"/>
+        <result property="remarks" column="remarks"/>
+        <result property="sourceOrderNumber" column="source_order_number"/>
     </resultMap>
 
     <sql id="selectOrderDeliveryNoteVo">
-        select order_delivery_note_id, order_delivery_code, order_connection_id, delivery_note_state, delivery_address, consignee, company_name, consignee_phone, shipper, shipper_phone, supplier, carrier, carrier_phone, delivery_method, tracking_number, delivery_date, arrival_date, note, annex, delivery_id from order_delivery_note
+        select a.order_delivery_note_id,
+               a.order_delivery_code,
+               a.order_connection_id,
+               a.delivery_note_state,
+               a.delivery_address,
+               a.consignee,
+               a.company_name,
+               a.consignee_phone,
+               a.shipper,
+               a.shipper_phone,
+               a.supplier,
+               a.carrier,
+               a.carrier_phone,
+               a.delivery_method,
+               a.tracking_number,
+               a.delivery_date,
+               a.arrival_date,
+               a.note,
+               a.annex,
+               b.delivery_id,
+               b.product_info,
+               b.product_specifications,
+               b.required_quantity,
+               b.unit,
+               b.remaining_delivery_quantity,
+               b.current_delivery_quantity,
+               b.remarks,
+               b.source_order_number
+        from order_delivery_note a
+                 left join delivery b on b.delivery_id = a.order_delivery_note_id
     </sql>
 
     <select id="selectOrderDeliveryNoteList" parameterType="OrderDeliveryNote" resultMap="OrderDeliveryNoteResult">
         <include refid="selectOrderDeliveryNoteVo"/>
-        <where>  
-            <if test="orderDeliveryCode != null  and orderDeliveryCode != ''"> and order_delivery_code = #{orderDeliveryCode}</if>
-            <if test="deliveryNoteState != null "> and delivery_note_state = #{deliveryNoteState}</if>
-            <if test="deliveryMethod != null  and deliveryMethod != ''"> and delivery_method = #{deliveryMethod}</if>
-            <if test="arrivalDate != null "> and arrival_date = #{arrivalDate}</if>
+        <where>
+            <if test="orderDeliveryCode != null  and orderDeliveryCode != ''">and order_delivery_code =
+                #{orderDeliveryCode}
+            </if>
+            <if test="deliveryNoteState != null ">and delivery_note_state = #{deliveryNoteState}</if>
+            <if test="deliveryMethod != null  and deliveryMethod != ''">and delivery_method = #{deliveryMethod}</if>
+            <if test="arrivalDate != null ">and arrival_date = #{arrivalDate}</if>
         </where>
     </select>
-    
-    <select id="selectOrderDeliveryNoteByOrderDeliveryNoteId" parameterType="Long" resultMap="OrderDeliveryNoteDeliveryResult">
-        select a.order_delivery_note_id, a.order_delivery_code, a.order_connection_id, a.delivery_note_state, a.delivery_address, a.consignee, a.company_name, a.consignee_phone, a.shipper, a.shipper_phone, a.supplier, a.carrier, a.carrier_phone, a.delivery_method, a.tracking_number, a.delivery_date, a.arrival_date, a.note, a.annex, a.delivery_id,
- b.delivery_id as sub_delivery_id, b.product_info as sub_product_info, b.product_specifications as sub_product_specifications, b.required_quantity as sub_required_quantity, b.unit as sub_unit, b.remaining_delivery_quantity as sub_remaining_delivery_quantity, b.current_delivery_quantity as sub_current_delivery_quantity, b.remarks as sub_remarks, b.source_order_number as sub_source_order_number
-        from order_delivery_note a
-        left join delivery b on b.delivery_id = a.order_delivery_note_id
-        where a.order_delivery_note_id = #{orderDeliveryNoteId}
+
+    <select id="selectOrderDeliveryNoteByOrderDeliveryNoteId" parameterType="Long"
+            resultMap="OrderDeliveryNoteResult">
+        select order_delivery_note_id,
+               order_delivery_code,
+               order_connection_id,
+               delivery_note_state,
+               delivery_address,
+               consignee,
+               company_name,
+               consignee_phone,
+               shipper,
+               shipper_phone,
+               supplier,
+               carrier,
+               carrier_phone,
+               delivery_method,
+               tracking_number,
+               delivery_date,
+               arrival_date,
+               note,
+               annex
+        from order_delivery_note
+        where order_delivery_note_id = #{orderDeliveryNoteId}
     </select>
-        
-    <insert id="insertOrderDeliveryNote" parameterType="OrderDeliveryNote" keyProperty="orderDeliveryNoteId" useGeneratedKeys="true">
+
+    <insert id="insertOrderDeliveryNote" parameterType="OrderDeliveryNote" keyProperty="orderDeliveryNoteId"
+            useGeneratedKeys="true">
         insert into order_delivery_note
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderDeliveryNoteId != null">order_delivery_note_id,</if>
@@ -87,8 +139,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="arrivalDate != null">arrival_date,</if>
             <if test="note != null">note,</if>
             <if test="annex != null">annex,</if>
-            <if test="deliveryId != null">delivery_id,</if>
-         </trim>
+            <if test="createTime != null">create_time,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderDeliveryNoteId != null">#{orderDeliveryNoteId},</if>
             <if test="orderDeliveryCode != null">#{orderDeliveryCode},</if>
@@ -109,8 +161,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="arrivalDate != null">#{arrivalDate},</if>
             <if test="note != null">#{note},</if>
             <if test="annex != null">#{annex},</if>
-            <if test="deliveryId != null">#{deliveryId},</if>
-         </trim>
+            <if test="createTime !=null">#{createTime}</if>
+        </trim>
     </insert>
 
     <update id="updateOrderDeliveryNote" parameterType="OrderDeliveryNote">
@@ -134,37 +186,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="arrivalDate != null">arrival_date = #{arrivalDate},</if>
             <if test="note != null">note = #{note},</if>
             <if test="annex != null">annex = #{annex},</if>
-            <if test="deliveryId != null">delivery_id = #{deliveryId},</if>
         </trim>
         where order_delivery_note_id = #{orderDeliveryNoteId}
     </update>
 
     <delete id="deleteOrderDeliveryNoteByOrderDeliveryNoteId" parameterType="Long">
-        delete from order_delivery_note where order_delivery_note_id = #{orderDeliveryNoteId}
+        delete
+        from order_delivery_note
+        where order_delivery_note_id = #{orderDeliveryNoteId}
     </delete>
 
     <delete id="deleteOrderDeliveryNoteByOrderDeliveryNoteIds" parameterType="String">
-        delete from order_delivery_note where order_delivery_note_id in 
+        delete from order_delivery_note where order_delivery_note_id in
         <foreach item="orderDeliveryNoteId" collection="array" open="(" separator="," close=")">
             #{orderDeliveryNoteId}
         </foreach>
     </delete>
-    
+
     <delete id="deleteDeliveryByDeliveryIds" parameterType="String">
-        delete from delivery where delivery_id in 
+        delete from delivery where delivery_id in
         <foreach item="deliveryId" collection="array" open="(" separator="," close=")">
             #{deliveryId}
         </foreach>
     </delete>
 
     <delete id="deleteDeliveryByDeliveryId" parameterType="Long">
-        delete from delivery where delivery_id = #{deliveryId}
+        delete
+        from delivery
+        where delivery_id = #{deliveryId}
     </delete>
 
     <insert id="batchDelivery">
-        insert into delivery( delivery_id, product_info, product_specifications, required_quantity, unit, remaining_delivery_quantity, current_delivery_quantity, remarks, source_order_number) values
-		<foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.deliveryId}, #{item.productInfo}, #{item.productSpecifications}, #{item.requiredQuantity}, #{item.unit}, #{item.remainingDeliveryQuantity}, #{item.currentDeliveryQuantity}, #{item.remarks}, #{item.sourceOrderNumber})
+        insert into delivery( delivery_id, product_info, product_specifications, required_quantity, unit,
+        remaining_delivery_quantity, current_delivery_quantity, remarks, source_order_number) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.deliveryId}, #{item.productInfo}, #{item.productSpecifications}, #{item.requiredQuantity},
+            #{item.unit}, #{item.remainingDeliveryQuantity}, #{item.currentDeliveryQuantity}, #{item.remarks},
+            #{item.sourceOrderNumber})
         </foreach>
     </insert>
 </mapper>

@@ -1,5 +1,6 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.OrderMaterial;
 
 import java.util.List;
@@ -21,6 +22,13 @@ public interface IOrderMaterialService
     public OrderMaterial selectOrderMaterialByOrId(Long orId);
 
     /**
+     * 根据来源单号查询物料明细
+     * @param orderCode
+     * @return
+     */
+    List<OrderMaterial> findByOrderCodeMaterial(String orderCode);
+
+    /**
      * 查询订单物料明细列表
      * 
      * @param orderMaterial 订单物料明细
@@ -37,6 +45,12 @@ public interface IOrderMaterialService
     public int insertOrderMaterial(OrderMaterial orderMaterial);
 
     /**
+     * 批量新增订单物料明细
+     * @param orderMaterials 订单物料明细
+     * @return 结束
+     */
+    public int insertOrderMaterials(OrderManager orderManager);
+    /**
      * 修改订单物料明细
      * 
      * @param orderMaterial 订单物料明细
@@ -44,6 +58,13 @@ public interface IOrderMaterialService
      */
     public int updateOrderMaterial(OrderMaterial orderMaterial);
 
+    /**
+     * 根据订单编号删除订单物料明细
+     *
+     * @param orderCode 订单物料明细主键
+     * @return 结果
+     */
+    public int deleteOrderMaterialByOrderCode(String orderCode);
     /**
      * 批量删除订单物料明细
      * 

@@ -17,6 +17,14 @@ export function getManager(orderId) {
   })
 }
 
+// 根据订单编号查询采购订单管理详细
+export function getOrderManager(orderCode) {
+  return request({
+    url: '/pms/manager/getOrderManager' + orderCode,
+    method: 'get'
+  })
+}
+
 // 查询采购订单管理详细
 export function getNumber() {
   return request({

@@ -3,6 +3,7 @@ package com.hh.pms.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.OrderMaterial;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,11 @@ public class OrderMaterialController extends BaseController
     public AjaxResult findTaskMaterial(@PathVariable("taskCode") String taskCode){
         return success(orderMaterialService.findTaskMaterial(taskCode));
     }
+    @RequiresPermissions("pms:materials:query")
+    @GetMapping(value = "/findByOrderCodeMaterial/{orderCode}")
+    public AjaxResult findByOrderCodeMaterial(@PathVariable("orderCode") String orderCode){
+        return success(orderMaterialService.findByOrderCodeMaterial(orderCode));
+    }
     /**
      * 导出订单物料明细列表
      */
@@ -77,7 +83,16 @@ public class OrderMaterialController extends BaseController
     {
         return toAjax(orderMaterialService.insertOrderMaterial(orderMaterial));
     }
-
+    /**
+     * 批量新增订单物料明细
+     */
+    @RequiresPermissions("pms:materials:add")
+    @Log(title = "订单物料明细", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/addMaterials")
+    public AjaxResult add1(@RequestBody OrderManager orderManager)
+    {
+        return toAjax(orderMaterialService.insertOrderMaterials(orderManager));
+    }
     /**
      * 修改订单物料明细
      */
@@ -89,6 +104,16 @@ public class OrderMaterialController extends BaseController
         return toAjax(orderMaterialService.updateOrderMaterial(orderMaterial));
     }
 
+    /**
+     * 删除订单物料明细
+     */
+    @RequiresPermissions("pms:materials:remove")
+    @Log(title = "订单物料明细", businessType = BusinessType.DELETE)
+    @DeleteMapping("deleteMaterial/{orderCode}")
+    public AjaxResult remove(@PathVariable String orderCode)
+    {
+        return toAjax(orderMaterialService.deleteOrderMaterialByOrderCode(orderCode));
+    }
     /**
      * 删除订单物料明细
      */

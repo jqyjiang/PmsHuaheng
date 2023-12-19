@@ -1,6 +1,8 @@
 package com.hh.pms.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.ruoyi.common.core.utils.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +27,7 @@ import com.hh.pms.service.IOrderDeliveryNoteService;
  */
 @Service
 public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService {
+    private static final String[] PREFIXES = {"YT", "SF", "JD"};
     @Autowired
     private OrderDeliveryNoteMapper orderDeliveryNoteMapper;
 
@@ -59,8 +63,22 @@ public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService {
     @Override
     public int insertOrderDeliveryNote(OrderDeliveryNote orderDeliveryNote) {
         Date date = new Date();
+        orderDeliveryNote.setCreateTime(date);
+        //生成送货单号
         String deliveryCode = createOrderCode(date);
+        //添加到对象里面
         orderDeliveryNote.setOrderDeliveryCode(deliveryCode);
+        if (orderDeliveryNote.getTrackingNumber()!=null){
+            //用户自己填入了快递单号
+            return 0;
+        }else{
+            //用户没填入快递单号 随机分配快递公司运输货物
+            String trackingNumber = generate();
+            if(orderDeliveryNoteMapper.selectByTrackingNumber(trackingNumber)>0){
+                trackingNumber = generate();
+            }
+            orderDeliveryNote.setTrackingNumber(trackingNumber);
+        }
         int rows = orderDeliveryNoteMapper.insertOrderDeliveryNote(orderDeliveryNote);
         insertDelivery(orderDeliveryNote);
         return rows;
@@ -163,28 +181,24 @@ public class OrderDeliveryNoteServiceImpl implements IOrderDeliveryNoteService {
     }
 
     /**
-     * //中通、韵达、艾斯客、闵鑫 自动加 1
-     *
-     * @param deliverynum 物流单号
-     * @return 后一个物流单号
+     * 形成快递单号
+     * @return
      */
-    public static String getTwoNum(String deliverynum) {
-        String deliveryvalue = "";
-        int num = Integer.parseInt(deliverynum);
-        num++;
-        System.out.println(num);
-        int intnum = String.valueOf(num).trim().length();//num 字符长度
-        int strnum = deliverynum.trim().length();//输入的物流单号字符长度
-            //判断int类型数据是否小于原来值的长度
-           //如物流单号是已’0‘开头的，需要把零补上
-        String value = "";
-        if (intnum < strnum) {
-            for (int j = 0; j < (strnum - intnum); j++) {
-                value += "0";
-            }
+    public static String generate() {
+        Random random = new Random();
+        String prefix = PREFIXES[random.nextInt(PREFIXES.length)];
+        LocalDate currentDate = LocalDate.now();
+        String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return prefix + formattedDate + generateRandomDigits(5);
+    }
+
+    private static String generateRandomDigits(int length) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append(random.nextInt(10));
         }
-        deliveryvalue = value + num;
-        return deliveryvalue;
+        return sb.toString();
     }
 
 }

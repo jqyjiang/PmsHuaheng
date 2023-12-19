@@ -2,6 +2,7 @@ package com.hh.pms.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.OrderMaterial;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,11 @@ public class OrderMaterialServiceImpl implements IOrderMaterialService
         return orderMaterialMapper.selectOrderMaterialByOrId(orId);
     }
 
+    @Override
+    public List<OrderMaterial> findByOrderCodeMaterial(String orderCode) {
+        return orderMaterialMapper.findByOrderCodeMaterial(orderCode);
+    }
+
     /**
      * 查询订单物料明细列表
      * 
@@ -56,6 +62,15 @@ public class OrderMaterialServiceImpl implements IOrderMaterialService
         return orderMaterialMapper.insertOrderMaterial(orderMaterial);
     }
 
+    @Override
+    public int insertOrderMaterials(OrderManager orderManager) {
+        List<OrderMaterial> list = orderManager.getOrderMaterialList();
+        list.forEach(item->{
+            item.setOrderCode(orderManager.getOrderCode());
+        });
+        return orderMaterialMapper.insertOrderMaterials(list);
+    }
+
     /**
      * 修改订单物料明细
      * 
@@ -66,6 +81,11 @@ public class OrderMaterialServiceImpl implements IOrderMaterialService
     public int updateOrderMaterial(OrderMaterial orderMaterial)
     {
         return orderMaterialMapper.updateOrderMaterial(orderMaterial);
+    }
+
+    @Override
+    public int deleteOrderMaterialByOrderCode(String orderCode) {
+        return orderMaterialMapper.deleteOrderMaterialByOrderCode(orderCode);
     }
 
     /**
