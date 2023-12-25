@@ -112,7 +112,148 @@ public class Material extends BaseEntity
     /** 是否免检 */
     private Long avoidInspect;
 
+    /**需求月度 统计分析*/
+    @Excel(name = "需求月度")
+    private String demandMonth;
+    /**需求月度数 统计分析*/
+    @Excel(name = "需求月度数")
+    private String demandNum;
+    /**需求状态 统计分析*/
+    @Excel(name = "需求状态")
+    private String demandStatus;
+    /**需求状态数 统计分析*/
+    @Excel(name = "需求状态数")
+    private String count;
+    /**订单来源 统计分析*/
+    @Excel(name = "订单来源")
+    private String orderSource;
+    /**订单来源 统计分析*/
+    @Excel(name = "订单来源数")
+    private String oCount;
+    /**月度订单 统计分析*/
+    @Excel(name = "月度订单")
+    private String Month;
+    /**月度订单数 统计分析*/
+    @Excel(name = "月度订单数")
+    private String mCount;
+    /**月度订单金额统计*/
+    @Excel(name = "月度订单金额")
+    private String aMoney;
+    /**待收货订单*/
+    @Excel(name = "待收货订单")
+    private Long treatNum;
+    /**待收货金额*/
+    @Excel(name = "待收货金额")
+    private Long treatMoney;
+    /**已完成订单*/
+    @Excel(name = "已完成订单")
+    private Long stopNum;
+    /**已完成金额*/
+    @Excel(name = "已完成金额")
+    private Long completeMoney;
 
+    public Long getTreatNum() {
+        return treatNum;
+    }
+
+    public void setTreatNum(Long treatNum) {
+        this.treatNum = treatNum;
+    }
+
+    public Long getTreatMoney() {
+        return treatMoney;
+    }
+
+    public void setTreatMoney(Long treatMoney) {
+        this.treatMoney = treatMoney;
+    }
+
+    public Long getStopNum() {
+        return stopNum;
+    }
+
+    public void setStopNum(Long stopNum) {
+        this.stopNum = stopNum;
+    }
+
+    public Long getCompleteMoney() {
+        return completeMoney;
+    }
+
+    public void setCompleteMoney(Long completeMoney) {
+        this.completeMoney = completeMoney;
+    }
+
+    public String getaMoney() {
+        return aMoney;
+    }
+    public void setaMoney(String aMoney) {
+        this.aMoney = aMoney;
+    }
+
+    public String getMonth() {
+        return Month;
+    }
+
+    public void setMonth(String month) {
+        Month = month;
+    }
+
+    public String getmCount() {
+        return mCount;
+    }
+
+    public void setmCount(String mCount) {
+        this.mCount = mCount;
+    }
+
+    public String getOrderSource() {
+        return orderSource;
+    }
+
+    public void setOrderSource(String orderSource) {
+        this.orderSource = orderSource;
+    }
+
+    public String getoCount() {
+        return oCount;
+    }
+
+    public void setoCount(String oCount) {
+        this.oCount = oCount;
+    }
+
+    public String getDemandStatus() {
+        return demandStatus;
+    }
+
+    public void setDemandStatus(String demandStatus) {
+        this.demandStatus = demandStatus;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String getDemandMonth() {
+        return demandMonth;
+    }
+
+    public void setDemandMonth(String demandMonth) {
+        this.demandMonth = demandMonth;
+    }
+
+    public String getDemandNum() {
+        return demandNum;
+    }
+
+    public void setDemandNum(String demandNum) {
+        this.demandNum = demandNum;
+    }
 
     public String getvUnitName() {
         return vUnitName;
@@ -382,6 +523,19 @@ public class Material extends BaseEntity
             .append("vUnitName",getvUnitName())
             .append("abcAttribute", getAbcAttribute())
             .append("avoidInspect", getAvoidInspect())
+            .append("demandMonth",getDemandMonth())
+            .append("demandNum",getDemandNum())
+            .append("demandStatus",getDemandStatus())
+            .append("count",getCount())
+            .append("orderSource",getOrderSource())
+            .append("oCount",getoCount())
+            .append("Month",getMonth())
+            .append("mCount",getmCount())
+            .append("aMoney",getaMoney())
+            .append("treatNum",getTreatNum())
+            .append("treatMoney",getTreatMoney())
+            .append("stopNum",getStopNum())
+            .append("completeMoney",getCompleteMoney())
             .toString();
     }
 }

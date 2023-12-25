@@ -110,7 +110,8 @@
                stockInQuantity,
                stockInPerson,
                stockInDate,
-               create_time
+               create_time,
+               reconciliation_status
         from order_execution_details
     </sql>
     <sql id="selectOrderExecutionDetailsVo1">
@@ -287,6 +288,7 @@
             <if test="stockInPerson != null">stockInPerson,</if>
             <if test="stockInDate != null">stockInDate,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="reconciliationStatus != null">reconciliation_status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">#{orderCode},</if>
@@ -329,6 +331,7 @@
             <if test="stockInPerson != null">#{stockInPerson},</if>
             <if test="stockInDate != null">#{stockInDate},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="reconciliationStatus != null">#{reconciliation_status},</if>
         </trim>
     </insert>
 
@@ -376,6 +379,7 @@
             <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
             <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="reconciliationStatus != null">reconciliation_status = #{reconciliationStatus},</if>
         </trim>
         where id = #{id}
     </update>
@@ -420,6 +424,7 @@
             <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
             <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
             <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
+            <if test="reconciliationStatus != null">reconciliationStatus = #{reconciliationStatus},</if>
         </trim>
         where orderCode = #{orderCode}
     </update>
@@ -436,4 +441,75 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectReconciliation" parameterType="OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        <where>
+            <if test="orderCode != null  and orderCode != ''">and orderCode = #{orderCode}</if>
+            <if test="supplier != null  and supplier != ''">and supplier = #{supplier}</if>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
+            <if test="reconciliationStatus != null  and reconciliationStatus != ''">and reconciliation_status = #{reconciliationStatus}</if>
+            AND order_quanlity=2
+        </where>
+    </select>
+
+    <update id="updateReconciliation1" parameterType="OrderExecutionDetails">
+        update order_execution_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="orderStatus != null">orderStatus = #{orderStatus},</if>
+            <if test="totalDemand != null">totalDemand = #{totalDemand},</if>
+            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
+            <if test="receivedQuantity != null">receivedQuantity = #{receivedQuantity},</if>
+            <if test="inStockQuantity != null">inStockQuantity = #{inStockQuantity},</if>
+            <if test="taxTotal != null">taxTotal = #{taxTotal},</if>
+            <if test="receivedAmount != null">receivedAmount = #{receivedAmount},</if>
+            <if test="awaitingDeliveryQuantity != null">awaitingDeliveryQuantity = #{awaitingDeliveryQuantity},</if>
+            <if test="awaitingDeliveryAmount != null">awaitingDeliveryAmount = #{awaitingDeliveryAmount},</if>
+            <if test="orderLineNo != null">orderLineNo = #{orderLineNo},</if>
+            <if test="materialCode != null">materialCode = #{materialCode},</if>
+            <if test="materialName != null">materialName = #{materialName},</if>
+            <if test="materialUnit != null">materialUnit = #{materialUnit},</if>
+            <if test="requiredQuantity != null">requiredQuantity = #{requiredQuantity},</if>
+            <if test="requiredDate != null">requiredDate = #{requiredDate},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="deliveryNoteLineNo != null">deliveryNoteLineNo = #{deliveryNoteLineNo},</if>
+            <if test="deliveredQuantity != null">deliveredQuantity = #{deliveredQuantity},</if>
+            <if test="deliveredAmount != null">deliveredAmount = #{deliveredAmount},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="deliveryDate != null">deliveryDate = #{deliveryDate},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="receiptNoteLineNo != null">receiptNoteLineNo = #{receiptNoteLineNo},</if>
+            <if test="rejectedQuantity != null">rejectedQuantity = #{rejectedQuantity},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
+            <if test="stockInNoteNo != null">stockInNoteNo = #{stockInNoteNo},</if>
+            <if test="stockInNoteLineNo != null">stockInNoteLineNo = #{stockInNoteLineNo},</if>
+            <if test="returnedQuantity != null">returnedQuantity = #{returnedQuantity},</if>
+            <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
+            <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
+            <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            reconciliation_status=2
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateReconciliation2">
+        update order_execution_details set reconciliation_status = 3
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateReconciliation3">
+        update order_execution_details set reconciliation_status = 1
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>
+

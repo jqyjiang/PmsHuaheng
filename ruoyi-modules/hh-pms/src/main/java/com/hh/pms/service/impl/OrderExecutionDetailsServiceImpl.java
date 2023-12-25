@@ -206,6 +206,27 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         return orderExecutionDetailsMapper.deleteOrderExecutionDetailsByIds(ids);
     }
 
+    @Override
+    public List<OrderExecutionDetails> selectReconciliation(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.selectReconciliation(orderExecutionDetails);
+    }
+
+    @Override
+    public int updateReconciliation1(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.updateReconciliation1(orderExecutionDetails);
+    }
+
+    @Override
+    public int updateReconciliation2(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation2(ids);
+    }
+
+    @Override
+    public int updateReconciliation3(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation3(ids);
+    }
+
+
     /**
      * 删除mingxi信息
      *

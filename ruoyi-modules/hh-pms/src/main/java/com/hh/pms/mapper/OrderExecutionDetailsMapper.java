@@ -7,18 +7,19 @@ import com.ruoyi.system.api.domain.OrderExecutionDetails;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * mingxiMapper接口
- * 
+ *
  * @author ruoyi
  * @date 2023-12-14
  */
-public interface OrderExecutionDetailsMapper 
+public interface OrderExecutionDetailsMapper
 {
     /**
      * 查询mingxi
-     * 
+     *
      * @param id mingxi主键
      * @return mingxi
      */
@@ -28,7 +29,7 @@ public interface OrderExecutionDetailsMapper
 
     /**
      * 查询mingxi列表
-     * 
+     *
      * @param orderExecutionDetails mingxi
      * @return mingxi集合
      */
@@ -50,7 +51,7 @@ public interface OrderExecutionDetailsMapper
     List<OrderExecutionDetails> selectOrderReceiptList(OrderExecutionDetails orderExecutionDetails);
     /**
      * 新增mingxi
-     * 
+     *
      * @param orderExecutionDetails mingxi
      * @return 结果
      */
@@ -58,7 +59,7 @@ public interface OrderExecutionDetailsMapper
 
     /**
      * 修改mingxi
-     * 
+     *
      * @param orderExecutionDetails mingxi
      * @return 结果
      */
@@ -73,7 +74,7 @@ public interface OrderExecutionDetailsMapper
     public int updateOrderExecutionDetailsandDelivery(OrderExecutionDetails orderExecutionDetails);
     /**
      * 删除mingxi
-     * 
+     *
      * @param id mingxi主键
      * @return 结果
      */
@@ -81,7 +82,7 @@ public interface OrderExecutionDetailsMapper
 
     /**
      * 批量删除mingxi
-     * 
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
@@ -92,6 +93,15 @@ public interface OrderExecutionDetailsMapper
 
 
     public List<OrderExecutionDetails> selectDeliveryNo(@Param("OrderCode") String OrderCode);
+
+    /**订单业务对账*/
+    public List<OrderExecutionDetails> selectReconciliation(OrderExecutionDetails orderExecutionDetails);
+    /**手动对账*/
+    public int updateReconciliation1(OrderExecutionDetails orderExecutionDetails);
+    /**采方确认对账*/
+    public int updateReconciliation2(List<Long> ids);
+    /**退回对账*/
+    public int updateReconciliation3(List<Long> ids);
 
     public List<OrderExecutionDetails> selectOrderExecutionDetailsListByOrderCode(@Param("OrderCode") String OrderCode);
 

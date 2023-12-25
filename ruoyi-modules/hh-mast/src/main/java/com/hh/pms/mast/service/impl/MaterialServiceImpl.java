@@ -3,6 +3,9 @@ package com.hh.pms.mast.service.impl;
 import java.util.List;
 
 import com.ruoyi.system.api.domain.Material;
+import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.OrderExecutionDetails;
+import com.ruoyi.system.api.domain.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mast.mapper.MaterialMapper;
@@ -91,4 +94,51 @@ public class MaterialServiceImpl implements IMaterialService
     {
         return materialMapper.deleteMaterialByMaterialId(materialId);
     }
+
+    @Override
+    public List<MaterialInformation> selectMonthDemand() {
+        return materialMapper.selectMonthDemand();
+    }
+
+    @Override
+    public List<MaterialInformation> selectDemandStatus() {
+        return materialMapper.selectDemandStatus();
+    }
+
+    @Override
+    public List<OrderManager> selectOrderSource() {
+        return materialMapper.selectOrderSource();
+    }
+
+    @Override
+    public List<OrderManager> selectMonthOrder() {
+        return materialMapper.selectMonthOrder();
+    }
+
+    @Override
+    public List<OrderExecutionDetails> selectMonthOrderMoney() {
+        return materialMapper.selectMonthOrderMoney();
+    }
+
+    @Override
+    public Long selTreatNum() {
+        return materialMapper.selTreatNum();
+    }
+
+    @Override
+    public Long selTreatMoney() {
+        return materialMapper.selTreatMoney();
+    }
+
+    @Override
+    public Long selStopNum() {
+        return materialMapper.selStopNum();
+    }
+
+    @Override
+    public Long selCompleteMoney() {
+        return materialMapper.selCompleteMoney();
+    }
+
+
 }

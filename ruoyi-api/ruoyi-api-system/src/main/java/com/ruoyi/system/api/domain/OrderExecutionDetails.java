@@ -258,6 +258,17 @@ public class OrderExecutionDetails extends BaseEntity {
      */
     private Date stockInDate;
 
+    /**业务对账状态*/
+    private Long reconciliationStatus;
+
+    public Long getReconciliationStatus() {
+        return reconciliationStatus;
+    }
+
+    public void setReconciliationStatus(Long reconciliationStatus) {
+        this.reconciliationStatus = reconciliationStatus;
+    }
+
     /**
      * 物料基本信息
      */
@@ -625,8 +636,6 @@ public class OrderExecutionDetails extends BaseEntity {
         return "OrderExecutionDetails{" +
                 "id=" + id +
                 ", orderCode='" + orderCode + '\'' +
-                ", orderHandle=" + orderHandle +
-                ", orderQuanlity=" + orderQuanlity +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", totalDemand=" + totalDemand +
                 ", deliveryQuantity=" + deliveryQuantity +
@@ -665,6 +674,7 @@ public class OrderExecutionDetails extends BaseEntity {
                 ", stockInAmount=" + stockInAmount +
                 ", stockInPerson='" + stockInPerson + '\'' +
                 ", stockInDate=" + stockInDate +
+                ", reconciliationStatus=" + reconciliationStatus +
                 ", orderMaterials=" + orderMaterials +
                 ", orderManager=" + orderManager +
                 '}';
