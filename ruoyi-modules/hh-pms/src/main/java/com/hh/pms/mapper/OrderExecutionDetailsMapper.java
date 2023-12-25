@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.system.api.domain.OrderExecutionDetails;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * mingxiMapper接口
@@ -23,6 +24,8 @@ public interface OrderExecutionDetailsMapper
      */
     public OrderExecutionDetails selectOrderExecutionDetailsById(Long id);
 
+
+
     /**
      * 查询mingxi列表
      * 
@@ -31,6 +34,20 @@ public interface OrderExecutionDetailsMapper
      */
     public List<OrderExecutionDetails> selectOrderExecutionDetailsList(OrderExecutionDetails orderExecutionDetails);
 
+    /**
+     * 查询收货管理列表
+     *
+     * @param orderExecutionDetails mingxi
+     * @return mingxi集合
+     */
+    public List<OrderExecutionDetails> selectOrderExecutionDeliveryList(OrderExecutionDetails orderExecutionDetails);
+
+    /**
+     * 查询收货单列表
+     * @param orderExecutionDetails
+     * @return
+     */
+    List<OrderExecutionDetails> selectOrderReceiptList(OrderExecutionDetails orderExecutionDetails);
     /**
      * 新增mingxi
      * 
@@ -75,4 +92,11 @@ public interface OrderExecutionDetailsMapper
 
 
     public List<OrderExecutionDetails> selectDeliveryNo(@Param("OrderCode") String OrderCode);
+
+    public List<OrderExecutionDetails> selectOrderExecutionDetailsListByOrderCode(@Param("OrderCode") String OrderCode);
+
+    @Update("update order_execution_details set orderStatus=#{orderStatus} where materialName =#{materialName} and orderCode =#{orderCode}")
+    int updateMaterialState(@Param("orderStatus") Long orderStatus, @Param("materialName")String materialName, @Param("orderCode")String orderCode);
+
+    List<OrderExecutionDetails> selectOrderDelivery(String orderLineNo);
 }

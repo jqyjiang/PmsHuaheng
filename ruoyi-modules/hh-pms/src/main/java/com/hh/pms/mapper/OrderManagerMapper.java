@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.system.api.domain.OrderManager;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 采购订单管理Mapper接口
@@ -97,4 +98,8 @@ public interface OrderManagerMapper
      * @return
      */
     int updateOrderManagerState(OrderManager orderManager);
+
+    @Update("update order_manager set or_id =#{orId} where order_code=#{orderCode}")
+    int updateOrIDByOrderCode(@Param("orId") Long orId,@Param("orderCode") String orderCode);
+
 }

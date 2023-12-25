@@ -27,7 +27,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 /**
  * mingxiController
  *
- * @author ruoyi
+ * @author yt
  * @date 2023-12-14
  */
 @RestController
@@ -38,7 +38,7 @@ public class OrderExecutionDetailsController extends BaseController
     private IOrderExecutionDetailsService orderExecutionDetailsService;
 
     /**
-     * 查询mingxi列表
+     * 查询待收货列表
      */
     @RequiresPermissions("pms:orderDetail:list")
     @GetMapping("/list")
@@ -49,6 +49,19 @@ public class OrderExecutionDetailsController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 查询收货单列表
+     * @param orderExecutionDetails
+     * @return
+     */
+    @RequiresPermissions("pms:orderDetail:list")
+    @GetMapping("/receiptList")
+    public TableDataInfo receiptList(OrderExecutionDetails orderExecutionDetails)
+    {
+        startPage();
+        List<OrderExecutionDetails> list = orderExecutionDetailsService.selectOrderReceiptList(orderExecutionDetails);
+        return getDataTable(list);
+    }
     /**
      * 导出mingxi列表
      */

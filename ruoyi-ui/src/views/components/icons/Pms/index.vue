@@ -1,22 +1,12 @@
 <template>
-  <div class="app-container">
+  <div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="订单编号" prop="orderCode">
-        <el-input
-          v-model="queryParams.orderCode"
-          placeholder="请输入订单编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.orderCode" placeholder="请输入订单编号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="订单状态" prop="orderStatus">
         <el-select v-model="queryParams.orderStatus" placeholder="请选择订单状态" clearable>
-          <el-option
-            v-for="dict in dict.type.om_state"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.om_state" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -25,80 +15,75 @@
       </el-form-item>
     </el-form>
 
-    <!-- <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['pms:orderDetail:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['pms:orderDetail:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['pms:orderDetail:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['pms:orderDetail:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row> -->
-
     <el-table v-loading="loading" :data="orderDetailList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="订单编号" align="center" prop="orderCode" />
-      <el-table-column label="订单状态" align="center" prop="orderStatus">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.om_state" :value="scope.row.orderStatus"/>
+      <el-table-column label="行号" align="center" prop="orderMaterials.lineNumber">
+        <template scope="scope">
+          <span>
+            {{ scope.row.orderLineNo.substr(13 + 1) }}
+          </span>
         </template>
       </el-table-column>
-      <el-table-column label="总需求量" align="center" prop="totalDemand" />
-      <el-table-column label="交货数量" align="center" prop="deliveryQuantity" />
-      <el-table-column label="已收货数量" align="center" prop="receivedQuantity" />
-      <el-table-column label="库存数量" align="center" prop="inStockQuantity" />
-      <el-table-column label="税后总金额" align="center" prop="taxTotal" />
-      <el-table-column label="已收款金额" align="center" prop="receivedAmount" />
-      <el-table-column label="待交货数量" align="center" prop="awaitingDeliveryQuantity" />
-      <el-table-column label="待交货金额" align="center" prop="awaitingDeliveryAmount" />
-      <el-table-column label="物料名称" align="center" prop="materialName" />
-      <el-table-column label="物料单位" align="center" prop="materialUnit" />
-      <el-table-column label="需求数量" align="center" prop="requiredQuantity" />
-      <el-table-column label="需求日期" align="center" prop="requiredDate" width="180">
+      <el-table-column label="物料信息" align="center" prop="materialId">
+        <template slot-scope="scope">
+          <span>{{ scope.row ? getFormattedMaterialName(scope.row) : '' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单状态" align="center" prop="orderStatus">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.om_state" :value="scope.row.orderStatus" />
+        </template>
+      </el-table-column>
+      <el-table-column label="供应商名称" align="center" prop="supplier" />
+      <el-table-column label="需求总数量" align="center" prop="totalDemand">
+        <template scope="scope">
+          <span>{{ scope.row.totalDemand === null ? 0.00 : scope.row.totalDemand.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="含税总金额" align="center" prop="taxTotal">
+        <template scope="scope">
+          <span>{{ scope.row.taxTotal === null ? 0.00 : scope.row.taxTotal.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="在途数量" align="center" prop="deliveryQuantity">
+        <template scope="scope">
+          <span>{{ scope.row.deliveryQuantity === null ? 0.00 : scope.row.deliveryQuantity.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="在途金额" align="center" prop="deliveredAmount">
+        <template scope="scope">
+          <span>{{ scope.row.deliveredAmount === null ? 0.00 : scope.row.deliveredAmount.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="入库数量" align="center" prop="stockInQuantity">
+        <template scope="scope">
+          <span>{{ scope.row.stockInQuantity === null ? 0.00 : scope.row.stockInQuantity.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="已收货数量" align="center" prop="stockInAmount">
+        <template scope="scope">
+          <span>{{ scope.row.stockInAmount === null ? 0.00 : scope.row.stockInAmount.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="待发货数量" align="center" prop="awaitingDeliveryQuantity">
+        <template scope="scope">
+          <span>{{ scope.row.awaitingDeliveryQuantity === null ? 0.00 :
+            scope.row.awaitingDeliveryQuantity.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="待发货金额" align="center" prop="awaitingDeliveryAmount">
+        <template scope="scope">
+          <span>{{ scope.row.awaitingDeliveryAmount === null ? 0.00 : scope.row.awaitingDeliveryAmount.toFixed(2) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="采购员" align="center" prop="materialName" />
+      <el-table-column label="需求时间" align="center" prop="requiredDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.requiredDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" align="center" prop="supplier" />
-      <el-table-column label="已收货数量" align="center" prop="receiveQuantity" />
-      <el-table-column label="入库数量" align="center" prop="stockInQuantity" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -115,16 +100,11 @@
             v-hasPermi="['pms:orderDetail:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改mingxi对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -132,17 +112,14 @@
         <el-form-item label="订单编号" prop="orderCode">
           <el-input v-model="form.orderCode" placeholder="请输入订单编号" />
         </el-form-item>
+
         <el-form-item label="订单状态" prop="orderStatus">
           <el-select v-model="form.orderStatus" placeholder="请选择订单状态">
-            <el-option
-              v-for="dict in dict.type.om_state"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+            <el-option v-for="dict in dict.type.om_state" :key="dict.value" :label="dict.label"
+              :value="dict.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="总需求量" prop="totalDemand">
+        <el-form-item label="需求总数量" prop="totalDemand">
           <el-input v-model="form.totalDemand" placeholder="请输入总需求量" />
         </el-form-item>
         <el-form-item label="交货数量" prop="deliveryQuantity">
@@ -182,10 +159,7 @@
           <el-input v-model="form.requiredQuantity" placeholder="请输入需求数量" />
         </el-form-item>
         <el-form-item label="需求日期" prop="requiredDate">
-          <el-date-picker clearable
-            v-model="form.requiredDate"
-            type="date"
-            value-format="yyyy-MM-dd"
+          <el-date-picker clearable v-model="form.requiredDate" type="date" value-format="yyyy-MM-dd"
             placeholder="请选择需求日期">
           </el-date-picker>
         </el-form-item>
@@ -202,10 +176,7 @@
           <el-input v-model="form.supplier" placeholder="请输入供应商" />
         </el-form-item>
         <el-form-item label="交货日期" prop="deliveryDate">
-          <el-date-picker clearable
-            v-model="form.deliveryDate"
-            type="date"
-            value-format="yyyy-MM-dd"
+          <el-date-picker clearable v-model="form.deliveryDate" type="date" value-format="yyyy-MM-dd"
             placeholder="请选择交货日期">
           </el-date-picker>
         </el-form-item>
@@ -225,10 +196,7 @@
           <el-input v-model="form.receiver" placeholder="请输入收货人" />
         </el-form-item>
         <el-form-item label="收货日期" prop="receivedDate">
-          <el-date-picker clearable
-            v-model="form.receivedDate"
-            type="date"
-            value-format="yyyy-MM-dd"
+          <el-date-picker clearable v-model="form.receivedDate" type="date" value-format="yyyy-MM-dd"
             placeholder="请选择收货日期">
           </el-date-picker>
         </el-form-item>
@@ -248,10 +216,7 @@
           <el-input v-model="form.stockInPerson" placeholder="请输入入库人员" />
         </el-form-item>
         <el-form-item label="入库日期" prop="stockInDate">
-          <el-date-picker clearable
-            v-model="form.stockInDate"
-            type="date"
-            value-format="yyyy-MM-dd"
+          <el-date-picker clearable v-model="form.stockInDate" type="date" value-format="yyyy-MM-dd"
             placeholder="请选择入库日期">
           </el-date-picker>
         </el-form-item>
@@ -308,6 +273,17 @@ export default {
     this.getList();
   },
   methods: {
+    /**
+    * 查询orName物料名称
+    * @param {*} orderMaterialList
+    */
+    getFormattedMaterialName(row) {
+      if (!row.orderManager.materialId || typeof row.orderManager.materialId !== 'string') {
+        return '';
+      }
+      const names = row.orderManager.materialId.split(',').map(name => name.trim()).filter(name => name);
+      return names.join(' ');
+    },
     /** 查询mingxi列表 */
     getList() {
       this.loading = true;
@@ -375,7 +351,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -417,12 +393,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除mingxi编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除mingxi编号为"' + ids + '"的数据项？').then(function () {
         return delOrderDetail(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.OrderReceiptMapper">
+
+    <resultMap type="OrderReceipt" id="OrderReceiptResult">
+        <result property="receiptId" column="receipt_id"/>
+        <result property="receiptNoteNo" column="receiptNoteNo"/>
+        <result property="receiver" column="receiver"/>
+        <result property="receiveQuantity" column="receiveQuantity"/>
+        <result property="recepitAmountTax" column="recepit_amount_tax"/>
+        <result property="receiptRemarks" column="receipt_remarks"/>
+        <result property="annex" column="annex"/>
+        <result property="inspector" column="inspector"/>
+        <result property="supplier" column="supplier"/>
+        <result property="receiptConcat" column="receipt_concat"/>
+        <result property="receiptPhone" column="receipt_phone"/>
+        <result property="receiptState" column="receipt_state"/>
+    </resultMap>
+
+    <resultMap id="OrderReceiptReceiptDetailsResult" type="OrderReceipt" extends="OrderReceiptResult">
+        <collection property="receiptDetailsList" notNullColumn="id" javaType="java.util.List"
+                    resultMap="ReceiptDetailsResult"/>
+    </resultMap>
+
+    <resultMap type="ReceiptDetails" id="ReceiptDetailsResult">
+        <result property="id" column="id"/>
+        <result property="serialNumber" column="serial_number"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="deliveryNoteNo" column="deliveryNoteNo"/>
+        <result property="orCode" column="or_code"/>
+        <result property="orName" column="or_name"/>
+        <result property="materialCategory" column="material_category"/>
+        <result property="materialSpecification" column="material_specification"/>
+        <result property="materialUnit" column="material_unit"/>
+        <result property="requireNumber" column="require_number"/>
+        <result property="requireTime" column="require_time"/>
+        <result property="deliveryQuantity" column="deliveryQuantity"/>
+        <result property="rejectedQuantity" column="rejected_quantity"/>
+        <result property="rejectionReason" column="rejection_reason"/>
+        <result property="receivedQuantity" column="received_quantity"/>
+        <result property="noTaxPrice" column="no_tax_price"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="tax" column="tax"/>
+        <result property="taxPrice" column="tax_price"/>
+        <result property="receiver" column="receiver"/>
+        <result property="recipientPhone" column="recipient_phone"/>
+        <result property="warehouse" column="warehouse"/>
+        <result property="exemptFromSupplyCapacityCheck" column="exempt_from_supply_capacity_check"/>
+        <result property="exemptFromMaterialInspection" column="exempt_from_material_inspection"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+    <sql id="selectOrderReceiptVo">
+        select receipt_id,
+               receiptNoteNo,
+               receiver,
+               receiveQuantity,
+               recepit_amount_tax,
+               receipt_remarks,
+               annex,
+               inspector,
+               supplier,
+               receipt_concat,
+               receipt_phone,
+               receipt_state
+        from order_receipt
+    </sql>
+
+    <select id="selectOrderReceiptList" parameterType="OrderReceipt" resultMap="OrderReceiptResult">
+        <include refid="selectOrderReceiptVo"/>
+        <where>
+        </where>
+    </select>
+
+    <select id="selectOrderReceiptByReceiptId" parameterType="Long" resultMap="OrderReceiptReceiptDetailsResult">
+        select a.receipt_id,
+               a.receiptNoteNo,
+               a.receiver,
+               a.receiveQuantity,
+               a.recepit_amount_tax,
+               a.receipt_remarks,
+               a.annex,
+               a.inspector,
+               a.supplier,
+               a.receipt_concat,
+               a.receipt_phone,
+               a.receipt_state,
+               b.id                                as sub_id,
+               b.serial_number                     as sub_serial_number,
+               b.order_code                        as sub_order_code,
+               b.deliveryNoteNo                    as sub_deliveryNoteNo,
+               b.or_code                           as sub_or_code,
+               b.or_name                           as sub_or_name,
+               b.material_category                 as sub_material_category,
+               b.material_specification            as sub_material_specification,
+               b.material_unit                     as sub_material_unit,
+               b.require_number                    as sub_require_number,
+               b.require_time                      as sub_require_time,
+               b.deliveryQuantity                  as sub_deliveryQuantity,
+               b.rejected_quantity                 as sub_rejected_quantity,
+               b.rejection_reason                  as sub_rejection_reason,
+               b.received_quantity                 as sub_received_quantity,
+               b.no_tax_price                      as sub_no_tax_price,
+               b.tax_code                          as sub_tax_code,
+               b.tax                               as sub_tax,
+               b.tax_price                         as sub_tax_price,
+               b.receiver                          as sub_receiver,
+               b.recipient_phone                   as sub_recipient_phone,
+               b.warehouse                         as sub_warehouse,
+               b.exempt_from_supply_capacity_check as sub_exempt_from_supply_capacity_check,
+               b.exempt_from_material_inspection   as sub_exempt_from_material_inspection,
+               b.remarks                              as sub_remarks
+        from order_receipt a
+                 left join receipt_details b on b.deliveryNoteNo = a.receipt_id
+        where a.receipt_id = #{receiptId}
+    </select>
+
+    <insert id="insertOrderReceipt" parameterType="OrderReceipt">
+        insert into order_receipt
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiptNoteNo != null">receiptNoteNo,</if>
+            <if test="receiver != null">receiver,</if>
+            <if test="receiveQuantity != null">receiveQuantity,</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax,</if>
+            <if test="receiptRemarks != null">receipt_remarks,</if>
+            <if test="annex != null">annex,</if>
+            <if test="inspector != null">inspector,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="receiptConcat != null">receipt_concat,</if>
+            <if test="receiptPhone != null">receipt_phone,</if>
+            <if test="receiptState != null">receipt_state,</if>
+            <if test="createTime !=null">create_time</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiptId != null">#{receiptId},</if>
+            <if test="receiptNoteNo != null">#{receiptNoteNo},</if>
+            <if test="receiver != null">#{receiver},</if>
+            <if test="receiveQuantity != null">#{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">#{recepitAmountTax},</if>
+            <if test="receiptRemarks != null">#{receiptRemarks},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="inspector != null">#{inspector},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="receiptConcat != null">#{receiptConcat},</if>
+            <if test="receiptPhone != null">#{receiptPhone},</if>
+            <if test="receiptState != null">#{receiptState},</if>
+            <if test="createTime !=null">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <update id="updateOrderReceipt" parameterType="OrderReceipt">
+        update order_receipt
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax = #{recepitAmountTax},</if>
+            <if test="receiptRemarks != null">receipt_remarks = #{receiptRemarks},</if>
+            <if test="annex != null">annex = #{annex},</if>
+            <if test="inspector != null">inspector = #{inspector},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="receiptConcat != null">receipt_concat = #{receiptConcat},</if>
+            <if test="receiptPhone != null">receipt_phone = #{receiptPhone},</if>
+            <if test="receiptState != null">receipt_state = #{receiptState},</if>
+        </trim>
+        where receipt_id = #{receiptId}
+    </update>
+
+    <delete id="deleteOrderReceiptByReceiptId" parameterType="Long">
+        delete
+        from order_receipt
+        where receipt_id = #{receiptId}
+    </delete>
+
+    <delete id="deleteOrderReceiptByReceiptIds" parameterType="String">
+        delete from order_receipt where receipt_id in
+        <foreach item="receiptId" collection="array" open="(" separator="," close=")">
+            #{receiptId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteReceiptDetailsByDeliveryNoteNos" parameterType="String">
+        delete from receipt_details where deliveryNoteNo in
+        <foreach item="deliveryNoteNo" collection="array" open="(" separator="," close=")">
+            #{deliveryNoteNo}
+        </foreach>
+    </delete>
+
+    <delete id="deleteReceiptDetailsByDeliveryNoteNo" parameterType="Long">
+        delete
+        from receipt_details
+        where deliveryNoteNo = #{deliveryNoteNo}
+    </delete>
+
+    <insert id="batchReceiptDetails">
+        insert into receipt_details( id, serial_number, order_code, deliveryNoteNo, or_code, or_name, material_category,
+        material_specification, material_unit, require_number, require_time, deliveryQuantity, rejected_quantity,
+        rejection_reason, received_quantity, no_tax_price, tax_code, tax, tax_price, receiver, recipient_phone,
+        warehouse, exempt_from_supply_capacity_check, exempt_from_material_inspection, remarks) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.serialNumber}, #{item.orderCode}, #{item.deliveryNoteNo}, #{item.orCode},
+            #{item.orName}, #{item.materialCategory}, #{item.materialSpecification}, #{item.materialUnit},
+            #{item.requireNumber}, #{item.requireTime}, #{item.deliveryQuantity}, #{item.rejectedQuantity},
+            #{item.rejectionReason}, #{item.receivedQuantity}, #{item.noTaxPrice}, #{item.taxCode}, #{item.tax},
+            #{item.taxPrice}, #{item.receiver}, #{item.recipientPhone}, #{item.warehouse},
+            #{item.exemptFromSupplyCapacityCheck}, #{item.exemptFromMaterialInspection}, #{item.remarks})
+        </foreach>
+    </insert>
+</mapper>

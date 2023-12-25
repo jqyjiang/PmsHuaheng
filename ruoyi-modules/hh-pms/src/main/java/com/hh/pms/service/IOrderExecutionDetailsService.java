@@ -66,4 +66,19 @@ public interface IOrderExecutionDetailsService
      * @return 结果
      */
     public int deleteOrderExecutionDetailsById(Long id);
+
+    /**
+     * 查询收货管理列表
+     *
+     * @param orderExecutionDetails mingxi
+     * @return mingxi集合
+     */
+    public List<OrderExecutionDetails> selectOrderExecutionDeliveryList(OrderExecutionDetails orderExecutionDetails);
+
+    /**
+     * 查询收货单列表
+     * @param orderExecutionDetails
+     * @return
+     */
+    List<OrderExecutionDetails> selectOrderReceiptList(OrderExecutionDetails orderExecutionDetails);
 }

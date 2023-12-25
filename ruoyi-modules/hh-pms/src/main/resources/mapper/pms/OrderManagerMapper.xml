@@ -30,6 +30,7 @@
         <result property="createTime" column="create_time"/>
         <result property="taxTotal"    column="tax_total"    />
         <result property="materialId" column="material_id"/>
+        <result property="productId" column="product_id"/>
         <association property="orderTypeRunning" javaType="OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
@@ -95,6 +96,7 @@
             <result property="receivingPhone" column="receiving_phone"/>
             <result property="receivingAddress" column="receiving_address"/>
             <result property="remarks" column="remarks"/>
+            <result property="taxTotal"    column="tax_total"    />
         </collection>
     </resultMap>
 
@@ -127,14 +129,12 @@
                otr.ort_name,
                sd.sbi_name,
                c.companies_name,
-               y.currency_name,
-        ob.*
+               y.currency_name
         from order_manager om
                  left join order_type_running otr on om.order_state = otr.ort_id
                  left join supplier_details sd on sd.sd_id = om.supplier
                  left join companies c on c.companies_id = om.company
                  left join currency y on y.currency_id = om.currency_id
-                 left join order_material ob on ob.order_code = om.order_code
     </sql>
     <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
         select om.order_id,

@@ -8,7 +8,22 @@ export function listOrderDetail(query) {
     params: query
   })
 }
-
+// 查询送货管理列表
+export function listOrderDelivery(query) {
+  return request({
+    url: '/pms/orderDelivery/list',
+    method: 'get',
+    params: query
+  })
+}
+// 查询收货单管理列表
+export function listOrderReceipt(query) {
+  return request({
+    url: '/pms/orderDetail/receiptList',
+    method: 'get',
+    params: query
+  })
+}
 // 查询mingxi详细
 export function getOrderDetail(id) {
   return request({
