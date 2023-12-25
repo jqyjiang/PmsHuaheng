@@ -1,53 +1,53 @@
 import request from '@/utils/request'
 
-// 查询对账单列表
+// 查询订单业务对账列表
 export function listReconciliation(query) {
   return request({
-    url: '/mast/reconciliation/list',
+    url: '/pms/orderDetail/selectReconciliation',
     method: 'get',
     params: query
   })
 }
-
-//外键查询 采购单号------------------------------------------
-export function listOrderDetail(query) {
+// 查询mingxi详细
+export function getOrderDetail(id) {
   return request({
-    url: '/pms/orderDetail/list',
-    method: 'get',
-    params: query
-  })
-}
-
-// 查询对账单详细
-export function getReconciliation(statementAccountId) {
-  return request({
-    url: '/mast/reconciliation/' + statementAccountId,
+    url: '/pms/orderDetail/' + id,
     method: 'get'
   })
 }
 
-// 新增对账单
-export function addReconciliation(data) {
+// 修改mingxi
+export function updateOrderDetail(data) {
   return request({
-    url: '/mast/reconciliation',
-    method: 'post',
-    data: data
-  })
-}
-
-// 修改对账单
-export function updateReconciliation(data) {
-  return request({
-    url: '/mast/reconciliation',
+    url: '/pms/orderDetail',
     method: 'put',
     data: data
   })
 }
 
-// 删除对账单
-export function delReconciliation(statementAccountId) {
+
+// 修改对账1
+export function updateReconciliation1(data) {
   return request({
-    url: '/mast/reconciliation/' + statementAccountId,
-    method: 'delete'
+    url: '/pms/orderDetail/updateReconciliation1',
+    method: 'put',
+    data: data
   })
 }
+// 修改对账2
+export function updateReconciliation2(ids) {
+  return request({
+    url: '/pms/orderDetail/updateReconciliation2',
+    method: 'put',
+    data:ids
+  })
+}
+// 修改对账3
+export function updateReconciliation3(ids) {
+  return request({
+    url: '/pms/orderDetail/updateReconciliation3',
+    method: 'put',
+    data:ids
+  })
+}
+
