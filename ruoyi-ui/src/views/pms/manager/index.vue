@@ -533,15 +533,13 @@
   订单执行明细
 -->
     <div class="order-info" v-show="!isWholeOrder">
-      <Mingxi></Mingxi>
+      <Mingxi ref="mingxi"></Mingxi>
     </div>
     <!--
       新建送货单
     -->
     <el-dialog title="新建送货单" :visible.sync="invoiceOrder">
       <!--新建送货单-->
-
-
       <el-form ref="invoiceForm" :model="invoiceForm" :rules="rules" label-width="80px">
         <!-- <el-form-item label="订单编号" prop="orderCode">
           <el-input v-model="invoiceForm.orderCode" placeholder="请输入订单编号" />
@@ -952,14 +950,14 @@ export default {
       for (let i = 0; i < this.orderMaterialList.length; i++) {
         const item = this.orderMaterialList[i];
         if (item.tax !== '' && item.tax !== 0) {
-          const basePrice = parseFloat(item.newPrice);
+          const basePrice = parseFloat(item.noTaxPrice);
           const taxRate = parseFloat(item.tax);
           if (taxRate !== 0) { // 如果税率不为0，则继续计算
-            const taxIncludedPrice = basePrice * (1 + taxRate);
+            const taxIncludedPrice = basePrice * (1 + taxRate*0.01);
             const requireNumber = parseFloat(item.requireNumber);
             const afterTaxAmount = taxIncludedPrice * requireNumber;
             sum += afterTaxAmount;
-          } else {
+          } else {//这是税率为0的情况  用不含税单价乘以需求数量即可
             const requireNumber = parseFloat(item.requireNumber);
             const basePrice = parseFloat(item.noTaxPrice);
             const afterTaxAmount = basePrice * requireNumber;
@@ -974,6 +972,12 @@ export default {
     isSelfPickupSelected() {
       return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
     }
+  },
+  mounted(){
+    this.$refs.mingxi.$on('shown', this.handleMingxiShown)
+  },
+  beforeDestroy() {
+    this.$refs.mingxi.$off('shown', this.handleMingxiShown) // 解绑 Mingxi 组件的 shown 事件
   },
   methods: {
     //新建送货单提交按钮
@@ -1108,7 +1112,13 @@ export default {
     },
     showOrderDetail() {
       this.isWholeOrder = false;
+      this.$nextTick(() => {
+        this.$refs.mingxi.getList(); // 调用子组件的查询方法
+      });
     },
+    // handleMingxiShown() {
+    //   this.$refs.mingxi.getList() // 调用 Mingxi 组件的查询方法
+    // },
     //控制订单执行状态的颜色
     getFormattedOrderTypeRunning(row) {
       if (row.orderTypeRunning !== null) {
@@ -1335,16 +1345,10 @@ export default {
      * @param {*} orderMaterialList
      */
     getFormattedMaterialName(row) {
-      if (!row.orderCode || typeof row.orderCode !== 'string') {
+      if (!row.materialId || typeof row.materialId !== 'string') {
         return '';
       }
-      const names = [];
-      for (let i = 0; i < this.listOrderMaterial.length; i++) {
-        const innerElement = this.listOrderMaterial[i];
-        if (innerElement.orderCode === row.orderCode) {
-          names.push(innerElement.orName)
-        }
-      }
+      const names = row.materialId.split(',').map(name => name.trim()).filter(name => name);
       return names.join(' ');
     },
     /**
@@ -1608,12 +1612,14 @@ export default {
               this.getList5();
             });
           } else {
+            console.log("这是要提交的数据:"+this.form)
             addManager(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
               this.getlistNumber();
               // 导航到 SubmitResult 组件，并传递提交的内容作为参数
+              console.log("这是返回的数据:"+response.data)
               this.$router.push({
                 name: 'SubmitResult',
                 params: {

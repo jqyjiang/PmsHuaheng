@@ -7,91 +7,91 @@
         <!-- <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body> -->
         <el-form ref="form" :model="form" :rules="rules" label-width="100px">
             <el-form-item label="采购订单编号" prop="orderCode">
-                <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" disabled />
+                <el-input v-model="form.orderCode" disabled />
             </el-form-item>
             <el-form-item label="公司" prop="company">
                 <el-input v-model="form.company" placeholder="请输入公司" />
             </el-form-item>
             <el-form-item label="订单类型" prop="orderType">
-                <el-select v-model="form.orderType" placeholder="请选择订单类型">
+                <el-select v-model="form.orderType" placeholder="请选择订单类型" disabled>
                     <el-option v-for="dict in dict.type.order_type" :key="dict.value" :label="dict.label"
                         :value="parseInt(dict.value)"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="订单来源" prop="orderSource">
-                <el-select v-model="form.orderSource" placeholder="请选择订单来源">
+                <el-select v-model="form.orderSource" placeholder="请选择订单来源" disabled>
                     <el-option v-for="dict in dict.type.order_source" :key="dict.value" :label="dict.label"
                         :value="dict.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="采购组织" prop="purOrganization">
-                <el-select v-model="form.purOrganization" placeholder="请选择采购组织">
+                <el-select v-model="form.purOrganization" placeholder="请选择采购组织" disabled>
                     <el-option v-for="dict in dict.type.procure" :key="dict.value" :label="dict.label"
                         :value="parseInt(dict.value)"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="附件" prop="annex">
-                <file-upload v-model="form.annex" />
+                <file-upload v-model="form.annex" disabled/>
             </el-form-item>
             <el-form-item label="是否自提" prop="isSelfPickup">
-                <el-select v-model="form.isSelfPickup" placeholder="请选择是否自提">
+                <el-select v-model="form.isSelfPickup" placeholder="请选择是否自提" disabled>
                     <el-option v-for="dict in dict.type.self_pickup" :key="dict.value" :label="dict.label"
                         :value="parseInt(dict.value)"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="自提车牌号" prop="licensePlateNumber">
-                <el-input v-model="form.licensePlateNumber" 
-                    />
+                <el-input v-model="form.licensePlateNumber"
+                disabled  />
             </el-form-item>
             <el-form-item label="自提司机联系方式" prop="concatInfomation">
-                <el-input v-model="form.concatInfomation" 
-                     />
+                <el-input v-model="form.concatInfomation"
+                disabled />
             </el-form-item>
             <el-form-item label="关联合同编号" prop="contractCode">
-                <el-input v-model="form.contractCode" placeholder="请输入关联合同编号" disabled />
+                <el-input v-model="form.contractCode"  disabled />
             </el-form-item>
             <el-form-item label="关联合同名称" prop="contractName">
-                <el-input v-model="form.contractName" placeholder="请输入关联合同名称" />
+                <el-input v-model="form.contractName"  />
             </el-form-item>
             <el-form-item label="订单说明" prop="orderDescription">
-                <el-input v-model="form.orderDescription" placeholder="请输入订单说明" />
+                <el-input v-model="form.orderDescription" disabled />
             </el-form-item>
             <el-form-item label="需求总数量" prop="totalDemand">
                 <el-input v-model="form.totalDemand"
-                    />
+                disabled  />
             </el-form-item>
             <el-form-item label="含税总金额(元)" prop="taxTotal">
                 <el-input v-model="form.taxTotal"
-                   />
+                disabled />
             </el-form-item>
             <el-form-item label="采购员" prop="purchaser">
-                <el-input v-model="form.purchaser"  />
+                <el-input v-model="form.purchaser" disabled />
             </el-form-item>
-            <el-form-item label="采购审批状态" prop="orderState">
+            <el-form-item label="采购审批状态" prop="orderState" disabled>
                 <el-select v-model="form.orderState" >
                     <el-option v-for="dict in dict.type.order_state" :key="dict.value" :label="dict.label"
                         :value="parseInt(dict.value)"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="币种" prop="currency.currencyName">
-                <el-input v-model="form.currencyId"  />
+                <el-input v-model="form.currency.currencyName" disabled />
             </el-form-item>
             <el-form-item label="供应商名称" prop="supplierDetails.sbiName">
-                <el-input v-model="form.supplier" />
+                <el-input v-model="form.supplierDetails.sbiName" disabled/>
             </el-form-item>
             <el-form-item label="联系人" prop="contacts">
-                <el-input v-model="form.contacts"  />
+                <el-input v-model="form.contacts" disabled />
             </el-form-item>
             <el-form-item label="联系电话" prop="phone">
-                <el-input v-model="form.phone"  />
+                <el-input v-model="form.phone" disabled />
             </el-form-item>
-            <el-form-item label="供应商发票方式" prop="invoiceMethod">
+            <el-form-item label="供应商发票方式" prop="invoiceMethod" disabled>
                 <el-select v-model="form.invoiceMethod" >
                     <el-option v-for="dict in dict.type.invoice_method" :key="dict.value" :label="dict.label"
                         :value="parseInt(dict.value)"></el-option>
                 </el-select>
             </el-form-item>
-            <el-table :data="orderMaterialList" 
+            <el-table :data="orderMaterialList"
                  ref="orderMaterial">
                 <el-table-column type="selection" width="50" align="center" />
                 <el-table-column label="序号" align="center" prop="index" width="50" />
@@ -102,37 +102,37 @@
                 </el-table-column>
                 <el-table-column label="物料名称" prop="orName" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.orName"/>
+                        <el-input v-model="scope.row.orName" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="品类编码" prop="categoryCode" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.categoryCode" />
+                        <el-input v-model="scope.row.categoryCode" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="物料品类" prop="materialCategory" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.materialCategory"/>
+                        <el-input v-model="scope.row.materialCategory" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="物料规格" prop="materialSpecification" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.materialSpecification" />
+                        <el-input v-model="scope.row.materialSpecification" disabled />
                     </template>
                 </el-table-column>
                 <el-table-column label="物料型号" prop="materialModel" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.materialModel"/>
+                        <el-input v-model="scope.row.materialModel" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="物料单位" prop="materialUnit" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.materialUnit"/>
+                        <el-input v-model="scope.row.materialUnit" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="需求数量" prop="requireNumber" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.requireNumber"/>
+                        <el-input v-model="scope.row.requireNumber" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="需求日期" prop="requireTime" width="240">
@@ -143,57 +143,57 @@
                 </el-table-column>
                 <el-table-column label="历史最低价" prop="lowerPrice" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.lowerPrice" />
+                        <el-input v-model="scope.row.lowerPrice" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="最新价格" prop="newPrice" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.newPrice"/>
+                        <el-input v-model="scope.row.newPrice" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="不含税单价" prop="noTaxPrice" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.noTaxPrice"/>
+                        <el-input v-model="scope.row.noTaxPrice" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="税率代码" prop="taxCode" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.taxCode"/>
+                        <el-input v-model="scope.row.taxCode" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="税率" prop="tax" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.tax"/>
+                        <el-input v-model="scope.row.tax" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="含税单价" prop="taxPrice" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.taxPrice"  />
+                        <el-input v-model="scope.row.taxPrice" disabled />
                     </template>
                 </el-table-column>
                 <el-table-column label="行含税金额" prop="lineTaxAmount" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.lineTaxAmount" />
+                        <el-input v-model="scope.row.lineTaxAmount" disabled />
                     </template>
                 </el-table-column>
                 <el-table-column label="收货人" prop="consignee" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.consignee"/>
+                        <el-input v-model="scope.row.consignee" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="收货电话" prop="receivingPhone" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.receivingPhone" />
+                        <el-input v-model="scope.row.receivingPhone" disabled />
                     </template>
                 </el-table-column>
                 <el-table-column label="收货地址" prop="receivingAddress" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.receivingAddress" />
+                        <el-input v-model="scope.row.receivingAddress" disabled/>
                     </template>
                 </el-table-column>
                 <el-table-column label="备注" prop="remarks" width="150">
                     <template slot-scope="scope">
-                        <el-input v-model="scope.row.remarks"  />
+                        <el-input v-model="scope.row.remarks"  disabled/>
                     </template>
                 </el-table-column>
             </el-table>
@@ -236,13 +236,13 @@ export default {
     created() {
         this.form = this.$route.params.formData;
         this.orderId = this.form.orderId
+        this.orderMaterialList = this.form.orderMaterialList
         this.getList();
     },
     methods: {
         getList() {
             getManager(this.orderId).then(response => {
                 this.form = response.data;
-                this.orderMaterialList = response.data.orderMaterialList
             });
         },
         /**
@@ -253,7 +253,7 @@ export default {
             this.form.orderState=4
            //退回到刚才的路径
            updateManagerState(this.form).then(response=>{
-            
+
                 this.$modal.msgSuccess("新增成功");
                 //返回到指定的路由地址
             })
@@ -278,7 +278,7 @@ export default {
                 //批准通过之后进行订单执行明细的操作
                 //插入订单明细表的部分字段数据
                 // addOrderDetails(this.form).then(response=>{
-                   
+
                 // })
             })
         }

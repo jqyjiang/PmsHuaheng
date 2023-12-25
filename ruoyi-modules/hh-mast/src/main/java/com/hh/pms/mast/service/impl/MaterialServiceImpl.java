@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.system.api.domain.Material;
 import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.OrderExecutionDetails;
 import com.ruoyi.system.api.domain.OrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,4 +114,31 @@ public class MaterialServiceImpl implements IMaterialService
     public List<OrderManager> selectMonthOrder() {
         return materialMapper.selectMonthOrder();
     }
+
+    @Override
+    public List<OrderExecutionDetails> selectMonthOrderMoney() {
+        return materialMapper.selectMonthOrderMoney();
+    }
+
+    @Override
+    public Long selTreatNum() {
+        return materialMapper.selTreatNum();
+    }
+
+    @Override
+    public Long selTreatMoney() {
+        return materialMapper.selTreatMoney();
+    }
+
+    @Override
+    public Long selStopNum() {
+        return materialMapper.selStopNum();
+    }
+
+    @Override
+    public Long selCompleteMoney() {
+        return materialMapper.selCompleteMoney();
+    }
+
+
 }

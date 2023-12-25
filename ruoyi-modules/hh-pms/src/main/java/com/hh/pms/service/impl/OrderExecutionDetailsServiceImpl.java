@@ -4,9 +4,16 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import com.hh.pms.mapper.OrderManagerMapper;
+
+import com.hh.pms.mapper.ReceiptDetailsMapper;
+import com.ruoyi.common.security.utils.SecurityUtils;
 import com.ruoyi.system.api.domain.OrderExecutionDetails;
 import com.ruoyi.system.api.domain.OrderMaterial;
+import com.ruoyi.system.api.domain.ReceiptDetails;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.OrderExecutionDetailsMapper;
@@ -23,6 +30,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsService {
     @Autowired
     private OrderExecutionDetailsMapper orderExecutionDetailsMapper;
+    @Autowired
+    private ReceiptDetailsMapper receiptDetailsMapper;
+
+    @Autowired
+    private OrderManagerMapper orderManagerMapper;
 
     /**
      * 查询mingxi
@@ -68,6 +80,13 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         return orderExecutionDetailsMapper.updateOrderExecutionDetails(orderExecutionDetails);
     }
 
+    /**
+     * 新建送货单
+     *
+     * @param orderExecutionDetails mingxi
+     * @return
+     * @throws Exception
+     */
     @Override
     @Transactional
     public int updateOrderExecutionDetailsandDelivery(OrderExecutionDetails orderExecutionDetails) throws Exception {
@@ -75,78 +94,80 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         //现在是执行中状态  需要计算 发货金额(发货总金额) 待发货数量  待发货金额
         //获取总金额 获取含税单价 获取数量
         //计算发货单号
+        ReceiptDetails receiptDetails = new ReceiptDetails();
         Date date = new Date();
         String deliveryCode = createOrderCode(date);
         orderExecutionDetails.setCreateTime(date);
         orderExecutionDetails.setDeliveryNoteNo(deliveryCode);
-        BigDecimal subtractResult = BigDecimal.valueOf(0);
-        List<OrderMaterial> list = orderExecutionDetails.getOrderMaterials();
-        BigDecimal result = BigDecimal.valueOf(0);
-        for (OrderMaterial material : list) {
-            if (orderExecutionDetails.getMaterialCode().equals(material.getOrCode()) && orderExecutionDetails.getMaterialName().equals(material.getOrName())) {
-                //  判断输入的送货数量是否大于需求量
-                if ( orderExecutionDetails.getDeliveryQuantity().compareTo(material.getRequireNumber()) > 0) {
-                    throw new Exception("发货数量大于需求数量");
-                }
-                if (material.getTax() == BigDecimal.valueOf(0)) {
-                    //如果税率为0 南无就用单价计算发货总金额
-                    result = material.getNoTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
-                    System.out.println("这是没有税率计算的发货总金额:" + result);
-                    orderExecutionDetails.setDeliveredAmount(result);//为发货总金额赋值
-                } else {
-                    //如果税率不为0,那么就用 含税单价计算发货总金额
-                    result = material.getTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
-                    System.out.println("这是有税率计算的发货总金额:" + result);
-                    orderExecutionDetails.setDeliveredAmount(result);//为发货总金额赋值
-                }
-            } else {
-                //这是未选中部分物料的计算待发货数量和待发货金额
-                if (material.getTax() == BigDecimal.valueOf(0)) {
-                    //如果税率为0 南无就用单价计算待发货总金额
-                    result = material.getNoTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
-                    System.out.println("这是没有税率计算的发货总金额:" + result);
-                    orderExecutionDetails.setAwaitingDeliveryAmount(result);//为待发货总金额赋值
-                } else {
-                    //如果税率不为0,那么就用 含税单价计算待发货总金额
-                    result = material.getTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
-                    orderExecutionDetails.setAwaitingDeliveryAmount(result);//为待发货总金额赋值
-                    System.out.println("这是有税率计算的发货总金额:" + result);
-                }
+
+        List<OrderExecutionDetails> deliveries = orderExecutionDetailsMapper.selectOrderDelivery(orderExecutionDetails.getOrderLineNo());
+        if (!deliveries.isEmpty()){
+            if (deliveries.stream()
+                    .map(OrderExecutionDetails::getDeliveryQuantity)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add)
+                    .add(orderExecutionDetails.getDeliveryQuantity())
+                    .compareTo(orderExecutionDetails.getRequiredQuantity()) > 0) {
+                throw new Exception("该物料已经超过上限了");
             }
         }
-        //计算待发货数量 需求总量-填写的发货数量-订单量deliveryNoteNo
+
+        orderExecutionDetails.getOrderMaterials().forEach(material -> {
+            if (!orderExecutionDetails.getMaterialCode().equals(material.getOrCode()) || !orderExecutionDetails.getMaterialName().equals(material.getOrName())) {
+                BigDecimal awaitingDeliveryAmount = material.getTax().equals(BigDecimal.ZERO) ?
+                        material.getNoTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity()) :
+                        material.getTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
+                orderExecutionDetails.setAwaitingDeliveryAmount(awaitingDeliveryAmount);
+            } else {
+                if (orderExecutionDetails.getDeliveryQuantity().compareTo(material.getRequireNumber()) > 0) {
+                    throw new RuntimeException("发货数量大于需求数量");
+                }
+
+                BeanUtils.copyProperties(material, receiptDetails);
+                BeanUtils.copyProperties(orderExecutionDetails, receiptDetails);
+                receiptDetails.setExemptFromMaterialInspection(1L);
+                receiptDetails.setExemptFromSupplyCapacityCheck(1L);
+                receiptDetailsMapper.insertReceiptDetails(receiptDetails);
+
+                BigDecimal result = material.getTax().equals(BigDecimal.ZERO) ?
+                        material.getNoTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity()) :
+                        material.getTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity());
+                orderExecutionDetails.setDeliveredAmount(result);
+            }
+        });
+
+        //计算待发货数量 需求总量-填写的发货数量-订单量
         List<OrderExecutionDetails> orderExecutionDetails1 = orderExecutionDetailsMapper.selectDeliveryNo(orderExecutionDetails.getOrderCode());
-        if (orderExecutionDetails1.size() > 0) {
-            for (OrderExecutionDetails executionDetails : orderExecutionDetails1) {
-                if (executionDetails.getDeliveryQuantity()!=null){
-                    BigDecimal deliveryQuantity = executionDetails.getDeliveryQuantity();
-                    System.out.println("这是orderExecutionDetails1的数量:" + deliveryQuantity);
-                    if (deliveryQuantity.compareTo(BigDecimal.ZERO) != 0 && deliveryQuantity != null) {
-                        BigDecimal totalDemand = orderExecutionDetails.getTotalDemand();
-                        System.out.println("这是需求总数量:" + totalDemand);
-                        subtractResult = totalDemand.subtract(deliveryQuantity).subtract(deliveryQuantity);
-                        System.out.println("这是计算之后的数量:" + subtractResult);
-                        //executionDetails.setDeliveredQuantity(subtractResult);
-                        orderExecutionDetails.setAwaitingDeliveryQuantity(subtractResult);//为待发货数量赋值
-                    }
+        Optional<OrderExecutionDetails> executionDetailsOptional = orderExecutionDetails1.stream().findFirst();
+        if (executionDetailsOptional.isPresent()) {
+            OrderExecutionDetails executionDetails = executionDetailsOptional.get();
+            BigDecimal deliveryQuantity = executionDetails.getDeliveryQuantity();
+            if (deliveryQuantity != null && deliveryQuantity.compareTo(BigDecimal.ZERO) != 0) {
+                BigDecimal totalDemand = orderExecutionDetails.getTotalDemand();
+                BigDecimal subtractResult1 = totalDemand.subtract(deliveryQuantity).subtract(deliveryQuantity);
+                orderExecutionDetails.setAwaitingDeliveryQuantity(subtractResult1);
+            }
+
+            if (orderExecutionDetails.getMaterialName().equals(executionDetails.getMaterialName())
+                    && orderExecutionDetails.getOrderCode().equals(executionDetails.getOrderCode())
+                    && orderExecutionDetails.getOrderLineNo().equals(executionDetails.getOrderLineNo())) {
+                if ((orderExecutionDetails.getDeliveryQuantity().add(executionDetails.getReceiveQuantity()))
+                        .compareTo(executionDetails.getRequiredQuantity()) > 0) {
+                    BigDecimal showNumber = executionDetails.getRequiredQuantity()
+                            .subtract(orderExecutionDetails.getDeliveryQuantity().add(executionDetails.getReceiveQuantity()));
+                    throw new Exception("该物料还剩余" + showNumber);
                 }
             }
         } else {
-            //需求总量-填写的发货量
             BigDecimal deliveryQuantity = orderExecutionDetails.getTotalDemand();
             orderExecutionDetails.setAwaitingDeliveryQuantity(deliveryQuantity.subtract(orderExecutionDetails.getDeliveryQuantity()));
         }
+
         int rows = 0;
         //计算发货行号
         String deliverLineNo = null;
-        if (orderExecutionDetails1.size() > 1) {
-            deliverLineNo = orderExecutionDetails1.get(orderExecutionDetails1.size()).getDeliveryNoteLineNo();
-        } else if (orderExecutionDetails1.size() == 1) {
-            deliverLineNo = orderExecutionDetails1.get(0).getDeliveryNoteLineNo();
-        } else {
-            deliverLineNo = null;
+        if (!orderExecutionDetails1.isEmpty()) {
+            deliverLineNo = orderExecutionDetails1.get(orderExecutionDetails1.size() - 1).getDeliveryNoteLineNo();
         }
-        //插入数据
         if (deliverLineNo == null) {
             //判断它是否为空 为空从1开始递增
             deliverLineNo = deliveryCode + "-1";
@@ -158,10 +179,21 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
             num++;
             orderExecutionDetails.setDeliveryNoteLineNo(deliveryCode + "-" + num);
         }
+
+        // 获取当前的用户信息
+        String createAccount = SecurityUtils.getUsername();
         orderExecutionDetails.setOrderStatus("4");//执行中状态
+        orderExecutionDetails.setOrderHandle(1L);//待收货状态
+        orderExecutionDetails.setReceiver(createAccount);
         rows = orderExecutionDetailsMapper.insertOrderExecutionDetails(orderExecutionDetails);
+
+        //修改订单管理订单号下的执行状态为执行中
+        Long runningId = 5L;
+        orderManagerMapper.updateOrIDByOrderCode(runningId, orderExecutionDetails.getOrderCode());
+
         return rows;
     }
+
 
     /**
      * 批量删除mingxi
@@ -174,6 +206,27 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         return orderExecutionDetailsMapper.deleteOrderExecutionDetailsByIds(ids);
     }
 
+    @Override
+    public List<OrderExecutionDetails> selectReconciliation(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.selectReconciliation(orderExecutionDetails);
+    }
+
+    @Override
+    public int updateReconciliation1(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.updateReconciliation1(orderExecutionDetails);
+    }
+
+    @Override
+    public int updateReconciliation2(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation2(ids);
+    }
+
+    @Override
+    public int updateReconciliation3(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation3(ids);
+    }
+
+
     /**
      * 删除mingxi信息
      *
@@ -185,8 +238,18 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         return orderExecutionDetailsMapper.deleteOrderExecutionDetailsById(id);
     }
 
+    @Override
+    public List<OrderExecutionDetails> selectOrderExecutionDeliveryList(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.selectOrderExecutionDeliveryList(orderExecutionDetails);
+    }
+
+    @Override
+    public List<OrderExecutionDetails> selectOrderReceiptList(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.selectOrderReceiptList(orderExecutionDetails);
+    }
+
     /**
-     * 订单编号生成方法
+     * 发货单号生成方法
      *
      * @param date 传入当前日期
      * @return 订单编号

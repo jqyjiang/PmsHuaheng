@@ -138,6 +138,67 @@ public class Material extends BaseEntity
     private String mCount;
 
 
+
+
+    public void setDemandMonth(String demandMonth) {
+        this.demandMonth = demandMonth;
+    }
+
+    /**月度订单金额统计*/
+    @Excel(name = "月度订单金额")
+    private String aMoney;
+    /**待收货订单*/
+    @Excel(name = "待收货订单")
+    private Long treatNum;
+    /**待收货金额*/
+    @Excel(name = "待收货金额")
+    private Long treatMoney;
+    /**已完成订单*/
+    @Excel(name = "已完成订单")
+    private Long stopNum;
+    /**已完成金额*/
+    @Excel(name = "已完成金额")
+    private Long completeMoney;
+
+    public Long getTreatNum() {
+        return treatNum;
+    }
+
+    public void setTreatNum(Long treatNum) {
+        this.treatNum = treatNum;
+    }
+
+    public Long getTreatMoney() {
+        return treatMoney;
+    }
+
+    public void setTreatMoney(Long treatMoney) {
+        this.treatMoney = treatMoney;
+    }
+
+    public Long getStopNum() {
+        return stopNum;
+    }
+
+    public void setStopNum(Long stopNum) {
+        this.stopNum = stopNum;
+    }
+
+    public Long getCompleteMoney() {
+        return completeMoney;
+    }
+
+    public void setCompleteMoney(Long completeMoney) {
+        this.completeMoney = completeMoney;
+    }
+
+    public String getaMoney() {
+        return aMoney;
+    }
+    public void setaMoney(String aMoney) {
+        this.aMoney = aMoney;
+    }
+
     public String getMonth() {
         return Month;
     }
@@ -190,9 +251,6 @@ public class Material extends BaseEntity
         return demandMonth;
     }
 
-    public void setDemandMonth(String demandMonth) {
-        this.demandMonth = demandMonth;
-    }
 
     public String getDemandNum() {
         return demandNum;
@@ -478,6 +536,11 @@ public class Material extends BaseEntity
             .append("oCount",getoCount())
             .append("Month",getMonth())
             .append("mCount",getmCount())
+            .append("aMoney",getaMoney())
+            .append("treatNum",getTreatNum())
+            .append("treatMoney",getTreatMoney())
+            .append("stopNum",getStopNum())
+            .append("completeMoney",getCompleteMoney())
             .toString();
     }
 }

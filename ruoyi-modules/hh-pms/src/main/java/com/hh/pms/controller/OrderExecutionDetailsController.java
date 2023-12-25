@@ -1,20 +1,15 @@
 package com.hh.pms.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.system.api.domain.OrderExecutionDetails;
 import com.ruoyi.system.api.domain.OrderManager;
+import feign.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
@@ -27,7 +22,7 @@ import com.ruoyi.common.core.web.page.TableDataInfo;
 /**
  * mingxiController
  *
- * @author ruoyi
+ * @author yt
  * @date 2023-12-14
  */
 @RestController
@@ -38,7 +33,7 @@ public class OrderExecutionDetailsController extends BaseController
     private IOrderExecutionDetailsService orderExecutionDetailsService;
 
     /**
-     * 查询mingxi列表
+     * 查询待收货列表
      */
     @RequiresPermissions("pms:orderDetail:list")
     @GetMapping("/list")
@@ -49,6 +44,19 @@ public class OrderExecutionDetailsController extends BaseController
         return getDataTable(list);
     }
 
+    /**
+     * 查询收货单列表
+     * @param orderExecutionDetails
+     * @return
+     */
+    @RequiresPermissions("pms:orderDetail:list")
+    @GetMapping("/receiptList")
+    public TableDataInfo receiptList(OrderExecutionDetails orderExecutionDetails)
+    {
+        startPage();
+        List<OrderExecutionDetails> list = orderExecutionDetailsService.selectOrderReceiptList(orderExecutionDetails);
+        return getDataTable(list);
+    }
     /**
      * 导出mingxi列表
      */
@@ -136,5 +144,44 @@ public class OrderExecutionDetailsController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(orderExecutionDetailsService.deleteOrderExecutionDetailsByIds(ids));
+    }
+    /**
+     * 查询订单业务对账列表
+     */
+    @RequiresPermissions("pms:orderDetail:selectReconciliation")
+    @GetMapping("/selectReconciliation")
+    public TableDataInfo listReconciliation(OrderExecutionDetails orderExecutionDetails)
+    {
+        startPage();
+        List<OrderExecutionDetails> list=orderExecutionDetailsService.selectReconciliation(orderExecutionDetails);
+        System.out.println("数据"+list);
+        return getDataTable(list);
+    }
+
+    /**
+     * 修改对账
+     */
+    @RequiresPermissions("pms:orderDetail:edit")
+    @Log(title = "对账单", businessType = BusinessType.UPDATE)
+    @PutMapping(value = "/updateReconciliation1")
+    public AjaxResult updateReconciliation1(@RequestBody OrderExecutionDetails orderExecutionDetails)
+    {
+        return toAjax(orderExecutionDetailsService.updateReconciliation1(orderExecutionDetails));
+    }
+    /**
+     * 修改对账采方确认
+     */
+    @RequiresPermissions("pms:orderDetail:edit")
+    @PutMapping(value = "/updateReconciliation2")
+    public AjaxResult updateReconciliation2(@RequestBody List<Long> ids) {
+        return toAjax(orderExecutionDetailsService.updateReconciliation2(ids));
+    }
+    /**
+     * 修改对账退回对账单
+     */
+    @RequiresPermissions("pms:orderDetail:edit")
+    @PutMapping(value = "/updateReconciliation3")
+    public AjaxResult updateReconciliation3(@RequestBody List<Long> ids) {
+        return toAjax(orderExecutionDetailsService.updateReconciliation3(ids));
     }
 }

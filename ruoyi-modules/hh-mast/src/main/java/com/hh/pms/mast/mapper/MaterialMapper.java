@@ -2,6 +2,9 @@ package com.hh.pms.mast.mapper;
 
 import com.ruoyi.system.api.domain.Material;
 import com.ruoyi.system.api.domain.MaterialInformation;
+import com.ruoyi.system.api.domain.OrderExecutionDetails;
+import com.ruoyi.system.api.domain.OrderManager;
+import com.ruoyi.system.api.domain.MaterialInformation;
 import com.ruoyi.system.api.domain.OrderManager;
 
 import java.util.List;
@@ -70,4 +73,15 @@ public interface MaterialMapper
     List<OrderManager> selectOrderSource();
     //统计分析月度订单
     List<OrderManager> selectMonthOrder();
+    //统计分析月度订单金额
+    List<OrderExecutionDetails> selectMonthOrderMoney();
+    //待收货订单
+    Long selTreatNum();
+    //待收货金额
+    Long selTreatMoney();
+    //已完成订单
+    Long selStopNum();
+    //已完成金额
+    Long selCompleteMoney();
+
 }

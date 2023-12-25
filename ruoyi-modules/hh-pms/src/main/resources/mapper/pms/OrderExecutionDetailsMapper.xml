@@ -7,6 +7,8 @@
     <resultMap type="OrderExecutionDetails" id="OrderExecutionDetailsResult">
         <result property="id" column="id"/>
         <result property="orderCode" column="orderCode"/>
+        <result property="orderHandle" column="order_handle"/>
+        <result property="orderQuanlity" column="order_quanlity"/>
         <result property="orderStatus" column="orderStatus"/>
         <result property="totalDemand" column="totalDemand"/>
         <result property="deliveryQuantity" column="deliveryQuantity"/>
@@ -27,25 +29,51 @@
         <result property="deliveredQuantity" column="deliveredQuantity"/>
         <result property="deliveredAmount" column="deliveredAmount"/>
         <result property="supplier" column="supplier"/>
+        <result property="company" column="company"/>
         <result property="deliveryDate" column="deliveryDate"/>
         <result property="receiptNoteNo" column="receiptNoteNo"/>
         <result property="receiptNoteLineNo" column="receiptNoteLineNo"/>
         <result property="rejectedQuantity" column="rejectedQuantity"/>
         <result property="receiveQuantity" column="receiveQuantity"/>
         <result property="receiver" column="receiver"/>
+        <result property="recepitAmountTax" column="recepit_amount_tax"/>
         <result property="receivedDate" column="receivedDate"/>
         <result property="stockInNoteNo" column="stockInNoteNo"/>
         <result property="stockInNoteLineNo" column="stockInNoteLineNo"/>
+        <result property="stockInAmount" column="stockInAmount"/>
         <result property="returnedQuantity" column="returnedQuantity"/>
         <result property="stockInQuantity" column="stockInQuantity"/>
         <result property="stockInPerson" column="stockInPerson"/>
         <result property="stockInDate" column="stockInDate"/>
         <result property="createTime" column="create_time"/>
+        <association property="orderManager" javaType="OrderManager">
+            <id property="orderId" column="order_id"/>
+            <result property="materialId" column="material_id"/>
+            <result property="orderSource" column="order_source"/>
+            <association property="companies" javaType="com.ruoyi.system.api.domain.Companies">
+                <id property="companiesId" column="companies_id"/>
+                <result property="companiesName" column="companies_name"/>
+            </association>
+            <association property="supplierDetails" javaType="SupplierDetails">
+                <id property="sdId" column="sd_id"/>
+                <result property="sdTime" column="sd_time"/>
+                <result property="sdCode" column="sd_code"/>
+                <result property="sbiName" column="sbi_name"/>
+                <result property="sdPcn" column="sd_pcn"/>
+                <result property="sdPcp" column="sd_pcp"/>
+            </association>
+        </association>
+        <collection property="orderMaterials" ofType="OrderMaterial">
+            <id property="orId" column="or_id"/>
+            <result property="lineNumber" column="line_number"/>
+        </collection>
     </resultMap>
 
     <sql id="selectOrderExecutionDetailsVo">
         select id,
                orderCode,
+               order_handle,
+               order_quanlity,
                orderStatus,
                totalDemand,
                deliveryQuantity,
@@ -66,69 +94,102 @@
                deliveredQuantity,
                deliveredAmount,
                supplier,
+               company,
                deliveryDate,
                receiptNoteNo,
                receiptNoteLineNo,
                rejectedQuantity,
                receiveQuantity,
+               recepit_amount_tax,
                receiver,
                receivedDate,
                stockInNoteNo,
                stockInNoteLineNo,
+               stockInAmount,
                returnedQuantity,
                stockInQuantity,
                stockInPerson,
                stockInDate,
-               create_time
+               create_time,
+               reconciliation_status
         from order_execution_details
     </sql>
-
+    <sql id="selectOrderExecutionDetailsVo1">
+        select o.id,
+               om.material_id,
+               o.orderLineNo,
+               om.order_source,
+               om.purchaser,
+               o.orderCode,
+               o.orderStatus,
+               o.company,
+               o.totalDemand,
+               o.deliveryQuantity,
+               o.taxTotal,
+               o.awaitingDeliveryQuantity,
+               o.awaitingDeliveryAmount,
+               o.requiredQuantity,
+               o.deliveredQuantity,
+               o.deliveredAmount,
+               o.supplier,
+               o.requiredDate,
+               o.stockInAmount,
+               o.stockInQuantity
+        from order_execution_details as o
+                 left join order_manager as om on o.orderCode = om.order_code
+    </sql>
+    <sql id="deliverySQL">
+        select o.id,
+               o.orderCode,
+               o.order_handle,
+               o.order_quanlity,
+               o.orderStatus,
+               o.totalDemand,
+               o.deliveryQuantity,
+               o.receivedQuantity,
+               o.inStockQuantity,
+               o.taxTotal,
+               o.company,
+               o.receivedAmount,
+               o.awaitingDeliveryQuantity,
+               o.awaitingDeliveryAmount,
+               o.orderLineNo,
+               o.materialCode,
+               o.materialName,
+               o.materialUnit,
+               o.requiredQuantity,
+               o.requiredDate,
+               o.deliveryNoteNo,
+               o.deliveryNoteLineNo,
+               o.deliveredQuantity,
+               o.deliveredAmount,
+               o.supplier,
+               o.deliveryDate,
+               o.receiptNoteNo,
+               o.receiptNoteLineNo,
+               o.rejectedQuantity,
+               o.receiveQuantity,
+               o.receiver,
+               s.sd_pcp,
+               s.sbi_name,
+               s.sd_pcn
+        from order_execution_details o
+                 left join order_manager om on om.order_code = o.orderCode
+                 left join supplier_details s on om.supplier = s.sd_id
+    </sql>
     <select id="selectOrderExecutionDetailsList" parameterType="OrderExecutionDetails"
             resultMap="OrderExecutionDetailsResult">
-        <include refid="selectOrderExecutionDetailsVo"/>
+        <include refid="selectOrderExecutionDetailsVo1"/>
         <where>
-            <if test="orderCode != null  and orderCode != ''">and orderCode = #{orderCode}</if>
-            <if test="orderStatus != null  and orderStatus != ''">and orderStatus = #{orderStatus}</if>
-            <if test="totalDemand != null ">and totalDemand = #{totalDemand}</if>
-            <if test="deliveryQuantity != null ">and deliveryQuantity = #{deliveryQuantity}</if>
-            <if test="receivedQuantity != null ">and receivedQuantity = #{receivedQuantity}</if>
-            <if test="inStockQuantity != null ">and inStockQuantity = #{inStockQuantity}</if>
-            <if test="taxTotal != null ">and taxTotal = #{taxTotal}</if>
-            <if test="receivedAmount != null ">and receivedAmount = #{receivedAmount}</if>
-            <if test="awaitingDeliveryQuantity != null ">and awaitingDeliveryQuantity = #{awaitingDeliveryQuantity}</if>
-            <if test="awaitingDeliveryAmount != null ">and awaitingDeliveryAmount = #{awaitingDeliveryAmount}</if>
-            <if test="orderLineNo != null  and orderLineNo != ''">and orderLineNo = #{orderLineNo}</if>
-            <if test="materialCode != null  and materialCode != ''">and materialCode = #{materialCode}</if>
-            <if test="materialName != null  and materialName != ''">and materialName like concat('%', #{materialName},
+            <if test="orderCode != null  and orderCode != ''">and oed.orderCode = #{orderCode}</if>
+
+            <if test="orderStatus != null  and orderStatus != ''">and oed.orderStatus = #{orderStatus}</if>
+
+            <if test="materialName != null  and materialName != ''">and oed.materialName like concat('%',
+                #{materialName},
                 '%')
             </if>
-            <if test="materialUnit != null  and materialUnit != ''">and materialUnit = #{materialUnit}</if>
-            <if test="requiredQuantity != null ">and requiredQuantity = #{requiredQuantity}</if>
-            <if test="requiredDate != null ">and requiredDate = #{requiredDate}</if>
-            <if test="deliveryNoteNo != null  and deliveryNoteNo != ''">and deliveryNoteNo = #{deliveryNoteNo}</if>
-            <if test="deliveryNoteLineNo != null  and deliveryNoteLineNo != ''">and deliveryNoteLineNo =
-                #{deliveryNoteLineNo}
-            </if>
-            <if test="deliveredQuantity != null ">and deliveredQuantity = #{deliveredQuantity}</if>
-            <if test="deliveredAmount != null ">and deliveredAmount = #{deliveredAmount}</if>
-            <if test="supplier != null  and supplier != ''">and supplier = #{supplier}</if>
-            <if test="deliveryDate != null ">and deliveryDate = #{deliveryDate}</if>
-            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
-            <if test="receiptNoteLineNo != null  and receiptNoteLineNo != ''">and receiptNoteLineNo =
-                #{receiptNoteLineNo}
-            </if>
-            <if test="rejectedQuantity != null ">and rejectedQuantity = #{rejectedQuantity}</if>
-            <if test="receiveQuantity != null ">and receiveQuantity = #{receiveQuantity}</if>
-            <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
-            <if test="receivedDate != null ">and receivedDate = #{receivedDate}</if>
-            <if test="stockInNoteNo != null  and stockInNoteNo != ''">and stockInNoteNo = #{stockInNoteNo}</if>
-            <if test="stockInNoteLineNo != null  and stockInNoteLineNo != ''">and stockInNoteLineNo =
-                #{stockInNoteLineNo}
-            </if>
-            <if test="returnedQuantity != null ">and returnedQuantity = #{returnedQuantity}</if>
-            <if test="stockInQuantity != null ">and stockInQuantity = #{stockInQuantity}</if>
-            <if test="stockInPerson != null  and stockInPerson != ''">and stockInPerson = #{stockInPerson}</if>
-            <if test="stockInDate != null ">and stockInDate = #{stockInDate}</if>
+            <!--            <if test="om.orderSource != null  and om.orderSource != ''">and om.order_source = #{orderSource}</if>-->
         </where>
     </select>
 
@@ -138,10 +199,49 @@
     </select>
     <select id="selectDeliveryNo" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
             resultMap="OrderExecutionDetailsResult">
-        select deliveryNoteLineNo, awaitingDeliveryQuantity
+        select deliveryNoteLineNo,
+               awaitingDeliveryQuantity,
+               receiveQuantity,
+               requiredQuantity,
+               requiredQuantity,
+               deliveryQuantity,
+               materialName,
+               orderCode,
+               orderLineNo
         from order_execution_details
         where orderCode = #{OrderCode}
         order by id ASC
+    </select>
+    <select id="selectOrderExecutionDeliveryList"
+            resultType="com.ruoyi.system.api.domain.OrderExecutionDetails" resultMap="OrderExecutionDetailsResult">
+        <include refid="deliverySQL"/>
+        <where>
+            <if test="deliveryNoteNo != null  and deliveryNoteNo != ''">and deliveryNoteNo = #{deliveryNoteNo}</if>
+            <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>
+            and order_handle = '1'
+        </where>
+    </select>
+    <select id="selectOrderExecutionDetailsListByOrderCode"
+            resultType="com.ruoyi.system.api.domain.OrderExecutionDetails" resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        where orderCode = #{OrderCode}
+    </select>
+    <!-- 查询收货单列表   <!-->
+    <select id="selectOrderReceiptList" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        <where>
+            <if test="deliveryNoteNo != null  and deliveryNoteNo != ''">and deliveryNoteNo = #{deliveryNoteNo}</if>
+            <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            and order_handle ='2'
+
+        </where>
+    </select>
+    <select id="selectOrderDelivery" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        where orderLineNo = #{orderLineNo}
     </select>
 
     <insert id="insertOrderExecutionDetails" parameterType="OrderExecutionDetails" useGeneratedKeys="true"
@@ -149,6 +249,8 @@
         insert into order_execution_details
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">orderCode,</if>
+            <if test="orderHandle != null">order_handle,</if>
+            <if test="orderQuanlity != null">order_quanlity,</if>
             <if test="orderStatus != null">orderStatus,</if>
             <if test="totalDemand != null">totalDemand,</if>
             <if test="deliveryQuantity != null">deliveryQuantity,</if>
@@ -169,23 +271,29 @@
             <if test="deliveredQuantity != null">deliveredQuantity,</if>
             <if test="deliveredAmount != null">deliveredAmount,</if>
             <if test="supplier != null">supplier,</if>
+            <if test="company != null">company,</if>
             <if test="deliveryDate != null">deliveryDate,</if>
             <if test="receiptNoteNo != null">receiptNoteNo,</if>
             <if test="receiptNoteLineNo != null">receiptNoteLineNo,</if>
             <if test="rejectedQuantity != null">rejectedQuantity,</if>
             <if test="receiveQuantity != null">receiveQuantity,</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax,</if>
             <if test="receiver != null">receiver,</if>
             <if test="receivedDate != null">receivedDate,</if>
             <if test="stockInNoteNo != null">stockInNoteNo,</if>
             <if test="stockInNoteLineNo != null">stockInNoteLineNo,</if>
             <if test="returnedQuantity != null">returnedQuantity,</if>
+            <if test="stockInAmount != null">stockInAmount,</if>
             <if test="stockInQuantity != null">stockInQuantity,</if>
             <if test="stockInPerson != null">stockInPerson,</if>
             <if test="stockInDate != null">stockInDate,</if>
             <if test="createTime != null">create_time,</if>
+            <if test="reconciliationStatus != null">reconciliation_status,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">#{orderCode},</if>
+            <if test="orderHandle != null">#{orderHandle},</if>
+            <if test="orderQuanlity != null">#{orderQuanlity},</if>
             <if test="orderStatus != null">#{orderStatus},</if>
             <if test="totalDemand != null">#{totalDemand},</if>
             <if test="deliveryQuantity != null">#{deliveryQuantity},</if>
@@ -206,24 +314,148 @@
             <if test="deliveredQuantity != null">#{deliveredQuantity},</if>
             <if test="deliveredAmount != null">#{deliveredAmount},</if>
             <if test="supplier != null">#{supplier},</if>
+            <if test="company != null">#{company},</if>
             <if test="deliveryDate != null">#{deliveryDate},</if>
             <if test="receiptNoteNo != null">#{receiptNoteNo},</if>
             <if test="receiptNoteLineNo != null">#{receiptNoteLineNo},</if>
             <if test="rejectedQuantity != null">#{rejectedQuantity},</if>
             <if test="receiveQuantity != null">#{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">#{recepitAmountTax},</if>
             <if test="receiver != null">#{receiver},</if>
             <if test="receivedDate != null">#{receivedDate},</if>
             <if test="stockInNoteNo != null">#{stockInNoteNo},</if>
             <if test="stockInNoteLineNo != null">#{stockInNoteLineNo},</if>
             <if test="returnedQuantity != null">#{returnedQuantity},</if>
+            <if test="stockInAmount != null">#{stockInAmount},</if>
             <if test="stockInQuantity != null">#{stockInQuantity},</if>
             <if test="stockInPerson != null">#{stockInPerson},</if>
             <if test="stockInDate != null">#{stockInDate},</if>
             <if test="createTime != null">#{createTime},</if>
+            <if test="reconciliationStatus != null">#{reconciliation_status},</if>
         </trim>
     </insert>
 
+
     <update id="updateOrderExecutionDetails" parameterType="OrderExecutionDetails">
+        update order_execution_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="orderHandle != null">order_handle = #{orderHandle},</if>
+            <if test="orderQuanlity != null">order_quanlity = #{orderQuanlity},</if>
+            <if test="orderStatus != null">orderStatus = #{orderStatus},</if>
+            <if test="totalDemand != null">totalDemand = #{totalDemand},</if>
+            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
+            <if test="receivedQuantity != null">receivedQuantity = #{receivedQuantity},</if>
+            <if test="inStockQuantity != null">inStockQuantity = #{inStockQuantity},</if>
+            <if test="taxTotal != null">taxTotal = #{taxTotal},</if>
+            <if test="receivedAmount != null">receivedAmount = #{receivedAmount},</if>
+            <if test="awaitingDeliveryQuantity != null">awaitingDeliveryQuantity = #{awaitingDeliveryQuantity},</if>
+            <if test="awaitingDeliveryAmount != null">awaitingDeliveryAmount = #{awaitingDeliveryAmount},</if>
+            <if test="orderLineNo != null">orderLineNo = #{orderLineNo},</if>
+            <if test="materialCode != null">materialCode = #{materialCode},</if>
+            <if test="materialName != null">materialName = #{materialName},</if>
+            <if test="materialUnit != null">materialUnit = #{materialUnit},</if>
+            <if test="requiredQuantity != null">requiredQuantity = #{requiredQuantity},</if>
+            <if test="requiredDate != null">requiredDate = #{requiredDate},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="deliveryNoteLineNo != null">deliveryNoteLineNo = #{deliveryNoteLineNo},</if>
+            <if test="deliveredQuantity != null">deliveredQuantity = #{deliveredQuantity},</if>
+            <if test="deliveredAmount != null">deliveredAmount = #{deliveredAmount},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="company != null">company=#{company},</if>
+            <if test="deliveryDate != null">deliveryDate = #{deliveryDate},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="receiptNoteLineNo != null">receiptNoteLineNo = #{receiptNoteLineNo},</if>
+            <if test="rejectedQuantity != null">rejectedQuantity = #{rejectedQuantity},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax = #{recepitAmountTax},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
+            <if test="stockInNoteNo != null">stockInNoteNo = #{stockInNoteNo},</if>
+            <if test="stockInNoteLineNo != null">stockInNoteLineNo = #{stockInNoteLineNo},</if>
+            <if test="returnedQuantity != null">returnedQuantity = #{returnedQuantity},</if>
+            <if test="stockInAmount != null">stockInAmount = #{stockInAmount},</if>
+            <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
+            <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
+            <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="reconciliationStatus != null">reconciliation_status = #{reconciliationStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateOrderExecutionDetailsandDelivery" parameterType="OrderExecutionDetails">
+        update order_execution_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="orderStatus != null">orderStatus = #{orderStatus},</if>
+            <if test="orderHandle != null">order_handle = #{orderHandle},</if>
+            <if test="orderQuanlity != null">order_quanlity = #{orderQuanlity},</if>
+            <if test="totalDemand != null">totalDemand = #{totalDemand},</if>
+            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
+            <if test="receivedQuantity != null">receivedQuantity = #{receivedQuantity},</if>
+            <if test="inStockQuantity != null">inStockQuantity = #{inStockQuantity},</if>
+            <if test="taxTotal != null">taxTotal = #{taxTotal},</if>
+            <if test="receivedAmount != null">receivedAmount = #{receivedAmount},</if>
+            <if test="awaitingDeliveryQuantity != null">awaitingDeliveryQuantity = #{awaitingDeliveryQuantity},</if>
+            <if test="awaitingDeliveryAmount != null">awaitingDeliveryAmount = #{awaitingDeliveryAmount},</if>
+            <if test="orderLineNo != null">orderLineNo = #{orderLineNo},</if>
+            <if test="materialCode != null">materialCode = #{materialCode},</if>
+            <if test="materialName != null">materialName = #{materialName},</if>
+            <if test="materialUnit != null">materialUnit = #{materialUnit},</if>
+            <if test="requiredQuantity != null">requiredQuantity = #{requiredQuantity},</if>
+            <if test="requiredDate != null">requiredDate = #{requiredDate},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="deliveryNoteLineNo != null">deliveryNoteLineNo = #{deliveryNoteLineNo},</if>
+            <if test="deliveredQuantity != null">deliveredQuantity = #{deliveredQuantity},</if>
+            <if test="deliveredAmount != null">deliveredAmount = #{deliveredAmount},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="company != null">company=#{company},</if>
+            <if test="deliveryDate != null">deliveryDate = #{deliveryDate},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="receiptNoteLineNo != null">receiptNoteLineNo = #{receiptNoteLineNo},</if>
+            <if test="rejectedQuantity != null">rejectedQuantity = #{rejectedQuantity},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax = #{recepitAmountTax},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
+            <if test="stockInNoteNo != null">stockInNoteNo = #{stockInNoteNo},</if>
+            <if test="stockInNoteLineNo != null">stockInNoteLineNo = #{stockInNoteLineNo},</if>
+            <if test="returnedQuantity != null">returnedQuantity = #{returnedQuantity},</if>
+            <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
+            <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
+            <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
+            <if test="reconciliationStatus != null">reconciliationStatus = #{reconciliationStatus},</if>
+        </trim>
+        where orderCode = #{orderCode}
+    </update>
+
+    <delete id="deleteOrderExecutionDetailsById" parameterType="Long">
+        delete
+        from order_execution_details
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderExecutionDetailsByIds" parameterType="String">
+        delete from order_execution_details where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectReconciliation" parameterType="OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        <where>
+            <if test="orderCode != null  and orderCode != ''">and orderCode = #{orderCode}</if>
+            <if test="supplier != null  and supplier != ''">and supplier = #{supplier}</if>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
+            <if test="reconciliationStatus != null  and reconciliationStatus != ''">and reconciliation_status = #{reconciliationStatus}</if>
+            AND order_quanlity=2
+        </where>
+    </select>
+
+    <update id="updateReconciliation1" parameterType="OrderExecutionDetails">
         update order_execution_details
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderCode != null">orderCode = #{orderCode},</if>
@@ -261,60 +493,23 @@
             <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
             <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
+            reconciliation_status=2
         </trim>
         where id = #{id}
     </update>
-    <update id="updateOrderExecutionDetailsandDelivery" parameterType="OrderExecutionDetails">
-        update order_execution_details
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="orderCode != null">orderCode = #{orderCode},</if>
-            <if test="orderStatus != null">orderStatus = #{orderStatus},</if>
-            <if test="totalDemand != null">totalDemand = #{totalDemand},</if>
-            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
-            <if test="receivedQuantity != null">receivedQuantity = #{receivedQuantity},</if>
-            <if test="inStockQuantity != null">inStockQuantity = #{inStockQuantity},</if>
-            <if test="taxTotal != null">taxTotal = #{taxTotal},</if>
-            <if test="receivedAmount != null">receivedAmount = #{receivedAmount},</if>
-            <if test="awaitingDeliveryQuantity != null">awaitingDeliveryQuantity = #{awaitingDeliveryQuantity},</if>
-            <if test="awaitingDeliveryAmount != null">awaitingDeliveryAmount = #{awaitingDeliveryAmount},</if>
-            <if test="orderLineNo != null">orderLineNo = #{orderLineNo},</if>
-            <if test="materialCode != null">materialCode = #{materialCode},</if>
-            <if test="materialName != null">materialName = #{materialName},</if>
-            <if test="materialUnit != null">materialUnit = #{materialUnit},</if>
-            <if test="requiredQuantity != null">requiredQuantity = #{requiredQuantity},</if>
-            <if test="requiredDate != null">requiredDate = #{requiredDate},</if>
-            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
-            <if test="deliveryNoteLineNo != null">deliveryNoteLineNo = #{deliveryNoteLineNo},</if>
-            <if test="deliveredQuantity != null">deliveredQuantity = #{deliveredQuantity},</if>
-            <if test="deliveredAmount != null">deliveredAmount = #{deliveredAmount},</if>
-            <if test="supplier != null">supplier = #{supplier},</if>
-            <if test="deliveryDate != null">deliveryDate = #{deliveryDate},</if>
-            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
-            <if test="receiptNoteLineNo != null">receiptNoteLineNo = #{receiptNoteLineNo},</if>
-            <if test="rejectedQuantity != null">rejectedQuantity = #{rejectedQuantity},</if>
-            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
-            <if test="receiver != null">receiver = #{receiver},</if>
-            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
-            <if test="stockInNoteNo != null">stockInNoteNo = #{stockInNoteNo},</if>
-            <if test="stockInNoteLineNo != null">stockInNoteLineNo = #{stockInNoteLineNo},</if>
-            <if test="returnedQuantity != null">returnedQuantity = #{returnedQuantity},</if>
-            <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
-            <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
-            <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
-        </trim>
-        where orderCode = #{orderCode}
-    </update>
-
-    <delete id="deleteOrderExecutionDetailsById" parameterType="Long">
-        delete
-        from order_execution_details
-        where id = #{id}
-    </delete>
-
-    <delete id="deleteOrderExecutionDetailsByIds" parameterType="String">
-        delete from order_execution_details where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+    <update id="updateReconciliation2">
+        update order_execution_details set reconciliation_status = 3
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
             #{id}
         </foreach>
-    </delete>
+    </update>
+    <update id="updateReconciliation3">
+        update order_execution_details set reconciliation_status = 1
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>
+

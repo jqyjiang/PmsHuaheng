@@ -28,7 +28,7 @@
         <result property="phone" column="phone"/>
         <result property="invoiceMethod" column="invoice_method"/>
         <result property="createTime" column="create_time"/>
-        <result property="taxTotal"    column="tax_total"    />
+        <result property="taxTotal" column="tax_total"/>
         <result property="materialId" column="material_id"/>
         <result property="productId" column="product_id"/>
         <association property="orderTypeRunning" javaType="OrderTypeRunning">
@@ -96,7 +96,7 @@
             <result property="receivingPhone" column="receiving_phone"/>
             <result property="receivingAddress" column="receiving_address"/>
             <result property="remarks" column="remarks"/>
-            <result property="taxTotal"    column="tax_total"    />
+            <result property="taxTotal" column="tax_total"/>
         </collection>
     </resultMap>
 
@@ -189,11 +189,13 @@
         where or_id = #{orId}
     </select>
     <select id="findRunTypeNumber" resultType="OrderManager" resultMap="OrderManagerResult">
-        select order_id,or_id,order_state from order_manager
+        select order_id, or_id, order_state
+        from order_manager
     </select>
-    <select id="selectOrderManagerByOrderCode" resultType="com.ruoyi.system.api.domain.OrderManager" resultMap="OrderManagerResult">
+    <select id="selectOrderManagerByOrderCode" resultType="com.ruoyi.system.api.domain.OrderManager"
+            resultMap="OrderManagerResult">
         <include refid="selectOrderManagerVo"/>
-where order_code = #{orderCode}
+        where order_code = #{orderCode}
     </select>
 
     <insert id="insertOrderManager" parameterType="OrderManager" useGeneratedKeys="true" keyProperty="orderId">
@@ -222,6 +224,7 @@ where order_code = #{orderCode}
             <if test="invoiceMethod != null">invoice_method,</if>
             <if test="createTime != null">create_time,</if>
             <if test="materialId != null">material_id,</if>
+            <if test="taxTotal !=null">tax_total,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">#{orderCode},</if>
@@ -247,6 +250,7 @@ where order_code = #{orderCode}
             <if test="invoiceMethod != null">#{invoiceMethod},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="materialId != null">#{materialId},</if>
+            <if test="taxTotal !=null">#{taxTotal},</if>
         </trim>
     </insert>
 

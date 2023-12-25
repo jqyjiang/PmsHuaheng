@@ -118,11 +118,11 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                 // 修改任务表状态
                 BigDecimal taskAccepted = procurementTask.getTaskAccepted();
                 System.out.println("这是查询之后返回的待受理数量:" + taskAccepted);
-//                if (taskAccepted.compareTo(totalDemandQuantity) > 0) {
+                if (taskAccepted.compareTo(totalDemandQuantity) > 0) {
                 BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
                 System.out.println("这是相减之后的数" + newTaskAccepted);
                 procurementTask.setTaskAccepted(newTaskAccepted);
-                //}
+                }
                 procurementTask.setTaskStatus(2l);
                 procurementTaskServiceClient.updateProcurement(procurementTask);
                 // 如果物料明细有修改还要考虑修改物料明细表的数据
@@ -143,7 +143,7 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                     if (orIdBuilder.length() > 0) {
                         orIdBuilder.append(",");
                     }
-                    orIdBuilder.append(item.getOrId());
+                    orIdBuilder.append(item.getOrName());
                 }
                 String orIdString = orIdBuilder.toString();
                 orderManager.setMaterialId(orIdString);

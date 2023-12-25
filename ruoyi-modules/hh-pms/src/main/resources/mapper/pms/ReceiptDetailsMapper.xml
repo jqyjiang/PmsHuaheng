@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.ReceiptDetailsMapper">
+
+    <resultMap type="ReceiptDetails" id="ReceiptDetailsResult">
+        <result property="id" column="id"/>
+        <result property="serialNumber" column="serial_number"/>
+        <result property="orderCode" column="order_code"/>
+        <result property="deliveryNoteNo" column="deliveryNoteNo"/>
+        <result property="orCode" column="or_code"/>
+        <result property="orName" column="or_name"/>
+        <result property="materialCategory" column="material_category"/>
+        <result property="materialSpecification" column="material_specification"/>
+        <result property="materialUnit" column="material_unit"/>
+        <result property="requireNumber" column="require_number"/>
+        <result property="requireTime" column="require_time"/>
+        <result property="deliveryQuantity" column="deliveryQuantity"/>
+        <result property="rejectedQuantity" column="rejected_quantity"/>
+        <result property="rejectionReason" column="rejection_reason"/>
+        <result property="receivedQuantity" column="received_quantity"/>
+        <result property="noTaxPrice" column="no_tax_price"/>
+        <result property="taxCode" column="tax_code"/>
+        <result property="tax" column="tax"/>
+        <result property="taxPrice" column="tax_price"/>
+        <result property="consignee" column="consignee"/>
+        <result property="receivingPhone" column="receiving_phone"/>
+        <result property="warehouse" column="warehouse"/>
+        <result property="exemptFromSupplyCapacityCheck" column="exempt_from_supply_capacity_check"/>
+        <result property="exemptFromMaterialInspection" column="exempt_from_material_inspection"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+    <sql id="selectReceiptDetailsVo">
+        select id,
+               serial_number,
+               order_code,
+               deliveryNoteNo,
+               or_code,
+               or_name,
+               material_category,
+               material_specification,
+               material_unit,
+               require_number,
+               require_time,
+               deliveryQuantity,
+               rejected_quantity,
+               rejection_reason,
+               received_quantity,
+               no_tax_price,
+               tax_code,
+               tax,
+               tax_price,
+               consignee,
+               receiving_phone,
+               warehouse,
+               exempt_from_supply_capacity_check,
+               exempt_from_material_inspection,
+               remarks
+        from receipt_details
+    </sql>
+
+    <select id="selectReceiptDetailsList" parameterType="ReceiptDetails" resultMap="ReceiptDetailsResult">
+        <include refid="selectReceiptDetailsVo"/>
+        <where>
+            <if test="serialNumber != null ">and serial_number = #{serialNumber}</if>
+            <if test="orderCode != null  and orderCode != ''">and order_code = #{orderCode}</if>
+            <if test="deliveryNoteNo != null  and deliveryNoteNo != ''">and deliveryNoteNo = #{deliveryNoteNo}</if>
+            <if test="orCode != null  and orCode != ''">and or_code = #{orCode}</if>
+            <if test="orName != null  and orName != ''">and or_name like concat('%', #{orName}, '%')</if>
+            <if test="materialCategory != null  and materialCategory != ''">and material_category =
+                #{materialCategory}
+            </if>
+            <if test="materialSpecification != null  and materialSpecification != ''">and material_specification =
+                #{materialSpecification}
+            </if>
+            <if test="materialUnit != null  and materialUnit != ''">and material_unit = #{materialUnit}</if>
+            <if test="requireNumber != null ">and require_number = #{requireNumber}</if>
+            <if test="requireTime != null ">and require_time = #{requireTime}</if>
+            <if test="deliveryQuantity != null ">and deliveryQuantity = #{deliveryQuantity}</if>
+            <if test="rejectedQuantity != null ">and rejected_quantity = #{rejectedQuantity}</if>
+            <if test="rejectionReason != null  and rejectionReason != ''">and rejection_reason = #{rejectionReason}</if>
+            <if test="receivedQuantity != null ">and received_quantity = #{receivedQuantity}</if>
+            <if test="noTaxPrice != null ">and no_tax_price = #{noTaxPrice}</if>
+            <if test="taxCode != null  and taxCode != ''">and tax_code = #{taxCode}</if>
+            <if test="tax != null ">and tax = #{tax}</if>
+            <if test="taxPrice != null ">and tax_price = #{taxPrice}</if>
+            <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
+            <if test="recipientPhone != null  and recipientPhone != ''">and recipient_phone = #{recipientPhone}</if>
+            <if test="warehouse != null  and warehouse != ''">and warehouse = #{warehouse}</if>
+            <if test="exemptFromSupplyCapacityCheck != null ">and exempt_from_supply_capacity_check =
+                #{exemptFromSupplyCapacityCheck}
+            </if>
+            <if test="exemptFromMaterialInspection != null ">and exempt_from_material_inspection =
+                #{exemptFromMaterialInspection}
+            </if>
+            <if test="remarks != null  and remarks != ''">and remarks = #{remarks}</if>
+        </where>
+    </select>
+
+    <select id="selectReceiptDetailsById" parameterType="Long" resultMap="ReceiptDetailsResult">
+        <include refid="selectReceiptDetailsVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectOrderExecutionDetailsByDeliveryNo"
+            resultType="com.ruoyi.system.api.domain.OrderExecutionDetails" resultMap="ReceiptDetailsResult">
+        <include refid="selectReceiptDetailsVo"/>
+        where order_code =#{orderCode} and deliveryNoteNo = #{deliverNo}
+    </select>
+
+    <insert id="insertReceiptDetails" parameterType="ReceiptDetails" useGeneratedKeys="true" keyProperty="id">
+        insert into receipt_details
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number,</if>
+            <if test="orderCode != null">order_code,</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo,</if>
+            <if test="orCode != null">or_code,</if>
+            <if test="orName != null">or_name,</if>
+            <if test="materialCategory != null">material_category,</if>
+            <if test="materialSpecification != null">material_specification,</if>
+            <if test="materialUnit != null">material_unit,</if>
+            <if test="requireNumber != null">require_number,</if>
+            <if test="requireTime != null">require_time,</if>
+            <if test="deliveryQuantity != null">deliveryQuantity,</if>
+            <if test="rejectedQuantity != null">rejected_quantity,</if>
+            <if test="rejectionReason != null">rejection_reason,</if>
+            <if test="receivedQuantity != null">received_quantity,</if>
+            <if test="noTaxPrice != null">no_tax_price,</if>
+            <if test="taxCode != null">tax_code,</if>
+            <if test="tax != null">tax,</if>
+            <if test="taxPrice != null">tax_price,</if>
+            <if test="consignee != null">consignee,</if>
+            <if test="receivingPhone != null">receiving_phone,</if>
+            <if test="warehouse != null">warehouse,</if>
+            <if test="exemptFromSupplyCapacityCheck != null">exempt_from_supply_capacity_check,</if>
+            <if test="exemptFromMaterialInspection != null">exempt_from_material_inspection,</if>
+            <if test="remarks != null">remarks,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="serialNumber != null">#{serialNumber},</if>
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="deliveryNoteNo != null">#{deliveryNoteNo},</if>
+            <if test="orCode != null">#{orCode},</if>
+            <if test="orName != null">#{orName},</if>
+            <if test="materialCategory != null">#{materialCategory},</if>
+            <if test="materialSpecification != null">#{materialSpecification},</if>
+            <if test="materialUnit != null">#{materialUnit},</if>
+            <if test="requireNumber != null">#{requireNumber},</if>
+            <if test="requireTime != null">#{requireTime},</if>
+            <if test="deliveryQuantity != null">#{deliveryQuantity},</if>
+            <if test="rejectedQuantity != null">#{rejectedQuantity},</if>
+            <if test="rejectionReason != null">#{rejectionReason},</if>
+            <if test="receivedQuantity != null">#{receivedQuantity},</if>
+            <if test="noTaxPrice != null">#{noTaxPrice},</if>
+            <if test="taxCode != null">#{taxCode},</if>
+            <if test="tax != null">#{tax},</if>
+            <if test="taxPrice != null">#{taxPrice},</if>
+            <if test="consignee != null">#{consignee},</if>
+            <if test="receivingPhone != null">#{receivingPhone},</if>
+            <if test="warehouse != null">#{warehouse},</if>
+            <if test="exemptFromSupplyCapacityCheck != null">#{exemptFromSupplyCapacityCheck},</if>
+            <if test="exemptFromMaterialInspection != null">#{exemptFromMaterialInspection},</if>
+            <if test="remarks != null">#{remarks},</if>
+        </trim>
+    </insert>
+
+    <update id="updateReceiptDetails" parameterType="ReceiptDetails">
+        update receipt_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="serialNumber != null">serial_number = #{serialNumber},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="orCode != null">or_code = #{orCode},</if>
+            <if test="orName != null">or_name = #{orName},</if>
+            <if test="materialCategory != null">material_category = #{materialCategory},</if>
+            <if test="materialSpecification != null">material_specification = #{materialSpecification},</if>
+            <if test="materialUnit != null">material_unit = #{materialUnit},</if>
+            <if test="requireNumber != null">require_number = #{requireNumber},</if>
+            <if test="requireTime != null">require_time = #{requireTime},</if>
+            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
+            <if test="rejectedQuantity != null">rejected_quantity = #{rejectedQuantity},</if>
+            <if test="rejectionReason != null">rejection_reason = #{rejectionReason},</if>
+            <if test="receivedQuantity != null">received_quantity = #{receivedQuantity},</if>
+            <if test="noTaxPrice != null">no_tax_price = #{noTaxPrice},</if>
+            <if test="taxCode != null">tax_code = #{taxCode},</if>
+            <if test="tax != null">tax = #{tax},</if>
+            <if test="taxPrice != null">tax_price = #{taxPrice},</if>
+            <if test="consignee != null">consignee = #{consignee},</if>
+            <if test="receivingPhone != null">receiving_phone = #{receivingPhone},</if>
+            <if test="warehouse != null">warehouse = #{warehouse},</if>
+            <if test="exemptFromSupplyCapacityCheck != null">exempt_from_supply_capacity_check =
+                #{exemptFromSupplyCapacityCheck},
+            </if>
+            <if test="exemptFromMaterialInspection != null">exempt_from_material_inspection =
+                #{exemptFromMaterialInspection},
+            </if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteReceiptDetailsById" parameterType="Long">
+        delete
+        from receipt_details
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteReceiptDetailsByIds" parameterType="String">
+        delete from receipt_details where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

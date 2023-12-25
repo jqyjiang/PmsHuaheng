@@ -40,7 +40,11 @@
         <result property="oCount"    column="oCount"    />
         <result property="mCount"    column="mCount"    />
         <result property="Month"    column="Month"    />
-
+        <result property="aMoney"    column="aMoney"    />
+        <result property="treatNum"    column="treatNum"    />
+        <result property="treatMoney"    column="treatMoney"    />
+        <result property="stopNum"    column="stopNum"    />
+        <result property="aMoney"    column="completeMoney"    />
     </resultMap>
 
     <sql id="selectMaterialVo">
@@ -221,5 +225,36 @@
                 AND EXTRACT(YEAR FROM create_time) = '2023'
         GROUP BY months.Month
         ORDER BY months.Month
+    </select>
+    <select id="selectMonthOrderMoney" parameterType="OrderExecutionDetails" resultMap="MaterialResult">
+        SELECT
+            months.Month,
+            COALESCE(SUM(taxTotal), 0) AS aMoney
+        FROM
+            (SELECT 1 AS Month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL
+             SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL
+             SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL
+             SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months
+                LEFT JOIN
+            (SELECT
+                 EXTRACT(MONTH FROM requiredDate) AS Month,
+        taxTotal
+             FROM order_execution_details
+             WHERE EXTRACT(YEAR FROM requiredDate) = '2023'
+            ) AS data ON months.Month = data.Month
+        GROUP BY months.Month
+        ORDER BY months.Month
+    </select>
+    <select id="selTreatNum"  >
+        SELECT COUNT(*) AS treatNum from order_execution_details where order_handle=1
+    </select>
+    <select id="selTreatMoney" >
+        SELECT COALESCE(SUM(taxTotal-receivedAmount), 0) AS treatMoney from order_execution_details where order_handle=1
+    </select>
+    <select id="selStopNum" >
+        SELECT COUNT(*) AS stopNum from order_execution_details where order_handle=2
+    </select>
+    <select id="selCompleteMoney"  >
+        SELECT COALESCE(SUM(taxTotal),0) AS completeMoney from order_execution_details where order_handle=2
     </select>
 </mapper>
