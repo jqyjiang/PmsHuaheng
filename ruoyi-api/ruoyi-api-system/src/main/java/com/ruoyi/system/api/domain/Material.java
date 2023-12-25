@@ -136,14 +136,6 @@ public class Material extends BaseEntity
     /**月度订单数 统计分析*/
     @Excel(name = "月度订单数")
     private String mCount;
-
-
-
-
-    public void setDemandMonth(String demandMonth) {
-        this.demandMonth = demandMonth;
-    }
-
     /**月度订单金额统计*/
     @Excel(name = "月度订单金额")
     private String aMoney;
@@ -251,6 +243,9 @@ public class Material extends BaseEntity
         return demandMonth;
     }
 
+    public void setDemandMonth(String demandMonth) {
+        this.demandMonth = demandMonth;
+    }
 
     public String getDemandNum() {
         return demandNum;
