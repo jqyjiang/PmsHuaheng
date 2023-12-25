@@ -96,7 +96,6 @@
             <result property="receivingPhone" column="receiving_phone"/>
             <result property="receivingAddress" column="receiving_address"/>
             <result property="remarks" column="remarks"/>
-            <result property="taxTotal" column="tax_total"/>
         </collection>
     </resultMap>
 
