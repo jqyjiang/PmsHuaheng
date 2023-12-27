@@ -16,17 +16,17 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-<!--      <el-col :span="1.5">-->
-<!--        <el-button-->
-<!--          type="success"-->
-<!--          plain-->
-<!--          size="mini"-->
-<!--          :disabled="single"-->
-<!--          @click="handleUpdate"-->
-<!--          v-hasPermi="['procure:task:edit']"-->
-<!--        >受理-->
-<!--        </el-button>-->
-<!--      </el-col>-->
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['procure:task:edit']"
+        >受理
+        </el-button>
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -68,14 +68,13 @@
       <el-table-column label="任务单号" align="center" prop="taskCode"/>
       <el-table-column label="采购策略" align="center" prop="procurementStrategy"/>
       <el-table-column label="任务总金额" align="center" prop="taskTotal"/>
-      <el-table-column label="公司ID" align="center" prop="companiesId">
+      <el-table-column label="公司" align="center" prop="companiesId">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.companies" :value="scope.row.companiesId"/>
         </template>
       </el-table-column>
       <el-table-column label="采购员" align="center" prop="purchaser"/>
       <el-table-column label="物料名称" align="center" prop="materialName"/>
-      <el-table-column label="币种" align="center" prop="currencyId"/>
       <el-table-column label="受理策略" align="center" prop="acceptanceStrategy"/>
       <el-table-column label="任务总数量" align="center" prop="taskNumber"/>
       <el-table-column label="已受理数量" align="center" prop="acceptedQuantity"/>
@@ -177,11 +176,11 @@ export default {
         taskCode: null,
         procurementStrategy: null,
         taskTotal: null,
-        requirementId1: null,
-        companiesId1: null,
+        requirementId: null,
+        companiesId: null,
         purchaser: null,
-        materialId2: null,
-        currencyId2: null,
+        materialId: null,
+        currencyId: null,
         acceptanceStrategy: null,
         taskNumber: null,
         acceptedQuantity: null,
@@ -233,6 +232,7 @@ export default {
         this.loading = true;
         listTask(this.queryParams).then(response => {
           this.taskList = response.rows;
+          console.log(this.taskList)
           this.total = response.total;
           this.loading = false;
         });
@@ -249,11 +249,11 @@ export default {
           taskCode: null,
           procurementStrategy: null,
           taskTotal: null,
-          requirementId1: null,
-          companiesId1: null,
+          requirementId: null,
+          companiesId: null,
           purchaser: null,
-          materialId2: null,
-          currencyId2: null,
+          materialId: null,
+          currencyName: null,
           acceptanceStrategy: null,
           taskNumber: null,
           acceptedQuantity: null,

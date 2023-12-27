@@ -74,6 +74,10 @@ public interface ContractManagementMapper
     @Select("SELECT contract_code FROM contract_management  WHERE TO_DAYS(signing_date)=TO_DAYS(#{contractTime}) GROUP BY contract_code ORDER BY signing_date DESC LIMIT 1")
     String selectContractCode(Date contractTime);
 
+
+    @Select("SELECT purchase_order_code FROM contract_management  WHERE TO_DAYS(signing_date)=TO_DAYS(#{contractTime}) GROUP BY purchase_order_code ORDER BY signing_date DESC LIMIT 1")
+    String selectPurchaseOrderCode(Date contractTime);
+
     // 查询合同contractManagementId最大值
     @Select("SELECT MAX(contract_management_id) FROM contract_management")
     public int selectContractManagementId();

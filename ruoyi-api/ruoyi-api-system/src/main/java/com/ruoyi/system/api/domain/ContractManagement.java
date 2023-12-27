@@ -136,6 +136,10 @@ public class ContractManagement extends BaseEntity
     @Excel(name = "采购清单")
     private String purchasingList;
 
+    /** 采购订单号 */
+    @Excel(name = "采购订单号")
+    private String purchaseOrderCode;
+
     public void setContractManagementId(Long contractManagementId)
     {
         this.contractManagementId = contractManagementId;
@@ -398,6 +402,14 @@ public class ContractManagement extends BaseEntity
         return purchasingList;
     }
 
+    public String getPurchaseOrderCode() {
+        return purchaseOrderCode;
+    }
+
+    public void setPurchaseOrderCode(String purchaseOrderCode) {
+        this.purchaseOrderCode = purchaseOrderCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -430,6 +442,7 @@ public class ContractManagement extends BaseEntity
                 .append("stampDutyAmount", getStampDutyAmount())
                 .append("contractDescription", getContractDescription())
                 .append("purchasingList", getPurchasingList())
+                .append("purchaseOrderCode",getPurchaseOrderCode())
                 .toString();
     }
 

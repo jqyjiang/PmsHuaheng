@@ -78,6 +78,9 @@ public class ContractManagementServiceImpl implements IContractManagementService
         contractManagement.setProjectAvailableBudget(10000000L);
         // 成本中心
         contractManagement.setCostCenter("维森集团行政共享中心项目");
+        // 采购订单编号
+        String purchase_order_code=createPurchaseOrderCode(date);
+        contractManagement.setPurchaseOrderCode(purchase_order_code);
         // 付款比例=(已付款金额/合同总金额)*100%
         List<ExecutionStatus> list = contractManagement.getExecutionStatuses();
         BigDecimal paidAmount = BigDecimal.ZERO;
@@ -148,6 +151,7 @@ public class ContractManagementServiceImpl implements IContractManagementService
 
     @Override
     public ContractManagement selectByContractManagementId(Long contractManagementId) {
+        System.out.println("-----"+contractManagementMapper.selectByContractManagementId(contractManagementId));
         return contractManagementMapper.selectByContractManagementId(contractManagementId);
     }
 
@@ -188,6 +192,40 @@ public class ContractManagementServiceImpl implements IContractManagementService
         }
     }
 
-
+    /**
+     * 采购订单编号生成方法
+     *
+     * @param date 传入当前日期
+     * @return 订单编号
+     */
+    public String createPurchaseOrderCode(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String newBidDate = dateFormat.format(date).replace("-", "");//把2020-11-11中-去掉
+        String contract = contractManagementMapper.selectPurchaseOrderCode(date);
+        if (contract != null) {
+            //如果这个时间存在,说明今天已经有需求生成了
+            String contractCode = contract;
+            contractCode = contract.substring(14,15);
+            int num = Integer.valueOf(contractCode);
+            num++;
+            if (num < 10) {
+                String idNum = String.format("%03d", num);  //num<10,说明是个位数，前面要补两个0
+                String code = "CGDD" + newBidDate + idNum;
+                return code;
+            } else if (num < 100) {
+                String idNum = String.format("%03d", num);//num<100,说明是两位数，前面要补一个0
+                String code = "CGDD" + newBidDate + idNum;
+                return code;
+            } else {
+                String idNum = String.valueOf(num);
+                String code = "CGDD" + newBidDate + idNum;  //date = 20201111+124
+                return code;
+            }
+        } else {
+            //如果今天时间不存在
+            String code = "CGDD" + newBidDate + "001";
+            return code;
+        }
+    }
 
 }

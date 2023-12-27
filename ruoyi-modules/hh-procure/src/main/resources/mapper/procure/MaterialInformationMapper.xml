@@ -43,7 +43,6 @@
         <result property="relatedProjects"    column="related_projects"    />
         <result property="status"    column="status"    />
         <result property="taskCode"    column="taskCode"    />
-        <result property="taskId"    column="task_id"    />
     </resultMap>
 
 
@@ -105,7 +104,6 @@
             <if test="purchaser != null  and purchaser != ''"> and purchaser = #{purchaser}</if>
             <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
         </where>
     </select>
 

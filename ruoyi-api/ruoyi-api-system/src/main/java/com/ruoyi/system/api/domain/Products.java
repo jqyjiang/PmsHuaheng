@@ -118,13 +118,20 @@ public class Products extends BaseEntity
         return taxRate;
     }
 
-    public BigDecimal getNumber()
-    {
+    public BigDecimal getNumber() {
         return number;
     }
-    public BigDecimal getSubtotal()
-    {
+
+    public void setNumber(BigDecimal number) {
+        this.number = number;
+    }
+
+    public BigDecimal getSubtotal() {
         return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 
     public String getOrderCode() {

@@ -477,4 +477,8 @@ public class ProcurementTask extends BaseEntity
     public void setStatus(Long status) {
         this.status = status;
     }
+
+
+
+
 }

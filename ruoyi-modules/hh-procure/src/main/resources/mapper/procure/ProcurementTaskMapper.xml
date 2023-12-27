@@ -39,18 +39,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remarks"    column="remarks"    />
         <result property="annex"    column="annex"    />
         <result property="purchaser"    column="purchaser"    />
+
+
     </resultMap>
 
     <sql id="selectProcurementTaskVo">
         select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser,
-               currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
-               material_name,currency_name
-        from procurement_task t LEFT JOIN material_information m ON t.mi_id=m.mi_id
+               t.currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
+               material_name
+        from procurement_task t
+                 LEFT JOIN material_information m ON t.mi_id=m.mi_id
     </sql>
 
     <select id="selectProcurementTaskList" parameterType="com.ruoyi.system.api.domain.ProcurementTask" resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
-        <where>  
+        <where>
+            <if test="taskId != null  and taskId != ''"> and task_Id = #{taskId}</if>
             <if test="taskCode != null  and taskCode != ''"> and task_code = #{taskCode}</if>
             <if test="procurementStrategy != null  and procurementStrategy != ''"> and procurement_strategy = #{procurementStrategy}</if>
             <if test="taskTotal != null "> and task_total = #{taskTotal}</if>

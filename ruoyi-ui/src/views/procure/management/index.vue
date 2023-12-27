@@ -582,7 +582,7 @@
     <el-dialog :title="title" :visible.sync="openSelectAll" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="申请人" prop="applicant">
-          <el-input v-model="form.applicant" placeholder="请输入申请人" style="width: 300px"/>
+          <el-input v-model="form.applicant" placeholder="请输入申请人" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="申请日期" prop="applicationDate" style="float: right;margin-left: 540px;margin-top: -58px">
           <el-date-picker clearable
@@ -590,62 +590,66 @@
                           type="date"
                           value-format="yyyy-MM-dd"
                           placeholder="请选择申请日期"
-                          readonly style="width: 300px">
+                          readonly style="width: 300px" readonly>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="申请部门" prop="department" >
-          <el-input v-model="form.department" placeholder="请输入申请部门" style="width: 300px;"/>
+          <el-input v-model="form.department" placeholder="请输入申请部门" style="width: 300px;" readonly/>
         </el-form-item>
         <el-form-item label="申请公司" prop="companies">
-          <el-input v-model="form.companies" placeholder="请输入申请公司" style="width: 300px"/>
+          <el-input v-model="form.companies" placeholder="请输入申请公司" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="是否主子合同" prop="isMainContract">
-          <el-radio-group v-model="form.isMainContract">
+          <el-radio-group v-model="form.isMainContract" >
             <el-radio
               v-for="dict in dict.type.is_main_contract"
               :key="dict.value"
               :label="parseInt(dict.value)"
+              readonly
             >{{ dict.label }}
             </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="预算相关合同" prop="budgetRelatedContracts"
                       style="float: right;margin-left: 540px;margin-top: -116px">
-          <el-select v-model="form.budgetRelatedContracts" placeholder="请选择预算相关合同" style="width: 300px">
+          <el-select v-model="form.budgetRelatedContracts" placeholder="请选择预算相关合同" style="width: 300px" >
             <el-option
               v-for="dict in dict.type.budget_related_contracts"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
+              readonly
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="合同名称" prop="contractName">
-          <el-input v-model="form.contractName" placeholder="请输入合同名称" style="width: 300px"/>
+          <el-input v-model="form.contractName" placeholder="请输入合同名称" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="项目相关合同" prop="projectRelatedContracts"
                       style="float: right;margin-left: 540px;margin-top: -232px">
-          <el-select v-model="form.projectRelatedContracts"  placeholder="请选择项目相关合同" style="width: 300px">
+          <el-select v-model="form.projectRelatedContracts"  placeholder="请选择项目相关合同" style="width: 300px" >
             <el-option
               v-for="dict in dict.type.project_related_contracts"
               :key="dict.value"
               :label="dict.label"
               :value="dict.value"
+              readonly
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="合同状态" prop="contractstatusId" style="float: right;margin-left: 540px;margin-top: -116px">
-          <el-select v-model="form.contractstatusId" placeholder="请选择合同状态" style="width: 300px">
+          <el-select v-model="form.contractstatusId" placeholder="请选择合同状态" style="width: 300px" >
             <el-option
               v-for="dict in dict.type.contract_status"
               :key="dict.value"
               :label="dict.label"
               :value="parseInt(dict.value)"
+              readonly
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="密集" prop="dense" style="float: right;margin-left: 540px;margin-top: -58px">
-          <el-select v-model="form.dense" placeholder="请选择密集" style="width: 300px">
+          <el-select v-model="form.dense" placeholder="请选择密集" style="width: 300px" >
             <el-option
               v-for="dict in dict.type.dense"
               :key="dict.value"
@@ -659,7 +663,7 @@
                           v-model="form.beginTime"
                           type="date"
                           value-format="yyyy-MM-dd"
-                          placeholder="请选择开始时间" style="width: 300px">
+                          placeholder="请选择开始时间" style="width: 300px" readonly>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="结束时间" prop="endTime" style="float: right;margin-left: 540px;margin-top: -58px">
@@ -667,23 +671,23 @@
                           v-model="form.endTime"
                           type="date"
                           value-format="yyyy-MM-dd"
-                          placeholder="请选择结束时间" style="width: 300px">
+                          placeholder="请选择结束时间" style="width: 300px" readonly>
           </el-date-picker>
         </el-form-item>
         <el-form-item label="合同金额" prop="contractPrice">
           <el-input v-model="form.contractPrice" placeholder="请输入合同金额" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="大写" prop="capitalization" style="float: right;margin-left: 540px;margin-top: -58px">
-          <el-input v-model="form.capitalization" readonly style="border: none;width: 300px"/>
+          <el-input v-model="form.capitalization" readonly style="border: none;width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="印花税金额" prop="stampDutyAmount">
-          <el-input v-model="form.stampDutyAmount" placeholder="请输入印花税金额" style="width: 300px"/>
+          <el-input v-model="form.stampDutyAmount" placeholder="请输入印花税金额" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="负责人" prop="head" style="float: right;margin-left: 540px;margin-top: -58px">
-          <el-input v-model="form.head" placeholder="请输入负责人" style="width: 300px"/>
+          <el-input v-model="form.head" placeholder="请输入负责人" style="width: 300px" readonly/>
         </el-form-item>
         <el-form-item label="合同情况说明" prop="contractDescription">
-          <el-input v-model="form.contractDescription" placeholder="请输入合同情况说明" />
+          <el-input v-model="form.contractDescription" placeholder="请输入合同情况说明"  readonly/>
         </el-form-item>
         <el-form-item label="采购清单" prop="purchasingList">
           <el-input v-model="orderCode" placeholder="" readonly/>
@@ -740,7 +744,7 @@
       <el-divider content-position="center">签署执行状态</el-divider>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="签署方数" prop="signatories">
-          <el-select v-model="form.signatories" placeholder="请选择签署方数" @change="selectChangeSignatories"
+          <el-select v-model="form.signatories" readonly placeholder="请选择签署方数" @change="selectChangeSignatories"
                      style="width: 300px">
             <el-option
               v-for="dict in dict.type.signatories"
@@ -751,35 +755,35 @@
           </el-select>
         </el-form-item>
         <el-form-item label="我方主体" prop="ourEntity">
-          <el-input v-model="ourEntity" placeholder="请输入我方主体" style="width: 300px;"/>
+          <el-input v-model="ourEntity" readonly placeholder="请输入我方主体" style="width: 300px;"/>
         </el-form-item>
         <el-form-item label="乙方供应商" prop="supplierB">
-          <el-input v-model="supplierB" placeholder="请输入乙方供应商" style="width: 300px"/>
+          <el-input v-model="supplierB" readonly placeholder="请输入乙方供应商" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="乙方联系人" prop="personB" style="float: right;margin-left: 540px;margin-top: -174px">
-          <el-input v-model="form.personB" placeholder="请输入乙方联系人" style="width: 300px;"/>
+          <el-input v-model="form.personB" readonly placeholder="请输入乙方联系人" style="width: 300px;"/>
         </el-form-item>
         <el-form-item label="乙方联系方式" prop="phoneB" style="float: right;margin-left: 540px;margin-top: -117px">
-          <el-input v-model="form.phoneB" placeholder="请输入乙方联系方式" style="width: 300px"/>
+          <el-input v-model="form.phoneB" readonly placeholder="请输入乙方联系方式" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="乙方开户行" prop="bankB" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.bankB" placeholder="请输入乙方开户行" style="width: 300px"/>
+          <el-input v-model="form.bankB" readonly placeholder="请输入乙方开户行" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="乙方开户行账号" prop="accountOpeningB">
-          <el-input v-model="form.accountOpeningB" placeholder="请输入乙方开户行账号" style="width: 300px"/>
+          <el-input v-model="form.accountOpeningB" readonly placeholder="请输入乙方开户行账号" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="合同方金额" prop="contractAmount"
                       style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.contractAmount" placeholder="请输入合同方金额" style="width: 300px"/>
+          <el-input v-model="form.contractAmount" readonly placeholder="请输入合同方金额" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="已支付金额" prop="paidAmount">
-          <el-input v-model="form.paidAmount" placeholder="请输入已支付金额" style="width: 300px"  @blur="alreadyPaidAmount"/>
+          <el-input v-model="form.paidAmount" readonly placeholder="请输入已支付金额" style="width: 300px"  @blur="alreadyPaidAmount"/>
         </el-form-item>
         <el-form-item label="锁定金额" prop="lockInAmount" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.lockInAmount" placeholder="请输入锁定金额" @blur="alreadyPaidAmount" style="width: 300px"/>
+          <el-input v-model="form.lockInAmount" readonly placeholder="请输入锁定金额" @blur="alreadyPaidAmount" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="剩余金额" prop="remainingAmount">
-          <el-input v-model="form.remainingAmount" placeholder="请输入剩余金额" style="width: 300px"/>
+          <el-input v-model="form.remainingAmount" readonly placeholder="请输入剩余金额" style="width: 300px"/>
         </el-form-item>
       </el-form>
       <!--   丙方   -->
@@ -787,29 +791,29 @@
         <el-divider content-position="center">丙方</el-divider>
         <el-form ref="form" :model="form" :rules="rules" label-width="110px">
           <el-form-item label="丙方供应商" prop="supplierC">
-            <el-input v-model="supplierC" placeholder="请输入丙方供应商" style="width: 300px"/>
+            <el-input v-model="supplierC" placeholder="请输入丙方供应商" readonly style="width: 300px"/>
           </el-form-item>
           <el-form-item label="丙方联系人" prop="personB" style="float: right;margin-left: 540px;margin-top: -59px">
-            <el-input v-model="personC"  placeholder="请输入丙方联系人" style="width: 300px"/>
+            <el-input v-model="personC"  placeholder="请输入丙方联系人" readonly style="width: 300px"/>
           </el-form-item>
           <el-form-item label="丙方联系方式" prop="phoneB">
-            <el-input v-model="phoneC" placeholder="请输入丙方联系方式" style="width: 300px"/>
+            <el-input v-model="phoneC" placeholder="请输入丙方联系方式" readonly style="width: 300px"/>
           </el-form-item>
           <el-form-item label="丙方开户行" prop="bankB" style="float: right;margin-left: 540px;margin-top: -59px">
-            <el-input v-model="bankC" placeholder="请输入丙方开户行" style="width: 300px"/>
+            <el-input v-model="bankC" placeholder="请输入丙方开户行" readonly style="width: 300px"/>
           </el-form-item>
           <el-form-item label="丙方开户行账号" prop="accountOpeningB">
-            <el-input v-model="accountOpeningC" placeholder="请输入丙方开户行账号" style="width: 300px"/>
+            <el-input v-model="accountOpeningC" readonly placeholder="请输入丙方开户行账号" style="width: 300px"/>
           </el-form-item>
           <el-form-item label="合同方金额" prop="contractAmount"
                         style="float: right;margin-left: 540px;margin-top: -59px">
-            <el-input v-model="contractAmount" placeholder="请输入合同方金额" style="width: 300px"/>
+            <el-input v-model="contractAmount" readonly placeholder="请输入合同方金额" style="width: 300px"/>
           </el-form-item>
           <el-form-item label="已支付金额" prop="paidAmount">
-            <el-input v-model="paidAmountC" placeholder="请输入已支付金额" @blur="alreadyPaidAmountC" style="width: 300px"/>
+            <el-input v-model="paidAmountC" readonly placeholder="请输入已支付金额" @blur="alreadyPaidAmountC" style="width: 300px"/>
           </el-form-item>
           <el-form-item label="锁定金额" prop="lockInAmount" style="float: right;margin-left: 540px;margin-top: -59px">
-            <el-input v-model="lockInAmountC" placeholder="请输入锁定金额" @blur="alreadyPaidAmountC" style="width: 300px"/>
+            <el-input v-model="lockInAmountC" readonly placeholder="请输入锁定金额" @blur="alreadyPaidAmountC" style="width: 300px"/>
           </el-form-item>
           <el-form-item label="剩余金额" prop="remainingAmount">
             <el-input v-model="remainingAmountC" placeholder="请输入剩余金额" readonly style="width: 300px"/>
@@ -817,7 +821,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" @click="submitFormSelectAll">确 定</el-button>
         <el-button @click="cancelSelectAll">取 消</el-button>
       </div>
     </el-dialog>
@@ -1593,42 +1597,43 @@ export default {
     },
     // 查看详情
     handleSelectAll(contractManagementId){
-      // this.reset();
       this.openSelectAll=true;
-      const bothSides=this.bothSides
-      console.log(contractManagementId)
-      console.log("-----")
-      console.log(bothSides)
-      getManagement(contractManagementId,bothSides).then(response => {
+      getManagementById(contractManagementId).then(response => {
         this.form = response.data;
         console.log(response.data)
-        this.ProductsList=[]  //清空合同标的物信息
-        // 多条数据
+        //清空合同标的物信息
+        this.ProductsList=[]
+        // 多条数据(产品)
         for (let i = 0; i < this.productList.length; i++) {
           const innerElement = this.productList[i];
           if (innerElement.orderCode === response.data.purchasingList) {
             this.ProductsList.push(innerElement)
           }
         }
+        this.orderCode=response.data.orderManager.orderCode;
+        this.form.companies=response.data.companiesId;
         this.form.signatories=response.data.executionStatus.signatories;
-        console.log(response.data.executionStatus)
         this.title = "采购合同详情表";
         if (this.form.signatories===2){
           this.showForm = true;
           // 乙方
-          this.supplierB=response.data.executionStatus.supplierB;
-          this.form.personB=response.data.executionStatus.personB;
-          this.form.phoneB=response.data.executionStatus.phoneB;
-          this.form.orderId=response.data.orderManager.orderId;
-          this.ourEntity=response.data.executionStatus.ourEntity;
-          this.form.bankB=response.data.executionStatus.bankB;
-          this.form.accountOpeningB=response.data.executionStatus.accountOpeningB;
-          this.form.contractAmount=response.data.executionStatus.contractAmount;
-          this.form.paidAmount=response.data.executionStatus.paidAmount;
-          this.form.lockInAmount=response.data.executionStatus.lockInAmount;
-          this.form.remainingAmount=response.data.executionStatus.remainingAmount;
-          // 丙方
-          if (this.form.bothSides==2){
+          // if (response.data.executionStatus.bothSides==1){
+            this.supplierB=response.data.executionStatus.supplierB;
+            this.form.personB=response.data.executionStatus.personB;
+            this.form.phoneB=response.data.executionStatus.phoneB;
+            this.form.orderId=response.data.orderManager.orderId;
+            this.ourEntity=response.data.executionStatus.ourEntity;
+            this.form.bankB=response.data.executionStatus.bankB;
+            this.form.accountOpeningB=response.data.executionStatus.accountOpeningB;
+            this.form.contractAmount=response.data.executionStatus.contractAmount;
+            this.form.paidAmount=response.data.executionStatus.paidAmount;
+            this.form.lockInAmount=response.data.executionStatus.lockInAmount;
+            this.form.remainingAmount=response.data.executionStatus.remainingAmount;
+            this.bothSides=response.data.executionStatus.bothSides;
+            console.log(this.ourEntity)
+          // }
+          // if (response.data.executionStatus.bothSides==2){
+          //   // 丙方
             this.supplierC=response.data.executionStatus.supplierB;
             this.personC=response.data.executionStatus.personB;
             this.phoneC=response.data.executionStatus.phoneB;
@@ -1639,8 +1644,7 @@ export default {
             this.paidAmountC=response.data.executionStatus.paidAmount;
             this.lockInAmountC=response.data.executionStatus.lockInAmount;
             this.remainingAmountC=response.data.executionStatus.remainingAmount;
-          }
-
+          // }
         }else {
           this.showForm = false;
           this.supplierB=response.data.executionStatus.supplierB;
@@ -1657,8 +1661,11 @@ export default {
         }
 
       });
-    }
-
+    },
+    // 查看详情 提交
+    submitFormSelectAll(){
+      this.openSelectAll=false;
+    },
   }
 };
 </script>

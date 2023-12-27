@@ -34,6 +34,7 @@
         <result property="stampDutyAmount"    column="stamp_duty_amount"    />
         <result property="contractDescription"    column="contract_description"    />
         <result property="purchasingList"    column="purchasing_list"    />
+        <result property="purchaseOrderCode"    column="purchase_order_code"    />
         <association property="supplierDetails" javaType="com.ruoyi.system.api.domain.SupplierDetails">
             <result property="sdId"    column="sd_id"    />
             <result property="sdTime"    column="sd_time"    />
@@ -86,23 +87,7 @@
             <result property="slAdvance"    column="sl_advance"    />
             <result property="cycle"    column="cycle"    />
         </association>
-        <association property="executionStatus" javaType="com.ruoyi.system.api.domain.ExecutionStatus">
-            <result property="executionId"    column="execution_id"    />
-            <result property="signatories"    column="signatories"    />
-            <result property="ourEntity"    column="our_entity"    />
-            <result property="supplierB"    column="supplier_b"    />
-            <result property="personB"    column="person_b"    />
-            <result property="phoneB"    column="phone_b"    />
-            <result property="bankB"    column="bank_b"    />
-            <result property="accountOpeningB"    column="account_opening_b"    />
-            <result property="contractAmount"    column="contract_amount"    />
-            <result property="currencyName"    column="currencyName"    />
-            <result property="paidAmount"    column="paid_amount"    />
-            <result property="lockInAmount"    column="lock_in_amount"    />
-            <result property="remainingAmount"    column="remaining_amount"    />
-            <result property="contractManagementId"    column="contract_management_id"    />
-            <result property="bothSides"    column="both_sides"    />
-        </association>
+
         <association property="orderManager" javaType="com.ruoyi.system.api.domain.OrderManager">
             <result property="orderId" column="order_id"/>
             <result property="orderCode" column="order_code"/>
@@ -142,6 +127,23 @@
             <result property="subtotal"    column="subtotal"    />
             <result property="orderCode"    column="order_code"    />
         </association>
+        <association property="executionStatus" javaType="com.ruoyi.system.api.domain.ExecutionStatus">
+            <result property="executionId"    column="execution_id"    />
+            <result property="signatories"    column="signatories"    />
+            <result property="ourEntity"    column="our_entity"    />
+            <result property="supplierB"    column="supplier_b"    />
+            <result property="personB"    column="person_b"    />
+            <result property="phoneB"    column="phone_b"    />
+            <result property="bankB"    column="bank_b"    />
+            <result property="accountOpeningB"    column="account_opening_b"    />
+            <result property="contractAmount"    column="contract_amount"    />
+            <result property="currencyName"    column="currencyName"    />
+            <result property="paidAmount"    column="paid_amount"    />
+            <result property="lockInAmount"    column="lock_in_amount"    />
+            <result property="remainingAmount"    column="remaining_amount"    />
+            <result property="contractManagementId"    column="contract_management_id"    />
+            <result property="bothSides"    column="both_sides"    />
+        </association>
     </resultMap>
 
     <sql id="selectContractManagementVo">
@@ -159,7 +161,7 @@
                pur_organization,annex,is_self_pickup,license_plate_number,concat_infomation,o.contract_code,o.contract_name,
                order_description,total_demand,purchaser,order_state,or_id,currency_id,supplier,contacts,phone,invoice_method,
                create_time,material_id,tax_total,p.product_id,o.product_id,product_name,sd_bank,
-               product_code,specifications,unit,price,tax_rate,number,subtotal,both_sides
+               product_code,specifications,unit,price,tax_rate,number,subtotal,both_sides,purchase_order_code
         from contract_management c
                  LEFT JOIN supplier_details s  ON c.sd_id=s.sd_id
                  LEFT JOIN execution_status e ON c.contract_management_id=e.contract_management_id
@@ -198,6 +200,7 @@
             <if test="stampDutyAmount != null  and stampDutyAmount != ''"> and stamp_duty_amount = #{stampDutyAmount}</if>
             <if test="contractDescription != null  and contractDescription != ''"> and contract_description = #{contractDescription}</if>
             <if test="purchasingList != null  and purchasingList != ''"> and purchasing_list = #{purchasingList}</if>
+            <if test="purchaseOrderCode != null  and purchaseOrderCode != ''"> and purchase_order_code = #{purchaseOrderCode}</if>
         </where>
     </select>
 
@@ -237,6 +240,7 @@
             <if test="stampDutyAmount != null">stamp_duty_amount,</if>
             <if test="contractDescription != null">contract_description,</if>
             <if test="purchasingList != null">purchasing_list,</if>
+            <if test="purchaseOrderCode != null">purchase_order_code,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="contractName != null">#{contractName},</if>
@@ -267,6 +271,7 @@
             <if test="stampDutyAmount != null">#{stampDutyAmount},</if>
             <if test="contractDescription != null">#{contractDescription},</if>
             <if test="purchasingList != null">#{purchasingList},</if>
+            <if test="purchaseOrderCode != null">#{purchaseOrderCode},</if>
         </trim>
     </insert>
 
@@ -301,6 +306,7 @@
             <if test="stampDutyAmount != null">stamp_duty_amount = #{stampDutyAmount},</if>
             <if test="contractDescription != null">contract_description = #{contractDescription},</if>
             <if test="purchasingList != null">purchasing_list = #{purchasingList},</if>
+            <if test="purchaseOrderCode != null">purchase_order_code = #{purchaseOrderCode},</if>
         </trim>
         where contract_management_id = #{contractManagementId}
     </update>

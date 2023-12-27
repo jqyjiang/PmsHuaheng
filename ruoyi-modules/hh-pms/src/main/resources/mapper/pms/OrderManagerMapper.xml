@@ -31,7 +31,6 @@
         <result property="taxTotal" column="tax_total"/>
         <result property="materialId" column="material_id"/>
         <result property="productId" column="product_id"/>
-        <result property="taxTotal" column="tax_total"/>
         <association property="orderTypeRunning" javaType="com.ruoyi.system.api.domain.OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
@@ -211,8 +210,6 @@
         <include refid="selectOrderManagerVo"/>
         where or_id = #{orId}
     </select>
-    <select id="findRunTypeNumber" resultType="com.ruoyi.system.api.domain.OrderManager" resultMap="OrderManagerResult">
-        select order_id,or_id from order_manager
     <select id="findRunTypeNumber" resultType="OrderManager" resultMap="OrderManagerResult">
         select order_id, or_id, order_state
         from order_manager

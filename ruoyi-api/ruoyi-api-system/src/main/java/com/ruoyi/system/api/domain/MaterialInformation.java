@@ -402,10 +402,6 @@ public class MaterialInformation extends BaseEntity
     private String relatedProjects;
 
 
-
-
-
-
     /** 任务单号 */
     @Excel(name = "任务单号")
     private String taskCode;
@@ -569,8 +565,5 @@ public class MaterialInformation extends BaseEntity
     {
         return taskCode;
     }
-
-
-
 
 }
