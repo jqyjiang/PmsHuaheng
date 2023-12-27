@@ -115,7 +115,7 @@
             <result property="materialId" column="material_id"/>
             <result property="productId" column="product_id"/>
         </association>
-        <association property="productse" javaType="com.ruoyi.system.api.domain.Products">
+        <collection property="products" ofType="com.ruoyi.system.api.domain.Products">
             <result property="productId"    column="product_id"    />
             <result property="productName"    column="product_name"    />
             <result property="productCode"    column="product_code"    />
@@ -126,8 +126,8 @@
             <result property="number"    column="number"    />
             <result property="subtotal"    column="subtotal"    />
             <result property="orderCode"    column="order_code"    />
-        </association>
-        <association property="executionStatus" javaType="com.ruoyi.system.api.domain.ExecutionStatus">
+        </collection>
+        <collection property="executionStatuses" ofType="com.ruoyi.system.api.domain.ExecutionStatus">
             <result property="executionId"    column="execution_id"    />
             <result property="signatories"    column="signatories"    />
             <result property="ourEntity"    column="our_entity"    />
@@ -143,7 +143,7 @@
             <result property="remainingAmount"    column="remaining_amount"    />
             <result property="contractManagementId"    column="contract_management_id"    />
             <result property="bothSides"    column="both_sides"    />
-        </association>
+        </collection>
     </resultMap>
 
     <sql id="selectContractManagementVo">

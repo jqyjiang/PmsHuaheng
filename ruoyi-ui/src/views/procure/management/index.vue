@@ -844,8 +844,6 @@ import {addManager, listManager, updateManager} from "@/api/pms/manager"
 import {listCompanies, listCurrency} from "@/api/procure/requirement";
 import {addStatus, updateStatus} from "@/api/procure/status";
 
-
-
 export default {
   name: "Management",
   dicts: ['is_main_contract', 'budget_related_contracts', 'dense', 'project_related_contracts', 'contract_status', 'signatories', 'order_type'],
@@ -902,6 +900,7 @@ export default {
       productTotal: 0,
       // 采购清单列表
       managerList: [],
+
       // 采购清单总数
       managerTotal: 0,
       managerqueryParams: {
@@ -1012,7 +1011,7 @@ export default {
       dialogSupplierListD: false, // 用于标记供应商列表是否展示
       dialogCompanies: false, //用于公司信息是否可见
       dialogCurrency: false, //用于币种信息是否可见（需求申请）
-
+      bothSidesList:[], // 三方数组
     };
   },
   created() {
@@ -1598,11 +1597,12 @@ export default {
     // 查看详情
     handleSelectAll(contractManagementId){
       this.openSelectAll=true;
+      //清空合同标的物信息
+      this.ProductsList=[]
       getManagementById(contractManagementId).then(response => {
         this.form = response.data;
+        this.bothSidesList=response.data.executionStatuses
         console.log(response.data)
-        //清空合同标的物信息
-        this.ProductsList=[]
         // 多条数据(产品)
         for (let i = 0; i < this.productList.length; i++) {
           const innerElement = this.productList[i];
@@ -1612,54 +1612,45 @@ export default {
         }
         this.orderCode=response.data.orderManager.orderCode;
         this.form.companies=response.data.companiesId;
-        this.form.signatories=response.data.executionStatus.signatories;
         this.title = "采购合同详情表";
-        if (this.form.signatories===2){
-          this.showForm = true;
-          // 乙方
-          // if (response.data.executionStatus.bothSides==1){
-            this.supplierB=response.data.executionStatus.supplierB;
-            this.form.personB=response.data.executionStatus.personB;
-            this.form.phoneB=response.data.executionStatus.phoneB;
-            this.form.orderId=response.data.orderManager.orderId;
-            this.ourEntity=response.data.executionStatus.ourEntity;
-            this.form.bankB=response.data.executionStatus.bankB;
-            this.form.accountOpeningB=response.data.executionStatus.accountOpeningB;
-            this.form.contractAmount=response.data.executionStatus.contractAmount;
-            this.form.paidAmount=response.data.executionStatus.paidAmount;
-            this.form.lockInAmount=response.data.executionStatus.lockInAmount;
-            this.form.remainingAmount=response.data.executionStatus.remainingAmount;
-            this.bothSides=response.data.executionStatus.bothSides;
-            console.log(this.ourEntity)
-          // }
-          // if (response.data.executionStatus.bothSides==2){
-          //   // 丙方
-            this.supplierC=response.data.executionStatus.supplierB;
-            this.personC=response.data.executionStatus.personB;
-            this.phoneC=response.data.executionStatus.phoneB;
-            this.orderId=response.data.orderManager.orderId;
-            this.bankC=response.data.executionStatus.bankB;
-            this.accountOpeningC=response.data.executionStatus.accountOpeningB;
-            this.contractAmount=response.data.executionStatus.contractAmount;
-            this.paidAmountC=response.data.executionStatus.paidAmount;
-            this.lockInAmountC=response.data.executionStatus.lockInAmount;
-            this.remainingAmountC=response.data.executionStatus.remainingAmount;
-          // }
-        }else {
-          this.showForm = false;
-          this.supplierB=response.data.executionStatus.supplierB;
-          this.form.personB=response.data.executionStatus.personB;
-          this.form.phoneB=response.data.executionStatus.phoneB;
-          this.form.orderId=response.data.orderManager.orderId;
-          this.ourEntity=response.data.executionStatus.ourEntity;
-          this.form.bankB=response.data.executionStatus.bankB;
-          this.form.accountOpeningB=response.data.executionStatus.accountOpeningB;
-          this.form.contractAmount=response.data.executionStatus.contractAmount;
-          this.form.paidAmount=response.data.executionStatus.paidAmount;
-          this.form.lockInAmount=response.data.executionStatus.lockInAmount;
-          this.form.remainingAmount=response.data.executionStatus.remainingAmount;
-        }
-
+          if (this.bothSidesList.length===1){
+            this.showForm = false;
+            this.form.signatories=this.bothSidesList[0].signatories;
+            this.supplierB=this.bothSidesList[0].supplierB;
+            this.form.personB=this.bothSidesList[0].personB;
+            this.form.phoneB=this.bothSidesList[0].phoneB;
+            this.ourEntity=this.bothSidesList[0].ourEntity;
+            this.form.bankB=this.bothSidesList[0].bankB;
+            this.form.accountOpeningB=this.bothSidesList[0].accountOpeningB;
+            this.form.contractAmount=this.bothSidesList[0].contractAmount;
+            this.form.paidAmount=this.bothSidesList[0].paidAmount;
+            this.form.lockInAmount=this.bothSidesList[0].lockInAmount;
+            this.form.remainingAmount=this.bothSidesList[0].remainingAmount;
+            this.bothSides=this.bothSidesList[0].bothSides;
+          }else {
+            this.showForm = true;
+            this.form.signatories=this.bothSidesList[0].signatories;
+            this.supplierB=this.bothSidesList[0].supplierB;
+            this.form.personB=this.bothSidesList[0].personB;
+            this.form.phoneB=this.bothSidesList[0].phoneB;
+            this.ourEntity=this.bothSidesList[0].ourEntity;
+            this.form.bankB=this.bothSidesList[0].bankB;
+            this.form.accountOpeningB=this.bothSidesList[0].accountOpeningB;
+            this.form.contractAmount=this.bothSidesList[0].contractAmount;
+            this.form.paidAmount=this.bothSidesList[0].paidAmount;
+            this.form.lockInAmount=this.bothSidesList[0].lockInAmount;
+            this.form.remainingAmount=this.bothSidesList[0].remainingAmount;
+            this.bothSides=this.bothSidesList[1].bothSides;
+            this.supplierC=this.bothSidesList[1].supplierB;
+            this.personC=this.bothSidesList[1].personB;
+            this.phoneC=this.bothSidesList[1].phoneB;
+            this.bankC=this.bothSidesList[1].bankB;
+            this.accountOpeningC=this.bothSidesList[1].accountOpeningB;
+            this.contractAmount=this.bothSidesList[1].contractAmount;
+            this.paidAmountC=this.bothSidesList[1].paidAmount;
+            this.lockInAmountC=this.bothSidesList[1].lockInAmount;
+            this.remainingAmountC=this.bothSidesList[1].remainingAmount;
+          }
       });
     },
     // 查看详情 提交

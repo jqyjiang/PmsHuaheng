@@ -412,45 +412,49 @@ public class ContractManagement extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("contractManagementId", getContractManagementId())
-                .append("contractName", getContractName())
-                .append("contractCode", getContractCode())
-                .append("projectRelatedContracts", getProjectRelatedContracts())
-                .append("applicant", getApplicant())
-                .append("applicationDate", getApplicationDate())
-                .append("department", getDepartment())
-                .append("companies", getCompaniesId())
-                .append("relatedProjects", getRelatedProjects())
-                .append("isMainContract", getIsMainContract())
-                .append("relatedMainContract", getRelatedMainContract())
-                .append("budgetRelatedContracts", getBudgetRelatedContracts())
-                .append("costCenter", getCostCenter())
-                .append("head", getHead())
-                .append("signingDate", getSigningDate())
-                .append("paymentProportion", getPaymentProportion())
-                .append("contractstatusId", getContractstatusId())
-                .append("sdId", getSdId())
-                .append("totalProjectBudget", getTotalProjectBudget())
-                .append("projectAvailableBudget", getProjectAvailableBudget())
-                .append("contractType", getContractType())
-                .append("dense", getDense())
-                .append("beginTime", getBeginTime())
-                .append("endTime", getEndTime())
-                .append("contractPrice", getContractPrice())
-                .append("capitalization", getCapitalization())
-                .append("stampDutyAmount", getStampDutyAmount())
-                .append("contractDescription", getContractDescription())
-                .append("purchasingList", getPurchasingList())
-                .append("purchaseOrderCode",getPurchaseOrderCode())
-                .toString();
+        return "ContractManagement{" +
+                "contractManagementId=" + contractManagementId +
+                ", contractName='" + contractName + '\'' +
+                ", contractCode='" + contractCode + '\'' +
+                ", projectRelatedContracts='" + projectRelatedContracts + '\'' +
+                ", applicant='" + applicant + '\'' +
+                ", applicationDate=" + applicationDate +
+                ", department='" + department + '\'' +
+                ", companies='" + companies + '\'' +
+                ", relatedProjects='" + relatedProjects + '\'' +
+                ", isMainContract=" + isMainContract +
+                ", relatedMainContract='" + relatedMainContract + '\'' +
+                ", budgetRelatedContracts='" + budgetRelatedContracts + '\'' +
+                ", costCenter='" + costCenter + '\'' +
+                ", head='" + head + '\'' +
+                ", signingDate=" + signingDate +
+                ", paymentProportion=" + paymentProportion +
+                ", contractstatusId=" + contractstatusId +
+                ", sdId=" + sdId +
+                ", totalProjectBudget=" + totalProjectBudget +
+                ", projectAvailableBudget=" + projectAvailableBudget +
+                ", contractType=" + contractType +
+                ", dense='" + dense + '\'' +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", contractPrice=" + contractPrice +
+                ", capitalization='" + capitalization + '\'' +
+                ", stampDutyAmount='" + stampDutyAmount + '\'' +
+                ", contractDescription='" + contractDescription + '\'' +
+                ", purchasingList='" + purchasingList + '\'' +
+                ", purchaseOrderCode='" + purchaseOrderCode + '\'' +
+                ", supplierDetails=" + supplierDetails +
+                ", orderManager=" + orderManager +
+                ", executionStatuses=" + executionStatuses +
+                ", products=" + products +
+                '}';
     }
 
 
     // 供应商
     private SupplierDetails supplierDetails;
-    private ExecutionStatus executionStatus;
-    private Products productse;
+    //private ExecutionStatus executionStatus;
+    //private Products productse;
     private OrderManager orderManager;
 
     public SupplierDetails getSupplierDetails() {
@@ -461,20 +465,8 @@ public class ContractManagement extends BaseEntity
         this.supplierDetails = supplierDetails;
     }
 
-    public ExecutionStatus getExecutionStatus() {
-        return executionStatus;
-    }
-
-    public void setExecutionStatus(ExecutionStatus executionStatus) {
-        this.executionStatus = executionStatus;
-    }
-
-    public Products getProductse() {
-        return productse;
-    }
-
-    public void setProductse(Products productse) {
-        this.productse = productse;
+    public String getCompanies() {
+        return companies;
     }
 
     public OrderManager getOrderManager() {
@@ -509,16 +501,7 @@ public class ContractManagement extends BaseEntity
     }
 
 
-    // 订单
-    private List<OrderManager> orderManagers;
 
-    public List<OrderManager> getOrderManagers() {
-        return orderManagers;
-    }
-
-    public void setOrderManagers(List<OrderManager> orderManagers) {
-        this.orderManagers = orderManagers;
-    }
 
 
 

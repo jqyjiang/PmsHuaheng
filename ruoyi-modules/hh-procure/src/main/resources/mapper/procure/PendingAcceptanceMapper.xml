@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.PendingAcceptanceMapper">
+
+    <resultMap type="com.ruoyi.system.api.domain.ProcurementTask" id="ProcurementTaskResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="taskCode"    column="task_code"    />
+        <result property="procurementStrategy"    column="procurement_strategy"    />
+        <result property="taskTotal"    column="task_total"    />
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="companiesId"    column="companies_id"    />
+        <result property="purchaser"    column="purchaser"    />
+        <result property="currencyId"    column="currency_id"    />
+        <result property="acceptanceStrategy"    column="acceptance_strategy"    />
+        <result property="taskNumber"    column="task_number"    />
+        <result property="acceptedQuantity"    column="accepted_quantity"    />
+        <result property="taskOccupied"    column="task_occupied"    />
+        <result property="taskAccepted"    column="task_accepted"    />
+        <result property="taskStatus"    column="task_status"    />
+        <!--   物料信息      -->
+        <result property="miId"    column="mi_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialCategory"    column="material_category"    />
+        <result property="materialSpecification"    column="material_specification"    />
+        <result property="materialModel"    column="material_model"    />
+        <result property="materialBrand"    column="material_brand"    />
+        <result property="materialUnit"    column="material_unit"    />
+        <result property="mustNumber"    column="must_number"    />
+        <result property="mustDate"    column="must_date"    />
+        <result property="currencyName"    column="currency_name"    />
+        <result property="referencePrice"    column="reference_price"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="tax"    column="tax"    />
+        <result property="rateValue"    column="rate_value"    />
+        <result property="budgetAmount"    column="budget_amount"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="annex"    column="annex"    />
+        <result property="purchaser"    column="purchaser"    />
+    </resultMap>
+
+    <sql id="selectProcurementTaskVo">
+        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser,
+               t.currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
+               material_name
+        from procurement_task t
+                 LEFT JOIN material_information m ON t.mi_id=m.mi_id
+    </sql>
+
+    <select id="selectTaskAccepted" parameterType="com.ruoyi.system.api.domain.ProcurementTask" resultMap="ProcurementTaskResult">
+        <include refid="selectProcurementTaskVo"/>
+        where task_accepted!=0
+        and task_status != 4
+    </select>
+
+
+</mapper>

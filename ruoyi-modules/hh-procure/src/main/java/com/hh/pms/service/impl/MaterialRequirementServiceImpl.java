@@ -118,6 +118,7 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
             procurementTask.setPurchaser(materialInformation1.getPurchaser());//采购员
             procurementTask.setCurrencyId(materialInformation1.getCurrencyName());//币种ID
             procurementTask.setTaskNumber(BigDecimal.valueOf(materialInformation1.getMustNumber()));// 任务总数量
+            procurementTask.setAcceptanceStrategy("转订单"); // 受理策略
             procurementTask.setAcceptedQuantity(BigDecimal.valueOf(0.00));
             procurementTask.setTaskOccupied(BigDecimal.valueOf(0.00));
             procurementTask.setTaskAccepted(procurementTask.getTaskNumber());
