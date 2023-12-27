@@ -2,11 +2,14 @@ package com.ruoyi.system.api.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.annotation.Excel;
 import com.ruoyi.common.core.web.domain.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 采购合同管理对象 contract_management
@@ -29,10 +32,6 @@ public class ContractManagement extends BaseEntity
     @Excel(name = "合同编号")
     private String contractCode;
 
-    /** 采购订单号 */
-    @Excel(name = "采购订单号")
-    private String purchasingCode;
-
     /** 项目相关合同 */
     @Excel(name = "项目相关合同")
     private String projectRelatedContracts;
@@ -42,17 +41,16 @@ public class ContractManagement extends BaseEntity
     private String applicant;
 
     /** 申请日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "申请日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applicationDate;
 
     /** 申请部门 */
     @Excel(name = "申请部门")
-    private Long departmentId;
+    private String department;
 
     /** 申请公司 */
     @Excel(name = "申请公司")
-    private Long companiesId;
+    private String companies;
 
     /** 相关项目 */
     @Excel(name = "相关项目")
@@ -79,17 +77,12 @@ public class ContractManagement extends BaseEntity
     private String head;
 
     /** 签订日期 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "签订日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date signingDate;
 
-    /** 合同总金额 */
-    @Excel(name = "合同总金额")
-    private BigDecimal totalAmount;
-
     /** 付款比例(%) */
     @Excel(name = "付款比例(%)")
-    private String paymentProportion;
+    private BigDecimal paymentProportion;
 
     /** 合同状态ID */
     @Excel(name = "合同状态ID")
@@ -116,12 +109,10 @@ public class ContractManagement extends BaseEntity
     private String dense;
 
     /** 开始时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "开始时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date beginTime;
 
     /** 结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "结束时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date endTime;
 
@@ -172,15 +163,6 @@ public class ContractManagement extends BaseEntity
     {
         return contractCode;
     }
-    public void setPurchasingCode(String purchasingCode)
-    {
-        this.purchasingCode = purchasingCode;
-    }
-
-    public String getPurchasingCode()
-    {
-        return purchasingCode;
-    }
     public void setProjectRelatedContracts(String projectRelatedContracts)
     {
         this.projectRelatedContracts = projectRelatedContracts;
@@ -208,23 +190,23 @@ public class ContractManagement extends BaseEntity
     {
         return applicationDate;
     }
-    public void setDepartmentId(Long departmentId)
-    {
-        this.departmentId = departmentId;
+
+    public String getDepartment() {
+        return department;
     }
 
-    public Long getDepartmentId()
-    {
-        return departmentId;
-    }
-    public void setCompaniesId(Long companiesId)
-    {
-        this.companiesId = companiesId;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
-    public Long getCompaniesId()
+    public void setCompanies(String companies)
     {
-        return companiesId;
+        this.companies = companies;
+    }
+
+    public String getCompaniesId()
+    {
+        return companies;
     }
     public void setRelatedProjects(String relatedProjects)
     {
@@ -289,21 +271,12 @@ public class ContractManagement extends BaseEntity
     {
         return signingDate;
     }
-    public void setTotalAmount(BigDecimal totalAmount)
-    {
-        this.totalAmount = totalAmount;
-    }
-
-    public BigDecimal getTotalAmount()
-    {
-        return totalAmount;
-    }
-    public void setPaymentProportion(String paymentProportion)
+    public void setPaymentProportion(BigDecimal paymentProportion)
     {
         this.paymentProportion = paymentProportion;
     }
 
-    public String getPaymentProportion()
+    public BigDecimal getPaymentProportion()
     {
         return paymentProportion;
     }
@@ -431,12 +404,11 @@ public class ContractManagement extends BaseEntity
                 .append("contractManagementId", getContractManagementId())
                 .append("contractName", getContractName())
                 .append("contractCode", getContractCode())
-                .append("purchasingCode", getPurchasingCode())
                 .append("projectRelatedContracts", getProjectRelatedContracts())
                 .append("applicant", getApplicant())
                 .append("applicationDate", getApplicationDate())
-                .append("departmentId", getDepartmentId())
-                .append("companiesId", getCompaniesId())
+                .append("department", getDepartment())
+                .append("companies", getCompaniesId())
                 .append("relatedProjects", getRelatedProjects())
                 .append("isMainContract", getIsMainContract())
                 .append("relatedMainContract", getRelatedMainContract())
@@ -444,7 +416,6 @@ public class ContractManagement extends BaseEntity
                 .append("costCenter", getCostCenter())
                 .append("head", getHead())
                 .append("signingDate", getSigningDate())
-                .append("totalAmount", getTotalAmount())
                 .append("paymentProportion", getPaymentProportion())
                 .append("contractstatusId", getContractstatusId())
                 .append("sdId", getSdId())
@@ -461,4 +432,82 @@ public class ContractManagement extends BaseEntity
                 .append("purchasingList", getPurchasingList())
                 .toString();
     }
+
+
+    // 供应商
+    private SupplierDetails supplierDetails;
+    private ExecutionStatus executionStatus;
+    private Products productse;
+    private OrderManager orderManager;
+
+    public SupplierDetails getSupplierDetails() {
+        return supplierDetails;
+    }
+
+    public void setSupplierDetails(SupplierDetails supplierDetails) {
+        this.supplierDetails = supplierDetails;
+    }
+
+    public ExecutionStatus getExecutionStatus() {
+        return executionStatus;
+    }
+
+    public void setExecutionStatus(ExecutionStatus executionStatus) {
+        this.executionStatus = executionStatus;
+    }
+
+    public Products getProductse() {
+        return productse;
+    }
+
+    public void setProductse(Products productse) {
+        this.productse = productse;
+    }
+
+    public OrderManager getOrderManager() {
+        return orderManager;
+    }
+
+    public void setOrderManager(OrderManager orderManager) {
+        this.orderManager = orderManager;
+    }
+
+    // 状态(乙方)
+    private List<ExecutionStatus> executionStatuses;
+
+    public List<ExecutionStatus> getExecutionStatuses() {
+        return executionStatuses;
+    }
+
+    public void setExecutionStatuses(List<ExecutionStatus> executionStatuses) {
+        this.executionStatuses = executionStatuses;
+    }
+
+
+    // 产品
+    private List<Products> products;
+
+    public List<Products> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Products> products) {
+        this.products = products;
+    }
+
+
+    // 订单
+    private List<OrderManager> orderManagers;
+
+    public List<OrderManager> getOrderManagers() {
+        return orderManagers;
+    }
+
+    public void setOrderManagers(List<OrderManager> orderManagers) {
+        this.orderManagers = orderManagers;
+    }
+
+
+
+
 }

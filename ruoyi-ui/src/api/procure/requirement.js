@@ -90,4 +90,11 @@ export function listMaterial(query) {
   })
 }
 
-
+// 查询税率列表
+export function listRate(query) {
+  return request({
+    url: '/pms/OrderManager/listRate',
+    method: 'get',
+    params: query
+  })
+}

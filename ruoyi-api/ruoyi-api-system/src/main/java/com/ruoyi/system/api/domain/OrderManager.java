@@ -436,4 +436,17 @@ public class OrderManager extends BaseEntity
     public void setProductId(Long productId) {
         this.productId = productId;
     }
+
+    // 产品表信息
+    private Products products;
+
+    public Products getProducts() {
+        return products;
+    }
+
+    public void setProducts(Products products) {
+        this.products = products;
+    }
+
+
 }

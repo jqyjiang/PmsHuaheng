@@ -16,17 +16,17 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['procure:task:edit']"
-        >受理
-        </el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="success"-->
+<!--          plain-->
+<!--          size="mini"-->
+<!--          :disabled="single"-->
+<!--          @click="handleUpdate"-->
+<!--          v-hasPermi="['procure:task:edit']"-->
+<!--        >受理-->
+<!--        </el-button>-->
+<!--      </el-col>-->
       <el-col :span="1.5">
         <el-button
           type="success"
@@ -339,7 +339,6 @@ export default {
           }).then(() => {
             this.queryParams.purchaser=null;
             this.getList();
-
             this.$modal.msgSuccess("转办成功");
             this.open = false;
           }).catch(() => {});

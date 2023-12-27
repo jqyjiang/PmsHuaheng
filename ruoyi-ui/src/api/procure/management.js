@@ -10,9 +10,9 @@ export function listManagement(query) {
 }
 
 // 查询采购合同管理详细
-export function getManagement(contractManagementId) {
+export function getManagement(contractManagementId,bothSides) {
   return request({
-    url: '/procure/management/' + contractManagementId,
+    url: '/procure/management/' + contractManagementId+"/"+bothSides,
     method: 'get'
   })
 }
@@ -52,4 +52,10 @@ export function listSupplier(query) {
   })
 }
 
-
+// 查询采购合同管理详细
+export function getManagementById(contractManagementId) {
+  return request({
+    url: '/procure/management/' + contractManagementId,
+    method: 'get'
+  })
+}

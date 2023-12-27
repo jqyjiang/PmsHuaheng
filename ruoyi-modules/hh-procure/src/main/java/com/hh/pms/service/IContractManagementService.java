@@ -1,6 +1,9 @@
 package com.hh.pms.service;
 
+import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.system.api.domain.ContractManagement;
+import com.ruoyi.system.api.domain.OrderManager;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ public interface IContractManagementService
      * @param contractManagementId 采购合同管理主键
      * @return 采购合同管理
      */
-    public ContractManagement selectContractManagementByContractManagementId(Long contractManagementId);
+    public ContractManagement selectContractManagementByContractManagementId(Long contractManagementId,Long bothSides);
 
     /**
      * 查询采购合同管理列表
@@ -59,4 +62,12 @@ public interface IContractManagementService
      * @return 结果
      */
     public int deleteContractManagementByContractManagementId(Long contractManagementId);
+
+    /**
+     * 查询采购合同管理（详情查询）
+     *
+     * @param contractManagementId 采购合同管理主键
+     * @return 采购合同管理
+     */
+    public ContractManagement selectByContractManagementId(@Param("contractManagementId")Long contractManagementId);
 }

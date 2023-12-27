@@ -42,7 +42,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProcurementTaskVo">
-        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser, currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,material_name,currency_name
+        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser,
+               currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
+               material_name,currency_name
         from procurement_task t LEFT JOIN material_information m ON t.mi_id=m.mi_id
     </sql>
 

@@ -96,4 +96,7 @@ public interface MaterialRequirementMapper {
 
     /**采购需求类型统计分析*/
     public List<MaterialRequirement> selectDemandType();
+
+
+
 }

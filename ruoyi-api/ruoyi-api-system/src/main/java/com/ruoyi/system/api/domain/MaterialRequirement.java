@@ -306,7 +306,7 @@ public class MaterialRequirement extends BaseEntity
         this.materialInformations = materialInformations;
     }
 
-    /**  需求物料  */
+    /**  需求任务  */
     private List<ProcurementTask> procurementTasks;
 
     public List<ProcurementTask> getProcurementTasks() {
@@ -315,5 +315,16 @@ public class MaterialRequirement extends BaseEntity
 
     public void setProcurementTasks(List<ProcurementTask> procurementTasks) {
         this.procurementTasks = procurementTasks;
+    }
+
+    /**  物料（yt）  */
+    private List<OrderMaterial> orderMaterials;
+
+    public List<OrderMaterial> getOrderMaterials() {
+        return orderMaterials;
+    }
+
+    public void setOrderMaterials(List<OrderMaterial> orderMaterials) {
+        this.orderMaterials = orderMaterials;
     }
 }

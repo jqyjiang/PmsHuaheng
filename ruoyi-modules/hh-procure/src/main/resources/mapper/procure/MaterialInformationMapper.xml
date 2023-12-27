@@ -46,9 +46,7 @@
         <result property="taskId"    column="task_id"    />
     </resultMap>
 
-    <resultMap id="MaterialInformationMaterialResult" type="com.ruoyi.system.api.domain.MaterialInformation" extends="MaterialInformationResult">
-        <collection property="materialList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MaterialResult" />
-    </resultMap>
+
 
     <resultMap type="com.ruoyi.system.api.domain.MaterialPool" id="MaterialResult">
         <result property="materialId"    column="sub_material_id"    />
@@ -74,7 +72,9 @@
         <result property="abcAttribute"    column="sub_abc_attribute"    />
         <result property="avoidInspect"    column="sub_avoid_inspect"    />
     </resultMap>
-
+    <resultMap id="MaterialInformationMaterialResult" type="com.ruoyi.system.api.domain.MaterialInformation" extends="MaterialInformationResult">
+        <collection property="materialList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MaterialResult" />
+    </resultMap>
     <sql id="selectMaterialInformationVo">
         select m.mi_id, material_code, material_name, material_category, material_specification, material_model,material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price,
         tax, rate_value, budget_amount, remarks, m.annex, m.purchaser, m.requirement_code,related_projects,demand_department,description,demander,`status`,task_id from material_information m
@@ -251,5 +251,8 @@
             #{miId}
         </foreach>
     </update>
+
+
+
 
 </mapper>

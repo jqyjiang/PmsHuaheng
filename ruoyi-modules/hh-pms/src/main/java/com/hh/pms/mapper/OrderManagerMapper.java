@@ -102,4 +102,8 @@ public interface OrderManagerMapper
     @Update("update order_manager set or_id =#{orId} where order_code=#{orderCode}")
     int updateOrIDByOrderCode(@Param("orId") Long orId,@Param("orderCode") String orderCode);
 
+
+
+
+
 }

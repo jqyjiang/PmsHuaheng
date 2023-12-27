@@ -1,6 +1,7 @@
 package com.hh.pms.mapper;
 
 import com.ruoyi.system.api.domain.ContractManagement;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
@@ -20,7 +21,7 @@ public interface ContractManagementMapper
      * @param contractManagementId 采购合同管理主键
      * @return 采购合同管理
      */
-    public ContractManagement selectContractManagementByContractManagementId(Long contractManagementId);
+    public ContractManagement selectContractManagementByContractManagementId(@Param("contractManagementId")Long contractManagementId,@Param("bothSides") Long bothSides);
 
     /**
      * 查询采购合同管理列表
@@ -72,4 +73,19 @@ public interface ContractManagementMapper
 
     @Select("SELECT contract_code FROM contract_management  WHERE TO_DAYS(signing_date)=TO_DAYS(#{contractTime}) GROUP BY contract_code ORDER BY signing_date DESC LIMIT 1")
     String selectContractCode(Date contractTime);
+
+    // 查询合同contractManagementId最大值
+    @Select("SELECT MAX(contract_management_id) FROM contract_management")
+    public int selectContractManagementId();
+
+
+    /**
+     * 查询采购合同管理（详情查询）
+     *
+     * @param contractManagementId 采购合同管理主键
+     * @return 采购合同管理
+     */
+    public ContractManagement selectByContractManagementId(@Param("contractManagementId")Long contractManagementId);
+
+
 }

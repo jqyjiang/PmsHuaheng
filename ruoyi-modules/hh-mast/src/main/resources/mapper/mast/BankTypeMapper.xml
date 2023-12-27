@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mast.mapper.BankTypeMapper">
 
-    <resultMap type="BankType" id="BankTypeResult">
+    <resultMap type="com.ruoyi.system.api.domain.BankType" id="BankTypeResult">
         <result property="bankTypeId"    column="bank_type_id"    />
         <result property="bankType"    column="bank_type"    />
     </resultMap>
@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select bank_type_id, bank_type from bank_type
     </sql>
 
-    <select id="selectBankTypeList" parameterType="BankType" resultMap="BankTypeResult">
+    <select id="selectBankTypeList" parameterType="com.ruoyi.system.api.domain.BankType" resultMap="BankTypeResult">
         <include refid="selectBankTypeVo"/>
         <where>
         </where>
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where bank_type_id = #{bankTypeId}
     </select>
 
-    <insert id="insertBankType" parameterType="BankType" useGeneratedKeys="true" keyProperty="bankTypeId">
+    <insert id="insertBankType" parameterType="com.ruoyi.system.api.domain.BankType" useGeneratedKeys="true" keyProperty="bankTypeId">
         insert into bank_type
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="bankType != null">bank_type,</if>
@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBankType" parameterType="BankType">
+    <update id="updateBankType" parameterType="com.ruoyi.system.api.domain.BankType">
         update bank_type
         <trim prefix="SET" suffixOverrides=",">
             <if test="bankType != null">bank_type = #{bankType},</if>

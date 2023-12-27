@@ -99,7 +99,6 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="任务Id" align="center" prop="taskId"/>
     </el-table>
 
     <pagination
@@ -252,7 +251,6 @@ export default {
         this.informationList = response.rows;
         this.total = response.total;
         this.loading = false;
-        // console.info(this.poolList)
       });
     },
     /** 查询采购员列表 */
@@ -404,7 +402,8 @@ export default {
         }).catch(() => {});
       }else {
         this.$message.error('存在已分配或已作废的数据,请修改后重试！');
-        return;
+        this.open=false;
+        // return;
       }
     },
     /** 删除按钮操作 */

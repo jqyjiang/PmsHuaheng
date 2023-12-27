@@ -65,10 +65,10 @@ public class ContractManagementController extends BaseController
      * 获取采购合同管理详细信息
      */
     @RequiresPermissions("procure:management:query")
-    @GetMapping(value = "/{contractManagementId}")
-    public AjaxResult getInfo(@PathVariable("contractManagementId") Long contractManagementId)
+    @GetMapping(value = "/{contractManagementId}/{bothSides}")
+    public AjaxResult getInfo(@PathVariable("contractManagementId") Long contractManagementId,@PathVariable("bothSides") Long bothSides)
     {
-        return success(contractManagementService.selectContractManagementByContractManagementId(contractManagementId));
+        return success(contractManagementService.selectContractManagementByContractManagementId(contractManagementId,bothSides));
     }
 
     /**
@@ -102,5 +102,15 @@ public class ContractManagementController extends BaseController
     public AjaxResult remove(@PathVariable Long[] contractManagementIds)
     {
         return toAjax(contractManagementService.deleteContractManagementByContractManagementIds(contractManagementIds));
+    }
+
+    /**
+     * 获取采购合同管理详细信息
+     */
+    @RequiresPermissions("procure:management:queryInfo")
+    @GetMapping(value = "/{contractManagementId}")
+    public AjaxResult getInfoById(@PathVariable("contractManagementId") Long contractManagementId)
+    {
+        return success(contractManagementService.selectByContractManagementId(contractManagementId));
     }
 }

@@ -7,17 +7,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.hh.pms.mapper.MaterialInformationMapper;
-import com.hh.pms.mapper.MaterialPoolMapper;
-import com.hh.pms.mapper.ProcurementTaskMapper;
+import com.hh.pms.mapper.*;
+import com.hh.pms.model.OrderMaterialClient;
 import com.ruoyi.common.core.utils.StringUtils;
-import com.ruoyi.system.api.domain.MaterialInformation;
-import com.ruoyi.system.api.domain.MaterialPool;
-import com.ruoyi.system.api.domain.MaterialRequirement;
-import com.ruoyi.system.api.domain.ProcurementTask;
+import com.ruoyi.common.core.web.domain.AjaxResult;
+import com.ruoyi.system.api.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hh.pms.mapper.MaterialRequirementMapper;
 import com.hh.pms.service.IMaterialRequirementService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +34,9 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
 
     @Autowired
     private MaterialInformationMapper materialInformationMapper;
+
+    @Autowired
+    private OrderMaterialClient orderMaterialClient;
 
     /**
      * 查询采购需求申请
@@ -106,7 +105,6 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
         for (MaterialInformation materialInformation : materialInformationsList) {
             int miId = materialInformationMapper.selectMaxMiId();
             MaterialInformation materialInformation1 = materialInformationMapper.selectMaterialInformationByMiId(miId);
-            System.out.println("materialInformation1信息------------------:"+materialInformation1);
             ProcurementTask procurementTask = new ProcurementTask();
             procurementTask.setTaskCode(task_code);
             procurementTask.setProcurementStrategy("待转订单,待询价");// 采购策略
@@ -127,7 +125,23 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
             procurementTaskList.add(procurementTask);
         }
          int i2 = materialRequirementMapper.insertProcurementTask(procurementTaskList);
-         return i1;
+        // 添加order_material表信息
+        OrderMaterial orderMaterial=new OrderMaterial();
+        int miId = materialInformationMapper.selectMaxMiId();
+        MaterialInformation materialInformation1 = materialInformationMapper.selectMaterialInformationByMiId(miId);
+        System.out.println("materialInformation信息:"+materialInformation1);
+        orderMaterial.setOrCode(materialInformation1.getMaterialCode());
+        orderMaterial.setOrName(materialInformation1.getMaterialName());
+        orderMaterial.setMaterialCategory(materialInformation1.getMaterialCategory());
+        orderMaterial.setMaterialSpecification(materialInformation1.getMaterialSpecification());
+        orderMaterial.setMaterialModel(materialInformation1.getMaterialModel());
+        orderMaterial.setMaterialUnit(materialInformation1.getMaterialUnit());
+        orderMaterial.setRequireNumber(BigDecimal.valueOf(materialInformation1.getMustNumber()));
+        orderMaterial.setRequireTime(materialInformation1.getMustDate());
+        orderMaterial.setOrderCode(task_code);
+        AjaxResult ajaxResult = orderMaterialClient.insertOrderMaterial(orderMaterial);
+        System.out.println("----------------------------:"+ajaxResult);
+        return i1;
     }
 
     /**
@@ -235,7 +249,7 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
      * 任务单号生成方法
      *
      * @param date 传入当前日期
-     * @return 订单编号
+     * @return 任务单号
      */
     public String createTaskcode(Date date){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

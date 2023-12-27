@@ -42,6 +42,17 @@ public class Products extends BaseEntity
     /** 税率 */
     @Excel(name = "税率")
     private BigDecimal taxRate;
+    /** 数量 */
+    @Excel(name = "数量")
+    private BigDecimal number;
+    /** 小计 */
+    @Excel(name = "小计")
+    private BigDecimal subtotal;
+
+    /** 订单编号 */
+    @Excel(name = "订单编号")
+    private String orderCode;
+
 
     public void setProductId(Long productId)
     {
@@ -107,6 +118,23 @@ public class Products extends BaseEntity
         return taxRate;
     }
 
+    public BigDecimal getNumber()
+    {
+        return number;
+    }
+    public BigDecimal getSubtotal()
+    {
+        return subtotal;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -117,6 +145,9 @@ public class Products extends BaseEntity
                 .append("unit", getUnit())
                 .append("price", getPrice())
                 .append("taxRate", getTaxRate())
+                .append("number", getNumber())
+                .append("subtotal", getSubtotal())
+                .append("orderCode", getOrderCode())
                 .toString();
     }
 }

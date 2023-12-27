@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.ExecutionStatusMapper">
+
+    <resultMap type="com.ruoyi.system.api.domain.ExecutionStatus" id="ExecutionStatusResult">
+        <result property="executionId"    column="execution_id"    />
+        <result property="signatories"    column="signatories"    />
+        <result property="ourEntity"    column="our_entity"    />
+        <result property="supplierB"    column="supplier_b"    />
+        <result property="personB"    column="person_b"    />
+        <result property="phoneB"    column="phone_b"    />
+        <result property="bankB"    column="bank_b"    />
+        <result property="accountOpeningB"    column="account_opening_b"    />
+        <result property="contractAmount"    column="contract_amount"    />
+        <result property="currencyName"    column="currencyName"    />
+        <result property="paidAmount"    column="paid_amount"    />
+        <result property="lockInAmount"    column="lock_in_amount"    />
+        <result property="remainingAmount"    column="remaining_amount"    />
+        <result property="contractManagementId"    column="contract_management_id"    />
+        <result property="bothSides"    column="both_sides"    />
+    </resultMap>
+
+    <sql id="selectExecutionStatusVo">
+        select execution_id, signatories, our_entity, supplier_b, person_b, phone_b, bank_b, account_opening_b, contract_amount, currencyName, paid_amount, lock_in_amount, remaining_amount, contract_management_id,both_sides from execution_status
+    </sql>
+
+    <select id="selectExecutionStatusList" parameterType="com.ruoyi.system.api.domain.ExecutionStatus" resultMap="ExecutionStatusResult">
+        <include refid="selectExecutionStatusVo"/>
+        <where>
+            <if test="signatories != null "> and signatories = #{signatories}</if>
+            <if test="ourEntity != null  and ourEntity != ''"> and our_entity = #{ourEntity}</if>
+            <if test="supplierB != null "> and supplier_b = #{supplierB}</if>
+            <if test="personB != null  and personB != ''"> and person_b = #{personB}</if>
+            <if test="phoneB != null  and phoneB != ''"> and phone_b = #{phoneB}</if>
+            <if test="bankB != null  and bankB != ''"> and bank_b = #{bankB}</if>
+            <if test="accountOpeningB != null  and accountOpeningB != ''"> and account_opening_b = #{accountOpeningB}</if>
+            <if test="contractAmount != null "> and contract_amount = #{contractAmount}</if>
+            <if test="currencyName != null  and currencyName != ''"> and currencyName like concat('%', #{currencyName}, '%')</if>
+            <if test="paidAmount != null "> and paid_amount = #{paidAmount}</if>
+            <if test="lockInAmount != null "> and lock_in_amount = #{lockInAmount}</if>
+            <if test="remainingAmount != null "> and remaining_amount = #{remainingAmount}</if>
+            <if test="contractManagementId != null "> and contract_management_id = #{contractManagementId}</if>
+            <if test="bothSides != null "> and both_sides = #{bothSides}</if>
+        </where>
+    </select>
+
+    <select id="selectExecutionStatusByExecutionId" parameterType="Long" resultMap="ExecutionStatusResult">
+        <include refid="selectExecutionStatusVo"/>
+        where execution_id = #{executionId}
+    </select>
+
+    <insert id="insertExecutionStatus" parameterType="com.ruoyi.system.api.domain.ExecutionStatus">
+        insert into execution_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="executionId != null">execution_id,</if>
+            <if test="signatories != null">signatories,</if>
+            <if test="ourEntity != null">our_entity,</if>
+            <if test="supplierB != null">supplier_b,</if>
+            <if test="personB != null">person_b,</if>
+            <if test="phoneB != null">phone_b,</if>
+            <if test="bankB != null">bank_b,</if>
+            <if test="accountOpeningB != null">account_opening_b,</if>
+            <if test="contractAmount != null">contract_amount,</if>
+            <if test="currencyName != null">currencyName,</if>
+            <if test="paidAmount != null">paid_amount,</if>
+            <if test="lockInAmount != null">lock_in_amount,</if>
+            <if test="remainingAmount != null">remaining_amount,</if>
+            <if test="contractManagementId != null">contract_management_id,</if>
+            <if test="bothSides != null">both_sides,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="executionId != null">#{executionId},</if>
+            <if test="signatories != null">#{signatories},</if>
+            <if test="ourEntity != null">#{ourEntity},</if>
+            <if test="supplierB != null">#{supplierB},</if>
+            <if test="personB != null">#{personB},</if>
+            <if test="phoneB != null">#{phoneB},</if>
+            <if test="bankB != null">#{bankB},</if>
+            <if test="accountOpeningB != null">#{accountOpeningB},</if>
+            <if test="contractAmount != null">#{contractAmount},</if>
+            <if test="currencyName != null">#{currencyName},</if>
+            <if test="paidAmount != null">#{paidAmount},</if>
+            <if test="lockInAmount != null">#{lockInAmount},</if>
+            <if test="remainingAmount != null">#{remainingAmount},</if>
+            <if test="contractManagementId != null">#{contractManagementId},</if>
+            <if test="bothSides != null">#{bothSides},</if>
+        </trim>
+    </insert>
+    <insert id="insertExecutionStatusList" useGeneratedKeys="true"  parameterType="java.util.List">
+        insert into execution_status (signatories,our_entity,supplier_b,person_b,phone_b,bank_b,account_opening_b,contract_amount,currencyName,paid_amount,
+        lock_in_amount,remaining_amount,contract_management_id,both_sides)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.signatories},#{item.ourEntity},#{item.supplierB},#{item.personB},#{item.phoneB},#{item.bankB},#{item.accountOpeningB},#{item.contractAmount},
+            #{item.currencyName},#{item.paidAmount},#{item.lockInAmount},#{item.remainingAmount},#{item.contractManagementId},#{item.bothSides})
+        </foreach>
+    </insert>
+    <update id="updateExecutionStatus" parameterType="com.ruoyi.system.api.domain.ExecutionStatus">
+        update execution_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="signatories != null">signatories = #{signatories},</if>
+            <if test="ourEntity != null">our_entity = #{ourEntity},</if>
+            <if test="supplierB != null">supplier_b = #{supplierB},</if>
+            <if test="personB != null">person_b = #{personB},</if>
+            <if test="phoneB != null">phone_b = #{phoneB},</if>
+            <if test="bankB != null">bank_b = #{bankB},</if>
+            <if test="accountOpeningB != null">account_opening_b = #{accountOpeningB},</if>
+            <if test="contractAmount != null">contract_amount = #{contractAmount},</if>
+            <if test="currencyName != null">currencyName = #{currencyName},</if>
+            <if test="paidAmount != null">paid_amount = #{paidAmount},</if>
+            <if test="lockInAmount != null">lock_in_amount = #{lockInAmount},</if>
+            <if test="remainingAmount != null">remaining_amount = #{remainingAmount},</if>
+            <if test="contractManagementId != null">contract_management_id = #{contractManagementId},</if>
+            <if test="bothSides != null">both_sides = #{bothSides},</if>
+        </trim>
+        where execution_id = #{executionId}
+    </update>
+
+    <delete id="deleteExecutionStatusByExecutionId" parameterType="Long">
+        delete from execution_status where execution_id = #{executionId}
+    </delete>
+
+    <delete id="deleteExecutionStatusByExecutionIds" parameterType="String">
+        delete from execution_status where execution_id in
+        <foreach item="executionId" collection="array" open="(" separator="," close=")">
+            #{executionId}
+        </foreach>
+    </delete>
+</mapper>

@@ -4,16 +4,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.ContractManagementMapper">
 
-    <resultMap type="ContractManagement" id="ContractManagementResult">
+    <resultMap type="com.ruoyi.system.api.domain.ContractManagement" id="ContractManagementResult">
         <result property="contractManagementId"    column="contract_management_id"    />
         <result property="contractName"    column="contract_name"    />
         <result property="contractCode"    column="contract_code"    />
-        <result property="purchasingCode"    column="purchasing_code"    />
         <result property="projectRelatedContracts"    column="project_related_contracts"    />
         <result property="applicant"    column="applicant"    />
         <result property="applicationDate"    column="application_date"    />
-        <result property="departmentId"    column="department_id"    />
-        <result property="companiesId"    column="companies_id"    />
+        <result property="department"    column="department"    />
+        <result property="companies"    column="companies"    />
         <result property="relatedProjects"    column="related_projects"    />
         <result property="isMainContract"    column="is_main_contract"    />
         <result property="relatedMainContract"    column="related_main_contract"    />
@@ -21,7 +20,6 @@
         <result property="costCenter"    column="cost_center"    />
         <result property="head"    column="head"    />
         <result property="signingDate"    column="signing_date"    />
-        <result property="totalAmount"    column="total_amount"    />
         <result property="paymentProportion"    column="payment_proportion"    />
         <result property="contractstatusId"    column="contractstatus_id"    />
         <result property="sdId"    column="sd_id"    />
@@ -36,23 +34,149 @@
         <result property="stampDutyAmount"    column="stamp_duty_amount"    />
         <result property="contractDescription"    column="contract_description"    />
         <result property="purchasingList"    column="purchasing_list"    />
+        <association property="supplierDetails" javaType="com.ruoyi.system.api.domain.SupplierDetails">
+            <result property="sdId"    column="sd_id"    />
+            <result property="sdTime"    column="sd_time"    />
+            <result property="sdCode"    column="sd_code"    />
+            <result property="sbiName"    column="sbi_name"    />
+            <result property="sdUscc"    column="sd_uscc"    />
+            <result property="sbiAbbreviation"    column="sbi_abbreviation"    />
+            <result property="sbiServe"    column="sbi_serve"    />
+            <result property="sdIndustry"    column="sd_industry"    />
+            <result property="sdEn"    column="sd_en"    />
+            <result property="sdRt"    column="sd_rt"    />
+            <result property="sdHead"    column="sd_head"    />
+            <result property="sdHeadPhone"    column="sd_head_phone"    />
+            <result property="sdPcn"    column="sd_pcn"    />
+            <result property="sdPce"    column="sd_pce"    />
+            <result property="sdPcp"    column="sd_pcp"    />
+            <result property="sdPcg"    column="sd_pcg"    />
+            <result property="sdMct"    column="sd_mct"    />
+            <result property="sdCountry"    column="sd_country"    />
+            <result property="sdRegion"    column="sd_region"    />
+            <result property="sdClass"    column="sd_class"    />
+            <result property="num"    column="num"    />
+            <result property="sdWebsite"    column="sd_website"    />
+            <result property="sdBrief"    column="sd_brief"    />
+            <result property="sdLegal"    column="sd_legal"    />
+            <result property="sdRi"    column="sd_ri"    />
+            <result property="sdBr"    column="sd_br"    />
+            <result property="sdRc"    column="sd_rc"    />
+            <result property="sdStatus"    column="sd_status"    />
+            <result property="sdPhone"    column="sd_phone"    />
+            <result property="sdEmail"    column="sd_email"    />
+            <result property="sdFax"    column="sd_fax"    />
+            <result property="sdSave"    column="sd_save"    />
+            <result property="sdCity"    column="sd_city"    />
+            <result property="sdCounty"    column="sd_county"    />
+            <result property="sdSm"    column="sd_sm"    />
+            <result property="sdBank"    column="sd_bank"    />
+            <result property="sdCurrency"    column="sd_currency"    />
+            <result property="sdAccount"    column="sd_account"    />
+            <result property="idCode"    column="id_code"    />
+            <result property="certificateName"    column="certificate_name"    />
+            <result property="filingDate"    column="filing_date"    />
+            <result property="filing"    column="filing"    />
+            <result property="dataTatus"    column="data_tatus"    />
+            <result property="classCode"    column="class_code"    />
+            <result property="classDescribe"    column="class_describe"    />
+            <result property="lifecycleId"    column="lifecycle_id"    />
+            <result property="cycle"    column="cycle"    />
+            <result property="slStatus"    column="sl_status"    />
+            <result property="slAdvance"    column="sl_advance"    />
+            <result property="cycle"    column="cycle"    />
+        </association>
+        <association property="executionStatus" javaType="com.ruoyi.system.api.domain.ExecutionStatus">
+            <result property="executionId"    column="execution_id"    />
+            <result property="signatories"    column="signatories"    />
+            <result property="ourEntity"    column="our_entity"    />
+            <result property="supplierB"    column="supplier_b"    />
+            <result property="personB"    column="person_b"    />
+            <result property="phoneB"    column="phone_b"    />
+            <result property="bankB"    column="bank_b"    />
+            <result property="accountOpeningB"    column="account_opening_b"    />
+            <result property="contractAmount"    column="contract_amount"    />
+            <result property="currencyName"    column="currencyName"    />
+            <result property="paidAmount"    column="paid_amount"    />
+            <result property="lockInAmount"    column="lock_in_amount"    />
+            <result property="remainingAmount"    column="remaining_amount"    />
+            <result property="contractManagementId"    column="contract_management_id"    />
+            <result property="bothSides"    column="both_sides"    />
+        </association>
+        <association property="orderManager" javaType="com.ruoyi.system.api.domain.OrderManager">
+            <result property="orderId" column="order_id"/>
+            <result property="orderCode" column="order_code"/>
+            <result property="company" column="company"/>
+            <result property="orderType" column="order_type"/>
+            <result property="orderSource" column="order_source"/>
+            <result property="purOrganization" column="pur_organization"/>
+            <result property="annex" column="annex"/>
+            <result property="isSelfPickup" column="is_self_pickup"/>
+            <result property="licensePlateNumber" column="license_plate_number"/>
+            <result property="concatInfomation" column="concat_infomation"/>
+            <result property="contractCode" column="contract_code"/>
+            <result property="contractName" column="contract_name"/>
+            <result property="orderDescription" column="order_description"/>
+            <result property="totalDemand" column="total_demand"/>
+            <result property="purchaser" column="purchaser"/>
+            <result property="orderState" column="order_state"/>
+            <result property="orId" column="or_id"/>
+            <result property="currencyId" column="currency_id"/>
+            <result property="supplier" column="supplier"/>
+            <result property="contacts" column="contacts"/>
+            <result property="phone" column="phone"/>
+            <result property="invoiceMethod" column="invoice_method"/>
+            <result property="createTime" column="create_time"/>
+            <result property="materialId" column="material_id"/>
+            <result property="productId" column="product_id"/>
+        </association>
+        <association property="productse" javaType="com.ruoyi.system.api.domain.Products">
+            <result property="productId"    column="product_id"    />
+            <result property="productName"    column="product_name"    />
+            <result property="productCode"    column="product_code"    />
+            <result property="specifications"    column="specifications"    />
+            <result property="unit"    column="unit"    />
+            <result property="price"    column="price"    />
+            <result property="taxRate"    column="tax_rate"    />
+            <result property="number"    column="number"    />
+            <result property="subtotal"    column="subtotal"    />
+            <result property="orderCode"    column="order_code"    />
+        </association>
     </resultMap>
 
     <sql id="selectContractManagementVo">
-        select contract_management_id, contract_name, contract_code, purchasing_code, project_related_contracts, applicant, application_date, department_id, companies_id, related_projects, is_main_contract, related_main_contract, budget_related_contracts, cost_center, head, signing_date, total_amount, payment_proportion, contractstatus_id, sd_id, total_project_budget, project_available_budget, contract_type, dense, begin_time, end_time, contract_price, capitalization, stamp_duty_amount, contract_description, purchasing_list from contract_management
+        select c.contract_management_id, c.contract_name, c.contract_code, project_related_contracts, applicant,
+               application_date, department, companies, related_projects,is_main_contract, related_main_contract,
+               budget_related_contracts, cost_center, head, signing_date,payment_proportion, contractstatus_id,
+               c.sd_id, total_project_budget, project_available_budget, contract_type, dense, begin_time, end_time,
+               contract_price,capitalization, stamp_duty_amount, contract_description, purchasing_list, s.sd_id,sd_time,
+               sd_code,sbi_name,sd_uscc,sbi_abbreviation,sbi_serve,sd_industry,sd_en,sd_rt,sd_head,sd_head_phone,sd_pcn,
+               sd_pce,sd_pcp,sd_pcg,sd_mct,sd_country,sd_region,sd_class,sd_website,sd_brief,sd_legal,sd_ri,sd_br,sd_rc,
+               sd_status,sd_phone,sd_email,sd_fax,sd_save,sd_city,sd_county,sd_sm,sd_bank,sd_currency,sd_account,id_code,
+               certificate_name,filing_date,filing,data_tatus,lifecycle_id,sl_status,sl_advance,execution_id,signatories,
+               our_entity,supplier_b,person_b,phone_b,bank_b,account_opening_b,contract_amount,currencyName,paid_amount,
+               lock_in_amount,remaining_amount,e.contract_management_id,order_id,o.order_code,company,order_type,order_source,
+               pur_organization,annex,is_self_pickup,license_plate_number,concat_infomation,o.contract_code,o.contract_name,
+               order_description,total_demand,purchaser,order_state,or_id,currency_id,supplier,contacts,phone,invoice_method,
+               create_time,material_id,tax_total,p.product_id,o.product_id,product_name,sd_bank,
+               product_code,specifications,unit,price,tax_rate,number,subtotal,both_sides
+        from contract_management c
+                 LEFT JOIN supplier_details s  ON c.sd_id=s.sd_id
+                 LEFT JOIN execution_status e ON c.contract_management_id=e.contract_management_id
+                 LEFT JOIN order_manager o ON c.purchasing_list=o.order_code
+                 LEFT JOIN products p on o.product_id=p.product_id
     </sql>
 
-    <select id="selectContractManagementList" parameterType="ContractManagement" resultMap="ContractManagementResult">
+    <select id="selectContractManagementList" parameterType="com.ruoyi.system.api.domain.ContractManagement" resultMap="ContractManagementResult">
         <include refid="selectContractManagementVo"/>
         <where>
             <if test="contractName != null  and contractName != ''"> and contract_name like concat('%', #{contractName}, '%')</if>
             <if test="contractCode != null  and contractCode != ''"> and contract_code = #{contractCode}</if>
-            <if test="purchasingCode != null  and purchasingCode != ''"> and purchasing_code = #{purchasingCode}</if>
             <if test="projectRelatedContracts != null  and projectRelatedContracts != ''"> and project_related_contracts = #{projectRelatedContracts}</if>
             <if test="applicant != null  and applicant != ''"> and applicant = #{applicant}</if>
             <if test="applicationDate != null "> and application_date = #{applicationDate}</if>
-            <if test="departmentId != null "> and department_id = #{departmentId}</if>
-            <if test="companiesId != null "> and companies_id = #{companiesId}</if>
+            <if test="department != null "> and department = #{department}</if>
+            <if test="companies != null "> and companies = #{companies}</if>
             <if test="relatedProjects != null  and relatedProjects != ''"> and related_projects = #{relatedProjects}</if>
             <if test="isMainContract != null "> and is_main_contract = #{isMainContract}</if>
             <if test="relatedMainContract != null  and relatedMainContract != ''"> and related_main_contract = #{relatedMainContract}</if>
@@ -60,7 +184,6 @@
             <if test="costCenter != null  and costCenter != ''"> and cost_center = #{costCenter}</if>
             <if test="head != null  and head != ''"> and head = #{head}</if>
             <if test="signingDate != null "> and signing_date = #{signingDate}</if>
-            <if test="totalAmount != null "> and total_amount = #{totalAmount}</if>
             <if test="paymentProportion != null "> and payment_proportion = #{paymentProportion}</if>
             <if test="contractstatusId != null "> and contractstatus_id = #{contractstatusId}</if>
             <if test="sdId != null "> and sd_id like concat('%', #{sdId}, '%')</if>
@@ -80,20 +203,19 @@
 
     <select id="selectContractManagementByContractManagementId" parameterType="Long" resultMap="ContractManagementResult">
         <include refid="selectContractManagementVo"/>
-        where contract_management_id = #{contractManagementId}
+        where c.contract_management_id = #{contractManagementId} and both_sides=#{bothSides}
     </select>
 
-    <insert id="insertContractManagement" parameterType="ContractManagement" useGeneratedKeys="true" keyProperty="contractManagementId">
+    <insert id="insertContractManagement" parameterType="com.ruoyi.system.api.domain.ContractManagement" useGeneratedKeys="true" keyProperty="contractManagementId">
         insert into contract_management
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="contractName != null">contract_name,</if>
             <if test="contractCode != null">contract_code,</if>
-            <if test="purchasingCode != null">purchasing_code,</if>
             <if test="projectRelatedContracts != null">project_related_contracts,</if>
             <if test="applicant != null">applicant,</if>
             <if test="applicationDate != null">application_date,</if>
-            <if test="departmentId != null">department_id,</if>
-            <if test="companiesId != null">companies_id,</if>
+            <if test="department != null">department,</if>
+            <if test="companies != null">companies,</if>
             <if test="relatedProjects != null">related_projects,</if>
             <if test="isMainContract != null">is_main_contract,</if>
             <if test="relatedMainContract != null">related_main_contract,</if>
@@ -101,7 +223,6 @@
             <if test="costCenter != null">cost_center,</if>
             <if test="head != null">head,</if>
             <if test="signingDate != null">signing_date,</if>
-            <if test="totalAmount != null">total_amount,</if>
             <if test="paymentProportion != null">payment_proportion,</if>
             <if test="contractstatusId != null">contractstatus_id,</if>
             <if test="sdId != null">sd_id,</if>
@@ -120,12 +241,11 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="contractName != null">#{contractName},</if>
             <if test="contractCode != null">#{contractCode},</if>
-            <if test="purchasingCode != null">#{purchasingCode},</if>
             <if test="projectRelatedContracts != null">#{projectRelatedContracts},</if>
             <if test="applicant != null">#{applicant},</if>
             <if test="applicationDate != null">#{applicationDate},</if>
-            <if test="departmentId != null">#{departmentId},</if>
-            <if test="companiesId != null">#{companiesId},</if>
+            <if test="department != null">#{department},</if>
+            <if test="companies != null">#{companies},</if>
             <if test="relatedProjects != null">#{relatedProjects},</if>
             <if test="isMainContract != null">#{isMainContract},</if>
             <if test="relatedMainContract != null">#{relatedMainContract},</if>
@@ -133,7 +253,6 @@
             <if test="costCenter != null">#{costCenter},</if>
             <if test="head != null">#{head},</if>
             <if test="signingDate != null">#{signingDate},</if>
-            <if test="totalAmount != null">#{totalAmount},</if>
             <if test="paymentProportion != null">#{paymentProportion},</if>
             <if test="contractstatusId != null">#{contractstatusId},</if>
             <if test="sdId != null">#{sdId},</if>
@@ -151,17 +270,16 @@
         </trim>
     </insert>
 
-    <update id="updateContractManagement" parameterType="ContractManagement">
+    <update id="updateContractManagement" parameterType="com.ruoyi.system.api.domain.ContractManagement">
         update contract_management
         <trim prefix="SET" suffixOverrides=",">
             <if test="contractName != null">contract_name = #{contractName},</if>
             <if test="contractCode != null">contract_code = #{contractCode},</if>
-            <if test="purchasingCode != null">purchasing_code = #{purchasingCode},</if>
             <if test="projectRelatedContracts != null">project_related_contracts = #{projectRelatedContracts},</if>
             <if test="applicant != null">applicant = #{applicant},</if>
             <if test="applicationDate != null">application_date = #{applicationDate},</if>
-            <if test="departmentId != null">department_id = #{departmentId},</if>
-            <if test="companiesId != null">companies_id = #{companiesId},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="companies != null">companies = #{companies},</if>
             <if test="relatedProjects != null">related_projects = #{relatedProjects},</if>
             <if test="isMainContract != null">is_main_contract = #{isMainContract},</if>
             <if test="relatedMainContract != null">related_main_contract = #{relatedMainContract},</if>
@@ -169,7 +287,6 @@
             <if test="costCenter != null">cost_center = #{costCenter},</if>
             <if test="head != null">head = #{head},</if>
             <if test="signingDate != null">signing_date = #{signingDate},</if>
-            <if test="totalAmount != null">total_amount = #{totalAmount},</if>
             <if test="paymentProportion != null">payment_proportion = #{paymentProportion},</if>
             <if test="contractstatusId != null">contractstatus_id = #{contractstatusId},</if>
             <if test="sdId != null">sd_id = #{sdId},</if>
@@ -198,4 +315,10 @@
             #{contractManagementId}
         </foreach>
     </delete>
+
+
+    <select id="selectByContractManagementId" parameterType="Long" resultMap="ContractManagementResult">
+        <include refid="selectContractManagementVo"/>
+        where c.contract_management_id = #{contractManagementId}
+    </select>
 </mapper>

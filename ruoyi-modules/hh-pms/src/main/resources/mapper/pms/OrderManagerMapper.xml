@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.OrderManagerMapper">
 
-    <resultMap type="OrderManager" id="OrderManagerResult">
+    <resultMap type="com.ruoyi.system.api.domain.OrderManager" id="OrderManagerResult">
         <id property="orderId" column="order_id"/>
         <result property="orderCode" column="order_code"/>
         <result property="company" column="company"/>
@@ -31,17 +31,21 @@
         <result property="taxTotal" column="tax_total"/>
         <result property="materialId" column="material_id"/>
         <result property="productId" column="product_id"/>
-        <association property="orderTypeRunning" javaType="OrderTypeRunning">
+        <result property="taxTotal" column="tax_total"/>
+        <association property="orderTypeRunning" javaType="com.ruoyi.system.api.domain.OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
         </association>
-        <association property="supplierDetails" javaType="SupplierDetails">
+        <association property="supplierDetails" javaType="com.ruoyi.system.api.domain.SupplierDetails">
             <id property="sdId" column="sd_id"/>
             <result property="sdTime" column="sd_time"/>
             <result property="sdCode" column="sd_code"/>
             <result property="sbiName" column="sbi_name"/>
+            <result property="sdPcn" column="sd_pcn"/>
+            <result property="sdPcp" column="sd_pcp"/>
+            <result property="sdAccount" column="sd_account"/>
         </association>
-        <association property="currency" javaType="Currency">
+        <association property="currency" javaType="com.ruoyi.system.api.domain.Currency">
             <result property="currencyId" column="currency_id"/>
             <result property="currencyCode" column="currency_code"/>
             <result property="currencyName" column="currency_name"/>
@@ -74,7 +78,18 @@
             <result property="dengCode" column="deng_code"/>
             <result property="profile" column="profile"/>
         </association>
-        <collection property="orderMaterialList" ofType="OrderMaterial">
+        <association property="products" javaType="com.ruoyi.system.api.domain.Products">
+            <result property="productId" column="product_id"/>
+            <result property="productName" column="product_name"/>
+            <result property="productCode" column="product_code"/>
+            <result property="specifications" column="specifications"/>
+            <result property="unit" column="unit"/>
+            <result property="price" column="price"/>
+            <result property="taxRate" column="tax_rate"/>
+            <result property="number" column="number"/>
+            <result property="subtotal" column="subtotal"/>
+        </association>
+        <collection property="orderMaterialList" ofType="com.ruoyi.system.api.domain.OrderMaterial">
             <id property="orId" column="or_id"/>
             <result property="orCode" column="or_code"/>
             <result property="orName" column="or_name"/>
@@ -129,13 +144,22 @@
                sd.sbi_name,
                c.companies_name,
                y.currency_name
+        select om.order_id, om.order_code, om.company,  om.order_type,om.order_source,
+               om.pur_organization, om.annex, om.is_self_pickup,om.license_plate_number,om.concat_infomation,
+               om.contract_code,om.contract_name,om.order_description,om.total_demand,om.purchaser,
+               om.order_state, om.or_id,om.currency_id, om.supplier,om.contacts,om.phone,
+               om.invoice_method, om.create_time,om.material_id, om.tax_total,otr.ort_name,
+               sd.sbi_name, c.companies_name, y.currency_name,  om.product_id,product_name,sd_bank,
+               product_code,specifications,unit,price,tax_rate,number,subtotal,sd_pcn,sd_pcp,sd_account,om.tax_total
         from order_manager om
                  left join order_type_running otr on om.order_state = otr.ort_id
                  left join supplier_details sd on sd.sd_id = om.supplier
                  left join companies c on c.companies_id = om.company
                  left join currency y on y.currency_id = om.currency_id
+                 LEFT JOIN products p on om.product_id=p.product_id
     </sql>
-    <select id="selectOrderManagerList" parameterType="OrderManager" resultMap="OrderManagerResult">
+
+    <select id="selectOrderManagerList" parameterType="com.ruoyi.system.api.domain.OrderManager" resultMap="OrderManagerResult">
         select om.order_id,
         om.order_code,
         om.company,
@@ -183,10 +207,12 @@
         <include refid="selectOrderManagerVo"/>
         where order_id = #{orderId}
     </select>
-    <select id="selectByOrderTypeRunning" resultType="OrderManager">
+    <select id="selectByOrderTypeRunning" resultType="com.ruoyi.system.api.domain.OrderManager">
         <include refid="selectOrderManagerVo"/>
         where or_id = #{orId}
     </select>
+    <select id="findRunTypeNumber" resultType="com.ruoyi.system.api.domain.OrderManager" resultMap="OrderManagerResult">
+        select order_id,or_id from order_manager
     <select id="findRunTypeNumber" resultType="OrderManager" resultMap="OrderManagerResult">
         select order_id, or_id, order_state
         from order_manager
@@ -197,7 +223,7 @@
         where order_code = #{orderCode}
     </select>
 
-    <insert id="insertOrderManager" parameterType="OrderManager" useGeneratedKeys="true" keyProperty="orderId">
+    <insert id="insertOrderManager" parameterType="com.ruoyi.system.api.domain.OrderManager" useGeneratedKeys="true" keyProperty="orderId">
         insert into order_manager
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">order_code,</if>
@@ -253,7 +279,7 @@
         </trim>
     </insert>
 
-    <update id="updateOrderManager" parameterType="OrderManager">
+    <update id="updateOrderManager" parameterType="com.ruoyi.system.api.domain.OrderManager">
         update order_manager
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderCode != null">order_code = #{orderCode},</if>
@@ -282,7 +308,7 @@
         </trim>
         where order_id = #{orderId}
     </update>
-    <update id="updateOrderManagerState" parameterType="OrderManager">
+    <update id="updateOrderManagerState" parameterType="com.ruoyi.system.api.domain.OrderManager">
         update order_manager
         <trim prefix="SET" suffixOverrides=",">
             <if test="orderCode != null">order_code = #{orderCode},</if>
@@ -324,4 +350,6 @@
             #{orderId}
         </foreach>
     </delete>
+
+
 </mapper>

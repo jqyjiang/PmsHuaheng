@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.ProductsMapper">
     
-    <resultMap type="Products" id="ProductsResult">
+    <resultMap type="com.ruoyi.system.api.domain.Products" id="ProductsResult">
         <result property="productId"    column="product_id"    />
         <result property="productName"    column="product_name"    />
         <result property="productCode"    column="product_code"    />
@@ -14,13 +14,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="taxRate"    column="tax_rate"    />
         <result property="number"    column="number"    />
         <result property="subtotal"    column="subtotal"    />
+        <result property="orderCode"    column="order_code"    />
     </resultMap>
 
     <sql id="selectProductsVo">
-        select product_id, product_name, product_code, specifications, unit, price, tax_rate,number,subtotal from products
+        select product_id, product_name, product_code, specifications, unit, price, tax_rate,number,
+               subtotal,order_code from products
     </sql>
 
-    <select id="selectProductsList" parameterType="Products" resultMap="ProductsResult">
+    <select id="selectProductsList" parameterType="com.ruoyi.system.api.domain.Products" resultMap="ProductsResult">
         <include refid="selectProductsVo"/>
         <where>  
             <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
@@ -31,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taxRate != null "> and tax_rate = #{taxRate}</if>
             <if test="number != null "> and number = #{number}</if>
             <if test="subtotal != null "> and subtotal = #{subtotal}</if>
+            <if test="orderCode != null "> and orderCode = #{orderCode}</if>
         </where>
     </select>
     
@@ -39,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where product_id = #{productId}
     </select>
         
-    <insert id="insertProducts" parameterType="Products" useGeneratedKeys="true" keyProperty="productId">
+    <insert id="insertProducts" parameterType="com.ruoyi.system.api.domain.Products" useGeneratedKeys="true" keyProperty="productId">
         insert into products
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="productName != null">product_name,</if>
@@ -50,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taxRate != null">tax_rate,</if>
             <if test="number != null">number,</if>
             <if test="subtotal != null">subtotal,</if>
+            <if test="orderCode != null">orderCode,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productName != null">#{productName},</if>
@@ -60,10 +64,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taxRate != null">#{taxRate},</if>
             <if test="number != null">#{number},</if>
             <if test="subtotal != null">#{subtotal},</if>
+            <if test="orderCode != null">#{orderCode},</if>
          </trim>
     </insert>
 
-    <update id="updateProducts" parameterType="Products">
+    <update id="updateProducts" parameterType="com.ruoyi.system.api.domain.Products">
         update products
         <trim prefix="SET" suffixOverrides=",">
             <if test="productName != null">product_name = #{productName},</if>
@@ -74,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taxRate != null">tax_rate = #{taxRate},</if>
             <if test="number != null">number = #{number},</if>
             <if test="subtotal != null">subtotal = #{subtotal},</if>
+            <if test="orderCode != null">order_code = #{orderCode},</if>
         </trim>
         where product_id = #{productId}
     </update>
