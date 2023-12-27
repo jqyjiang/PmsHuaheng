@@ -47,7 +47,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="发货单号" align="center" prop="deliveryNoteNo" />
         <el-table-column label="供应商" align="center" prop="supplier" />
-        <el-table-column label="公司" align="center" prop="materialName" />
+        <el-table-column label="公司" align="center" prop="company" />
         <el-table-column label="物料名称" align="center" prop="materialName" />
         <el-table-column label="发货数量" align="center" prop="deliveryQuantity" />
         <el-table-column label="已发货金额" align="center" prop="deliveredAmount" />
@@ -102,7 +102,7 @@
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="收货单号" align="center" prop="receiptNoteNo" />
         <el-table-column label="发货单号" align="center" prop="deliveryNoteNo" />
-        <el-table-column label="公司" align="center" prop="materialName" />
+        <el-table-column label="公司" align="center" prop="company" />
         <el-table-column label="供应商" align="center" prop="supplier" />
         <el-table-column label="物料信息" align="center" prop="materialName" />
         <el-table-column label="收货总数量" align="center" prop="receiveQuantity" />
@@ -139,7 +139,7 @@
           <el-input v-model="form.receiptCode" placeholder="请输入收货单号" />
         </el-form-item>
         <el-form-item label="收货人" prop="receiptName">
-          <el-input v-model="form.receiptName" placeholder="请输入收货人" />
+          <el-input v-model="form.consignee" placeholder="请输入收货人" />
         </el-form-item>
         <el-form-item label="收货总数量" prop="receiveQuantity">
           <el-input v-model="form.receiveQuantity" placeholder="请输入收货总数量" />
@@ -272,12 +272,12 @@
           </el-table-column>
           <el-table-column label="收货人" prop="receiver" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.receiver" placeholder="请输入收货人" />
+              <el-input v-model="scope.row.consignee" placeholder="请输入收货人" />
             </template>
           </el-table-column>
           <el-table-column label="收货电话" prop="recipientPhone" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.recipientPhone" placeholder="请输入收货电话" />
+              <el-input v-model="scope.row.receivingPhone" placeholder="请输入收货电话" />
             </template>
           </el-table-column>
           <!-- <el-table-column label="库房" prop="warehouse" width="150">
@@ -286,7 +286,7 @@
             </template>
           </el-table-column> -->
           <el-table-column label="供货能力免检" prop="exemptFromSupplyCapacityCheck" width="150">
-            <span v-text="isEdit2"></span>
+            <span v-text="isEdit1"></span>
           </el-table-column>
           <el-table-column label="物料免检" prop="exemptFromMaterialInspection" width="150">
             <span v-text="isEdit2"></span>
@@ -463,6 +463,8 @@ export default {
       getDeliveryInfo(this.receiptList[0].orderCode, this.receiptList[0].deliveryNoteNo).then(response => {
         this.receiptDetailsList.push(response.data);
         this.receiptDetailsList[0].receivedQuantity = this.form.receiveQuantity
+        this.form.consignee=this.receiptDetailsList[0].consignee
+        // this.receiptDetailsList[0].consignee=this.form.consignee
         if (this.receiptDetailsList[0].exemptFromSupplyCapacityCheck === 1) {
           this.isEdit1 = '否'
         } else {

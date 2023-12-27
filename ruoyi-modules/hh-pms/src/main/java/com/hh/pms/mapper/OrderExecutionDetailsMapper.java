@@ -109,4 +109,18 @@ public interface OrderExecutionDetailsMapper
     int updateMaterialState(@Param("orderStatus") Long orderStatus, @Param("materialName")String materialName, @Param("orderCode")String orderCode);
 
     List<OrderExecutionDetails> selectOrderDelivery(String orderLineNo);
+    /**
+     * 根据订单号和收货单号查询
+     * @param orderCode
+     * @param receiptNo
+     * @return
+     */
+    OrderExecutionDetails selectOrderExecutionDetailsByReceiptAndOrderCode(@Param("orderCode") String orderCode, @Param("receiptNo") String receiptNo);
+
+    @Update("update order_execution_details set order_quanlity=#{l} where deliveryNoteNo =#{deliveryNoteNo} and orderCode =#{orderCode} and receiptNoteNo=#{receiptNoteNo}")
+    int updateOrderDetailQualityStatus(@Param("orderCode") String orderCode, @Param("receiptNoteNo")String receiptNoteNo, @Param("deliveryNoteNo")String deliveryNoteNo, @Param("l")long l);
+
+    List<OrderExecutionDetails> selectOrderStockInList(OrderExecutionDetails orderExecutionDetails);
+
+    int updateOrderExecutionDetailsReceiptNoAndOrderCode(OrderExecutionDetails orderExecutionDetails);
 }

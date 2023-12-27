@@ -142,6 +142,17 @@
         <include refid="selectOrderMaterialVo"/>
         where orm.order_code = #{orderCode}
     </select>
+    <select id="selectOrderMaterialByOrNameAndOrderCode" resultType="OrderMaterial" resultMap="OrderMaterialResult">
+        select material_category
+        from order_material
+        where or_name = #{orName}
+          and order_code = #{orderCode} limit 1
+    </select>
+    <select id="findByOrderCodeMaterialReceipt" resultType="com.ruoyi.system.api.domain.OrderMaterial"
+            resultMap="OrderMaterialResult">
+        <include refid="selectOrderMaterialVo"/>
+        where orm.or_name = #{orName} and orm.order_code =#{orderCode}
+    </select>
 
     <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">
         insert into order_material

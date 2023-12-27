@@ -116,4 +116,14 @@ public class OrderMaterialServiceImpl implements IOrderMaterialService
     public List<OrderMaterial> findTaskMaterial(String taskCode) {
         return orderMaterialMapper.findTaskMaterial(taskCode);
     }
+
+    @Override
+    public OrderMaterial selectOrderMaterialByOrNameAndOrderCode(String orName, String orderCode) {
+        return orderMaterialMapper.selectOrderMaterialByOrNameAndOrderCode(orName, orderCode);
+    }
+
+    @Override
+    public OrderMaterial findByOrderCodeMaterialReceipt(String orderCode, String orName) {
+        return orderMaterialMapper.findByOrderCodeMaterialReceipt(orderCode, orName);
+    }
 }

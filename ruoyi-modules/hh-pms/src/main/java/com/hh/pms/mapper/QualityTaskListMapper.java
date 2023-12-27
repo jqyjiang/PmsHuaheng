@@ -2,7 +2,10 @@ package com.hh.pms.mapper;
 
 import java.util.List;
 
+import com.ruoyi.system.api.domain.QualityOrder;
 import com.ruoyi.system.api.domain.QualityTaskList;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 到货质检Mapper接口
@@ -20,6 +23,10 @@ public interface QualityTaskListMapper
      */
     public QualityTaskList selectQualityTaskListByQualityTaskListId(Long qualityTaskListId);
 
+    /**
+     * 查询免检单列表
+     */
+    List<QualityOrder> selectQualityOrdergetExemptList(QualityOrder qualityOrder);
     /**
      * 查询到货质检列表
      * 
@@ -59,4 +66,14 @@ public interface QualityTaskListMapper
      * @return 结果
      */
     public int deleteQualityTaskListByQualityTaskListIds(Long[] qualityTaskListIds);
+
+    @Update("update quality_task_list set quality_status = #{l} where receiptNoteNo =#{receiptNoteNo}")
+    int updateQualityStatus(@Param("l") long l, @Param("receiptNoteNo") String receiptNoteNo);
+
+    /**
+     * 修改免检状态
+     * @param qualityTaskList
+     * @return
+     */
+    int updateQualityTaskExemopt(QualityTaskList qualityTaskList);
 }

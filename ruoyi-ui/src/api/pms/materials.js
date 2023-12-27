@@ -17,6 +17,18 @@ export function getMaterial(orId) {
   })
 }
 
+// 根据物料名称和订单编号查询品类
+export function getCategory(orName,orderCode) {
+  return request({
+    url: '/pms/materials/getCategory',
+    method: 'get',
+    params:{
+      orName,
+      orderCode
+    }
+  })
+}
+
 // 根据任务单号查询订单物料明细详细
 export function findTaskMaterial(taskCode) {
   return request({
@@ -25,10 +37,14 @@ export function findTaskMaterial(taskCode) {
   })
 }
 // 根据来源单号查询订单物料明细详细
-export function findByOrderCodeMaterial(orderCode) {
+export function findByOrderCodeMaterial(orName,orderCode) {
   return request({
-    url: '/pms/materials/findByOrderCodeMaterial/' + orderCode,
-    method: 'get'
+    url: '/pms/materials/findByOrderReceipt',
+    method: 'get',
+    params:{
+      orName,
+      orderCode
+    }
   })
 }
 // 新增订单物料明细

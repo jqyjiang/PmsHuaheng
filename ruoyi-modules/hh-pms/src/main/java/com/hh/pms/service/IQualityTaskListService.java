@@ -2,6 +2,7 @@ package com.hh.pms.service;
 
 import java.util.List;
 
+import com.ruoyi.system.api.domain.QualityOrder;
 import com.ruoyi.system.api.domain.QualityTaskList;
 
 /**
@@ -59,4 +60,16 @@ public interface IQualityTaskListService
      * @return 结果
      */
     public int deleteQualityTaskListByQualityTaskListId(Long qualityTaskListId);
+
+    /**
+     * 查询免检单列表
+     */
+    List<QualityOrder> selectQualityOrdergetExemptList(QualityOrder qualityOrder);
+
+    /**
+     * 修改免检状态
+     * @param qualityTaskList
+     * @return
+     */
+    int updateQualityTaskExemopt(QualityTaskList qualityTaskList);
 }

@@ -1,6 +1,7 @@
 package com.hh.pms.mapper;
 
 import com.ruoyi.system.api.domain.OrderMaterial;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -92,4 +93,20 @@ public interface OrderMaterialMapper
      * @return 结果
      */
     public int deleteOrderMaterialByOrIds(Long[] orIds);
+
+    /**
+     * 根据物料名称和订单编号查询品类
+     * @param orName
+     * @param orderCode
+     * @return
+     */
+    OrderMaterial selectOrderMaterialByOrNameAndOrderCode(@Param("orName") String orName,@Param("orderCode") String orderCode);
+
+    /**
+     * 根据收货单号和订单号查询
+     * @param orderCode
+     * @param orName
+     * @return
+     */
+    OrderMaterial findByOrderCodeMaterialReceipt(@Param("orderCode") String orderCode, @Param("orName") String orName);
 }

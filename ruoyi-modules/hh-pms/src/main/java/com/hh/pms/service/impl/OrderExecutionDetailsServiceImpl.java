@@ -184,6 +184,7 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         String createAccount = SecurityUtils.getUsername();
         orderExecutionDetails.setOrderStatus("4");//执行中状态
         orderExecutionDetails.setOrderHandle(1L);//待收货状态
+
         orderExecutionDetails.setReceiver(createAccount);
         rows = orderExecutionDetailsMapper.insertOrderExecutionDetails(orderExecutionDetails);
 
@@ -224,6 +225,16 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
     @Override
     public int updateReconciliation3(List<Long> ids) {
         return orderExecutionDetailsMapper.updateReconciliation3(ids);
+    }
+
+    @Override
+    public OrderExecutionDetails selectOrderExecutionDetailsByReceiptAndOrderCode(String orderCode, String receiptNo) {
+        return orderExecutionDetailsMapper.selectOrderExecutionDetailsByReceiptAndOrderCode(orderCode, receiptNo);
+    }
+
+    @Override
+    public List<OrderExecutionDetails> selectOrderStockInList(OrderExecutionDetails orderExecutionDetails) {
+        return orderExecutionDetailsMapper.selectOrderStockInList(orderExecutionDetails);
     }
 
 

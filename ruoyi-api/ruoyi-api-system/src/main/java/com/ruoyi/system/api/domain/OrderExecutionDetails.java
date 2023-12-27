@@ -679,4 +679,6 @@ public class OrderExecutionDetails extends BaseEntity {
                 ", orderManager=" + orderManager +
                 '}';
     }
+
+
 }

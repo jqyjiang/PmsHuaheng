@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.api.domain.QualityOrder;
 import com.ruoyi.system.api.domain.QualityTaskList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,17 @@ public class QualityTaskListController extends BaseController
     }
 
     /**
+     * 查询免检单列表
+     */
+    @RequiresPermissions("pms:order:list")
+    @GetMapping("/exemptList")
+    public TableDataInfo getExemptList(QualityOrder qualityOrder)
+    {
+        startPage();
+        List<QualityOrder> list = qualityTaskListService.selectQualityOrdergetExemptList(qualityOrder);
+        return getDataTable(list);
+    }
+    /**
      * 导出到货质检列表
      */
     @RequiresPermissions("pms:orderQuality:export")
@@ -92,6 +104,17 @@ public class QualityTaskListController extends BaseController
     public AjaxResult edit(@RequestBody QualityTaskList qualityTaskList)
     {
         return toAjax(qualityTaskListService.updateQualityTaskList(qualityTaskList));
+    }
+
+    /**
+     * 修改免检状态
+     */
+    @RequiresPermissions("pms:orderQuality:edit")
+    @Log(title = "到货质检", businessType = BusinessType.UPDATE)
+    @PutMapping("exempt")
+    public AjaxResult editExempt(@RequestBody QualityTaskList qualityTaskList)
+    {
+        return toAjax(qualityTaskListService.updateQualityTaskExemopt(qualityTaskList));
     }
 
     /**

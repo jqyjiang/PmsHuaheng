@@ -39,7 +39,7 @@ public class QualityTaskList extends BaseEntity
 
     /** 公司 */
     @Excel(name = "公司")
-    private Long company;
+    private String company;
 
     /** 收货数量 */
     @Excel(name = "收货数量")
@@ -103,16 +103,16 @@ public class QualityTaskList extends BaseEntity
     {
         return orCode;
     }
-    public void setCompany(Long company) 
-    {
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
         this.company = company;
     }
 
-    public Long getCompany() 
-    {
-        return company;
-    }
-    public void setReceiveQuantity(BigDecimal receiveQuantity) 
+    public void setReceiveQuantity(BigDecimal receiveQuantity)
     {
         this.receiveQuantity = receiveQuantity;
     }

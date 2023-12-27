@@ -101,7 +101,7 @@ public class OrderManager extends BaseEntity
     private BigDecimal taxTotal;
 
     @Excel(name = "采购订单创建日期")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 

@@ -91,4 +91,19 @@ public interface IOrderExecutionDetailsService
     public int updateReconciliation2(List<Long> ids);
     /**退回对账*/
     public int updateReconciliation3(List<Long> ids);
+
+    /**
+     * 根据订单号和收货单号查询
+     * @param orderCode
+     * @param receiptNo
+     * @return
+     */
+    OrderExecutionDetails selectOrderExecutionDetailsByReceiptAndOrderCode(String orderCode, String receiptNo);
+
+    /**
+     * 查询待入库的物料信息
+     * @param orderExecutionDetails
+     * @return
+     */
+    List<OrderExecutionDetails> selectOrderStockInList(OrderExecutionDetails orderExecutionDetails);
 }

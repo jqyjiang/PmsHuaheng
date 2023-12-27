@@ -78,36 +78,36 @@ public class OrderReceiptServiceImpl implements IOrderReceiptService {
     public int insertOrderReceipt(OrderReceipt orderReceipt) {
         //生成当前时间
         Date date = new Date();
-        //创建任务质检单
-        QualityTaskList qualityTaskList = new QualityTaskList();
-        BeanUtils.copyProperties(orderReceipt,qualityTaskList);
-        BeanUtils.copyProperties(orderReceipt.getReceiptDetails().get(0),qualityTaskList);
-        qualityTaskList.setReceiveDate(date);
-        qualityTaskList.setConsignee(orderReceipt.getReceiver());
-        BigDecimal receiptQuantity = orderReceipt.getReceiveQuantity();
-        BigDecimal recepitAmountTax = orderReceipt.getRecepitAmountTax();
-
+        BigDecimal receiptQuantity = orderReceipt.getReceiveQuantity();//收货数量
+        BigDecimal recepitAmountTax = orderReceipt.getRecepitAmountTax();//收货总金额
 
         //生成收货单号
         String receiptCode = createOrderCode(date);
         orderReceipt.setReceiptNoteNo(receiptCode);
         orderReceipt.setCreateTime(date);
         int rows = orderReceiptMapper.insertOrderReceipt(orderReceipt);
-
+        //创建任务质检单
+        QualityTaskList qualityTaskList = new QualityTaskList();
+        BeanUtils.copyProperties(orderReceipt,qualityTaskList);
+        BeanUtils.copyProperties(orderReceipt.getReceiptDetails().get(0),qualityTaskList);
+        qualityTaskList.setReceiveDate(date);
+        qualityTaskList.setConsignee(orderReceipt.getConsignee());
+        qualityTaskList.setQualityStatus(1l);
+        qualityTaskListMapper.insertQualityTaskList(qualityTaskList);
         //根据传进来的OrderReceipt对象 包括了订单收货明细对象 订单明细收货对象只需要修改部分数据
         //对这个对象的部分字段进行更改 订单执行状态 质检状态  订单处理状态 收货数量和收货总金额 收货时间
         OrderExecutionDetails orderExecutionDetails = new OrderExecutionDetails();
         orderExecutionDetails.setReceivedDate(date);
         //为收货数量和收货总金额赋值
         List<ReceiptDetails> receiptDetails1 = orderReceipt.getReceiptDetails();
-        orderExecutionDetails.setReceiptNoteNo(orderReceipt.getReceiptNoteNo());//赋值收货单好
+        orderExecutionDetails.setReceiptNoteNo(orderReceipt.getReceiptNoteNo());//赋值收货单号
         orderExecutionDetails.setReceiveQuantity(receiptQuantity);//赋值收货数量
         orderExecutionDetails.setRecepitAmountTax(recepitAmountTax);
         BeanUtils.copyProperties(receiptDetails1.get(0), orderExecutionDetails);
         orderExecutionDetails.setOrderHandle(2l);//已收货
         orderExecutionDetails.setOrderQuanlity(1l);//已收货未质检
         //修改订单执行明细的部分字段
-        orderExecutionDetailsMapper.updateOrderExecutionDetailsandDelivery(orderExecutionDetails);
+        orderExecutionDetailsMapper.updateOrderExecutionDetailsReceiptNoAndOrderCode(orderExecutionDetails);
         //orderExecutionDetails.setOrderStatus("2");//已完成
         // 这里还需判断这个订单管理下的需求数量是否全部发货成功并且已接收 如果已接收那么就把这个订单改为已完成 查询订单号下的执行明细的待发货数量  待发货数量为零 就改为已完成
         // 使用orderCode 查询订单执行明细下面的送货数量相加 或者说是收货数量相加是否等于总需求量  还需要判断 每个物料的需求数量是否已上限 然后再加全部的数量是否等于总需求
@@ -136,8 +136,6 @@ public class OrderReceiptServiceImpl implements IOrderReceiptService {
             }
         }
         // TODO 还需判断是否有退回的数量 暂且不管
-
-
 
         //orderExecutionDetailsMapper.updateOrderExecutionDetails(orderExecutionDetails);
         return rows;

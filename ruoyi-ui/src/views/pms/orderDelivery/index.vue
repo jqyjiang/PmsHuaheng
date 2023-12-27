@@ -41,7 +41,7 @@
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column label="发货单号" align="center" prop="deliveryNoteNo" />
             <el-table-column label="供应商" align="center" prop="supplier" />
-            <el-table-column label="公司" align="center" prop="materialName" />
+            <el-table-column label="公司" align="center" prop="company" />
             <el-table-column label="物料名称" align="center" prop="materialName" />
             <el-table-column label="发货数量" align="center" prop="deliveryQuantity" />
             <el-table-column label="已发货金额" align="center" prop="deliveredAmount" />

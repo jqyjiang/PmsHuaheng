@@ -40,10 +40,16 @@ public class OrderMaterialController extends BaseController
         List<OrderMaterial> list = orderMaterialService.selectOrderMaterialList(orderMaterial);
         return getDataTable(list);
     }
+
     @RequiresPermissions("pms:materials:query")
     @GetMapping(value = "/findTaskMaterial/{taskCode}")
     public AjaxResult findTaskMaterial(@PathVariable("taskCode") String taskCode){
         return success(orderMaterialService.findTaskMaterial(taskCode));
+    }
+    @RequiresPermissions("pms:materials:query")
+    @GetMapping(value = "/findByOrderReceipt")
+    public AjaxResult findByOrderReceipt(@RequestParam("orderCode") String orderCode,@RequestParam("orName")String orName){
+        return success(orderMaterialService.findByOrderCodeMaterialReceipt(orderCode,orName));
     }
     @RequiresPermissions("pms:materials:query")
     @GetMapping(value = "/findByOrderCodeMaterial/{orderCode}")
@@ -71,6 +77,16 @@ public class OrderMaterialController extends BaseController
     public AjaxResult getInfo(@PathVariable("orId") Long orId)
     {
         return success(orderMaterialService.selectOrderMaterialByOrId(orId));
+    }
+
+    /**
+     * 获取订单物料明细详细信息
+     */
+    @RequiresPermissions("pms:materials:query")
+    @GetMapping(value = "/getCategory")
+    public AjaxResult getCategory(String orName,String orderCode)
+    {
+        return success(orderMaterialService.selectOrderMaterialByOrNameAndOrderCode(orName,orderCode));
     }
 
     /**

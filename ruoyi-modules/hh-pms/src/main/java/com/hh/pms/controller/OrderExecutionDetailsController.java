@@ -58,6 +58,19 @@ public class OrderExecutionDetailsController extends BaseController
         return getDataTable(list);
     }
     /**
+     * 查询待入库列表
+     * @param orderExecutionDetails
+     * @return
+     */
+    @RequiresPermissions("pms:orderDetail:list")
+    @GetMapping("/stockInList")
+    public TableDataInfo stockInList(OrderExecutionDetails orderExecutionDetails)
+    {
+        startPage();
+        List<OrderExecutionDetails> list = orderExecutionDetailsService.selectOrderStockInList(orderExecutionDetails);
+        return getDataTable(list);
+    }
+    /**
      * 导出mingxi列表
      */
     @RequiresPermissions("pms:orderDetail:export")
@@ -80,6 +93,15 @@ public class OrderExecutionDetailsController extends BaseController
         return success(orderExecutionDetailsService.selectOrderExecutionDetailsById(id));
     }
 
+    /**
+     * 获取与该订单号和收货单号下的物料信息
+     */
+    @RequiresPermissions("pms:orderDetail:query")
+    @GetMapping(value = "/orderQuanlity")
+    public AjaxResult getInfo(@RequestParam("orderCode") String orderCode,@RequestParam("receiptNo") String receiptNo)
+    {
+        return success(orderExecutionDetailsService.selectOrderExecutionDetailsByReceiptAndOrderCode(orderCode,receiptNo));
+    }
     /**
      * 新增mingxi
      */

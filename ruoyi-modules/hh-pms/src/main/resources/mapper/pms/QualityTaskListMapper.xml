@@ -1,41 +1,63 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.QualityTaskListMapper">
-    
+
     <resultMap type="QualityTaskList" id="QualityTaskListResult">
-        <result property="qualityTaskListId"    column="quality_task_list_id"    />
-        <result property="orderCode"    column="orderCode"    />
-        <result property="receiptNoteNo"    column="receiptNoteNo"    />
-        <result property="orName"    column="or_name"    />
-        <result property="orCode"    column="or_code"    />
-        <result property="company"    column="company"    />
-        <result property="receiveQuantity"    column="receiveQuantity"    />
-        <result property="receiveDate"    column="receive_date"    />
-        <result property="consignee"    column="consignee"    />
-        <result property="qualityStatus"    column="quality_status"    />
+        <result property="qualityTaskListId" column="quality_task_list_id"/>
+        <result property="orderCode" column="orderCode"/>
+        <result property="receiptNoteNo" column="receiptNoteNo"/>
+        <result property="orName" column="or_name"/>
+        <result property="orCode" column="or_code"/>
+        <result property="company" column="company"/>
+        <result property="receiveQuantity" column="receiveQuantity"/>
+        <result property="receiveDate" column="receive_date"/>
+        <result property="consignee" column="consignee"/>
+        <result property="qualityStatus" column="quality_status"/>
     </resultMap>
 
     <sql id="selectQualityTaskListVo">
-        select quality_task_list_id, orderCode, receiptNoteNo, or_name, or_code, company, receiveQuantity, receive_date, consignee, quality_status from quality_task_list
+        select quality_task_list_id,
+               orderCode,
+               receiptNoteNo,
+               or_name,
+               or_code,
+               company,
+               receiveQuantity,
+               receive_date,
+               consignee,
+               quality_status
+        from quality_task_list
     </sql>
 
     <select id="selectQualityTaskListList" parameterType="QualityTaskList" resultMap="QualityTaskListResult">
         <include refid="selectQualityTaskListVo"/>
-        <where>  
-            <if test="receiptNoteNo != null  and receiptNoteNo != ''"> and receiptNoteNo = #{receiptNoteNo}</if>
-            <if test="orName != null  and orName != ''"> and or_name like concat('%', #{orName}, '%')</if>
-            <if test="company != null "> and company = #{company}</if>
+        <where>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            <if test="orName != null  and orName != ''">and or_name like concat('%', #{orName}, '%')</if>
+            <if test="company != null ">and company = #{company}</if>
+            and quality_status = '1'
         </where>
     </select>
-    
+
     <select id="selectQualityTaskListByQualityTaskListId" parameterType="Long" resultMap="QualityTaskListResult">
         <include refid="selectQualityTaskListVo"/>
         where quality_task_list_id = #{qualityTaskListId}
     </select>
-        
-    <insert id="insertQualityTaskList" parameterType="QualityTaskList" useGeneratedKeys="true" keyProperty="qualityTaskListId">
+    <select id="selectQualityOrdergetExemptList" resultType="com.ruoyi.system.api.domain.QualityOrder"
+            resultMap="QualityTaskListResult">
+        <include refid="selectQualityTaskListVo"/>
+        <where>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            <if test="orName != null  and orName != ''">and or_name like concat('%', #{orName}, '%')</if>
+            <if test="company != null ">and company = #{company}</if>
+            and quality_status = '3'
+        </where>
+    </select>
+
+    <insert id="insertQualityTaskList" parameterType="QualityTaskList" useGeneratedKeys="true"
+            keyProperty="qualityTaskListId">
         insert into quality_task_list
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">orderCode,</if>
@@ -47,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receiveDate != null">receive_date,</if>
             <if test="consignee != null">consignee,</if>
             <if test="qualityStatus != null">quality_status,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderCode != null">#{orderCode},</if>
             <if test="receiptNoteNo != null">#{receiptNoteNo},</if>
@@ -58,7 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="receiveDate != null">#{receiveDate},</if>
             <if test="consignee != null">#{consignee},</if>
             <if test="qualityStatus != null">#{qualityStatus},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateQualityTaskList" parameterType="QualityTaskList">
@@ -76,13 +98,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where quality_task_list_id = #{qualityTaskListId}
     </update>
+    <update id="updateQualityTaskExemopt" parameterType="QualityTaskList">
+        update quality_task_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="orName != null">or_name = #{orName},</if>
+            <if test="orCode != null">or_code = #{orCode},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="receiveDate != null">receive_date = #{receiveDate},</if>
+            <if test="consignee != null">consignee = #{consignee},</if>
+            <if test="qualityStatus != null">quality_status = #{qualityStatus},</if>
+        </trim>
+        where quality_task_list_id = #{qualityTaskListId}
+    </update>
 
     <delete id="deleteQualityTaskListByQualityTaskListId" parameterType="Long">
-        delete from quality_task_list where quality_task_list_id = #{qualityTaskListId}
+        delete
+        from quality_task_list
+        where quality_task_list_id = #{qualityTaskListId}
     </delete>
 
     <delete id="deleteQualityTaskListByQualityTaskListIds" parameterType="String">
-        delete from quality_task_list where quality_task_list_id in 
+        delete from quality_task_list where quality_task_list_id in
         <foreach item="qualityTaskListId" collection="array" open="(" separator="," close=")">
             #{qualityTaskListId}
         </foreach>

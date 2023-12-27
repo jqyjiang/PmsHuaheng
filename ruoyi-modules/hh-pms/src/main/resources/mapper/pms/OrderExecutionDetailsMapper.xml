@@ -217,7 +217,7 @@
         <include refid="deliverySQL"/>
         <where>
             <if test="deliveryNoteNo != null  and deliveryNoteNo != ''">and deliveryNoteNo = #{deliveryNoteNo}</if>
-            <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>
+            <!--            <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>-->
             and order_handle = '1'
         </where>
     </select>
@@ -235,7 +235,6 @@
             <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>
             <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
             and order_handle ='2'
-
         </where>
     </select>
     <select id="selectOrderDelivery" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
@@ -428,7 +427,51 @@
         </trim>
         where orderCode = #{orderCode}
     </update>
-
+    <update id="updateOrderExecutionDetailsReceiptNoAndOrderCode" parameterType="OrderExecutionDetails">
+        update order_execution_details
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="orderStatus != null">orderStatus = #{orderStatus},</if>
+            <if test="orderHandle != null">order_handle = #{orderHandle},</if>
+            <if test="orderQuanlity != null">order_quanlity = #{orderQuanlity},</if>
+            <if test="totalDemand != null">totalDemand = #{totalDemand},</if>
+            <if test="deliveryQuantity != null">deliveryQuantity = #{deliveryQuantity},</if>
+            <if test="receivedQuantity != null">receivedQuantity = #{receivedQuantity},</if>
+            <if test="inStockQuantity != null">inStockQuantity = #{inStockQuantity},</if>
+            <if test="taxTotal != null">taxTotal = #{taxTotal},</if>
+            <if test="receivedAmount != null">receivedAmount = #{receivedAmount},</if>
+            <if test="awaitingDeliveryQuantity != null">awaitingDeliveryQuantity = #{awaitingDeliveryQuantity},</if>
+            <if test="awaitingDeliveryAmount != null">awaitingDeliveryAmount = #{awaitingDeliveryAmount},</if>
+            <if test="orderLineNo != null">orderLineNo = #{orderLineNo},</if>
+            <if test="materialCode != null">materialCode = #{materialCode},</if>
+            <if test="materialName != null">materialName = #{materialName},</if>
+            <if test="materialUnit != null">materialUnit = #{materialUnit},</if>
+            <if test="requiredQuantity != null">requiredQuantity = #{requiredQuantity},</if>
+            <if test="requiredDate != null">requiredDate = #{requiredDate},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="deliveryNoteLineNo != null">deliveryNoteLineNo = #{deliveryNoteLineNo},</if>
+            <if test="deliveredQuantity != null">deliveredQuantity = #{deliveredQuantity},</if>
+            <if test="deliveredAmount != null">deliveredAmount = #{deliveredAmount},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="company != null">company=#{company},</if>
+            <if test="deliveryDate != null">deliveryDate = #{deliveryDate},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="receiptNoteLineNo != null">receiptNoteLineNo = #{receiptNoteLineNo},</if>
+            <if test="rejectedQuantity != null">rejectedQuantity = #{rejectedQuantity},</if>
+            <if test="receiveQuantity != null">receiveQuantity = #{receiveQuantity},</if>
+            <if test="recepitAmountTax != null">recepit_amount_tax = #{recepitAmountTax},</if>
+            <if test="receiver != null">receiver = #{receiver},</if>
+            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
+            <if test="stockInNoteNo != null">stockInNoteNo = #{stockInNoteNo},</if>
+            <if test="stockInNoteLineNo != null">stockInNoteLineNo = #{stockInNoteLineNo},</if>
+            <if test="returnedQuantity != null">returnedQuantity = #{returnedQuantity},</if>
+            <if test="stockInQuantity != null">stockInQuantity = #{stockInQuantity},</if>
+            <if test="stockInPerson != null">stockInPerson = #{stockInPerson},</if>
+            <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
+            <if test="reconciliationStatus != null">reconciliationStatus = #{reconciliationStatus},</if>
+        </trim>
+        where orderCode = #{orderCode} and receiptNoteNo = #{receiptNoteNo}
+    </update>
     <delete id="deleteOrderExecutionDetailsById" parameterType="Long">
         delete
         from order_execution_details
@@ -450,8 +493,23 @@
             <if test="supplier != null  and supplier != ''">and supplier = #{supplier}</if>
             <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
             <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
-            <if test="reconciliationStatus != null  and reconciliationStatus != ''">and reconciliation_status = #{reconciliationStatus}</if>
+            <if test="reconciliationStatus != null  and reconciliationStatus != ''">and reconciliation_status =
+                #{reconciliationStatus}
+            </if>
             AND order_quanlity=2
+        </where>
+    </select>
+    <select id="selectOrderExecutionDetailsByReceiptAndOrderCode" resultType="OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        where orderCode = #{orderCode} and receiptNoteNo = #{receiptNo}
+    </select>
+    <select id="selectOrderStockInList" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
+            resultMap="OrderExecutionDetailsResult">
+        <include refid="selectOrderExecutionDetailsVo"/>
+        <where>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
+            and order_quanlity !=''
         </where>
     </select>
 
@@ -511,5 +569,6 @@
             #{id}
         </foreach>
     </update>
+
 </mapper>
 

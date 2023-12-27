@@ -24,6 +24,27 @@ export function listOrderReceipt(query) {
     params: query
   })
 }
+
+// 查询待收货管理列表
+export function stockInList(query) {
+  return request({
+    url: '/pms/orderDetail/stockInList',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询订单执行明细中的数据根据订单编号和收货单号
+export function listOrderQuanlity(orderCode,receiptNo) {
+  return request({
+    url: '/pms/orderDetail/orderQuanlity',
+    method: 'get',
+    params:{
+      orderCode:orderCode,
+      receiptNo:receiptNo
+    }
+  })
+}
 // 查询mingxi详细
 export function getOrderDetail(id) {
   return request({

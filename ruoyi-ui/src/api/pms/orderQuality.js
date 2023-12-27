@@ -9,6 +9,14 @@ export function listOrderQuality(query) {
   })
 }
 
+// 查询到货质检列表
+export function getExemptList(query) {
+  return request({
+    url: '/pms/orderQuality/exemptList',
+    method: 'get',
+    params: query
+  })
+}
 // 查询到货质检详细
 export function getOrderQuality(qualityTaskListId) {
   return request({
@@ -35,6 +43,14 @@ export function updateOrderQuality(data) {
   })
 }
 
+// 修改为免检单
+export function updateExempt(data) {
+  return request({
+    url: '/pms/orderQuality/exempt',
+    method: 'put',
+    data: data
+  })
+}
 // 删除到货质检
 export function delOrderQuality(qualityTaskListId) {
   return request({

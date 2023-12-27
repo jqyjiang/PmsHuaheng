@@ -2,6 +2,7 @@ package com.hh.pms.service;
 
 import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.OrderMaterial;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -82,4 +83,20 @@ public interface IOrderMaterialService
     public int deleteOrderMaterialByOrId(Long orId);
 
     List<OrderMaterial> findTaskMaterial(String taskCode);
+
+    /**
+     * 根据物料名称和订单编号查询品类
+     * @param orName
+     * @param orderCode
+     * @return
+     */
+    OrderMaterial selectOrderMaterialByOrNameAndOrderCode(String orName, String orderCode);
+
+    /**
+     * 根据收货单号和订单号查询
+     * @param orderCode
+     * @param orName
+     * @return
+     */
+    OrderMaterial findByOrderCodeMaterialReceipt( String orderCode,  String orName);
 }

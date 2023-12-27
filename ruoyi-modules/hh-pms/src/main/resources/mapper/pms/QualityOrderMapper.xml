@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.QualityOrderMapper">
+
+    <resultMap type="QualityOrder" id="QualityOrderResult">
+        <result property="qualityId"    column="quality_id"    />
+        <result property="orderCode"    column="orderCode"    />
+        <result property="qualityCode"    column="quality_code"    />
+        <result property="receiptNoteNo"    column="receiptNoteNo"    />
+        <result property="deliveryNoteNo"    column="deliveryNoteNo"    />
+        <result property="founder"    column="founder"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="receivedDate"    column="receivedDate"    />
+        <result property="qualityDate"    column="quality_date"    />
+        <result property="inspectOrderType"    column="inspect_order_type"    />
+        <result property="supplier"    column="supplier"    />
+        <result property="orCode"    column="or_code"    />
+        <result property="orName"    column="or_name"    />
+        <result property="materialUnit"    column="material_unit"    />
+        <result property="materialCategory"    column="material_category"    />
+        <result property="receivedQuantity"    column="received_quantity"    />
+        <result property="inspectionQuantity"    column="inspection_quantity"    />
+        <result property="qualityType"    column="quality_type"    />
+        <result property="inspectType"    column="inspect_type"    />
+        <result property="inspectStartDate"    column="inspect_start_date"    />
+        <result property="inspectEndDate"    column="inspect_end_date"    />
+        <result property="qualifiedNumber"    column="qualified_number"    />
+        <result property="inspectQualifiedNumber"    column="inspect_qualified_number"    />
+        <result property="inspectNonConformingNumber"    column="inspect_non_conforming_number"    />
+        <result property="nonConforming"    column="non_conforming"    />
+        <result property="decectionResultName"    column="decection_result_name"    />
+        <result property="handlingMeasuresName"    column="handling_measures_name"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="inspecter"    column="inspecter"    />
+        <result property="status"    column="status"    />
+        <result property="inventory"    column="inventory"    />
+        <result property="company"    column="company"    />
+    </resultMap>
+
+    <sql id="selectQualityOrderVo">
+        select quality_id, orderCode, quality_code, receiptNoteNo, deliveryNoteNo, founder, create_time, receivedDate, quality_date, inspect_order_type, supplier, or_code, or_name, material_unit, material_category, received_quantity, inspection_quantity, quality_type, inspect_type, inspect_start_date, inspect_end_date, qualified_number, inspect_qualified_number, inspect_non_conforming_number, non_conforming, decection_result_name, handling_measures_name, remarks, inspecter, status, inventory, company from quality_order
+    </sql>
+
+<!--  质检单列表数据查询  -->
+    <select id="selectQualityOrderList" parameterType="QualityOrder" resultMap="QualityOrderResult">
+        <include refid="selectQualityOrderVo"/>
+        <where>
+            <if test="qualityCode != null  and qualityCode != ''"> and quality_code = #{qualityCode}</if>
+            <if test="receiptNoteNo != null  and receiptNoteNo != ''"> and receiptNoteNo = #{receiptNoteNo}</if>
+            <if test="orName != null  and orName != ''"> and or_name like concat('%', #{orName}, '%')</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+
+        </where>
+    </select>
+
+    <select id="selectQualityOrderByQualityId" parameterType="Long" resultMap="QualityOrderResult">
+        <include refid="selectQualityOrderVo"/>
+        where quality_id = #{qualityId}
+    </select>
+
+
+    <insert id="insertQualityOrder" parameterType="QualityOrder" useGeneratedKeys="true" keyProperty="qualityId">
+        insert into quality_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">orderCode,</if>
+            <if test="qualityCode != null">quality_code,</if>
+            <if test="receiptNoteNo != null">receiptNoteNo,</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo,</if>
+            <if test="founder != null">founder,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="receivedDate != null">receivedDate,</if>
+            <if test="qualityDate != null">quality_date,</if>
+            <if test="inspectOrderType != null">inspect_order_type,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="orCode != null">or_code,</if>
+            <if test="orName != null">or_name,</if>
+            <if test="materialUnit != null">material_unit,</if>
+            <if test="materialCategory != null">material_category,</if>
+            <if test="receivedQuantity != null">received_quantity,</if>
+            <if test="inspectionQuantity != null">inspection_quantity,</if>
+            <if test="qualityType != null">quality_type,</if>
+            <if test="inspectType != null">inspect_type,</if>
+            <if test="inspectStartDate != null">inspect_start_date,</if>
+            <if test="inspectEndDate != null">inspect_end_date,</if>
+            <if test="qualifiedNumber != null">qualified_number,</if>
+            <if test="inspectQualifiedNumber != null">inspect_qualified_number,</if>
+            <if test="inspectNonConformingNumber != null">inspect_non_conforming_number,</if>
+            <if test="nonConforming != null">non_conforming,</if>
+            <if test="decectionResultName != null">decection_result_name,</if>
+            <if test="handlingMeasuresName != null">handling_measures_name,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="inspecter != null">inspecter,</if>
+            <if test="status != null">status,</if>
+            <if test="inventory != null">inventory,</if>
+            <if test="company != null">company,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="qualityCode != null">#{qualityCode},</if>
+            <if test="receiptNoteNo != null">#{receiptNoteNo},</if>
+            <if test="deliveryNoteNo != null">#{deliveryNoteNo},</if>
+            <if test="founder != null">#{founder},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="receivedDate != null">#{receivedDate},</if>
+            <if test="qualityDate != null">#{qualityDate},</if>
+            <if test="inspectOrderType != null">#{inspectOrderType},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="orCode != null">#{orCode},</if>
+            <if test="orName != null">#{orName},</if>
+            <if test="materialUnit != null">#{materialUnit},</if>
+            <if test="materialCategory != null">#{materialCategory},</if>
+            <if test="receivedQuantity != null">#{receivedQuantity},</if>
+            <if test="inspectionQuantity != null">#{inspectionQuantity},</if>
+            <if test="qualityType != null">#{qualityType},</if>
+            <if test="inspectType != null">#{inspectType},</if>
+            <if test="inspectStartDate != null">#{inspectStartDate},</if>
+            <if test="inspectEndDate != null">#{inspectEndDate},</if>
+            <if test="qualifiedNumber != null">#{qualifiedNumber},</if>
+            <if test="inspectQualifiedNumber != null">#{inspectQualifiedNumber},</if>
+            <if test="inspectNonConformingNumber != null">#{inspectNonConformingNumber},</if>
+            <if test="nonConforming != null">#{nonConforming},</if>
+            <if test="decectionResultName != null">#{decectionResultName},</if>
+            <if test="handlingMeasuresName != null">#{handlingMeasuresName},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="inspecter != null">#{inspecter},</if>
+            <if test="status != null">#{status},</if>
+            <if test="inventory != null">#{inventory},</if>
+            <if test="company != null">#{company},</if>
+        </trim>
+    </insert>
+
+    <update id="updateQualityOrder" parameterType="QualityOrder">
+        update quality_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderCode != null">orderCode = #{orderCode},</if>
+            <if test="qualityCode != null">quality_code = #{qualityCode},</if>
+            <if test="receiptNoteNo != null">receiptNoteNo = #{receiptNoteNo},</if>
+            <if test="deliveryNoteNo != null">deliveryNoteNo = #{deliveryNoteNo},</if>
+            <if test="founder != null">founder = #{founder},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="receivedDate != null">receivedDate = #{receivedDate},</if>
+            <if test="qualityDate != null">quality_date = #{qualityDate},</if>
+            <if test="inspectOrderType != null">inspect_order_type = #{inspectOrderType},</if>
+            <if test="supplier != null">supplier = #{supplier},</if>
+            <if test="orCode != null">or_code = #{orCode},</if>
+            <if test="orName != null">or_name = #{orName},</if>
+            <if test="materialUnit != null">material_unit = #{materialUnit},</if>
+            <if test="materialCategory != null">material_category = #{materialCategory},</if>
+            <if test="receivedQuantity != null">received_quantity = #{receivedQuantity},</if>
+            <if test="inspectionQuantity != null">inspection_quantity = #{inspectionQuantity},</if>
+            <if test="qualityType != null">quality_type = #{qualityType},</if>
+            <if test="inspectType != null">inspect_type = #{inspectType},</if>
+            <if test="inspectStartDate != null">inspect_start_date = #{inspectStartDate},</if>
+            <if test="inspectEndDate != null">inspect_end_date = #{inspectEndDate},</if>
+            <if test="qualifiedNumber != null">qualified_number = #{qualifiedNumber},</if>
+            <if test="inspectQualifiedNumber != null">inspect_qualified_number = #{inspectQualifiedNumber},</if>
+            <if test="inspectNonConformingNumber != null">inspect_non_conforming_number = #{inspectNonConformingNumber},</if>
+            <if test="nonConforming != null">non_conforming = #{nonConforming},</if>
+            <if test="decectionResultName != null">decection_result_name = #{decectionResultName},</if>
+            <if test="handlingMeasuresName != null">handling_measures_name = #{handlingMeasuresName},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="inspecter != null">inspecter = #{inspecter},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="inventory != null">inventory = #{inventory},</if>
+            <if test="company != null">company = #{company},</if>
+        </trim>
+        where quality_id = #{qualityId}
+    </update>
+
+    <delete id="deleteQualityOrderByQualityId" parameterType="Long">
+        delete from quality_order where quality_id = #{qualityId}
+    </delete>
+
+    <delete id="deleteQualityOrderByQualityIds" parameterType="String">
+        delete from quality_order where quality_id in
+        <foreach item="qualityId" collection="array" open="(" separator="," close=")">
+            #{qualityId}
+        </foreach>
+    </delete>
+</mapper>

@@ -76,6 +76,7 @@ public class OrderReceipt extends BaseEntity {
      * 收货状态
      */
     private Long receiptState;
+    private String consignee;
     private List<ReceiptDetails> receiptDetails;
 
     public List<ReceiptDetails> getReceiptDetails() {
@@ -117,6 +118,14 @@ public class OrderReceipt extends BaseEntity {
 
     public BigDecimal getReceiveQuantity() {
         return receiveQuantity;
+    }
+
+    public String getConsignee() {
+        return consignee;
+    }
+
+    public void setConsignee(String consignee) {
+        this.consignee = consignee;
     }
 
     public void setReceiveQuantity(BigDecimal receiveQuantity) {
