@@ -96,6 +96,6 @@ public interface InboundNoteMapper
      */
     List<InboundMaterial> selectInboundNoteByOrderCode(@Param("orderCode") String orderCode,@Param("orName")String orName);
 
-    @Select("select stockInNoteNo from order_manager where to_days(create_time)= to_days(#{orderTime}) group by stockInNoteNo order by create_time DESC limit 1")
+    @Select("select stockInNoteNo from inbound_note where to_days(create_time)= to_days(#{orderTime}) group by stockInNoteNo order by create_time DESC limit 1")
     String selectOrderCode(@Param("orderTime") Date date);
 }

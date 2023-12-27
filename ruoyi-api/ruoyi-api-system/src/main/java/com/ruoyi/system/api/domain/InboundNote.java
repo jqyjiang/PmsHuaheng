@@ -74,7 +74,7 @@ public class InboundNote extends BaseEntity
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date createdTime;
+    private Date createTime;
 
     /** 更新时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -202,12 +202,12 @@ public class InboundNote extends BaseEntity
     }
     public void setCreatedTime(Date createdTime) 
     {
-        this.createdTime = createdTime;
+        this.createTime = createdTime;
     }
 
     public Date getCreatedTime() 
     {
-        return createdTime;
+        return createTime;
     }
     public void setUpdatedAt(Date updatedAt) 
     {
@@ -245,7 +245,7 @@ public class InboundNote extends BaseEntity
                 ", returnQuantity=" + returnQuantity +
                 ", returnTaxIncludedAmount=" + returnTaxIncludedAmount +
                 ", returnTaxExcludedAmount=" + returnTaxExcludedAmount +
-                ", createdTime=" + createdTime +
+                ", createdTime=" + createTime +
                 ", updatedAt=" + updatedAt +
                 ", inboundMaterialList=" + inboundMaterialList +
                 '}';
