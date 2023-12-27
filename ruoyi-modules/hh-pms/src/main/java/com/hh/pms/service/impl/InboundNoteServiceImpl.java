@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import com.ruoyi.common.core.utils.StringUtils;
 import org.springframework.transaction.annotation.Isolation;
@@ -92,9 +93,10 @@ public class InboundNoteServiceImpl implements IInboundNoteService {
                 .findFirst()
                 .orElse(null);
 
-        if (orderExecutionDetails1 != null) {
+        if (orderExecutionDetails2 != null) {
             // 找到相同的物料
             orderExecutionDetails1.setStockInNoteNo(orderCode);
+            orderExecutionDetails1.setId(orderExecutionDetails2.getId());
             orderExecutionDetails1.setReceiveQuantity(inboundNote.getReturnQuantity());
             orderExecutionDetails1.setStockInDate(DateUtils.getNowDate());
             orderExecutionDetails1.setStockInPerson(inboundNote.getStockInPerson());
@@ -108,22 +110,30 @@ public class InboundNoteServiceImpl implements IInboundNoteService {
             ORDER = orderExecutionDetails2.getOrderCode();
             //获得物料名称
             orName = orderExecutionDetails2.getMaterialName();
-            if (inboundNote.getStockInQuantity().compareTo(requireNumber) == 0) {
-                orderExecutionDetailsMapper.updateMaterialState(2l, orName, ORDER);//修改单条物料执行明细的状态
-            }
+
             // 将 orderExecutionDetails1 对象保存到数据库中  条件是id
             orderExecutionDetailsMapper.updateOrderExecutionDetails(orderExecutionDetails1);
         }
         //计算总入库量 有则计算 无则加勉   计算单条物料的需求量是否等于入库量 如果=那么就将状态改成已完成  如果总入库量=总需求量那么这个订单就改为已完成
+        List<OrderExecutionDetails> orderExecutionDetails3 = orderExecutionDetailsMapper.selectOrderExecutionDetailsListByOrderCode(inboundNote.getInboundMaterialList().get(0).getOrderCode());
         // 计算 orderExecutionDetails 集合中所有物料的入库总量
-        BigDecimal totalStockInQuantity = orderExecutionDetails.stream()
+        BigDecimal totalStockInQuantity = orderExecutionDetails3.stream()
                 .map(OrderExecutionDetails::getStockInQuantity)
+                .filter(Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         if (totalStockInQuantity.compareTo(totalDemand) == 0) {
             //表示已到需求量,将改物料所属订单号下的物料改为已完成
             orderManagerMapper.updateOrIDByOrderCode(7l, orderCode);
         }
-
+        OrderExecutionDetails orderExecutionDetails5 = orderExecutionDetails.stream()
+                .filter(order -> order.getMaterialName().equals(inboundNote.getInboundMaterialList().get(0).getOrName()))
+                .findFirst()
+                .orElse(null);
+        if (orderExecutionDetails5!=null){
+            if (inboundNote.getStockInQuantity().compareTo(requireNumber) == 0) {
+                orderExecutionDetailsMapper.updateMaterialState(2l, orName, ORDER);//修改单条物料执行明细的状态
+            }
+        }
         //insertInboundMaterial(inboundNote);
         return rows;
     }
@@ -211,20 +221,20 @@ public class InboundNoteServiceImpl implements IInboundNoteService {
             num++;
             if (num < 10) {
                 String idNum = String.format("%03d", num);  //num<10,说明是个位数，前面要补两个0
-                String code = "PO" + newBidDate + idNum;
+                String code = "RK" + newBidDate + idNum;
                 return code;
             } else if (num < 100) {
                 String idNum = String.format("%03d", num);//num<100,说明是两位数，前面要补一个0
-                String code = "PO" + newBidDate + idNum;
+                String code = "RK" + newBidDate + idNum;
                 return code;
             } else {
                 String idNum = String.valueOf(num);
-                String code = "PO" + newBidDate + idNum;  //date = 20201111+124
+                String code = "RK" + newBidDate + idNum;  //date = 20201111+124
                 return code;
             }
         } else {
             //如果今天时间不存在
-            String code = "PO" + newBidDate + "001";
+            String code = "RK" + newBidDate + "001";
             return code;
         }
     }
