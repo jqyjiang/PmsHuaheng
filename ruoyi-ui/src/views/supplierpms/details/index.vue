@@ -80,11 +80,10 @@
         <template slot-scope="scope">
           <el-button v-if="scope.row.sdStatus === '0'" size="mini" type="text" @click="authentication(scope.row)"
             icon="el-icon-coordinate" v-hasPermi="['supplierpms:supplier:remove']">企业认证</el-button>
-          <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check" @click="handleUpdate(scope.row)"
-            v-hasPermi="['supplierpms:details:edit']">审核</el-button>
+          <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check"
+            @click="authentication(scope.row)" v-hasPermi="['supplierpms:details:edit']">审核</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
             v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -265,11 +264,24 @@
             <image-upload v-model="form.filing" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="authentications">提交认证</el-button>
+            <el-button type="primary" @click="authentications" v-if="form.sdStatus == '0'">提交认证</el-button>
+            <el-button type="primary" @click="InterviewReview" v-if="form.sdStatus == '1'">审核</el-button>
+
           </el-form-item>
+          <!-- @click="handleUpdate" -->
+
         </el-form>
+
       </div>
+
     </el-drawer>
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+      <!-- <span>这是一段信息</span> -->
+      <el-button type="primary" @click="review(true)">审核通过</el-button>
+      <el-button @click="review(false)">审核不通过</el-button>
+      <span slot="footer" class="dialog-footer">
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -287,6 +299,7 @@ export default {
   dicts: ["service_scope", "registration", 'sys_user_sex'],
   data() {
     return {
+      dialogVisible: false,
       //展示
       drawer: false,
       //隐藏数据
@@ -441,6 +454,10 @@ export default {
         this.loading = false;
       });
     },
+    /**审核按钮 */
+    InterviewReview() {
+      this.dialogVisible = true
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -499,7 +516,8 @@ export default {
       this.getList();
     },
     /** 重置按钮操作 */
-    resetQuery() {ids
+    resetQuery() {
+      ids
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -517,17 +535,16 @@ export default {
     },
     /** 点击审核按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      // const sdId = row.sdId || this.ids;
-      // const ss = 1;
-      this.form = row;
-      this.form.sdStatus = "2";
-      this.form.lifecycleId=1;
+      // this.reset();
 
-      updateDetails(this.form).then((response) => {
-        this.$modal.msgSuccess("审核成功");
-        this.getList();
-      });
+      // this.form = row;
+      // this.form.sdStatus = "2";
+      // this.form.lifecycleId = 1;
+
+      // updateDetails(this.form).then((response) => {
+      //   this.$modal.msgSuccess("审核成功");
+      //   this.getList();
+      // });
     },
     /** 点击企业认证按钮 */
     authentication(row) {
@@ -538,6 +555,30 @@ export default {
       getDetails(sdId).then((response) => {
         this.form = response.data;
       });
+    },
+    /**审核操作 */
+    review(determine) {
+      this.dialogVisible = false;
+      console.log(this.form);
+      this.form.lifecycleId = 1;
+      this.form.slStatus=1;
+      if (determine) {
+        //this.form.evaluationState = 3
+        this.form.sdStatus = "2";
+        updateDetails(this.form).then(response => {
+          this.$modal.msgSuccess("提交成功");
+          this.open = false;
+          this.getList();
+        });
+      } else {
+        // this.form.evaluationState = 4
+        this.form.sdStatus = "3";
+        updateDetails(this.form).then(response => {
+          this.$modal.msgSuccess("提交成功");
+          this.open = false;
+          this.getList();
+        });
+      }
     },
     /** 提交企业认证*/
     authentications() {

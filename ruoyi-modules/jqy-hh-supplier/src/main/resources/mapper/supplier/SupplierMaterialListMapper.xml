@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.SupplierMaterialListMapper">
+
+    <resultMap type="SupplierMaterialList" id="SupplierMaterialListResult">
+        <result property="supplierMaterialId"    column="supplier_material_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="supplyId"    column="supply_id"    />
+        <result property="soiId"    column="soi_id"    />
+        <result property="sampleId"    column="sample_id"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="supplyCapacity"    column="supply_capacity"    />
+        <result property="notes"    column="notes"    />
+        <result property="upload"    column="upload"    />
+    </resultMap>
+
+    <sql id="selectSupplierMaterialListVo">
+        select a.supplier_material_id, a.material_code,b.material_name,a.category_code,c.category_name, a.supply_id,a.soi_id,a.sample_id,a.manufacturer, a.supply_capacity, a.notes, a.upload
+        from supplier_material_list a left join material b on a.material_code= b.material_code left join category c on a.category_code= c.category_code
+    </sql>
+
+    <select id="selectSupplierMaterialListList" parameterType="SupplierMaterialList" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        <where>
+            <if test="materialCode != null  and materialCode != ''"> and material_code = #{materialCode}</if>
+            <if test="categoryCode != null  and categoryCode != ''"> and category_code = #{categoryCode}</if>
+            <if test="supplyId != null "> and supply_id = #{supplyId}</if>
+            <if test="soiId != null "> and soi_id = #{soiId}</if>
+            <if test="supplyId != null "> and supply_id = #{supplyId}</if>
+            <if test="manufacturer != null "> and manufacturer = #{manufacturer}</if>
+            <if test="supplyCapacity != null  and supplyCapacity != ''"> and supply_capacity = #{supplyCapacity}</if>
+            <if test="notes != null  and notes != ''"> and notes = #{notes}</if>
+            <if test="upload != null  and upload != ''"> and upload = #{upload}</if>
+        </where>
+    </select>
+
+    <select id="selectSupplierMaterialListBySupplierMaterialId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where supplier_material_id = #{supplierMaterialId}
+    </select>
+
+    <select id="selectSupplierMaterialListBySupplyId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where supply_id = #{supplyId}
+    </select>
+    <select id="selectSupplierMaterialListBySoiId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where soi_id = #{soiId}
+    </select>
+
+    <select id="selectSupplierMaterialListBysampleId" parameterType="Long" resultMap="SupplierMaterialListResult">
+        <include refid="selectSupplierMaterialListVo"/>
+        where sample_id = #{sampleId}
+    </select>
+    <insert id="insertSupplierMaterialList" parameterType="SupplierMaterialList" useGeneratedKeys="true" keyProperty="supplierMaterialId">
+        insert into supplier_material_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">material_code,</if>
+            <if test="categoryCode != null">category_code,</if>
+            <if test="supplyId != null">supply_id,</if>
+            <if test="soiId != null">soi_id,</if>
+            <if test="sampleId != null">sample_id,</if>
+            <if test="manufacturer != null">manufacturer,</if>
+            <if test="supplyCapacity != null">supply_capacity,</if>
+            <if test="notes != null">notes,</if>
+            <if test="upload != null">upload,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="categoryCode != null">#{categoryCode},</if>
+            <if test="supplyId != null">#{supplyId},</if>
+            <if test="soiId != null">#{soiId},</if>
+            <if test="sampleId != null">#{sampleId},</if>
+            <if test="manufacturer != null">#{manufacturer},</if>
+            <if test="supplyCapacity != null">#{supplyCapacity},</if>
+            <if test="notes != null">#{notes},</if>
+            <if test="upload != null">#{upload},</if>
+        </trim>
+    </insert>
+
+    <update id="updateSupplierMaterialList" parameterType="SupplierMaterialList">
+        update supplier_material_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialCode != null">material_code = #{materialCode},</if>
+            <if test="categoryCode != null">category_code = #{categoryCode},</if>
+            <if test="supplyId != null">supply_id = #{supplyId},</if>
+            <if test="soiId != null">soi_id = #{soiId},</if>
+            <if test="sampleId != null">sample_id = #{sampleId},</if>
+            <if test="manufacturer != null">manufacturer = #{manufacturer},</if>
+            <if test="supplyCapacity != null">supply_capacity = #{supplyCapacity},</if>
+            <if test="notes != null">notes = #{notes},</if>
+            <if test="upload != null">upload = #{upload},</if>
+        </trim>
+        where supplier_material_id = #{supplierMaterialId}
+    </update>
+
+    <delete id="deleteSupplierMaterialListBySupplierMaterialId" parameterType="Long">
+        delete from supplier_material_list where supplier_material_id = #{supplierMaterialId}
+    </delete>
+
+    <delete id="deleteSupplierMaterialListBySupplierMaterialIds" parameterType="String">
+        delete from supplier_material_list where supplier_material_id in
+        <foreach item="supplierMaterialId" collection="array" open="(" separator="," close=")">
+            #{supplierMaterialId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSupplierMaterialListBySupplyIds" parameterType="String">
+        delete from supplier_material_list where supply_id in
+        <foreach item="supplyId" collection="array" open="(" separator="," close=")">
+            #{supplyId}
+        </foreach>
+    </delete>
+</mapper>

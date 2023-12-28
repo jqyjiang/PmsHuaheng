@@ -50,3 +50,12 @@ export function companies() {
     method: 'get',
   })
 }
+
+// 查询物料信息
+export function listMaterial(query) {
+  return request({
+    url: '/pms/OrderManager/listMaterial',
+    method: 'get',
+    params: query
+  })
+}

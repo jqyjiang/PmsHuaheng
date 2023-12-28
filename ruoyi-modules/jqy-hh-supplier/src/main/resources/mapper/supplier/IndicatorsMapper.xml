@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.IndicatorsMapper">
+    
+    <resultMap type="Indicators" id="IndicatorsResult">
+        <result property="indicatorId"    column="indicator_id"    />
+        <result property="indicatorCode"    column="indicator_code"    />
+        <result property="indicatorName"    column="indicator_name"    />
+        <result property="scoringMethod"    column="scoring_method"    />
+        <result property="indicatorType"    column="Indicator_type"    />
+        <result property="scoreFrom"    column="score_from"    />
+        <result property="scoreTo"    column="score_to"    />
+        <result property="benchmarkScore"    column="benchmark_score"    />
+        <result property="rater"    column="rater"    />
+        <result property="scoringCriteria"    column="scoring_criteria"    />
+        <result property="configuration"    column="configuration"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectIndicatorsVo">
+        select indicator_id, indicator_code, indicator_name, scoring_method, Indicator_type, score_from, score_to, benchmark_score, rater, scoring_criteria, configuration, state from indicators
+    </sql>
+
+    <select id="selectIndicatorsList" parameterType="Indicators" resultMap="IndicatorsResult">
+        <include refid="selectIndicatorsVo"/>
+        <where>  
+            <if test="indicatorCode != null  and indicatorCode != ''"> and indicator_code = #{indicatorCode}</if>
+            <if test="indicatorName != null  and indicatorName != ''"> and indicator_name like concat('%', #{indicatorName}, '%')</if>
+            <if test="scoringMethod != null  and scoringMethod != ''"> and scoring_method = #{scoringMethod}</if>
+            <if test="indicatorType != null  and indicatorType != ''"> and Indicator_type = #{indicatorType}</if>
+            <if test="scoreFrom != null  and scoreFrom != ''"> and score_from = #{scoreFrom}</if>
+            <if test="scoreTo != null  and scoreTo != ''"> and score_to = #{scoreTo}</if>
+            <if test="benchmarkScore != null  and benchmarkScore != ''"> and benchmark_score = #{benchmarkScore}</if>
+            <if test="rater != null  and rater != ''"> and rater = #{rater}</if>
+            <if test="scoringCriteria != null  and scoringCriteria != ''"> and scoring_criteria = #{scoringCriteria}</if>
+            <if test="configuration != null  and configuration != ''"> and configuration = #{configuration}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectIndicatorsByIndicatorId" parameterType="Long" resultMap="IndicatorsResult">
+        <include refid="selectIndicatorsVo"/>
+        where indicator_id = #{indicatorId}
+    </select>
+        
+    <insert id="insertIndicators" parameterType="Indicators" useGeneratedKeys="true" keyProperty="indicatorId">
+        insert into indicators
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="indicatorCode != null">indicator_code,</if>
+            <if test="indicatorName != null">indicator_name,</if>
+            <if test="scoringMethod != null">scoring_method,</if>
+            <if test="indicatorType != null">Indicator_type,</if>
+            <if test="scoreFrom != null">score_from,</if>
+            <if test="scoreTo != null">score_to,</if>
+            <if test="benchmarkScore != null">benchmark_score,</if>
+            <if test="rater != null">rater,</if>
+            <if test="scoringCriteria != null">scoring_criteria,</if>
+            <if test="configuration != null">configuration,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="indicatorCode != null">#{indicatorCode},</if>
+            <if test="indicatorName != null">#{indicatorName},</if>
+            <if test="scoringMethod != null">#{scoringMethod},</if>
+            <if test="indicatorType != null">#{indicatorType},</if>
+            <if test="scoreFrom != null">#{scoreFrom},</if>
+            <if test="scoreTo != null">#{scoreTo},</if>
+            <if test="benchmarkScore != null">#{benchmarkScore},</if>
+            <if test="rater != null">#{rater},</if>
+            <if test="scoringCriteria != null">#{scoringCriteria},</if>
+            <if test="configuration != null">#{configuration},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIndicators" parameterType="Indicators">
+        update indicators
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="indicatorCode != null">indicator_code = #{indicatorCode},</if>
+            <if test="indicatorName != null">indicator_name = #{indicatorName},</if>
+            <if test="scoringMethod != null">scoring_method = #{scoringMethod},</if>
+            <if test="indicatorType != null">Indicator_type = #{indicatorType},</if>
+            <if test="scoreFrom != null">score_from = #{scoreFrom},</if>
+            <if test="scoreTo != null">score_to = #{scoreTo},</if>
+            <if test="benchmarkScore != null">benchmark_score = #{benchmarkScore},</if>
+            <if test="rater != null">rater = #{rater},</if>
+            <if test="scoringCriteria != null">scoring_criteria = #{scoringCriteria},</if>
+            <if test="configuration != null">configuration = #{configuration},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where indicator_id = #{indicatorId}
+    </update>
+
+    <delete id="deleteIndicatorsByIndicatorId" parameterType="Long">
+        delete from indicators where indicator_id = #{indicatorId}
+    </delete>
+
+    <delete id="deleteIndicatorsByIndicatorIds" parameterType="String">
+        delete from indicators where indicator_id in 
+        <foreach item="indicatorId" collection="array" open="(" separator="," close=")">
+            #{indicatorId}
+        </foreach>
+    </delete>
+</mapper>

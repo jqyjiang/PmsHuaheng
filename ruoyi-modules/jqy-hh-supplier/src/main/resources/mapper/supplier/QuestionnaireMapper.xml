@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.QuestionnaireMapper">
+
+    <resultMap type="Questionnaire" id="QuestionnaireResult">
+        <result property="questionnaireId" column="questionnaire_id"/>
+        <result property="questionnaireCode" column="questionnaire_code"/>
+        <result property="questionnaireTitle" column="questionnaire_title"/>
+        <result property="questionnaireState" column="questionnaire_state"/>
+        <result property="questionnaireType" column="questionnaire_type"/>
+        <result property="company" column="company"/>
+        <result property="surveyClassification" column="survey_classification"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="supplierContact" column="supplier_contact"/>
+        <result property="supplierSupplierContactInformation" column="supplier_supplier_contact_information"/>
+        <result property="supplierContactEmail" column="supplier_contact_email"/>
+        <result property="surveyResponseTime" column="survey_response_time"/>
+        <result property="surveyDescription" column="survey_description"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <resultMap id="QuestionnaireInformationResult" type="Questionnaire" extends="QuestionnaireResult">
+        <association property="informationList" notNullColumn="sub_enterprise_id"
+                    resultMap="InformationResult"/>
+    </resultMap>
+
+    <resultMap type="Information" id="InformationResult">
+        <result property="enterpriseId" column="sub_enterprise_id"/>
+        <result property="chairman" column="sub_chairman"/>
+        <result property="president" column="sub_president"/>
+        <result property="listed" column="sub_listed"/>
+        <result property="stockCode" column="sub_stock_code"/>
+        <result property="attachment" column="sub_attachment"/>
+        <result property="industryRanking" column="sub_industry_ranking"/>
+        <result property="cooperateWith" column="sub_cooperate_with"/>
+        <result property="numberOfEmployees" column="sub_number_of_employees"/>
+        <result property="administrativeNumber" column="sub_administrative_number"/>
+        <result property="Structure" column="sub_Structure"/>
+        <result property="majorCompetitors" column="sub_major_competitors"/>
+        <result property="businessScope" column="sub_business_scope"/>
+        <result property="questionnaireId" column="sub_questionnaire_id"/>
+    </resultMap>
+
+    <sql id="selectQuestionnaireVo">
+        select questionnaire_id,
+               questionnaire_code,
+               questionnaire_title,
+               questionnaire_state,
+               questionnaire_type,
+               company,
+               survey_classification,
+               supplier_name,
+               supplier_contact,
+               supplier_supplier_contact_information,
+               supplier_contact_email,
+               survey_response_time,
+               survey_description,
+               status
+        from questionnaire
+    </sql>
+
+    <select id="selectQuestionnaireList" parameterType="Questionnaire" resultMap="QuestionnaireResult">
+        <include refid="selectQuestionnaireVo"/>
+        <where>
+            <if test="questionnaireCode != null  and questionnaireCode != ''">and questionnaire_code =
+                #{questionnaireCode}
+            </if>
+            <if test="questionnaireTitle != null  and questionnaireTitle != ''">and questionnaire_title =
+                #{questionnaireTitle}
+            </if>
+            <if test="questionnaireState != null ">and questionnaire_state = #{questionnaireState}</if>
+            <if test="questionnaireType != null ">and questionnaire_type = #{questionnaireType}</if>
+            <if test="company != null  and company != ''">and company = #{company}</if>
+            <if test="surveyClassification != null ">and survey_classification = #{surveyClassification}</if>
+            <if test="supplierName != null  and supplierName != ''">and supplier_name like concat('%', #{supplierName},
+                '%')
+            </if>
+            <if test="supplierContact != null  and supplierContact != ''">and supplier_contact = #{supplierContact}</if>
+            <if test="supplierSupplierContactInformation != null  and supplierSupplierContactInformation != ''">and
+                supplier_supplier_contact_information = #{supplierSupplierContactInformation}
+            </if>
+            <if test="supplierContactEmail != null  and supplierContactEmail != ''">and supplier_contact_email =
+                #{supplierContactEmail}
+            </if>
+            <if test="surveyResponseTime != null ">and survey_response_time = #{surveyResponseTime}</if>
+            <if test="surveyDescription != null  and surveyDescription != ''">and survey_description =
+                #{surveyDescription}
+            </if>
+            <if test="status != null ">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectQuestionnaireByQuestionnaireId" parameterType="Long" resultMap="QuestionnaireInformationResult">
+        select a.questionnaire_id,
+               a.questionnaire_code,
+               a.questionnaire_title,
+               a.questionnaire_state,
+               a.questionnaire_type,
+               a.company,
+               a.survey_classification,
+               a.supplier_name,
+               a.supplier_contact,
+               a.supplier_supplier_contact_information,
+               a.supplier_contact_email,
+               a.survey_response_time,
+               a.survey_description,
+               a.status,
+               b.enterprise_id         as sub_enterprise_id,
+               b.chairman              as sub_chairman,
+               b.president             as sub_president,
+               b.listed                as sub_listed,
+               b.stock_code            as sub_stock_code,
+               b.attachment            as sub_attachment,
+               b.industry_ranking      as sub_industry_ranking,
+               b.cooperate_with        as sub_cooperate_with,
+               b.number_of_employees   as sub_number_of_employees,
+               b.administrative_number as sub_administrative_number,
+               b.Structure             as sub_Structure,
+               b.major_competitors     as sub_major_competitors,
+               b.business_scope        as sub_business_scope,
+               b.questionnaire_id      as sub_questionnaire_id
+        from questionnaire a
+                 left join information b on b.questionnaire_id = a.questionnaire_id
+        where a.questionnaire_id = #{questionnaireId}
+    </select>
+
+    <insert id="insertQuestionnaire" parameterType="Questionnaire" useGeneratedKeys="true"
+            keyProperty="questionnaireId">
+        insert into questionnaire
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="questionnaireCode != null">questionnaire_code,</if>
+            <if test="questionnaireTitle != null">questionnaire_title,</if>
+            <if test="questionnaireState != null">questionnaire_state,</if>
+            <if test="questionnaireType != null">questionnaire_type,</if>
+            <if test="company != null">company,</if>
+            <if test="surveyClassification != null">survey_classification,</if>
+            <if test="supplierName != null">supplier_name,</if>
+            <if test="supplierContact != null">supplier_contact,</if>
+            <if test="supplierSupplierContactInformation != null">supplier_supplier_contact_information,</if>
+            <if test="supplierContactEmail != null">supplier_contact_email,</if>
+            <if test="surveyResponseTime != null">survey_response_time,</if>
+            <if test="surveyDescription != null">survey_description,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="questionnaireCode != null">#{questionnaireCode},</if>
+            <if test="questionnaireTitle != null">#{questionnaireTitle},</if>
+            <if test="questionnaireState != null">#{questionnaireState},</if>
+            <if test="questionnaireType != null">#{questionnaireType},</if>
+            <if test="company != null">#{company},</if>
+            <if test="surveyClassification != null">#{surveyClassification},</if>
+            <if test="supplierName != null">#{supplierName},</if>
+            <if test="supplierContact != null">#{supplierContact},</if>
+            <if test="supplierSupplierContactInformation != null">#{supplierSupplierContactInformation},</if>
+            <if test="supplierContactEmail != null">#{supplierContactEmail},</if>
+            <if test="surveyResponseTime != null">#{surveyResponseTime},</if>
+            <if test="surveyDescription != null">#{surveyDescription},</if>
+            <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+
+    <update id="updateQuestionnaire" parameterType="Questionnaire">
+        update questionnaire
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionnaireCode != null">questionnaire_code = #{questionnaireCode},</if>
+            <if test="questionnaireTitle != null">questionnaire_title = #{questionnaireTitle},</if>
+            <if test="questionnaireState != null">questionnaire_state = #{questionnaireState},</if>
+            <if test="questionnaireType != null">questionnaire_type = #{questionnaireType},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="surveyClassification != null">survey_classification = #{surveyClassification},</if>
+            <if test="supplierName != null">supplier_name = #{supplierName},</if>
+            <if test="supplierContact != null">supplier_contact = #{supplierContact},</if>
+            <if test="supplierSupplierContactInformation != null">supplier_supplier_contact_information =
+                #{supplierSupplierContactInformation},
+            </if>
+            <if test="supplierContactEmail != null">supplier_contact_email = #{supplierContactEmail},</if>
+            <if test="surveyResponseTime != null">survey_response_time = #{surveyResponseTime},</if>
+            <if test="surveyDescription != null">survey_description = #{surveyDescription},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where questionnaire_id = #{questionnaireId}
+    </update>
+
+    <delete id="deleteQuestionnaireByQuestionnaireId" parameterType="Long">
+        delete
+        from questionnaire
+        where questionnaire_id = #{questionnaireId}
+    </delete>
+
+    <delete id="deleteQuestionnaireByQuestionnaireIds" parameterType="String">
+        delete from questionnaire where questionnaire_id in
+        <foreach item="questionnaireId" collection="array" open="(" separator="," close=")">
+            #{questionnaireId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteInformationByQuestionnaireIds" parameterType="String">
+        delete from information where questionnaire_id in
+        <foreach item="questionnaireId" collection="array" open="(" separator="," close=")">
+            #{questionnaireId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteInformationByQuestionnaireId" parameterType="Long">
+        delete
+        from information
+        where questionnaire_id = #{questionnaireId}
+    </delete>
+
+    <insert id="batchInformation" parameterType="Information">
+        insert into information(chairman, president, listed, stock_code, attachment, industry_ranking, cooperate_with,
+                                number_of_employees, administrative_number, Structure, major_competitors,
+                                business_scope, questionnaire_id)
+        values (#{chairman}, #{president}, #{listed}, #{stockCode}, #{attachment}, #{industryRanking}, #{cooperateWith},
+                #{numberOfEmployees}, #{administrativeNumber}, #{Structure}, #{majorCompetitors}, #{businessScope},
+                #{questionnaireId})
+    </insert>
+</mapper>

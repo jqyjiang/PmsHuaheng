@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.SupplierOnSiteInspectionMapper">
+    
+    <resultMap type="SupplierOnSiteInspection" id="SupplierOnSiteInspectionResult">
+        <result property="soiId"    column="soi_id"    />
+        <result property="soiCode"    column="soi_code"    />
+        <result property="soiTitle"    column="soi_title"    />
+        <result property="soiType"    column="soi_type"    />
+        <result property="company"    column="company"    />
+        <result property="inspectionDateFrom"    column="inspection_date_from"    />
+        <result property="inspectionDateTo"    column="inspection_date_to"    />
+        <result property="scoringMethod"    column="scoring_method"    />
+        <result property="sdName"    column="sd_name"    />
+        <result property="supplierContact"    column="supplier_contact"    />
+        <result property="supplierContactPhone"    column="supplier_contact_phone"    />
+        <result property="supplierContactEmail"    column="supplier_contact_email"    />
+        <result property="actualAddress"    column="actual_address"    />
+        <result property="inspectionResults"    column="inspection_results"    />
+        <result property="finalScore"    column="final_score"    />
+        <result property="level"    column="level"    />
+        <result property="comprehensiveOpinions"    column="comprehensive_opinions"    />
+        <result property="applicant"    column="applicant"    />
+        <result property="examine"    column="examine"    />
+    </resultMap>
+
+    <resultMap id="SupplierOnSiteInspectionSupplierMaterialListResult" type="SupplierOnSiteInspection" extends="SupplierOnSiteInspectionResult">
+        <collection property="supplierMaterialListList" notNullColumn="sub_supplier_material_id" javaType="java.util.List" resultMap="SupplierMaterialListResult" />
+    </resultMap>
+
+    <resultMap type="SupplierMaterialList" id="SupplierMaterialListResult">
+        <result property="supplierMaterialId"    column="sub_supplier_material_id"    />
+        <result property="materialCode"    column="sub_material_code"    />
+        <result property="categoryCode"    column="sub_category_code"    />
+        <result property="supplyId"    column="sub_supply_id"    />
+        <result property="soiId"    column="sub_soi_id"    />
+        <result property="manufacturer"    column="sub_manufacturer"    />
+        <result property="supplyCapacity"    column="sub_supply_capacity"    />
+        <result property="notes"    column="sub_notes"    />
+        <result property="upload"    column="sub_upload"    />
+    </resultMap>
+
+    <sql id="selectSupplierOnSiteInspectionVo">
+        select soi_id,soi_code ,soi_title, soi_type, company, inspection_date_from, inspection_date_to, scoring_method, sd_name, supplier_contact, supplier_contact_phone, supplier_contact_email, actual_address, inspection_results, final_score, level, comprehensive_opinions, applicant,examine  from supplier_on_site_inspection
+    </sql>
+
+    <select id="selectSupplierOnSiteInspectionList" parameterType="SupplierOnSiteInspection" resultMap="SupplierOnSiteInspectionResult">
+        <include refid="selectSupplierOnSiteInspectionVo"/>
+        <where>
+            <if test="soiCode != null  and soiCode != ''"> and soi_code = #{soiCode}</if>
+            <if test="soiTitle != null  and soiTitle != ''"> and soi_title = #{soiTitle}</if>
+            <if test="soiType != null "> and soi_type = #{soiType}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="inspectionDateFrom != null "> and inspection_date_from = #{inspectionDateFrom}</if>
+            <if test="inspectionDateTo != null "> and inspection_date_to = #{inspectionDateTo}</if>
+            <if test="scoringMethod != null "> and scoring_method = #{scoringMethod}</if>
+            <if test="sdName != null  and sdName != ''"> and sd_name = #{sdName}</if>
+            <if test="supplierContact != null  and supplierContact != ''"> and supplier_contact = #{supplierContact}</if>
+            <if test="supplierContactPhone != null  and supplierContactPhone != ''"> and supplier_contact_phone = #{supplierContactPhone}</if>
+            <if test="supplierContactEmail != null  and supplierContactEmail != ''"> and supplier_contact_email = #{supplierContactEmail}</if>
+            <if test="actualAddress != null  and actualAddress != ''"> and actual_address = #{actualAddress}</if>
+            <if test="inspectionResults != null "> and inspection_results = #{inspectionResults}</if>
+            <if test="finalScore != null "> and final_score = #{finalScore}</if>
+            <if test="level != null "> and level = #{level}</if>
+            <if test="comprehensiveOpinions != null  and comprehensiveOpinions != ''"> and comprehensive_opinions = #{comprehensiveOpinions}</if>
+            <if test="applicant != null  and applicant != ''"> and applicant = #{applicant}</if>
+            <if test="examine != null "> and examine = #{examine}</if>
+        </where>
+    </select>
+    
+    <select id="selectSupplierOnSiteInspectionBySoiId" parameterType="Long" resultMap="SupplierOnSiteInspectionSupplierMaterialListResult">
+        select a.soi_id,a.soi_code, a.soi_title, a.soi_type, a.company, a.inspection_date_from, a.inspection_date_to, a.scoring_method, a.sd_name, a.supplier_contact, a.supplier_contact_phone, a.supplier_contact_email, a.actual_address, a.inspection_results, a.final_score, a.level, a.comprehensive_opinions, a.applicant,a.examine,
+        b.supplier_material_id as sub_supplier_material_id, b.material_code as sub_material_code, b.category_code as sub_category_code, b.supply_id as sub_supply_id, b.soi_id as sub_soi_id, b.manufacturer as sub_manufacturer, b.supply_capacity as sub_supply_capacity, b.notes as sub_notes, b.upload as sub_upload
+        from supplier_on_site_inspection a
+        left join supplier_material_list b on b.soi_id = a.soi_id
+        where a.soi_id = #{soiId}
+    </select>
+        
+    <insert id="insertSupplierOnSiteInspection" parameterType="SupplierOnSiteInspection" useGeneratedKeys="true" keyProperty="soiId">
+        insert into supplier_on_site_inspection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="soiCode != null">soi_code,</if>
+            <if test="soiTitle != null">soi_title,</if>
+            <if test="soiType != null">soi_type,</if>
+            <if test="company != null">company,</if>
+            <if test="inspectionDateFrom != null">inspection_date_from,</if>
+            <if test="inspectionDateTo != null">inspection_date_to,</if>
+            <if test="scoringMethod != null">scoring_method,</if>
+            <if test="sdName != null">sd_name,</if>
+            <if test="supplierContact != null">supplier_contact,</if>
+            <if test="supplierContactPhone != null">supplier_contact_phone,</if>
+            <if test="supplierContactEmail != null">supplier_contact_email,</if>
+            <if test="actualAddress != null">actual_address,</if>
+            <if test="inspectionResults != null">inspection_results,</if>
+            <if test="finalScore != null">final_score,</if>
+            <if test="level != null">level,</if>
+            <if test="comprehensiveOpinions != null">comprehensive_opinions,</if>
+            <if test="applicant != null">applicant,</if>
+            <if test="examine != null">examine,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="soiCode != null">#{soiCode},</if>
+            <if test="soiTitle != null">#{soiTitle},</if>
+            <if test="soiType != null">#{soiType},</if>
+            <if test="company != null">#{company},</if>
+            <if test="inspectionDateFrom != null">#{inspectionDateFrom},</if>
+            <if test="inspectionDateTo != null">#{inspectionDateTo},</if>
+            <if test="scoringMethod != null">#{scoringMethod},</if>
+            <if test="sdName != null">#{sdName},</if>
+            <if test="supplierContact != null">#{supplierContact},</if>
+            <if test="supplierContactPhone != null">#{supplierContactPhone},</if>
+            <if test="supplierContactEmail != null">#{supplierContactEmail},</if>
+            <if test="actualAddress != null">#{actualAddress},</if>
+            <if test="inspectionResults != null">#{inspectionResults},</if>
+            <if test="finalScore != null">#{finalScore},</if>
+            <if test="level != null">#{level},</if>
+            <if test="comprehensiveOpinions != null">#{comprehensiveOpinions},</if>
+            <if test="applicant != null">#{applicant},</if>
+            <if test="examine != null">#{examine},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupplierOnSiteInspection" parameterType="SupplierOnSiteInspection">
+        update supplier_on_site_inspection
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="soiCode != null">soi_code = #{soiCode},</if>
+            <if test="soiTitle != null">soi_title = #{soiTitle},</if>
+            <if test="soiType != null">soi_type = #{soiType},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="inspectionDateFrom != null">inspection_date_from = #{inspectionDateFrom},</if>
+            <if test="inspectionDateTo != null">inspection_date_to = #{inspectionDateTo},</if>
+            <if test="scoringMethod != null">scoring_method = #{scoringMethod},</if>
+            <if test="sdName != null">sd_name = #{sdName},</if>
+            <if test="supplierContact != null">supplier_contact = #{supplierContact},</if>
+            <if test="supplierContactPhone != null">supplier_contact_phone = #{supplierContactPhone},</if>
+            <if test="supplierContactEmail != null">supplier_contact_email = #{supplierContactEmail},</if>
+            <if test="actualAddress != null">actual_address = #{actualAddress},</if>
+            <if test="inspectionResults != null">inspection_results = #{inspectionResults},</if>
+            <if test="finalScore != null">final_score = #{finalScore},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="comprehensiveOpinions != null">comprehensive_opinions = #{comprehensiveOpinions},</if>
+            <if test="applicant != null">applicant = #{applicant},</if>
+            <if test="examine != null">examine = #{examine},</if>
+        </trim>
+        where soi_id = #{soiId}
+    </update>
+
+    <delete id="deleteSupplierOnSiteInspectionBySoiId" parameterType="Long">
+        delete from supplier_on_site_inspection where soi_id = #{soiId}
+    </delete>
+
+    <delete id="deleteSupplierOnSiteInspectionBySoiIds" parameterType="String">
+        delete from supplier_on_site_inspection where soi_id in 
+        <foreach item="soiId" collection="array" open="(" separator="," close=")">
+            #{soiId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteSupplierMaterialListBySoiIds" parameterType="String">
+        delete from supplier_material_list where soi_id in 
+        <foreach item="soiId" collection="array" open="(" separator="," close=")">
+            #{soiId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSupplierMaterialListBySoiId" parameterType="Long">
+        delete from supplier_material_list where soi_id = #{soiId}
+    </delete>
+
+    <insert id="batchSupplierMaterialList">
+        insert into supplier_material_list( supplier_material_id, material_code, category_code, supply_id, soi_id, manufacturer, supply_capacity, notes, upload) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.supplierMaterialId}, #{item.materialCode}, #{item.categoryCode}, #{item.supplyId}, #{item.soiId}, #{item.manufacturer}, #{item.supplyCapacity}, #{item.notes}, #{item.upload})
+        </foreach>
+    </insert>
+</mapper>

@@ -8,12 +8,7 @@
       </el-form-item>
       <el-form-item label="升降级状态" prop="slStatus">
         <el-select v-model="queryParams.slStatus" placeholder="请选择升降级状态" clearable>
-          <el-option
-            v-for="dict in dict.type.ud_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
+          <el-option v-for="dict in dict.type.ud_status" :key="dict.value" :label="dict.label" :value="dict.value" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -23,14 +18,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <!-- <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['supplierpms:lifecycle:add']">新增</el-button>
-      </el-col> -->
-      <!-- <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-s-check" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['supplierpms:supplier:edit']">审核</el-button>
-      </el-col> -->
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['supplierpms:lifecycle:export']">导出</el-button>
@@ -49,22 +36,41 @@
       <el-table-column label="生命周期" align="center" prop="cycle" />
       <el-table-column label="升降级状态" align="center" prop="slStatus">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.ud_status" :value="scope.row.slStatus"/>
+          <dict-tag :options="dict.type.ud_status" :value="scope.row.slStatus" />
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-top" @click="handleUpdate(scope.row)"
-            v-if="scope.row.slStatus === 1"
-            v-hasPermi="['supplierpms:lifecycle:edit']">升级</el-button>
-          <el-button size="mini" type="text" icon="el-icon-bottom" @click="handleDelete(scope.row)"
-            v-if="scope.row.slStatus === 1"
-            v-hasPermi="['supplierpms:lifecycle:remove']">降级</el-button>
+          <el-button size="mini" type="text" icon="el-icon-top" @click="handTop(scope.row)"
+            v-if="scope.row.slStatus === 1" v-hasPermi="['supplierpms:lifecycle:edit']">升级</el-button>
+          <el-button size="mini" type="text" icon="el-icon-bottom" @click="handDrop(scope.row)"
+            v-if="scope.row.slStatus === 1" v-hasPermi="['supplierpms:lifecycle:remove']">降级</el-button>
           <el-button size="mini" type="text" icon="el-icon-s-check" @click="handleExamine(scope.row)"
-          v-if="scope.row.slStatus === 2"
+            v-if="scope.row.slStatus === 2 || scope.row.slStatus === 3"
             v-hasPermi="['supplierpms:lifecycle:remove']">审核</el-button>
+          <el-dialog title="升降级操作" :visible.sync="dialogFormVisible" width="363px">
+            <el-form :model="form" ref="form">
+              <el-form-item label="升降级供应商" :label-width="'100px'">
+                <el-input v-model="form.sbiName" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="当前阶段" :label-width="'100px'">
+                <el-input v-model="form.cycle" autocomplete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="目标阶段" :label-width="'100px'">
+                <el-select v-model="form.slAdvance" placeholder="请选择目标阶段">
+                  <el-option v-for="dict in lifecycleList" :key="dict.value" :label="dict.cycle"
+                    :value="dict.lifecycleId"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="submitForm">确 定</el-button>
+            </div>
+          </el-dialog>
         </template>
       </el-table-column>
+
     </el-table>
 
     <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
@@ -90,10 +96,10 @@
 
 <script>
 import { listLifecycle, getLifecycle, delLifecycle, addLifecycle, updateLifecycle } from "@/api/supplierpms/lifecycle";
-import {listDetails,getDetails,delDetails,addDetails,updateDetails,lifeStage,updateExamine} from "@/api/supplierpms/details";
+import { listDetails, getDetails, delDetails, addDetails, updateDetails, lifeStage, updateExamine, Supplierlifecycle } from "@/api/supplierpms/details";
 export default {
   name: "Lifecycle",
-  dicts:['ud_status'],
+  dicts: ['ud_status'],
   data() {
     return {
       // 遮罩层
@@ -112,8 +118,11 @@ export default {
       lifecycleList: [],
       // 供应商详细表格数据
       supplierList: [],
+      //供应商修改生命周期弹窗
+      dialogFormVisible: false,
       // 弹出层标题
       title: "",
+      formLabelWidth: '120px',
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -123,7 +132,7 @@ export default {
         cycle: null,
         blacklisted: null,
         lifecycleId: null,
-        slStatus:null,
+        slStatus: null,
       },
       // 表单参数
       form: {},
@@ -146,7 +155,7 @@ export default {
         this.loading = false;
       });
     },
-    getListOption(){
+    getListOption() {
       this.loading = true;
       listLifecycle(this.queryParams).then((response) => {
         this.lifecycleList = response.rows;
@@ -154,6 +163,7 @@ export default {
         this.loading = false;
       });
     },
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -170,13 +180,14 @@ export default {
         lifecycleId: null,
         cycle: null,
         blacklisted: null,
+        slAdvance: null
       };
       this.resetForm("form");
     },
-    
+
     /** 重置按钮操作 */
     resetQuery() {
-      this.queryParams.lifecycleId=null;
+      this.queryParams.lifecycleId = null;
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -192,20 +203,23 @@ export default {
       this.open = true;
       this.title = "添加生命周期维护";
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
+    /** 升级按钮操作 */
+    handTop(row) {
       this.reset();
-      const lifecycleId = row.lifecycleId || this.ids
-      getLifecycle(lifecycleId).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改生命周期维护";
-      });
+      this.form = row;
+      this.form.operate = 1;
+      this.dialogFormVisible = true
+    },
+    /** 降级按钮操作 */
+    handDrop(row) {
+      this.reset();
+      this.form = row;
+      this.form.operate = 2;
+      this.dialogFormVisible = true
     },
     /**审核按钮 */
-    handleExamine(row){
-      console.log(row);
-      updateExamine(row).then(response =>{
+    handleExamine(row) {
+      updateExamine(row).then(response => {
         this.$modal.msgSuccess("修改成功");
         this.open = false;
         this.getList();
@@ -215,17 +229,21 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          let person = this.lifecycleList.find(item => item.lifecycleId === this.form.slAdvance);
+          this.form.priorityLevel = person.priorityLevel
           if (this.form.lifecycleId != null) {
-            updateLifecycle(this.form).then(response => {
+            Supplierlifecycle(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
-              this.open = false;
+              //this.open = false;
               this.getList();
+              this.dialogFormVisible = false
             });
           } else {
             addLifecycle(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
-              this.open = false;
+              //this.open = false;
               this.getList();
+              this.dialogFormVisible = false
             });
           }
         }

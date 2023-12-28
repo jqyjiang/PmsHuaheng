@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.PerformanceAppraisalMapper">
+    
+    <resultMap type="PerformanceAppraisal" id="PerformanceAppraisalResult">
+        <result property="evaluationId"    column="evaluation_id"    />
+        <result property="evaluationCode"    column="evaluation_code"    />
+        <result property="evaluationName"    column="evaluation_name"    />
+        <result property="evaluationState"    column="evaluation_state"    />
+        <result property="evaluationTemplateId"    column="evaluation_template_id"    />
+        <result property="evaluationTemplateCode"    column="evaluation_template_code"    />
+        <result property="evaluationTemplateName"    column="evaluation_template_name"    />
+        <result property="evaluationMethod"    column="evaluation_method"    />
+        <result property="evaluationHead"    column="evaluation_head"    />
+        <result property="branch"    column="branch"    />
+        <result property="contactsDepartment"    column="contacts_department"    />
+        <result property="evaluationCycle"    column="evaluation_cycle"    />
+        <result property="evaluationDateFrom"    column="evaluation_date_from"    />
+        <result property="evaluationDateTo"    column="evaluation_date_to"    />
+        <result property="evaluationDescription"    column="evaluation_description"    />
+        <result property="creationTime"    column="creation_time"    />
+        <result property="assessmentAttachment"    column="assessment_attachment"    />
+
+    </resultMap>
+
+    <resultMap id="PerformanceAppraisalAttendSupplierResult" type="PerformanceAppraisal" extends="PerformanceAppraisalResult">
+        <collection property="attendSupplierList" notNullColumn="su_attend_id" javaType="java.util.List" resultMap="AttendSupplierResult" />
+        <collection property="scoringDetailsList" notNullColumn="sub_scoring_details_id" javaType="java.util.List" resultMap="ScoringDetailsResult" />
+    </resultMap>
+
+    <resultMap type="ScoringDetails" id="ScoringDetailsResult">
+        <result property="scoringDetailsId"    column="sub_scoring_details_id"    />
+        <result property="supplierCode"    column="sub_supplier_code"    />
+        <result property="supplierName"    column="sub_supplier_name"    />
+        <result property="categoryCode"    column="sub_category_code"    />
+        <result property="categoryName"    column="sub_category_name"    />
+        <result property="indicatorDescription"    column="sub_indicator_description"    />
+        <result property="indicatorCode"    column="sub_indicator_code"    />
+        <result property="scoringCriteria"    column="sub_scoring_criteria"    />
+        <result property="weight"    column="sub_weight"    />
+        <result property="scoringMethod"    column="sub_scoring_method"    />
+        <result property="rater"    column="sub_rater"    />
+        <result property="indicatorType"    column="sub_indicator_type"    />
+        <result property="ratingStatus"    column="sub_rating_status"    />
+        <result property="score"    column="sub_score"    />
+        <result property="selectivity"    column="sub_selectivity"    />
+        <result property="scoreFrom"    column="sub_score_from"    />
+        <result property="scoreTo"    column="sub_score_to"    />
+        <result property="feedback"    column="sub_feedback"    />
+        <result property="evaluationId"    column="sub_evaluation_id"    />
+        <result property="scoringTemplateId"    column="sub_scoring_template_id"    />
+    </resultMap>
+
+    <resultMap type="AttendSupplier" id="AttendSupplierResult">
+        <result property="attendId"    column="su_attend_id"    />
+        <result property="supplierCode"    column="su_supplier_code"    />
+        <result property="supplierName"    column="su_supplier_name"    />
+        <result property="categoryCode"    column="su_category_code"    />
+        <result property="categoryName"    column="su_category_name"    />
+        <result property="evaluationId"    column="su_evaluation_id"    />
+        <result property="summaryScore"    column="su_summary_score"    />
+        <result property="score"    column="su_score"    />
+        <result property="grade"    column="su_grade"    />
+        <result property="evaluationRanking"    column="su_evaluation_ranking"    />
+        <result property="strategy"    column="su_strategy"    />
+    </resultMap>
+
+    <sql id="selectPerformanceAppraisalVo">
+        select evaluation_id, evaluation_code, evaluation_name, evaluation_state, evaluation_template_code, evaluation_template_name, evaluation_method, evaluation_head, branch, contacts_department, evaluation_cycle, evaluation_date_from, evaluation_date_to, evaluation_description, creation_time, assessment_attachment from performance_appraisal
+    </sql>
+
+    <select id="selectPerformanceAppraisalList" parameterType="PerformanceAppraisal" resultMap="PerformanceAppraisalResult">
+        <include refid="selectPerformanceAppraisalVo"/>
+        <where>
+            <if test="evaluationCode != null  and evaluationCode != ''"> and evaluation_code = #{evaluationCode}</if>
+            <if test="evaluationName != null  and evaluationName != ''"> and evaluation_name like concat('%', #{evaluationName}, '%')</if>
+            <if test="evaluationState != null "> and evaluation_state = #{evaluationState}</if>
+            <if test="evaluationTemplateId != null  and evaluationTemplateId != ''"> and evaluation_template_id = #{evaluationTemplateId}</if>
+            <if test="evaluationTemplateCode != null  and evaluationTemplateCode != ''"> and evaluation_template_code = #{evaluationTemplateCode}</if>
+            <if test="evaluationTemplateName != null  and evaluationTemplateName != ''"> and evaluation_template_name like concat('%', #{evaluationTemplateName}, '%')</if>
+            <if test="evaluationMethod != null  and evaluationMethod != ''"> and evaluation_method = #{evaluationMethod}</if>
+            <if test="evaluationHead != null  and evaluationHead != ''"> and evaluation_head = #{evaluationHead}</if>
+            <if test="branch != null  and branch != ''"> and branch = #{branch}</if>
+            <if test="contactsDepartment != null  and contactsDepartment != ''"> and contacts_department = #{contactsDepartment}</if>
+            <if test="evaluationCycle != null  and evaluationCycle != ''"> and evaluation_cycle = #{evaluationCycle}</if>
+            <if test="evaluationDateFrom != null "> and evaluation_date_from = #{evaluationDateFrom}</if>
+            <if test="evaluationDateTo != null "> and evaluation_date_to = #{evaluationDateTo}</if>
+            <if test="evaluationDescription != null  and evaluationDescription != ''"> and evaluation_description = #{evaluationDescription}</if>
+            <if test="creationTime != null "> and creation_time = #{creationTime}</if>
+            <if test="assessmentAttachment != null  and assessmentAttachment != ''"> and assessment_attachment = #{assessmentAttachment}</if>
+        </where>
+    </select>
+
+    <select id="selectPerformanceAppraisalByEvaluationId" parameterType="Long" resultMap="PerformanceAppraisalAttendSupplierResult">
+        select a.evaluation_id, a.evaluation_code, a.evaluation_name, a.evaluation_state,a.evaluation_template_id, a.evaluation_template_code, a.evaluation_template_name, a.evaluation_method, a.evaluation_head, a.branch, a.contacts_department, a.evaluation_cycle, a.evaluation_date_from, a.evaluation_date_to, a.evaluation_description, a.creation_time, a.assessment_attachment,
+               b.attend_id as su_attend_id, b.supplier_code as su_supplier_code, b.supplier_name as su_supplier_name, b.category_code as su_category_code, b.category_name as su_category_name, b.evaluation_id as su_evaluation_id, b.summary_score as su_summary_score, b.score as su_score, b.grade as su_grade, b.evaluation_ranking as su_evaluation_ranking, b.strategy as su_strategy,
+            c.scoring_details_id as sub_scoring_details_id, c.supplier_code as sub_supplier_code, c.supplier_name as sub_supplier_name, c.category_code as sub_category_code, c.category_name as sub_category_name, c.indicator_description as sub_indicator_description, c.indicator_code as sub_indicator_code, c.scoring_criteria as sub_scoring_criteria, c.weight as sub_weight, c.scoring_method as sub_scoring_method, c.rater as sub_rater, c.indicator_type as sub_indicator_type, c.rating_status as sub_rating_status, c.score as sub_score, c.selectivity as sub_selectivity, c.score_from as sub_score_from, c.score_to as sub_score_to, c.feedback as sub_feedback, c.scoring_template_id as su_evaluation_id,c.scoring_template_id as sub_scoring_template_id
+        from performance_appraisal a
+        left join attend_supplier b on b.evaluation_id = a.evaluation_id
+        left join scoring_details c on c.evaluation_id = a.evaluation_id
+        where a.evaluation_id = #{evaluationId}
+    </select>
+
+    <insert id="insertPerformanceAppraisal" parameterType="PerformanceAppraisal" useGeneratedKeys="true" keyProperty="evaluationId">
+        insert into performance_appraisal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="evaluationCode != null">evaluation_code,</if>
+            <if test="evaluationName != null">evaluation_name,</if>
+            <if test="evaluationState != null">evaluation_state,</if>
+            <if test="evaluationTemplateId != null">evaluation_template_id,</if>
+            <if test="evaluationTemplateCode != null">evaluation_template_code,</if>
+            <if test="evaluationTemplateName != null">evaluation_template_name,</if>
+            <if test="evaluationMethod != null">evaluation_method,</if>
+            <if test="evaluationHead != null">evaluation_head,</if>
+            <if test="branch != null">branch,</if>
+            <if test="contactsDepartment != null">contacts_department,</if>
+            <if test="evaluationCycle != null">evaluation_cycle,</if>
+            <if test="evaluationDateFrom != null">evaluation_date_from,</if>
+            <if test="evaluationDateTo != null">evaluation_date_to,</if>
+            <if test="evaluationDescription != null">evaluation_description,</if>
+            <if test="creationTime != null">creation_time,</if>
+            <if test="assessmentAttachment != null">assessment_attachment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="evaluationCode != null">#{evaluationCode},</if>
+            <if test="evaluationName != null">#{evaluationName},</if>
+            <if test="evaluationState != null">#{evaluationState},</if>
+            <if test="evaluationTemplateId != null">#{evaluationTemplateId},</if>
+            <if test="evaluationTemplateCode != null">#{evaluationTemplateCode},</if>
+            <if test="evaluationTemplateName != null">#{evaluationTemplateName},</if>
+            <if test="evaluationMethod != null">#{evaluationMethod},</if>
+            <if test="evaluationHead != null">#{evaluationHead},</if>
+            <if test="branch != null">#{branch},</if>
+            <if test="contactsDepartment != null">#{contactsDepartment},</if>
+            <if test="evaluationCycle != null">#{evaluationCycle},</if>
+            <if test="evaluationDateFrom != null">#{evaluationDateFrom},</if>
+            <if test="evaluationDateTo != null">#{evaluationDateTo},</if>
+            <if test="evaluationDescription != null">#{evaluationDescription},</if>
+            <if test="creationTime != null">#{creationTime},</if>
+            <if test="assessmentAttachment != null">#{assessmentAttachment},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePerformanceAppraisal" parameterType="PerformanceAppraisal">
+        update performance_appraisal
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="evaluationCode != null">evaluation_code = #{evaluationCode},</if>
+            <if test="evaluationName != null">evaluation_name = #{evaluationName},</if>
+            <if test="evaluationState != null">evaluation_state = #{evaluationState},</if>
+            <if test="evaluationTemplateId != null">evaluation_template_id = #{evaluationTemplateId},</if>
+            <if test="evaluationTemplateCode != null">evaluation_template_code = #{evaluationTemplateCode},</if>
+            <if test="evaluationTemplateName != null">evaluation_template_name = #{evaluationTemplateName},</if>
+            <if test="evaluationMethod != null">evaluation_method = #{evaluationMethod},</if>
+            <if test="evaluationHead != null">evaluation_head = #{evaluationHead},</if>
+            <if test="branch != null">branch = #{branch},</if>
+            <if test="contactsDepartment != null">contacts_department = #{contactsDepartment},</if>
+            <if test="evaluationCycle != null">evaluation_cycle = #{evaluationCycle},</if>
+            <if test="evaluationDateFrom != null">evaluation_date_from = #{evaluationDateFrom},</if>
+            <if test="evaluationDateTo != null">evaluation_date_to = #{evaluationDateTo},</if>
+            <if test="evaluationDescription != null">evaluation_description = #{evaluationDescription},</if>
+            <if test="creationTime != null">creation_time = #{creationTime},</if>
+            <if test="assessmentAttachment != null">assessment_attachment = #{assessmentAttachment},</if>
+        </trim>
+        where evaluation_id = #{evaluationId}
+    </update>
+
+    <delete id="deletePerformanceAppraisalByEvaluationId" parameterType="Long">
+        delete from performance_appraisal where evaluation_id = #{evaluationId}
+    </delete>
+
+    <delete id="deletePerformanceAppraisalByEvaluationIds" parameterType="String">
+        delete from performance_appraisal where evaluation_id in
+        <foreach item="evaluationId" collection="array" open="(" separator="," close=")">
+            #{evaluationId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAttendSupplierByEvaluationIds" parameterType="String">
+        delete from attend_supplier where evaluation_id in
+        <foreach item="evaluationId" collection="array" open="(" separator="," close=")">
+            #{evaluationId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAttendSupplierByEvaluationId" parameterType="Long">
+        delete from attend_supplier where evaluation_id = #{evaluationId}
+    </delete>
+
+<!--    <insert id="batchAttendSupplier">-->
+<!--        insert into attend_supplier( attend_id, supplier_code, supplier_name, category_code, category_name, evaluation_id) values-->
+<!--		<foreach item="item" index="index" collection="list" separator=",">-->
+<!--            ( #{item.attendId}, #{item.supplierCode}, #{item.supplierName}, #{item.categoryCode}, #{item.categoryName}, #{item.evaluationId})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+    <insert id="batchAttendSupplier">
+        insert into attend_supplier( attend_id, supplier_code, supplier_name, category_code, category_name, evaluation_id, summary_score, score, grade, evaluation_ranking, strategy) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.attendId}, #{item.supplierCode}, #{item.supplierName}, #{item.categoryCode}, #{item.categoryName}, #{item.evaluationId}, #{item.summaryScore}, #{item.score}, #{item.grade}, #{item.evaluationRanking}, #{item.strategy})
+        </foreach>
+    </insert>
+    <delete id="deleteScoringDetailsByEvaluationIds" parameterType="String">
+        delete from scoring_details where evaluation_id in
+        <foreach item="evaluationId" collection="array" open="(" separator="," close=")">
+            #{evaluationId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteScoringDetailsByEvaluationId" parameterType="Long">
+        delete from scoring_details where evaluation_id = #{evaluationId}
+    </delete>
+
+    <insert id="batchScoringDetails">
+        insert into scoring_details( supplier_code, supplier_name, category_code, category_name, indicator_description, indicator_code, scoring_criteria, weight, scoring_method, rater, indicator_type, rating_status, score, selectivity, score_from, score_to, feedback, evaluation_id,scoring_template_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.supplierCode}, #{item.supplierName}, #{item.categoryCode}, #{item.categoryName}, #{item.indicatorDescription}, #{item.indicatorCode}, #{item.scoringCriteria}, #{item.weight}, #{item.scoringMethod}, #{item.rater}, #{item.indicatorType}, #{item.ratingStatus}, #{item.score}, #{item.selectivity}, #{item.scoreFrom}, #{item.scoreTo}, #{item.feedback}, #{item.evaluationId} , #{item.scoringTemplateId})
+        </foreach>
+    </insert>
+
+</mapper>

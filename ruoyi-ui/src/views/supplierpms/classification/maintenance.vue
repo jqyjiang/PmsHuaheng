@@ -212,7 +212,7 @@ export default {
         /** 分类定义列表 */
         getList1() {
             this.loading = true;
-            lifeStage(this.queryParams).then(response => {
+            listFilter(this.queryParams).then(response => {
                 this.classificationList = response.rows;
                 this.total = response.total;
                 this.loading = false;

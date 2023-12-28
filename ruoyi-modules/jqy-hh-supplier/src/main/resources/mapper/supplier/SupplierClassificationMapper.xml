@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.SupplierClassificationMapper">
+    
+    <resultMap type="SupplierClassification" id="SupplierClassificationResult">
+        <result property="classId"    column="class_id"    />
+        <result property="classCode"    column="class_code"    />
+        <result property="classDescribe"    column="class_describe"    />
+    </resultMap>
+
+    <sql id="selectSupplierClassificationVo">
+        select class_id, class_code, class_describe from supplier_classification
+    </sql>
+
+    <select id="selectSupplierClassificationList" parameterType="SupplierClassification" resultMap="SupplierClassificationResult">
+        <include refid="selectSupplierClassificationVo"/>
+        <where>  
+            <if test="classCode != null  and classCode != ''"> and class_code = #{classCode}</if>
+            <if test="classDescribe != null  and classDescribe != ''"> and class_describe = #{classDescribe}</if>
+        </where>
+    </select>
+    
+    <select id="selectSupplierClassificationByClassId" parameterType="Long" resultMap="SupplierClassificationResult">
+        <include refid="selectSupplierClassificationVo"/>
+        where class_id = #{classId}
+    </select>
+        
+    <insert id="insertSupplierClassification" parameterType="SupplierClassification">
+        insert into supplier_classification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="classId != null">class_id,</if>
+            <if test="classCode != null and classCode != ''">class_code,</if>
+            <if test="classDescribe != null and classDescribe != ''">class_describe,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="classId != null">#{classId},</if>
+            <if test="classCode != null and classCode != ''">#{classCode},</if>
+            <if test="classDescribe != null and classDescribe != ''">#{classDescribe},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupplierClassification" parameterType="SupplierClassification">
+        update supplier_classification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classCode != null and classCode != ''">class_code = #{classCode},</if>
+            <if test="classDescribe != null and classDescribe != ''">class_describe = #{classDescribe},</if>
+        </trim>
+        where class_id = #{classId}
+    </update>
+
+    <delete id="deleteSupplierClassificationByClassId" parameterType="Long">
+        delete from supplier_classification where class_id = #{classId}
+    </delete>
+
+    <delete id="deleteSupplierClassificationByClassIds" parameterType="String">
+        delete from supplier_classification where class_id in 
+        <foreach item="classId" collection="array" open="(" separator="," close=")">
+            #{classId}
+        </foreach>
+    </delete>
+</mapper>

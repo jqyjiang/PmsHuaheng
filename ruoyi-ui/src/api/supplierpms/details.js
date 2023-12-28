@@ -56,6 +56,16 @@ export function updateDetails(data) {
     data: data
   })
 }
+
+// 修改供应商
+export function Supplierlifecycle(data) {
+  return request({
+    url: '/supplierpms/details/updatelifecycle',
+    method: 'put',
+    data: data
+  })
+}
+
 // 审核供应商周期
 export function updateExamine(data){
   return request({

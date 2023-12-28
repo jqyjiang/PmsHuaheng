@@ -98,9 +98,9 @@
           </el-input>
         </el-form-item>
         <el-form-item label="供应商名称" prop="sbiName">
-          <el-input v-model="form.sbiName" placeholder="请输入供应商名称" >
-            <template v-slot:suffix>
-              <el-popover  placement="right" width="340" trigger="click">
+          <el-input v-model="form.sbiName" placeholder="请输入供应商名称">
+             <template v-slot:suffix>
+             <el-popover placement="right" width="340" trigger="click">
                 <el-table :data="supplyCanList" @row-click="hanSupplierClickfrom">
                   <el-table-column width="156" property="sdCode" label="供应商编号"></el-table-column>
                   <el-table-column width="156" property="sbiName" label="供应商名称"></el-table-column>
@@ -135,23 +135,53 @@
         <el-divider content-position="center">供应商物料信息</el-divider>
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddSupplierMaterialList">添加</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="mini"
+              @click="handleAddSupplierMaterialList">添加</el-button>
           </el-col>
           <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteSupplierMaterialList">删除</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini"
+              @click="handleDeleteSupplierMaterialList">删除</el-button>
           </el-col>
         </el-row>
-        <el-table :data="supplierMaterialList" :row-class-name="rowSupplierMaterialListIndex" @selection-change="handleSupplierMaterialListSelectionChange" ref="supplierMaterialList">
+        <el-table :data="supplierMaterialList" :row-class-name="rowSupplierMaterialListIndex"
+          @selection-change="handleSupplierMaterialListSelectionChange" ref="supplierMaterialList"
+          @row-click="handleSupplierMaterialListe">
           <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
+          <el-table-column label="序号" align="center" prop="index" width="50" />
           <el-table-column label="物料编码" prop="materialCode" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.materialCode" placeholder="请输入物料编码" />
+              <i class="el-icon-search" id="serachOne" @click="showMaterial()"></i>
+              <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
+                <!-- 这里是物料管理的内容 -->
+                <el-table v-loading="loading" :data="materialList" @row-click="handleRowClickMaterial">
+                  <el-table-column type="selection" width="55" align="center" />
+                  <el-table-column label="物料编码" align="center" prop="materialCode" />
+                  <el-table-column label="物料名称" align="center" prop="materialName" />
+                  <el-table-column label="品类编码" align="center" prop="categoryCode" />
+                  <el-table-column label="物料品类" align="center" prop="categoryName" />
+                </el-table>
+                <pagination v-show="mtotal > 0" :total="mtotal" :page.sync="ququeryParams.pageNum"
+                  :limit.sync="ququeryParams.pageSize" @pagination="getList3" />
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogMaterial = false">取消</el-button>
+                </div>
+              </el-dialog>
             </template>
           </el-table-column>
           <el-table-column label="物料名称" prop="materialName" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.materialName" placeholder="请输入物料名称" />
+            </template>
+          </el-table-column>
+          <el-table-column label="品类编码" prop="categoryCode" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.categoryCode" placeholder="品类编码" />
+            </template>
+          </el-table-column>
+          <el-table-column label="品类名称" prop="categoryName" width="150">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.categoryName" placeholder="请输入品类名称" />
             </template>
           </el-table-column>
           <el-table-column label="生产厂家" prop="manufacturer" width="150">
@@ -185,7 +215,7 @@
 </template>
 
 <script>
-import { listSupply, getSupply, delSupply, addSupply, updateSupply, companies } from "@/api/supplierpms/supply";
+import { listSupply, getSupply, delSupply, addSupply, updateSupply, companies, listMaterial } from "@/api/supplierpms/supply";
 import { canSupplier } from "@/api/supplierpms/details";
 export default {
   name: "Supply",
@@ -206,13 +236,15 @@ export default {
       // 供货管理表格数据
       supplyList: [],
       // 能新增的供应商数据、
-      supplyCanList:[],
+      supplyCanList: [],
       // 供应商物料表格数据
       supplierMaterialList: [],
       // 供应商物料表选中数据
       checkedSupplierMaterialList: [],
       //公司数据
       companiesList: [],
+
+      deliveryIndex: null,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -232,6 +264,14 @@ export default {
         createdByEpartment: null,
         sbiName: null
       },
+      // 物料基本信息
+      materialList: [],
+      mtotal: 0,
+      ququeryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        companiesName: null,
+      },
       // 表单参数
       form: {},
       // 表单校验
@@ -242,15 +282,14 @@ export default {
         sbiName: [
           { required: true, message: "供应商不能为空", trigger: "blur" }
         ],
-        companiesName: [
-          { required: true, message: "公司不能为空", trigger: "blur" }
-        ],
-      }
+      },
+      dialogMaterial: false, // 用于标记物料信息是否可见
     };
   },
   created() {
     this.getList();
     this.getCompanies();
+    this.getList3();
   },
   methods: {
     /**查询公司和供应商数据 */
@@ -270,6 +309,19 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+    },
+    /** 查询物料维护列表 */
+    getList3() {
+      this.loading = true;
+      listMaterial(this.ququeryParams).then(response => {
+        this.materialList = response.rows;
+        this.mtotal = response.total;
+        this.loading = false;
+      });
+    },
+    showMaterial() {
+      this.dialogMaterial = true;
+      //this.getList3()
     },
     // 取消按钮
     cancel() {
@@ -324,6 +376,7 @@ export default {
       this.reset();
       const supplyId = row.supplyId || this.ids
       getSupply(supplyId).then(response => {
+        console.log(response.data.supplierMaterialList);
         this.supplierMaterialList = response.data.supplierMaterialList;
         this.form = response.data;
         this.open = true;
@@ -363,7 +416,7 @@ export default {
       this.form.companiesName = row.companiesName;
     },
     //**新增供应商搜索按钮 */
-    hanSupplierClickfrom(row){
+    hanSupplierClickfrom(row) {
       //console.log(row);
       this.form.sdId = row.sdId;
       this.form.sbiName = row.sbiName;
@@ -392,12 +445,14 @@ export default {
     handleAddSupplierMaterialList() {
       let obj = {};
       obj.materialCode = "";
+      obj.categoryCode = "";
       obj.materialName = "";
+      obj.categoryName = "";
       obj.manufacturer = "";
       obj.supplyCapacity = "";
       obj.notes = "";
       obj.upload = "";
-      console.log(this.supplierMaterialList);
+      // console.log(this.supplierMaterialList);
       this.supplierMaterialList.push(obj);
     },
     /** 供应商物料删除按钮操作 */
@@ -407,15 +462,34 @@ export default {
       } else {
         const supplierMaterialList = this.supplierMaterialList;
         const checkedSupplierMaterialList = this.checkedSupplierMaterialList;
-        this.supplierMaterialList = supplierMaterialList.filter(function(item) {
+        this.supplierMaterialList = supplierMaterialList.filter(function (item) {
           return checkedSupplierMaterialList.indexOf(item.index) == -1
         });
       }
+    },
+    /** 物料添加 */
+    handleSupplierMaterialListe(row) {
+      this.deliveryIndex = this.supplierMaterialList.indexOf(row); // 获取点击的行索引
     },
     /** 复选框选中数据 */
     handleSupplierMaterialListSelectionChange(selection) {
       this.checkedSupplierMaterialList = selection.map(item => item.index)
     },
+    // 物料框架+数据
+    handleRowClickMaterial(row) {
+      console.log(row);
+      this.supplierMaterialList[this.deliveryIndex].materialCode = row.materialCode;// 物料编码
+      this.supplierMaterialList[this.deliveryIndex].materialName = row.materialName;// 物料名称
+      this.supplierMaterialList[this.deliveryIndex].categoryCode = row.categoryCode;// 品类
+      this.supplierMaterialList[this.deliveryIndex].categoryName = row.categoryName;// 物料品类
+      this.dialogMaterial = false; // 关闭对话框
+    },
   }
 };
 </script>
+<style>
+#serachOne {
+  position: absolute;
+  right: 15px;
+  top: 21.5px;
+}</style>

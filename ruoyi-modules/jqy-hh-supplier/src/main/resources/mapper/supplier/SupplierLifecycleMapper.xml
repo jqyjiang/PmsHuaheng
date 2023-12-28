@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.SupplierLifecycleMapper">
+    
+    <resultMap type="SupplierLifecycle" id="SupplierLifecycleResult">
+        <result property="lifecycleId"    column="lifecycle_id"    />
+        <result property="cycle"    column="cycle"    />
+        <result property="blacklisted"    column="blacklisted"    />
+        <result property="priorityLevel"    column="priority_level"    />
+    </resultMap>
+
+    <sql id="selectSupplierLifecycleVo">
+        select lifecycle_id, cycle, blacklisted,priority_level from supplier_lifecycle
+    </sql>
+
+    <select id="selectSupplierLifecycleList" parameterType="SupplierLifecycle" resultMap="SupplierLifecycleResult">
+        <include refid="selectSupplierLifecycleVo"/>
+        <where>  
+            <if test="cycle != null  and cycle != ''"> and cycle = #{cycle}</if>
+            <if test="blacklisted != null "> and blacklisted = #{blacklisted}</if>
+        </where>
+    </select>
+    
+    <select id="selectSupplierLifecycleByLifecycleId" parameterType="Long" resultMap="SupplierLifecycleResult">
+        <include refid="selectSupplierLifecycleVo"/>
+        where lifecycle_id = #{lifecycleId}
+    </select>
+        
+    <insert id="insertSupplierLifecycle" parameterType="SupplierLifecycle" useGeneratedKeys="true" keyProperty="lifecycleId">
+        insert into supplier_lifecycle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cycle != null">cycle,</if>
+            <if test="blacklisted != null">blacklisted,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cycle != null">#{cycle},</if>
+            <if test="blacklisted != null">#{blacklisted},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupplierLifecycle" parameterType="SupplierLifecycle">
+        update supplier_lifecycle
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cycle != null">cycle = #{cycle},</if>
+            <if test="blacklisted != null">blacklisted = #{blacklisted},</if>
+        </trim>
+        where lifecycle_id = #{lifecycleId}
+    </update>
+
+    <delete id="deleteSupplierLifecycleByLifecycleId" parameterType="Long">
+        delete from supplier_lifecycle where lifecycle_id = #{lifecycleId}
+    </delete>
+
+    <delete id="deleteSupplierLifecycleByLifecycleIds" parameterType="String">
+        delete from supplier_lifecycle where lifecycle_id in 
+        <foreach item="lifecycleId" collection="array" open="(" separator="," close=")">
+            #{lifecycleId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hh.pms.mapper.ScoringTemplateMapper">
+    
+    <resultMap type="ScoringTemplate" id="ScoringTemplateResult">
+        <result property="scoringTemplateId"    column="scoring_template_id"    />
+        <result property="scoringTemplateCode"    column="scoring_template_code"    />
+        <result property="scoringTemplateName"    column="scoring_template_name"    />
+        <result property="templateState"    column="template_state"    />
+        <result property="templateType"    column="template_type"    />
+    </resultMap>
+
+    <resultMap id="ScoringTemplateScoringDetailsResult" type="ScoringTemplate" extends="ScoringTemplateResult">
+        <collection property="scoringDetailsList" notNullColumn="sub_scoring_details_id" javaType="java.util.List" resultMap="ScoringDetailsResult" />
+    </resultMap>
+
+    <resultMap type="ScoringDetails" id="ScoringDetailsResult">
+        <result property="scoringDetailsId"    column="sub_scoring_details_id"    />
+        <result property="supplierCode"    column="sub_supplier_code"    />
+        <result property="supplierName"    column="sub_supplier_name"    />
+        <result property="categoryCode"    column="sub_category_code"    />
+        <result property="categoryName"    column="sub_category_name"    />
+        <result property="indicatorDescription"    column="sub_indicator_description"    />
+        <result property="indicatorCode"    column="sub_indicator_code"    />
+        <result property="scoringCriteria"    column="sub_scoring_criteria"    />
+        <result property="weight"    column="sub_weight"    />
+        <result property="scoringMethod"    column="sub_scoring_method"    />
+        <result property="rater"    column="sub_rater"    />
+        <result property="indicatorType"    column="sub_indicator_type"    />
+        <result property="ratingStatus"    column="sub_rating_status"    />
+        <result property="score"    column="sub_score"    />
+        <result property="selectivity"    column="sub_selectivity"    />
+        <result property="scoreFrom"    column="sub_score_from"    />
+        <result property="scoreTo"    column="sub_score_to"    />
+        <result property="feedback"    column="sub_feedback"    />
+        <result property="evaluationId"    column="sub_evaluation_id"    />
+        <result property="scoringTemplateId"    column="sub_scoring_template_id"    />
+    </resultMap>
+
+    <sql id="selectScoringTemplateVo">
+        select scoring_template_id, scoring_template_code, scoring_template_name, template_state, template_type from scoring_template
+    </sql>
+
+    <select id="selectScoringTemplateList" parameterType="ScoringTemplate" resultMap="ScoringTemplateResult">
+        <include refid="selectScoringTemplateVo"/>
+        <where>  
+            <if test="scoringTemplateCode != null  and scoringTemplateCode != ''"> and scoring_template_code = #{scoringTemplateCode}</if>
+            <if test="scoringTemplateName != null  and scoringTemplateName != ''"> and scoring_template_name like concat('%', #{scoringTemplateName}, '%')</if>
+            <if test="templateState != null "> and template_state = #{templateState}</if>
+            <if test="templateType != null "> and template_type = #{templateType}</if>
+        </where>
+    </select>
+    
+    <select id="selectScoringTemplateByScoringTemplateId" parameterType="Long" resultMap="ScoringTemplateScoringDetailsResult">
+        select a.scoring_template_id, a.scoring_template_code, a.scoring_template_name, a.template_state, a.template_type,
+ b.scoring_details_id as sub_scoring_details_id, b.supplier_code as sub_supplier_code, b.supplier_name as sub_supplier_name, b.category_code as sub_category_code, b.category_name as sub_category_name, b.indicator_description as sub_indicator_description, b.indicator_code as sub_indicator_code, b.scoring_criteria as sub_scoring_criteria, b.weight as sub_weight, b.scoring_method as sub_scoring_method, b.rater as sub_rater, b.indicator_type as sub_indicator_type, b.rating_status as sub_rating_status, b.score as sub_score, b.selectivity as sub_selectivity, b.score_from as sub_score_from, b.score_to as sub_score_to, b.feedback as sub_feedback, b.evaluation_id as sub_evaluation_id, b.scoring_template_id as sub_scoring_template_id
+        from scoring_template a
+        left join scoring_details b on b.scoring_template_id = a.scoring_template_id
+        where a.scoring_template_id = #{scoringTemplateId}
+    </select>
+        
+    <insert id="insertScoringTemplate" parameterType="ScoringTemplate" useGeneratedKeys="true" keyProperty="scoringTemplateId">
+        insert into scoring_template
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scoringTemplateCode != null">scoring_template_code,</if>
+            <if test="scoringTemplateName != null">scoring_template_name,</if>
+            <if test="templateState != null">template_state,</if>
+            <if test="templateType != null">template_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scoringTemplateCode != null">#{scoringTemplateCode},</if>
+            <if test="scoringTemplateName != null">#{scoringTemplateName},</if>
+            <if test="templateState != null">#{templateState},</if>
+            <if test="templateType != null">#{templateType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateScoringTemplate" parameterType="ScoringTemplate">
+        update scoring_template
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scoringTemplateCode != null">scoring_template_code = #{scoringTemplateCode},</if>
+            <if test="scoringTemplateName != null">scoring_template_name = #{scoringTemplateName},</if>
+            <if test="templateState != null">template_state = #{templateState},</if>
+            <if test="templateType != null">template_type = #{templateType},</if>
+        </trim>
+        where scoring_template_id = #{scoringTemplateId}
+    </update>
+
+    <delete id="deleteScoringTemplateByScoringTemplateId" parameterType="Long">
+        delete from scoring_template where scoring_template_id = #{scoringTemplateId}
+    </delete>
+
+    <delete id="deleteScoringTemplateByScoringTemplateIds" parameterType="String">
+        delete from scoring_template where scoring_template_id in 
+        <foreach item="scoringTemplateId" collection="array" open="(" separator="," close=")">
+            #{scoringTemplateId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteScoringDetailsByScoringTemplateIds" parameterType="String">
+        delete from scoring_details where scoring_template_id in 
+        <foreach item="scoringTemplateId" collection="array" open="(" separator="," close=")">
+            #{scoringTemplateId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteScoringDetailsByScoringTemplateId" parameterType="Long">
+        delete from scoring_details where scoring_template_id = #{scoringTemplateId}
+    </delete>
+
+    <insert id="batchScoringDetails">
+        insert into scoring_details( scoring_details_id, supplier_code, supplier_name, category_code, category_name, indicator_description, indicator_code, scoring_criteria, weight, scoring_method, rater, indicator_type, rating_status, score, selectivity, score_from, score_to, feedback, evaluation_id, scoring_template_id) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.scoringDetailsId}, #{item.supplierCode}, #{item.supplierName}, #{item.categoryCode}, #{item.categoryName}, #{item.indicatorDescription}, #{item.indicatorCode}, #{item.scoringCriteria}, #{item.weight}, #{item.scoringMethod}, #{item.rater}, #{item.indicatorType}, #{item.ratingStatus}, #{item.score}, #{item.selectivity}, #{item.scoreFrom}, #{item.scoreTo}, #{item.feedback}, #{item.evaluationId}, #{item.scoringTemplateId})
+        </foreach>
+    </insert>
+</mapper>
