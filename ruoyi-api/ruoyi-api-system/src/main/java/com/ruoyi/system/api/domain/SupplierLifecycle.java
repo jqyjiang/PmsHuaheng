@@ -26,6 +26,9 @@ public class SupplierLifecycle extends BaseEntity
     @Excel(name = "加入黑名单")
     private Long blacklisted;
 
+    /** 优先等级 */
+    @Excel(name = "优先等级")
+    private Long priorityLevel;
     public void setLifecycleId(Long lifecycleId) 
     {
         this.lifecycleId = lifecycleId;
@@ -54,12 +57,20 @@ public class SupplierLifecycle extends BaseEntity
         return blacklisted;
     }
 
+    public Long getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(Long PriorityLevel) {
+        this.priorityLevel = PriorityLevel;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("lifecycleId", getLifecycleId())
             .append("cycle", getCycle())
-            .append("blacklisted", getBlacklisted())
+            .append("priorityLevel", getPriorityLevel())
             .toString();
     }
 }

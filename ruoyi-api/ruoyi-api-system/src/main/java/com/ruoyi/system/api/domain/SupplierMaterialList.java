@@ -24,13 +24,29 @@ public class SupplierMaterialList extends BaseEntity
     @Excel(name = "物料编码")
     private String materialCode;
 
+    /** 品类编码 */
+    @Excel(name = "品类编码")
+    private String categoryCode;
+
     /** 供货id */
     @Excel(name = "供货id")
     private Long supplyId;
 
+    /** 考察id */
+    @Excel(name = "考察id")
+    private Long soiId;
+
+    /** 送样id */
+    @Excel(name = "送样id")
+    private Long sampleId;
+
     /** 物料名称 */
     @Excel(name = "物料名称")
     private String materialName;
+
+    /** 物料名称 */
+    @Excel(name = "品类名称")
+    private String categoryName;
 
     /** 生产厂家 */
     @Excel(name = "生产厂家")
@@ -47,6 +63,14 @@ public class SupplierMaterialList extends BaseEntity
     /** 文件上传 */
     @Excel(name = "文件上传")
     private String upload;
+
+    public Long getSoiId() {
+        return soiId;
+    }
+
+    public void setSoiId(Long soiId) {
+        this.soiId = soiId;
+    }
 
     public String getMaterialName() {
         return materialName;
@@ -120,17 +144,45 @@ public class SupplierMaterialList extends BaseEntity
         return upload;
     }
 
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Long getSampleId() {
+        return sampleId;
+    }
+
+    public void setSampleId(Long sampleId) {
+        this.sampleId = sampleId;
+    }
+
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-                .append("supplierMaterialId", getSupplierMaterialId())
-                .append("materialCode", getMaterialCode())
-                .append("supplyId", getSupplyId())
-                .append("materialName", getMaterialName())
-                .append("manufacturer", getManufacturer())
-                .append("supplyCapacity", getSupplyCapacity())
-                .append("notes", getNotes())
-                .append("upload", getUpload())
-                .toString();
+        return "SupplierMaterialList{" +
+                "supplierMaterialId=" + supplierMaterialId +
+                ", materialCode='" + materialCode + '\'' +
+                ", categoryCode='" + categoryCode + '\'' +
+                ", supplyId=" + supplyId +
+                ", soiId=" + soiId +
+                ", sampleId=" + sampleId +
+                ", materialName='" + materialName + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", manufacturer=" + manufacturer +
+                ", supplyCapacity='" + supplyCapacity + '\'' +
+                ", notes='" + notes + '\'' +
+                ", upload='" + upload + '\'' +
+                '}';
     }
 }

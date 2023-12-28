@@ -221,6 +221,28 @@ public class SupplierDetails extends BaseEntity
     @Excel(name = "预升降级周期")
     private Long slAdvance;
 
+    /** 优先等级 */
+    @Excel(name = "优先等级")
+    private Long priorityLevel;
+
+    /** 操作判断，用来判断生命周期是升级还是降级 */
+    private int operate;
+
+    public int getOperate() {
+        return operate;
+    }
+
+    public void setOperate(int operate) {
+        this.operate = operate;
+    }
+
+    public Long getPriorityLevel() {
+        return priorityLevel;
+    }
+
+    public void setPriorityLevel(Long PriorityLevel) {
+        this.priorityLevel = PriorityLevel;
+    }
     public String getLifeNum() {
         return lifeNum;
     }
@@ -667,59 +689,61 @@ public class SupplierDetails extends BaseEntity
         this.slStatus = slStatus;
     }
 
-
     @Override
     public String toString() {
         return "SupplierDetails{" +
-            "sdId=" + sdId +
-            ", sdTime=" + sdTime +
-            ", sdCode='" + sdCode + '\'' +
-            ", sbiName='" + sbiName + '\'' +
-            ", sdUscc='" + sdUscc + '\'' +
-            ", sbiAbbreviation='" + sbiAbbreviation + '\'' +
-            ", sbiServe='" + sbiServe + '\'' +
-            ", sdIndustry='" + sdIndustry + '\'' +
-            ", sdEn='" + sdEn + '\'' +
-            ", sdRt=" + sdRt +
-            ", sdHead='" + sdHead + '\'' +
-            ", sdHeadPhone='" + sdHeadPhone + '\'' +
-            ", sdPcn='" + sdPcn + '\'' +
-            ", sdPce='" + sdPce + '\'' +
-            ", sdPcp='" + sdPcp + '\'' +
-            ", sdPcg='" + sdPcg + '\'' +
-            ", sdMct='" + sdMct + '\'' +
-            ", sdCountry='" + sdCountry + '\'' +
-            ", sdRegion='" + sdRegion + '\'' +
-            ", sdClass='" + sdClass + '\'' +
-            ", num='" + num + '\'' +
-            ", sdWebsite='" + sdWebsite + '\'' +
-            ", sdBrief='" + sdBrief + '\'' +
-            ", sdLegal='" + sdLegal + '\'' +
-            ", sdRi='" + sdRi + '\'' +
-            ", sdBr='" + sdBr + '\'' +
-            ", sdRc='" + sdRc + '\'' +
-            ", sdStatus='" + sdStatus + '\'' +
-            ", sdPhone='" + sdPhone + '\'' +
-            ", sdEmail='" + sdEmail + '\'' +
-            ", sdFax='" + sdFax + '\'' +
-            ", sdSave='" + sdSave + '\'' +
-            ", sdCity='" + sdCity + '\'' +
-            ", sdCounty='" + sdCounty + '\'' +
-            ", sdSm='" + sdSm + '\'' +
-            ", sdBank='" + sdBank + '\'' +
-            ", sdCurrency='" + sdCurrency + '\'' +
-            ", sdAccount='" + sdAccount + '\'' +
-            ", idCode='" + idCode + '\'' +
-            ", certificateName='" + certificateName + '\'' +
-            ", filingDate=" + filingDate +
-            ", filing='" + filing + '\'' +
-            ", dataTatus='" + dataTatus + '\'' +
-            ", classCode='" + classCode + '\'' +
-            ", classDescribe='" + classDescribe + '\'' +
-            ", lifecycleId=" + lifecycleId +
-            ", cycle='" + cycle + '\'' +
-            ", lifeNum='" + lifeNum + '\'' +
-            ", slStatus=" + slStatus +
-            '}';
+                "sdId=" + sdId +
+                ", sdTime=" + sdTime +
+                ", sdCode='" + sdCode + '\'' +
+                ", sbiName='" + sbiName + '\'' +
+                ", sdUscc='" + sdUscc + '\'' +
+                ", sbiAbbreviation='" + sbiAbbreviation + '\'' +
+                ", sbiServe='" + sbiServe + '\'' +
+                ", sdIndustry='" + sdIndustry + '\'' +
+                ", sdEn='" + sdEn + '\'' +
+                ", sdRt=" + sdRt +
+                ", sdHead='" + sdHead + '\'' +
+                ", sdHeadPhone='" + sdHeadPhone + '\'' +
+                ", sdPcn='" + sdPcn + '\'' +
+                ", sdPce='" + sdPce + '\'' +
+                ", sdPcp='" + sdPcp + '\'' +
+                ", sdPcg='" + sdPcg + '\'' +
+                ", sdMct='" + sdMct + '\'' +
+                ", sdCountry='" + sdCountry + '\'' +
+                ", sdRegion='" + sdRegion + '\'' +
+                ", sdClass='" + sdClass + '\'' +
+                ", num='" + num + '\'' +
+                ", sdWebsite='" + sdWebsite + '\'' +
+                ", sdBrief='" + sdBrief + '\'' +
+                ", sdLegal='" + sdLegal + '\'' +
+                ", sdRi='" + sdRi + '\'' +
+                ", sdBr='" + sdBr + '\'' +
+                ", sdRc='" + sdRc + '\'' +
+                ", sdStatus='" + sdStatus + '\'' +
+                ", sdPhone='" + sdPhone + '\'' +
+                ", sdEmail='" + sdEmail + '\'' +
+                ", sdFax='" + sdFax + '\'' +
+                ", sdSave='" + sdSave + '\'' +
+                ", sdCity='" + sdCity + '\'' +
+                ", sdCounty='" + sdCounty + '\'' +
+                ", sdSm='" + sdSm + '\'' +
+                ", sdBank='" + sdBank + '\'' +
+                ", sdCurrency='" + sdCurrency + '\'' +
+                ", sdAccount='" + sdAccount + '\'' +
+                ", idCode='" + idCode + '\'' +
+                ", certificateName='" + certificateName + '\'' +
+                ", filingDate=" + filingDate +
+                ", filing='" + filing + '\'' +
+                ", dataTatus='" + dataTatus + '\'' +
+                ", classCode='" + classCode + '\'' +
+                ", classDescribe='" + classDescribe + '\'' +
+                ", lifecycleId=" + lifecycleId +
+                ", cycle='" + cycle + '\'' +
+                ", lifeNum='" + lifeNum + '\'' +
+                ", slStatus=" + slStatus +
+                ", slAdvance=" + slAdvance +
+                ", priorityLevel=" + priorityLevel +
+                ", operate=" + operate +
+                '}';
     }
 }
