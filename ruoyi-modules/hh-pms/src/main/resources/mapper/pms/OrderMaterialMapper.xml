@@ -150,8 +150,8 @@
     </select>
     <select id="findByOrderCodeMaterialReceipt" resultType="com.ruoyi.system.api.domain.OrderMaterial"
             resultMap="OrderMaterialResult">
-        <include refid="selectOrderMaterialVo"/>
-        where orm.or_name = #{orName} and orm.order_code =#{orderCode}
+        <include refid="selectOrderMaterialVo1"/>
+        where or_name = #{orName} and order_code =#{orderCode}
     </select>
 
     <insert id="insertOrderMaterial" parameterType="OrderMaterial" useGeneratedKeys="true" keyProperty="orId">

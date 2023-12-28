@@ -90,7 +90,7 @@
             <!-- 这里是关联订单的内容 -->
             <el-table v-loading="loading" :data="contractOrderList" @row-click="handleRowClickOrder">
               <el-table-column type="selection" width="55" align="center" />
-              <el-table-column label="订单号" align="center" prop="purchasingCode" />
+              <el-table-column label="订单号" align="center" prop="purchaseOrderCode" />
               <el-table-column label="供应商名称" align="center" prop="supplierDetails.sbiName" />
             </el-table>
             <pagination v-show="ordertotal > 0" :total="ordertotal" :page.sync="orderqueryParams.pageNum"
@@ -154,20 +154,20 @@
           <el-input v-model="form.trackingNumber" placeholder="请输入快递/物流单号" />
         </el-form-item>
         <el-form-item label="预计发货日期" prop="deliveryDate">
-      <el-date-picker clearable v-model="form.deliveryDate" type="date" value-format="yyyy-MM-dd"
-        placeholder="请选择预计发货日期">
-      </el-date-picker>
-    </el-form-item>
-    <el-form-item label="预计到货日期" prop="arrivalDate">
-      <el-date-picker clearable v-model="form.arrivalDate" type="date" value-format="yyyy-MM-dd"
-        placeholder="请选择预计到货日期">
-      </el-date-picker>
-    </el-form-item>
+          <el-date-picker clearable v-model="form.deliveryDate" type="date" value-format="yyyy-MM-dd"
+            placeholder="请选择预计发货日期">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="预计到货日期" prop="arrivalDate">
+          <el-date-picker clearable v-model="form.arrivalDate" type="date" value-format="yyyy-MM-dd"
+            placeholder="请选择预计到货日期">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="备注" prop="note">
           <el-input v-model="form.note" placeholder="请输入备注" />
         </el-form-item>
         <el-form-item label="附件" prop="annex">
-          <file-upload v-model="form.annex"/>
+          <file-upload v-model="form.annex" />
         </el-form-item>
         <el-divider content-position="center">产品明细信息</el-divider>
         <el-row :gutter="10" class="mb8">
@@ -182,9 +182,9 @@
           @selection-change="handleDeliverySelectionChange" ref="delivery" @row-click="handleRowClickPro">
           <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" prop="index" width="50" />
-          <el-table-column label="产品信息" prop="productInfo" width="150">
+          <el-table-column label="产品信息" prop="productName" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.productInfo" placeholder="请输入产品信息" />
+              <el-input v-model="scope.row.productName" placeholder="请输入产品信息" />
               <i class="el-icon-search" id="serachOne" @click="showDiagProduct()"></i>
               <el-dialog :visible.sync="dialogVisible8" title="产品信息" :modal="false">
                 <!-- 这里是关联订单的内容 -->
@@ -205,7 +205,7 @@
               </el-dialog>
             </template>
           </el-table-column>
-          <el-table-column label="产品规格" prop="productSpecifications" width="150">
+          <el-table-column label="产品规格" prop="specifications" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.productSpecifications" placeholder="请输入产品规格" />
             </template>
@@ -253,10 +253,29 @@
 <script>
 import { listProducts } from "@/api/pms/products";
 import { listSupplier } from "@/api/pms/manager";
-import {getDelivery} from "@/api/pms/delivery";
+import { getDelivery } from "@/api/pms/delivery";
 import { listNote, getNote, delNote, addNote, updateNote } from "@/api/pms/note";
 import { listManagement } from "@/api/procure/management";
-
+// 定义Productse类
+class Productse {
+  constructor(data) {
+    this.createBy = data.createBy;
+    this.createTime = data.createTime;
+    this.number = data.number;
+    this.orderCode = data.orderCode;
+    this.price = data.price;
+    this.productCode = data.productCode;
+    this.productId = data.productId;
+    this.productName = data.productName;
+    this.remark = data.remark;
+    this.specifications = data.specifications;
+    this.subtotal = data.subtotal;
+    this.taxRate = data.taxRate;
+    this.unit = data.unit;
+    this.updateBy = data.updateBy;
+    this.updateTime = data.updateTime;
+  }
+}
 export default {
   name: "Note",
   dicts: ['delivery_state'],
@@ -330,7 +349,7 @@ export default {
       //供应商列表
       detailsList: [],
       //获取deliveyList下标\
-      deliveryIndex:0
+      deliveryIndex: 0
     };
   },
   mounted() {
@@ -377,26 +396,31 @@ export default {
     },
     //点击deliveryList
     handleRowClickPro(row, event, column) {
-    this.deliveryIndex = this.deliveryList.indexOf(row); // 获取点击的行索引
-    // console.log(clickedRowIndex)
-    // const clickedRowData = this.deliveryList[clickedRowIndex]; // 获取点击的行数据
-    // console.log(clickedRowData)
-    // 在这里处理你需要的逻辑
-  },
+      this.deliveryIndex = this.deliveryList.indexOf(row); // 获取点击的行索引
+      // console.log(clickedRowIndex)
+      // const clickedRowData = this.deliveryList[clickedRowIndex]; // 获取点击的行数据
+      // console.log(clickedRowData)
+      // 在这里处理你需要的逻辑
+    },
     //点击每一行的产品信息显示到文本框里面
     handleRowClickProduct(row) {
-        this.deliveryList[this.deliveryIndex].productInfo=row.productName
-        this.deliveryList[this.deliveryIndex].productSpecifications=row.specifications
-        this.deliveryList[this.deliveryIndex].unit=row.unit
-        this.deliveryList[this.deliveryIndex].remainingDeliveryQuantity=50
-        this.deliveryList[this.deliveryIndex].currentDeliveryQuantity=30
-      this.dialogVisible8=false
+      this.deliveryList[this.deliveryIndex].productInfo = row.productName
+      this.deliveryList[this.deliveryIndex].productSpecifications = row.specifications
+      this.deliveryList[this.deliveryIndex].unit = row.unit
+      this.deliveryList[this.deliveryIndex].remainingDeliveryQuantity = 50
+      this.deliveryList[this.deliveryIndex].currentDeliveryQuantity = 30
+      this.dialogVisible8 = false
     },
     //点击每一行显示到文本框里面
     handleRowClickOrder(row) {
-      this.deliveryList = row.delivery
-      this.form.orderConnectionId = row.purchasingCode
-      this.dialogVisible7 = false;
+      if (row) {
+        this.form.orderConnectionId = row.purchaseOrderCode;
+        // const productse = new Productse(row.products);
+        this.deliveryList = row.products
+        this.dialogVisible7 = false;
+      } else {
+        // 处理row为空的情况
+      }
     },
     //控制关联订单的显示
     showDiagOrder() {
@@ -550,14 +574,14 @@ export default {
     /** 产品明细添加按钮操作 */
     handleAddDelivery() {
       let obj = {};
-      obj.productInfo = "";
-      obj.productSpecifications = "";
+      obj.productName = "";
+      obj.specifications = "";
       obj.requiredQuantity = "";
       obj.unit = "";
       obj.remainingDeliveryQuantity = "";
       obj.currentDeliveryQuantity = "";
-      obj.remarks = "";
-      obj.sourceOrderNumber = "";
+      obj.remark = "";
+      obj.orderCode = "";
       this.deliveryList.push(obj);
     },
     /** 产品明细删除按钮操作 */

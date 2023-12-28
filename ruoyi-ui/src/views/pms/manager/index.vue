@@ -720,7 +720,7 @@
 
 <script>
 import { listManager, getManager, delManager, addManager, updateManager, listSupplier, listMaterial, listOrderMaterial, listCurrency, listCategory, listRate, listTypeRun, managerList, getNumber, updateManagerState } from "@/api/pms/manager";
-import { listMaterials, findTaskMaterial, findByOrderCodeMaterial, deleteMaterial, addMaterials } from "@/api/pms/materials";
+import { listMaterials, findTaskMaterial, findByOrderCodeMaterial1, deleteMaterial, addMaterials } from "@/api/pms/materials";
 import { listTask } from "@/api/procure/task";
 import { addOrderDetails, updateOrderDetails } from "@/api/pms/orderDetail";
 import Mingxi from '../../components/icons/Pms/index.vue'
@@ -909,7 +909,7 @@ export default {
       },
 
       materialIndex1: 0,
-
+requireList:[]
     };
   },
   watch: {
@@ -1009,8 +1009,10 @@ export default {
           this.invoiceForm.totalDemand = this.invoiceList[0].totalDemand.toFixed(2)
           this.invoiceForm.taxTotal = this.invoiceList[0].taxTotal.toFixed(2)
           this.invoiceForm.orderCode = this.invoiceList[0].orderCode
+          this.invoiceForm.company = this.invoiceList[0].company
+          this.invoiceForm.purchaser = this.invoiceList[0].purchaser
           console.log("这是invoiceList的内容:" + this.invoiceList[0].supplierDetails.sbiName)
-          findByOrderCodeMaterial(this.invoiceList[0].orderCode).then(response => {
+          findByOrderCodeMaterial1(this.invoiceList[0].orderCode).then(response => {
             this.invoiceOrderMaterialList = response.data;
           })
         } else {
@@ -1187,16 +1189,23 @@ export default {
      * 需求转订单选择对应的需求订单号转成采购订货单
      */
     SelectionChange(selection) {
-      if (selection.length === 0) {
+      this.requireList=selection
+      if (this.requireList.length === 0) {
         // 没有选择任何任务
         this.$notify({
           title: '警告',
           message: '请至少选择一项任务',
           type: 'warning'
         });
-      } else {
-        for (let i = 0; i < selection.length; i++) {
-          const selectedTask = selection[i];
+      } 
+    },
+    /**
+     * 需求转订单里面的确定按钮
+     * @param {} 
+     */
+    transferToOrder() {
+      for (let i = 0; i < this.requireList.length; i++) {
+          const selectedTask = this.requireList[i];
           if (selectedTask.taskAccepted === 0.00 || selectedTask.taskAccepted === null || selectedTask.taskAccepted === '') {
             // 说明该条需求订单已经没有可改为采购申请单的必要了
             // 给出提示，重新选择
@@ -1205,25 +1214,14 @@ export default {
               message: '存在代理数量为0的任务，请重新选择',
               type: 'warning'
             });
-          } else {
-            // 执行转换为采购申请单的操作
-            this.transferToOrder(selectedTask);
-          }
+          } 
         }
-      }
-    },
-    /**
-     * 需求转订单里面的确定按钮
-     * @param {} row
-     */
-    transferToOrder(row) {
       this.open = true;
       this.title = "需求订单转采购订单";
-      console.log("点击确定得到的数据:", row);
       // 这里可以执行转换为采购申请单的操作
-      console.log("这是返回的orderMaterialList:" + findTaskMaterial(row.taskCode).data)
-      this.getList6(row.taskCode)
-      this.orderMaterialList = findTaskMaterial(row.taskCode).data
+      console.log("这是返回的orderMaterialList:" + findTaskMaterial(this.requireList[0].taskCode).data)
+      this.getList6(this.requireList[0].taskCode)
+      this.orderMaterialList = findTaskMaterial(this.requireList[0].taskCode).data
       //首先查询根据任务订单号查询该任务订单号下面的物料明细
       //查询之后复制给this.orderMaterialList以便展示数据
       //给几个字段加上默认值 状态  订单类型 订单审批状态
@@ -1570,6 +1568,7 @@ export default {
       this.number = 0.00
       this.taxTotal = 0.00
       this.open = true;
+      this.form.purchaser=this.$store.state.user.name
       this.title = "添加采购订单管理";
     },
     /** 修改按钮操作 */

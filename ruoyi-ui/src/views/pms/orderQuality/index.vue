@@ -129,132 +129,140 @@
 
 
     <!-- 添加或修改质检单对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
-        <el-form-item label="采购订单编号" prop="orderCode">
-          <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" />
-        </el-form-item>
-        <el-form-item label="质检单号" prop="qualityCode">
-          <el-input v-model="form.qualityCode" placeholder="请输入质检编号" />
-        </el-form-item>
-        <el-form-item label="收货单号" prop="receiptNoteNo">
-          <el-input v-model="form.receiptNoteNo" placeholder="请输入收货编号" />
-        </el-form-item>
-        <el-form-item label="发货单号" prop="deliveryNoteNo">
-          <el-input v-model="form.deliveryNoteNo" placeholder="请输入发货单号" />
-        </el-form-item>
-        <el-form-item label="创建人" prop="founder">
-          <el-input v-model="form.founder" placeholder="请输入创建人" />
-        </el-form-item>
-        <el-form-item label="到货日期" prop="receivedDate">
-          <el-date-picker clearable v-model="form.receivedDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择到货日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检验日期" prop="qualityDate">
-          <el-date-picker clearable v-model="form.qualityDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择检验日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检验单类型" prop="inspectOrderType">
-          <el-select v-model="form.inspectOrderType" placeholder="请选择检验单类型">
-            <el-option v-for="dict in dict.type.inspect_order_type" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="供应商名称" prop="supplier">
-          <el-input v-model="form.supplier" placeholder="请输入供应商名称" />
-        </el-form-item>
-        <el-form-item label="物料编号" prop="orCode">
-          <el-input v-model="form.orCode" placeholder="请输入物料编号" />
-        </el-form-item>
-        <el-form-item label="物料名称" prop="orName">
-          <el-input v-model="form.orName" placeholder="请输入物料名称" />
-        </el-form-item>
-        <el-form-item label="物料单位" prop="materialUnit">
-          <el-input v-model="form.materialUnit" placeholder="请输入物料单位" />
-        </el-form-item>
-        <el-form-item label="物料品类" prop="materialCategory">
-          <el-input v-model="form.materialCategory" placeholder="请输入物料品类" />
-        </el-form-item>
-        <el-form-item label="收货数量" prop="receivedQuantity">
-          <el-input v-model="form.receivedQuantity" placeholder="请输入收货数量" />
-        </el-form-item>
-        <el-form-item label="检验类型" prop="inspectType">
-          <el-select v-model="form.inspectType" placeholder="请选择检验类型">
-            <el-option v-for="dict in dict.type.inspect_type" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="检验开始日期" prop="inspectStartDate">
-          <el-date-picker clearable v-model="form.inspectStartDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择检验开始日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检验结束日期" prop="inspectEndDate">
-          <el-date-picker clearable v-model="form.inspectEndDate" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择检验结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="送检数量" prop="inspectionQuantity">
-          <el-input v-model="form.inspectionQuantity" placeholder="请输入送检数量" />
-        </el-form-item>
-        <el-form-item label="质检损耗数量" prop="qualifiedNumber">
-          <el-input v-model="form.qualifiedNumber" placeholder="请输入质检损耗数量" />
-        </el-form-item>
-        <el-form-item label="检验合格数量" prop="inspectQualifiedNumber">
-          <el-input v-model="form.inspectQualifiedNumber" placeholder="请输入检验合格数量" />
-        </el-form-item>
-        <el-form-item label="检验不合格品数量" prop="inspectNonConformingNumber">
-          <el-input v-model="form.inspectNonConformingNumber" placeholder="请输入检验不合格品数量" />
-        </el-form-item>
-        <el-form-item label="不合格品比例" prop="nonConforming">
-          <el-input :value="nonConformingRatio" disabled />
-        </el-form-item>
-        <el-form-item label="检测结果" prop="decectionResultName">
-          <el-select v-model="form.decectionResultName" placeholder="请选择检测结果">
-            <el-option v-for="dict in dict.type.decection_result_name" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="处理措施" prop="handlingMeasuresName">
-          <el-select v-model="form.handlingMeasuresName" placeholder="请选择处理措施">
-            <el-option v-for="dict in dict.type.handling_measures_name" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="说明" prop="remarks">
-          <el-input v-model="form.remarks" placeholder="请输入说明" />
-        </el-form-item>
-        <el-form-item label="检验员" prop="inspecter">
-          <el-input v-model="form.inspecter" placeholder="请输入检验员" />
-        </el-form-item>
-        <!-- <el-form-item label="状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option v-for="dict in dict.type.quality_status" :key="dict.value" :label="dict.label"
-              :value="parseInt(dict.value)"></el-option>
-          </el-select>
-        </el-form-item> -->
-        <el-form-item label="库存组织" prop="inventory">
-          <el-select v-model="form.inventory" placeholder="请选择库存组织">
-            <el-option v-for="dict in dict.type.inventory" :key="dict.value" :label="dict.label"
-              :value="dict.value"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="公司" prop="company">
-          <el-input v-model="form.company" placeholder="请输入公司" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
+      <el-dialog :title="title" :visible.sync="open" width="1200px" append-to-body>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 20px;">
+          <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+            <!-- 第一排表单项 -->
+            <el-form-item label="采购订单编号" prop="orderCode">
+              <el-input v-model="form.orderCode" placeholder="请输入采购订单编号" />
+            </el-form-item>
+            <el-form-item label="质检单号" prop="qualityCode">
+              <el-input v-model="form.qualityCode" placeholder="请输入质检编号" />
+            </el-form-item>
+            <el-form-item label="收货单号" prop="receiptNoteNo">
+              <el-input v-model="form.receiptNoteNo" placeholder="请输入收货编号" />
+            </el-form-item>
+            <el-form-item label="发货单号" prop="deliveryNoteNo">
+              <el-input v-model="form.deliveryNoteNo" placeholder="请输入发货单号" />
+            </el-form-item>
+            <el-form-item label="创建人" prop="founder">
+              <el-input v-model="form.founder" placeholder="请输入创建人" />
+            </el-form-item>
+            <el-form-item label="到货日期" prop="receivedDate">
+              <el-date-picker clearable v-model="form.receivedDate" type="date" value-format="yyyy-MM-dd"
+                placeholder="请选择到货日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="检验日期" prop="qualityDate">
+              <el-date-picker clearable v-model="form.qualityDate" type="date" value-format="yyyy-MM-dd"
+                placeholder="请选择检验日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="检验单类型" prop="inspectOrderType">
+              <el-select v-model="form.inspectOrderType" placeholder="请选择检验单类型">
+                <el-option v-for="dict in dict.type.inspect_order_type" :key="dict.value" :label="dict.label"
+                  :value="parseInt(dict.value)"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="供应商名称" prop="supplier">
+              <el-input v-model="form.supplier" placeholder="请输入供应商名称" />
+            </el-form-item>
+            <el-form-item label="物料编号" prop="orCode">
+              <el-input v-model="form.orCode" placeholder="请输入物料编号" />
+            </el-form-item>
+            <el-form-item label="物料名称" prop="orName">
+              <el-input v-model="form.orName" placeholder="请输入物料名称" />
+            </el-form-item>
+            <el-form-item label="物料单位" prop="materialUnit">
+              <el-input v-model="form.materialUnit" placeholder="请输入物料单位" />
+            </el-form-item>
+            <el-form-item label="物料品类" prop="materialCategory">
+              <el-input v-model="form.materialCategory" placeholder="请输入物料品类" />
+            </el-form-item>
+            <el-form-item label="收货数量" prop="receivedQuantity">
+              <el-input v-model="form.receivedQuantity" placeholder="请输入收货数量" />
+            </el-form-item>
+            <el-form-item label="公司" prop="company">
+              <el-input v-model="form.company" placeholder="请输入公司" />
+            </el-form-item>
+            <!-- 其他表单项省略 -->
+          </el-form>
+
+          <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+            <!-- 第二排表单项 -->
+            <el-form-item label="到货日期" prop="receivedDate">
+              <el-date-picker clearable v-model="form.receivedDate" type="date" value-format="yyyy-MM-dd"
+                placeholder="请选择到货日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="检验类型" prop="inspectType">
+              <el-select v-model="form.inspectType" placeholder="请选择检验类型">
+                <el-option v-for="dict in dict.type.inspect_type" :key="dict.value" :label="dict.label"
+                  :value="parseInt(dict.value)"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="检验开始日期" prop="inspectStartDate">
+              <el-date-picker clearable v-model="form.inspectStartDate" type="date" value-format="yyyy-MM-dd"
+                placeholder="请选择检验开始日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="检验结束日期" prop="inspectEndDate">
+              <el-date-picker clearable v-model="form.inspectEndDate" type="date" value-format="yyyy-MM-dd"
+                placeholder="请选择检验结束日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item label="送检数量" prop="inspectionQuantity">
+              <el-input v-model="form.inspectionQuantity" placeholder="请输入送检数量" />
+            </el-form-item>
+            <el-form-item label="质检损耗数量" prop="qualifiedNumber">
+              <el-input v-model="form.qualifiedNumber" placeholder="请输入质检损耗数量" />
+            </el-form-item>
+            <el-form-item label="检验合格数量" prop="inspectQualifiedNumber">
+              <el-input v-model="form.inspectQualifiedNumber" placeholder="请输入检验合格数量" />
+            </el-form-item>
+            <el-form-item label="检验不合格品数量" prop="inspectNonConformingNumber">
+              <el-input v-model="form.inspectNonConformingNumber" placeholder="请输入检验不合格品数量" />
+            </el-form-item>
+            <el-form-item label="不合格品比例" prop="nonConforming">
+              <el-input :value="nonConformingRatio" disabled />
+            </el-form-item>
+            <el-form-item label="检测结果" prop="decectionResultName">
+              <el-select v-model="form.decectionResultName" placeholder="请选择检测结果">
+                <el-option v-for="dict in dict.type.decection_result_name" :key="dict.value" :label="dict.label"
+                  :value="parseInt(dict.value)"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="处理措施" prop="handlingMeasuresName">
+              <el-select v-model="form.handlingMeasuresName" placeholder="请选择处理措施">
+                <el-option v-for="dict in dict.type.handling_measures_name" :key="dict.value" :label="dict.label"
+                  :value="parseInt(dict.value)"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="说明" prop="remarks">
+              <el-input v-model="form.remarks" placeholder="请输入说明" />
+            </el-form-item>
+            <el-form-item label="检验员" prop="inspecter">
+              <el-input v-model="form.inspecter" placeholder="请输入检验员" />
+            </el-form-item>
+            <el-form-item label="库存组织" prop="inventory">
+              <el-select v-model="form.inventory" placeholder="请选择库存组织">
+                <el-option v-for="dict in dict.type.inventory" :key="dict.value" :label="dict.label"
+                  :value="dict.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 其他表单项省略 -->
+          </el-form>
+        </div>
+        <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
-    </el-dialog>
+      </el-dialog>
   </div>
 </template>
 
 <script>
-import { listOrderQuality, getOrderQuality, delOrderQuality, addOrderQuality, updateOrderQuality, updateExempt,getExemptList } from "@/api/pms/orderQuality";
+import { listOrderQuality, getOrderQuality, delOrderQuality, addOrderQuality, updateOrderQuality, updateExempt, getExemptList } from "@/api/pms/orderQuality";
 import { listOrderQuanlity } from '@/api/pms/orderDetail'
 import { getCategory } from '@/api/pms/materials'
 import { listOrder, getOrder, delOrder, addOrder, updateOrder } from "@/api/pms/order";

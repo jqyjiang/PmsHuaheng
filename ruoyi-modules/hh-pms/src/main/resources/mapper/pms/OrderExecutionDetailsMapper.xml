@@ -470,7 +470,7 @@
             <if test="stockInDate != null">stockInDate = #{stockInDate},</if>
             <if test="reconciliationStatus != null">reconciliationStatus = #{reconciliationStatus},</if>
         </trim>
-        where orderCode = #{orderCode} and receiptNoteNo = #{receiptNoteNo}
+        where orderCode = #{orderCode} and deliveryNoteNo = #{deliveryNoteNo}
     </update>
     <delete id="deleteOrderExecutionDetailsById" parameterType="Long">
         delete

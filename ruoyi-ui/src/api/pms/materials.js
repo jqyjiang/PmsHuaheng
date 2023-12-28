@@ -47,6 +47,13 @@ export function findByOrderCodeMaterial(orName,orderCode) {
     }
   })
 }
+// 根据来源单号查询订单物料明细详细
+export function findByOrderCodeMaterial1(orderCode) {
+  return request({
+    url: '/pms/materials/findByOrderCodeMaterial/'+orderCode,
+    method: 'get',
+  })
+}
 // 新增订单物料明细
 export function addMaterial(data) {
   return request({

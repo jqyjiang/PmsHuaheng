@@ -31,6 +31,7 @@
         <result property="taxTotal" column="tax_total"/>
         <result property="materialId" column="material_id"/>
         <result property="productId" column="product_id"/>
+        <result property="taxTotal" column="tax_total"/>
         <association property="orderTypeRunning" javaType="com.ruoyi.system.api.domain.OrderTypeRunning">
             <id property="ortId" column="ort_id"/>
             <result property="ortName" column="ort_name"/>
@@ -114,35 +115,35 @@
     </resultMap>
 
     <sql id="selectOrderManagerVo">
-        select om.order_id,
-               om.order_code,
-               om.company,
-               om.order_type,
-               om.order_source,
-               om.pur_organization,
-               om.annex,
-               om.is_self_pickup,
-               om.license_plate_number,
-               om.concat_infomation,
-               om.contract_code,
-               om.contract_name,
-               om.order_description,
-               om.total_demand,
-               om.purchaser,
-               om.order_state,
-               om.or_id,
-               om.currency_id,
-               om.supplier,
-               om.contacts,
-               om.phone,
-               om.invoice_method,
-               om.create_time,
-               om.material_id,
-               om.tax_total,
-               otr.ort_name,
-               sd.sbi_name,
-               c.companies_name,
-               y.currency_name
+--         select om.order_id,
+--                om.order_code,
+--                om.company,
+--                om.order_type,
+--                om.order_source,
+--                om.pur_organization,
+--                om.annex,
+--                om.is_self_pickup,
+--                om.license_plate_number,
+--                om.concat_infomation,
+--                om.contract_code,
+--                om.contract_name,
+--                om.order_description,
+--                om.total_demand,
+--                om.purchaser,
+--                om.order_state,
+--                om.or_id,
+--                om.currency_id,
+--                om.supplier,
+--                om.contacts,
+--                om.phone,
+--                om.invoice_method,
+--                om.create_time,
+--                om.material_id,
+--                om.tax_total,
+--                otr.ort_name,
+--                sd.sbi_name,
+--                c.companies_name,
+--                y.currency_name
         select om.order_id, om.order_code, om.company,  om.order_type,om.order_source,
                om.pur_organization, om.annex, om.is_self_pickup,om.license_plate_number,om.concat_infomation,
                om.contract_code,om.contract_name,om.order_description,om.total_demand,om.purchaser,
@@ -186,12 +187,12 @@
         om.tax_total,
         otr.ort_name,
         sd.sbi_name,
-        c.companies_name,
+--         c.companies_name,
         y.currency_name
         from order_manager om
         left join order_type_running otr on om.order_state = otr.ort_id
         left join supplier_details sd on sd.sd_id = om.supplier
-        left join companies c on c.companies_id = om.company
+--         left join companies c on c.companies_id = om.company
         left join currency y on y.currency_id = om.currency_id
         <where>
             <if test="orderCode != null  and orderCode != ''">and om.order_code = #{orderCode}</if>
@@ -200,6 +201,7 @@
             <if test="supplier != null ">and om.supplier = #{supplier}</if>
             <if test="orId != null ">and om.or_id = #{orId}</if>
         </where>
+order by om.create_time DESC
     </select>
 
     <select id="selectOrderManagerByOrderId" parameterType="Long" resultMap="OrderManagerResult">
@@ -210,6 +212,7 @@
         <include refid="selectOrderManagerVo"/>
         where or_id = #{orId}
     </select>
+
     <select id="findRunTypeNumber" resultType="OrderManager" resultMap="OrderManagerResult">
         select order_id, or_id, order_state
         from order_manager

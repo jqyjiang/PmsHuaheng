@@ -29,7 +29,7 @@ public class OrderManager extends BaseEntity
 
     /** 公司 */
     @Excel(name = "公司")
-    private Long company;
+    private String company;
 
     /** 订单类型 */
     private Long orderType;
@@ -69,7 +69,7 @@ public class OrderManager extends BaseEntity
 
     /** 采购员 */
     @Excel(name = "采购员")
-    private Long purchaser;
+    private String purchaser;
 
     /** 采购审批状态 */
     @Excel(name = "采购审批状态")
@@ -244,12 +244,12 @@ public class OrderManager extends BaseEntity
     {
         return orderCode;
     }
-    public void setCompany(Long company)
+    public void setCompany(String company)
     {
         this.company = company;
     }
 
-    public Long getCompany()
+    public String getCompany()
     {
         return company;
     }
@@ -352,12 +352,12 @@ public class OrderManager extends BaseEntity
     {
         return totalDemand;
     }
-    public void setPurchaser(Long purchaser)
+    public void setPurchaser(String purchaser)
     {
         this.purchaser = purchaser;
     }
 
-    public Long getPurchaser()
+    public String getPurchaser()
     {
         return purchaser;
     }

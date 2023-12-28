@@ -116,21 +116,19 @@
         <el-table v-loading="loading" :data="stockInList1" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="入库单号" align="center" prop="stockInNoteNo" />
+          <el-table-column label="入库人" align="center" prop="stockInPerson" />
+          <el-table-column label="入库总数量" align="center" prop="stockInQuantity" />
+          <el-table-column label="入库总金额" align="center" prop="stockInAmount" />
+          <el-table-column label="入库税额" align="center" prop="taxAmount" />
+          <el-table-column label="退货总数量" align="center" prop="returnQuantity" />
+          <el-table-column label="退货含税金额" align="center" prop="returnTaxIncludedAmount" />
+          <el-table-column label="退货不含税金额" align="center" prop="returnTaxExcludedAmount" />
           <el-table-column label="入库日期" align="center" prop="inboundDate" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.inboundDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="入库人" align="center" prop="stockInPerson" />
-          <el-table-column label="入库总数量" align="center" prop="stockInQuantity" />
-          <el-table-column label="入库总金额" align="center" prop="stockInAmount" />
-          <el-table-column label="入库税额" align="center" prop="taxAmount" />
-          <el-table-column label="入库备注" align="center" prop="remarks" />
-          <el-table-column label="附件" align="center" prop="annex" />
-          <el-table-column label="退货总数量" align="center" prop="returnQuantity" />
-          <el-table-column label="退货含税金额" align="center" prop="returnTaxIncludedAmount" />
-          <el-table-column label="退货不含税金额" align="center" prop="returnTaxExcludedAmount" />
-          <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
+          <!-- <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createdTime, '{y}-{m}-{d}') }}</span>
             </template>
@@ -139,15 +137,15 @@
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.updatedAt, '{y}-{m}-{d}') }}</span>
             </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          </el-table-column> -->
+          <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
               <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
                 v-hasPermi="['pms:stockIn:edit']">修改</el-button>
               <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
                 v-hasPermi="['pms:stockIn:remove']">删除</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
 
         <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"

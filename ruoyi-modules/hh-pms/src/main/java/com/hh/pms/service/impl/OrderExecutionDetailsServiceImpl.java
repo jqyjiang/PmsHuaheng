@@ -126,7 +126,7 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
                 BeanUtils.copyProperties(orderExecutionDetails, receiptDetails);
                 receiptDetails.setExemptFromMaterialInspection(1L);
                 receiptDetails.setExemptFromSupplyCapacityCheck(1L);
-                receiptDetailsMapper.insertReceiptDetails(receiptDetails);
+
 
                 BigDecimal result = material.getTax().equals(BigDecimal.ZERO) ?
                         material.getNoTaxPrice().multiply(orderExecutionDetails.getDeliveryQuantity()) :
@@ -134,7 +134,8 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
                 orderExecutionDetails.setDeliveredAmount(result);
             }
         });
-
+        //插入收货物料明细
+        receiptDetailsMapper.insertReceiptDetails(receiptDetails);
         //计算待发货数量 需求总量-填写的发货数量-订单量
         List<OrderExecutionDetails> orderExecutionDetails1 = orderExecutionDetailsMapper.selectDeliveryNo(orderExecutionDetails.getOrderCode());
         Optional<OrderExecutionDetails> executionDetailsOptional = orderExecutionDetails1.stream().findFirst();

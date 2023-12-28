@@ -6,6 +6,7 @@ import java.util.*;
 
 import com.hh.pms.mapper.OrderMaterialMapper;
 import com.hh.pms.model.ProcurementTaskServiceClient;
+import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.OrderMaterial;
 import com.ruoyi.system.api.domain.ProcurementTask;
@@ -91,9 +92,8 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
     @Transactional
     public OrderManager insertOrderManager(OrderManager orderManager) {
         //先写订单生成
-        Date date = new Date();
-        orderManager.setCreateTime(date);
-        String orderCode = createOrderCode(date);
+        orderManager.setCreateTime(DateUtils.getNowDate());
+        String orderCode = createOrderCode(DateUtils.getNowDate());
         orderManager.setOrderCode(orderCode);
         orderManager.setOrderState(1l);
         //添加物料基础表
@@ -119,15 +119,18 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                 BigDecimal taskAccepted = procurementTask.getTaskAccepted();
                 System.out.println("这是查询之后返回的待受理数量:" + taskAccepted);
                 if (taskAccepted.compareTo(totalDemandQuantity) > 0) {
-                BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
-                System.out.println("这是相减之后的数" + newTaskAccepted);
-                procurementTask.setTaskAccepted(newTaskAccepted);
+                    BigDecimal newTaskAccepted = taskAccepted.subtract(totalDemandQuantity);
+                    System.out.println("这是相减之后的数" + newTaskAccepted);
+                    procurementTask.setTaskAccepted(newTaskAccepted);
                 }
                 procurementTask.setTaskStatus(2l);
                 procurementTaskServiceClient.updateProcurement(procurementTask);
                 // 如果物料明细有修改还要考虑修改物料明细表的数据
                 orderMaterialMapper.updateOrderMaterials(orderMaterialList);
+                //考虑订单表是否有修改
+
                 // 修改需求申请表状态
+
             } else {
                 // 存在某些OrderMaterial对象的orderCode不存在或为空的逻辑处理
                 // ...
@@ -136,25 +139,22 @@ public class OrderManagerServiceImpl implements IOrderManagerService {
                 });
                 // 执行物料明细插入操作
                 orderMaterialMapper.insertOrderMaterials(orderMaterialList);
-                // 获取自增Id集合
-                // 获取自增Id集合并转换为逗号隔开的字符串形式
-                StringBuilder orIdBuilder = new StringBuilder();
-                for (OrderMaterial item : orderMaterialList) {
-                    if (orIdBuilder.length() > 0) {
-                        orIdBuilder.append(",");
-                    }
-                    orIdBuilder.append(item.getOrName());
-                }
-                String orIdString = orIdBuilder.toString();
-                orderManager.setMaterialId(orIdString);
-                String connectCode = generateContractNumber();
-                orderManager.setContractCode(connectCode);
-            }
-        } else {
-            // 订单物料列表为空的逻辑处理
-            // ...
 
+            }
         }
+        // 获取自增Id集合
+        // 获取自增Id集合并转换为逗号隔开的字符串形式
+        StringBuilder orIdBuilder = new StringBuilder();
+        for (OrderMaterial item : orderMaterialList) {
+            if (orIdBuilder.length() > 0) {
+                orIdBuilder.append(",");
+            }
+            orIdBuilder.append(item.getOrName());
+        }
+        String orIdString = orIdBuilder.toString();
+        orderManager.setMaterialId(orIdString);
+        String connectCode = generateContractNumber();
+        orderManager.setContractCode(connectCode);
         int rows = orderManagerMapper.insertOrderManager(orderManager);
 
         return rows > 0 ? orderManager : null;
