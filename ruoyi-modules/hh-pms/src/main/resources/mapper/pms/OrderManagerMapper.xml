@@ -187,12 +187,10 @@
         om.tax_total,
         otr.ort_name,
         sd.sbi_name,
---         c.companies_name,
         y.currency_name
         from order_manager om
-        left join order_type_running otr on om.order_state = otr.ort_id
+        left join order_type_running otr on om.or_id = otr.ort_id
         left join supplier_details sd on sd.sd_id = om.supplier
---         left join companies c on c.companies_id = om.company
         left join currency y on y.currency_id = om.currency_id
         <where>
             <if test="orderCode != null  and orderCode != ''">and om.order_code = #{orderCode}</if>

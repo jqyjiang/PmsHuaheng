@@ -8,11 +8,10 @@
             style="width: 40px; height: 40px;margin-right: 10px; vertical-align: middle;">
           <span style="font-size: 18px; line-height: 40px; vertical-align: middle;">采购订单管理</span>
         </div>
-
         <div>
           <!-- 右边的四个个按钮 -->
           <el-button type="primary" size="small" @click="invoice">新建发货单</el-button>
-          <el-button type="primary" size="small" @click="drawer1 = true">审核</el-button>
+          <!-- <el-button type="primary" size="small" @click="drawer1 = true">审核</el-button> -->
           <el-button type="primary" size="small" label="rtl" @click="drawer = true">需求转订单</el-button>
           <el-button type="primary" size="small">合同转订单</el-button>
           <el-button type="primary" size="small" @click="orderCancelbutton">关闭订单</el-button>
@@ -134,7 +133,7 @@
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
-      <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChange">
+      <el-table v-loading="loading" :data="managerList" @selection-change="handleSelectionChange" stripe even-row-class="even-row">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="关联合同名称" align="center" prop="contractName" />
         <!-- <el-table-column label="采购订单id" align="center" prop="orderId" /> -->
@@ -313,7 +312,6 @@
                 <el-table-column label="供应商详细编码" align="center" prop="sdCode" />
                 <el-table-column label="供应商名称" align="center" prop="sbiName" />
               </el-table>
-
               <pagination v-show="stotal > 0" :total="stotal" :page.sync="squeryParams.pageNum"
                 :limit.sync="squeryParams.pageSize" @pagination="getList1" />
               <div slot="footer" class="dialog-footer">
@@ -729,7 +727,7 @@ export default {
   components: {
     Mingxi
   },
-  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method', 'om_state'],
+  dicts: ['self_pickup', 'order_state', 'order_type', 'order_source', 'procure', 'supplier_invoice', 'invoice_method', 'om_state','or_id'],
   data() {
     return {
       invoiceOrderMaterialList: [],//显示新建送货单的物料基本信息
@@ -1123,6 +1121,7 @@ requireList:[]
     // },
     //控制订单执行状态的颜色
     getFormattedOrderTypeRunning(row) {
+      console.log(row);
       if (row.orderTypeRunning !== null) {
         // 访问 row.orderTypeRunning 的属性并执行相应逻辑
         const statusClass = this.getOrderTypeRunningClass(row.orderTypeRunning.ortName);
@@ -1181,7 +1180,7 @@ requireList:[]
         return this.runNumber.length;
       } else {
         // 计算其他选项的总数
-        const count = this.runNumber.filter(item => item.orderState === ortId).length;
+        const count = this.runNumber.filter(item => item.orId === ortId).length;
         return count;
       }
     },
@@ -1574,7 +1573,7 @@ requireList:[]
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      findByOrderCodeMaterial(row.orderCode).then(response => {
+      findByOrderCodeMaterial1(row.orderCode).then(response => {
         this.orderMaterialList = response.data;
       })
       const orderId = row.orderId || this.ids
@@ -1694,6 +1693,9 @@ requireList:[]
 };
 </script>
 <style>
+.even-row {
+  background-color: #f2f2f2;
+}
 .order-info {
   margin-top: 20px;
 }
