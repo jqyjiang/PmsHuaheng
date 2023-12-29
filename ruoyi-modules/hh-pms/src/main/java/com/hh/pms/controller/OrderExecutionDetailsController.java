@@ -206,4 +206,20 @@ public class OrderExecutionDetailsController extends BaseController
     public AjaxResult updateReconciliation3(@RequestBody List<Long> ids) {
         return toAjax(orderExecutionDetailsService.updateReconciliation3(ids));
     }
+    /**
+     * 供应商确认对账
+     */
+    @RequiresPermissions("pms:orderDetail:edita")
+    @PutMapping(value = "/updateReconciliation4")
+    public AjaxResult updateReconciliation4(@RequestBody List<Long> ids) {
+        return toAjax(orderExecutionDetailsService.updateReconciliation4(ids));
+    }
+    /**
+     * 供应商拒绝对账
+     */
+    @RequiresPermissions("pms:orderDetail:edita")
+    @PutMapping(value = "/updateReconciliation5")
+    public AjaxResult updateReconciliation5(@RequestBody List<Long> ids) {
+        return toAjax(orderExecutionDetailsService.updateReconciliation5(ids));
+    }
 }

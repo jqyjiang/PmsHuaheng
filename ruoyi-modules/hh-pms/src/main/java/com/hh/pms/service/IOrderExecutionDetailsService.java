@@ -91,6 +91,10 @@ public interface IOrderExecutionDetailsService
     public int updateReconciliation2(List<Long> ids);
     /**退回对账*/
     public int updateReconciliation3(List<Long> ids);
+    /**供方确认对账*/
+    public int updateReconciliation4(List<Long> ids);
+    /**供方拒绝对账单*/
+    public int updateReconciliation5(List<Long> ids);
 
     /**
      * 根据订单号和收货单号查询

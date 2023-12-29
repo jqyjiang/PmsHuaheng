@@ -107,4 +107,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{categoryid}
         </foreach>
     </delete>
+
+    <insert id="batchCategory" parameterType="java.util.List">
+        insert into category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="list[0].categoryCode != null">category_code,</if>
+            <if test="list[0].categoryName != null">category_name,</if>
+            <if test="list[0].enable != null">enable,</if>
+            <if test="list[0].isNo != null">is_no,</if>
+            <if test="list[0].superiorCategory != null">superior_category,</if>
+            <if test="list[0].creationTime != null">creation_time,</if>
+            <if test="list[0].lUpdated != null">l_updated,</if>
+            <if test="list[0].lUpdateTime != null">l_update_time,</if>
+            <if test="list[0].company != null">company,</if>
+            <if test="list[0].meteringUnit != null">metering_unit,</if>
+            <if test="list[0].sourceSystem != null">source_system,</if>
+            <if test="list[0].introductionRequirements != null">introduction_requirements,</if>
+            <if test="list[0].assignPurchaser != null">assign_purchaser,</if>
+        </trim>
+        values
+        <foreach collection="list" item="category" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="category.categoryCode != null">#{category.categoryCode},</if>
+                <if test="category.categoryName != null">#{category.categoryName},</if>
+                <if test="category.enable != null">#{category.enable},</if>
+                <if test="category.isNo != null">#{category.isNo},</if>
+                <if test="category.superiorCategory != null">#{category.superiorCategory},</if>
+                <if test="category.creationTime != null">#{category.creationTime},</if>
+                <if test="category.lUpdated != null">#{category.lUpdated},</if>
+                <if test="category.lUpdateTime != null">#{category.lUpdateTime},</if>
+                <if test="category.company != null">#{category.company},</if>
+                <if test="category.meteringUnit != null">#{category.meteringUnit},</if>
+                <if test="category.sourceSystem != null">#{category.sourceSystem},</if>
+                <if test="category.introductionRequirements != null">#{category.introductionRequirements},</if>
+                <if test="category.assignPurchaser != null">#{category.assignPurchaser},</if>
+            </trim>
+        </foreach>
+    </insert>
 </mapper>

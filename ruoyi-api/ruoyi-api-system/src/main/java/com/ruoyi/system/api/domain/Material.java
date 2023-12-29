@@ -151,6 +151,105 @@ public class Material extends BaseEntity
     /**已完成金额*/
     @Excel(name = "已完成金额")
     private Long completeMoney;
+    /**需求申请数*/
+    @Excel(name = "需求申请数")
+    private Long applyNum;
+    /**对账申请总数*/
+    @Excel(name = "对账申请总数")
+    private Long reconciliationNum;
+    /**对账申请被拒绝数*/
+    @Excel(name = "对账申请被拒绝数")
+    private Long reconciliationRefuseNum;
+    /**订单总数*/
+    @Excel(name = "订单总数")
+    private Long orderTotal;
+    /**订单总收货金额*/
+    @Excel(name = "订单总收货金额")
+    private Long orderTotalAmount;
+    /**合同总数*/
+    @Excel(name = "合同总数")
+    private Long mentNum;
+    /**合同未激活数*/
+    @Excel(name = "合同未激活数")
+    private Long mentNumNo;
+    /**质检总数*/
+    @Excel(name = "质检总数")
+    private Long inspectTotal;
+    /**质检未执行*/
+    @Excel(name = "质检未执行")
+    private Long inspectTotalNo;
+
+    public Long getInspectTotal() {
+        return inspectTotal;
+    }
+
+    public void setInspectTotal(Long inspectTotal) {
+        this.inspectTotal = inspectTotal;
+    }
+
+    public Long getInspectTotalNo() {
+        return inspectTotalNo;
+    }
+
+    public void setInspectTotalNo(Long inspectTotalNo) {
+        this.inspectTotalNo = inspectTotalNo;
+    }
+
+    public Long getMentNum() {
+        return mentNum;
+    }
+
+    public void setMentNum(Long mentNum) {
+        this.mentNum = mentNum;
+    }
+
+    public Long getMentNumNo() {
+        return mentNumNo;
+    }
+
+    public void setMentNumNo(Long mentNumNo) {
+        this.mentNumNo = mentNumNo;
+    }
+
+    public Long getOrderTotal() {
+        return orderTotal;
+    }
+
+    public void setOrderTotal(Long orderTotal) {
+        this.orderTotal = orderTotal;
+    }
+
+    public Long getOrderTotalAmount() {
+        return orderTotalAmount;
+    }
+
+    public void setOrderTotalAmount(Long orderTotalAmount) {
+        this.orderTotalAmount = orderTotalAmount;
+    }
+
+    public Long getReconciliationNum() {
+        return reconciliationNum;
+    }
+
+    public void setReconciliationNum(Long reconciliationNum) {
+        this.reconciliationNum = reconciliationNum;
+    }
+
+    public Long getReconciliationRefuseNum() {
+        return reconciliationRefuseNum;
+    }
+
+    public void setReconciliationRefuseNum(Long reconciliationRefuseNum) {
+        this.reconciliationRefuseNum = reconciliationRefuseNum;
+    }
+
+    public Long getApplyNum() {
+        return applyNum;
+    }
+
+    public void setApplyNum(Long applyNum) {
+        this.applyNum = applyNum;
+    }
 
     public Long getTreatNum() {
         return treatNum;
@@ -536,6 +635,15 @@ public class Material extends BaseEntity
             .append("treatMoney",getTreatMoney())
             .append("stopNum",getStopNum())
             .append("completeMoney",getCompleteMoney())
+            .append("applyNum",getApplyNum())
+            .append("reconciliationNum",getReconciliationNum())
+            .append("reconciliationRefuseNum",getReconciliationRefuseNum())
+            .append("orderTotal",getOrderTotal())
+            .append("orderTotalAmount",getOrderTotalAmount())
+            .append("mentNum",getMentNum())
+            .append("mentNumNo",getMentNumNo())
+            .append("inspectTotal",getInspectTotal())
+            .append("inspectTotalNo",getInspectTotalNo())
             .toString();
     }
 }

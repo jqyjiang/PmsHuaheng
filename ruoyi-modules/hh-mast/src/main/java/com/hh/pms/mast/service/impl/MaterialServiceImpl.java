@@ -140,5 +140,50 @@ public class MaterialServiceImpl implements IMaterialService
         return materialMapper.selCompleteMoney();
     }
 
+    @Override
+    public Long selApplyNum() {
+        return materialMapper.selApplyNum();
+    }
+
+    @Override
+    public Long selReconciliationRefuseNum() {
+        return materialMapper.selReconciliationRefuseNum();
+    }
+
+    @Override
+    public Long selReconciliationNum() {
+        return materialMapper.selReconciliationNum();
+    }
+
+    @Override
+    public Long selOrderTotal() {
+        return materialMapper.selOrderTotal();
+    }
+
+    @Override
+    public Long selOrderTotalAmount() {
+        return materialMapper.selOrderTotalAmount();
+    }
+
+    @Override
+    public Long selMentNum() {
+        return materialMapper.selMentNum();
+    }
+
+    @Override
+    public Long selMentNumNo() {
+        return materialMapper.selMentNumNo();
+    }
+
+    @Override
+    public Long selInspectTotal() {
+        return materialMapper.selOrderTotal();
+    }
+
+    @Override
+    public Long selInspectTotalNo() {
+        return materialMapper.selInspectTotalNo();
+    }
+
 
 }

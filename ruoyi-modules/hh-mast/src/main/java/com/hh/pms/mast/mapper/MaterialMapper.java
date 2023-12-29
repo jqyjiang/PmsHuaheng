@@ -83,5 +83,22 @@ public interface MaterialMapper
     Long selStopNum();
     //已完成金额
     Long selCompleteMoney();
-
+    //需求申请数
+    Long selApplyNum();
+    //对账结算申请数
+    Long selReconciliationRefuseNum();
+    //对账结算拒绝数
+    Long selReconciliationNum();
+    //总订单数
+    Long selOrderTotal();
+    //总收货金额
+    Long selOrderTotalAmount();
+    //总合同数
+    Long selMentNum();
+    //合同未激活数
+    Long selMentNumNo();
+    //质检总数
+    Long selInspectTotal();
+    //质检未执行数
+    Long selInspectTotalNo();
 }

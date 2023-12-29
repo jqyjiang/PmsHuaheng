@@ -50,4 +50,20 @@ export function updateReconciliation3(ids) {
     data:ids
   })
 }
+// 修改对账4
+export function updateReconciliation4(ids) {
+  return request({
+    url: '/pms/orderDetail/updateReconciliation4',
+    method: 'put',
+    data:ids
+  })
+}
+// 修改对账5
+export function updateReconciliation5(ids) {
+  return request({
+    url: '/pms/orderDetail/updateReconciliation5',
+    method: 'put',
+    data:ids
+  })
+}
 

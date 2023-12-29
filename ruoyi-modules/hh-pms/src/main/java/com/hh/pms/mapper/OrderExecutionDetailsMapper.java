@@ -102,6 +102,10 @@ public interface OrderExecutionDetailsMapper
     public int updateReconciliation2(List<Long> ids);
     /**退回对账*/
     public int updateReconciliation3(List<Long> ids);
+    /**供方确认对账*/
+    public int updateReconciliation4(List<Long> ids);
+    /**供方拒绝对账单*/
+    public int updateReconciliation5(List<Long> ids);
 
     public List<OrderExecutionDetails> selectOrderExecutionDetailsListByOrderCode(@Param("OrderCode") String OrderCode);
 

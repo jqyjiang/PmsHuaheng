@@ -45,6 +45,15 @@
         <result property="treatMoney"    column="treatMoney"    />
         <result property="stopNum"    column="stopNum"    />
         <result property="aMoney"    column="completeMoney"    />
+        <result property="applyNum"    column="applyNum"    />
+        <result property="reconciliationNum"    column="reconciliationNum"    />
+        <result property="reconciliationRefuseNum"    column="reconciliationRefuseNum"    />
+        <result property="orderTotal"    column="orderTotal"    />
+        <result property="orderTotalAmount"    column="orderTotalAmount"    />
+        <result property="mentNum"    column="mentNum"    />
+        <result property="mentNumNo"    column="mentNumNo"    />
+        <result property="inspectTotalNo"    column="inspectTotalNo"    />
+        <result property="inspectTotal"    column="inspectTotal"    />
     </resultMap>
 
     <sql id="selectMaterialVo">
@@ -189,8 +198,18 @@
     </delete>
 
     <select id="selectMonthDemand" parameterType="MaterialInformation" resultMap="MaterialResult">
-        SELECT DATE_FORMAT(must_date, '%Y-%m') AS demandMonth, COUNT(*) AS demandNum
-        FROM material_information GROUP BY demandMonth
+        SELECT
+            months.Month,
+            COUNT(must_date) AS demandNum
+        FROM
+            (SELECT 1 AS Month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL
+             SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL
+             SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL
+             SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months
+                LEFT JOIN material_information ON EXTRACT(MONTH FROM must_date) = months.Month
+                AND EXTRACT(YEAR FROM must_date) = '2023'
+        GROUP BY months.Month
+        ORDER BY months.Month
     </select>
     <select id="selectDemandStatus" parameterType="MaterialInformation" resultMap="MaterialResult">
         SELECT '待分配' AS demandStatus, COUNT(*) AS count FROM material_information WHERE status = 1
@@ -257,4 +276,28 @@
     <select id="selCompleteMoney"  >
         SELECT COALESCE(SUM(taxTotal),0) AS completeMoney from order_execution_details where order_handle=2
     </select>
+    <select id="selApplyNum"  >
+        SELECT COUNT(*) AS applyNum FROM material_requirement
+    </select>
+    <select id="selReconciliationNum"  >
+        SELECT COUNT(*) AS reconciliationNum FROM order_execution_details WHERE order_quanlity=2
+    </select>
+    <select id="selReconciliationRefuseNum"  >
+        SELECT COUNT(*) AS reconciliationRefuseNum FROM order_execution_details WHERE order_quanlity=2 AND reconciliation_status=5
+    </select>
+    <select id="selOrderTotal"  >
+        SELECT count(*) AS orderTotal FROM order_execution_details    </select>
+    <select id="selOrderTotalAmount"  >
+        SELECT SUM(taxTotal) AS orderTotalAmount FROM order_execution_details    </select>
+    <select id="selMentNum"  >
+        SELECT COUNT(*) as mentNum from contract_management
+    </select>
+    <select id="selMentNumNo"  >
+        SELECT COUNT(*) as mentNumNo from contract_management WHERE contractstatus_id=4
+    </select>
+    <select id="selInspectTotal"  >
+        SELECT COUNT(*) as inspectTotal FROM order_execution_details where order_handle=2
+    </select>
+    <select id="selInspectTotalNo"  >
+        SELECT COUNT(*) as inspectTotalNo FROM order_execution_details where order_handle=2 AND order_quanlity=1    </select>
 </mapper>

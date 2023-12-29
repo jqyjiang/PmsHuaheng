@@ -58,7 +58,7 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: this.monthDemandList.map(item => item.demandMonth),
+          data: this.monthDemandList.map(item => item.month),
         },
         series: [
           {

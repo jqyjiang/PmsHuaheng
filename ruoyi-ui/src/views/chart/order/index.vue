@@ -7,7 +7,8 @@
             </li>
             <li>
                 <h4>待收货金额(元)</h4>
-                <h2>{{ treatMoney }}</h2>
+                <h2>{{ treatMoney!=null&&!isNaN(treatMoney)
+                ?parseFloat(treatMoney).toFixed(2) :'0.00'}}</h2>
             </li>
             <li>
                 <h4>完成订单</h4>
@@ -15,7 +16,8 @@
             </li>
             <li>
                 <h4>完成订单金额</h4>
-                <h2>{{ completeMoney }}</h2>
+                <h2>{{ completeMoney!=null&&!isNaN(completeMoney)
+                ?parseFloat(completeMoney).toFixed(2) :'0.00' }}</h2>
             </li>
         </ul>
 

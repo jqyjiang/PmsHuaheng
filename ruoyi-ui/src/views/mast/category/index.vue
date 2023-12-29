@@ -50,32 +50,17 @@
           v-hasPermi="['mast:category:add']"
         >新增</el-button>
       </el-col>
-      <el-col :span="1.5">
-            <el-button type="primary"
-             @click="showBatchAddDialog">批量新增</el-button>
-      </el-col>
-      <!-- <el-col :span="1.5">
+       <el-col :span="1.5">
         <el-button
           type="success"
           plain
           icon="el-icon-edit"
           size="mini"
-          :disabled="single"
-          @click="handleUpdate"
+
+          @click="showBatchAddDialog"
           v-hasPermi="['mast:category:edit']"
-        >修改</el-button>
+        >批量新增</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['mast:category:remove']"
-        >删除</el-button>
-      </el-col> -->
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -158,14 +143,9 @@
         <el-form-item label="品类名称" prop="categoryName">
           <el-input v-model="form.categoryName" placeholder="请输入品类名称" />
         </el-form-item>
-        <!-- <el-form-item label="是否允许超量送货" prop="isNo">
-          <el-input v-model="form.isNo" placeholder="请输入是否允许超量送货" />
-        </el-form-item> -->
         <el-form-item label="是否允许超量送货" prop="isNo">
         <el-checkbox v-model="form.isNo" ></el-checkbox>
         </el-form-item>
-
-
         <el-form-item label="上级品类" prop="superiorCategory">
           <el-input v-model="form.superiorCategory" placeholder="请选择上级品类"/>
           <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
@@ -182,8 +162,6 @@
                 </div>
               </el-dialog>
         </el-form-item>
-
-
         <el-form-item label="创建时间" prop="creationTime">
           <el-date-picker clearable
             v-model="form.creationTime"
@@ -206,7 +184,6 @@
         <el-form-item v-if="false" label="公司" prop="company">
         <el-input v-model="form.company" placeholder="请输入公司" />
         </el-form-item>
-        
         <el-form-item label="公司" prop="companiesName">
           <el-input v-model="form.companiesName" placeholder="请选择公司"/>
           <i class="el-icon-search" id="serachOne2" @click="showMaterial2()"></i>
@@ -265,48 +242,9 @@
     </el-dialog>
 
 <!-- 批量新增对话框 -->
-<el-dialog :visible.sync="batchAddDialogVisible" title="批量维护">
-      <el-form :model="forms" ref="forms">
-
-        <!-- <el-form-item label="品类编码" prop="categoryCode">
-          <el-input v-model="forms.categoryCode" placeholder="请输入品类编码"></el-input>
-        </el-form-item>
-        <el-form-item label="品类名称" prop="categoryCode">
-          <el-input v-model="forms.categoryName" placeholder="请输入品类名称"></el-input>
-        </el-form-item>
-        <el-form-item label="启用" prop="categoryEnable">
-        <el-checkbox v-model="form.categoryEnable" ></el-checkbox>
-        </el-form-item>
-        <el-form-item label="是否允许超量送货" prop="categoryIsNo">
-        <el-checkbox v-model="form.categoryIsNo" ></el-checkbox>
-        </el-form-item>
-        <el-form-item label="创建时间" prop="categoryCreatTime">
-          <el-date-picker v-model="forms.categoryCreatTime" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择创建时间"></el-date-picker>
-        </el-form-item>
-        <el-form-item label="最后更新人" prop="categoryUpdated">
-          <el-input v-model="forms.categoryUpdated" placeholder="请输入最后更新人"></el-input>
-        </el-form-item>
-        <el-form-item label="最后更新时间" prop="batchRequireTime">
-          <el-date-picker v-model="forms.batchRequireTime" type="date" value-format="yyyy-MM-dd"
-            placeholder="请选择最后更新时间"></el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="来源系统" prop="categorySystem">
-          <el-input v-model="forms.categorySystem" placeholder="请输入来源系统"></el-input>
-        </el-form-item>
-        <el-form-item label="引入要求 " prop="categoryRequirements">
-          <el-radio-group v-model="form.categoryRequirements" placeholder="请选择引入要求">
-            <el-radio :label="1">严格</el-radio>
-            <el-radio :label="0">一般</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="采购人" prop="categoryPurchaser">
-          <el-input v-model="forms.categoryPurchaser" placeholder="请输入采购人"></el-input>
-        </el-form-item> -->
+<el-dialog :visible.sync="batchAddDialogVisible"  title="批量维护">
+      <el-form :model="form" ref="form">
         <el-divider content-position="center">品类</el-divider>
-
-
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
             <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddCategory">添加</el-button>
@@ -315,8 +253,10 @@
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteCategory">删除</el-button>
           </el-col>
         </el-row>
-          <el-table :data="categoryList5" :row-class-name="rowCategoryIndex" @selection-change="handleCategorySelectionChange" ref="category">
+          <el-table :data="categoryList5" :row-class-name="rowCategoryIndex" @selection-change="handleCategorySelectionChange"
+          ref="category" @row-click="clickRowCategory">
           <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="品类编码" prop="categoryCode" width="150">
             <template slot-scope="scope">
                <el-input v-model="scope.row.categoryCode" placeholder="请输入品类编码" />
@@ -337,14 +277,12 @@
           <el-checkbox v-model="scope.row.categoryIsNo" ></el-checkbox>
           </template>
           </el-table-column>
-
-          <el-table-column label="上级品类" prop="superiorCategory">
+          <el-table-column label="上级品类" prop="superiorCategory" width="150">
           <template slot-scope="scope">
           <el-input v-model="scope.row.superiorCategory" placeholder="请选择上级品类"/>
           <i class="el-icon-search" id="serachOne1" @click="showMaterial1()"></i>
               <el-dialog :visible.sync="dialogMaterial1" title="品类对象-浏览框" :modal="false">
-
-                <el-table :data="categoryList1" v-loading="loading" @row-click="handleRowClickMaterial1">
+                <el-table :data="categoryList1" v-loading="loading" @row-click="handleRowClickMaterial11">
                   <el-table-column label="品类名称" align="center" prop="categoryName" />
                   <el-table-column label="品类代码" align="center" prop="categoryCode" />
                   <el-table-column label="上级品类" align="center" prop="superiorCategory" />
@@ -357,7 +295,6 @@
               </el-dialog>
             </template>
           </el-table-column>
-
           <el-table-column label="创建时间" prop="creationTime" width="240">
             <template slot-scope="scope">
               <el-date-picker clearable v-model="scope.row.creationTime" type="date" value-format="yyyy-MM-dd"
@@ -375,14 +312,12 @@
                 placeholder="请选择最后更新时间" />
             </template>
           </el-table-column>
-
-          <el-table-column label="公司" prop="companiesName">
+          <el-table-column label="公司" prop="companiesName" width="150">
             <template slot-scope="scope">
           <el-input v-model="scope.row.companiesName" placeholder="请选择公司"/>
           <i class="el-icon-search" id="serachOne2" @click="showMaterial2()"></i>
               <el-dialog :visible.sync="dialogMaterial2" title="公司-浏览框" :modal="false">
-
-                <el-table :data="companiesList" v-loading="loading" @row-click="handleRowClickMaterial2">
+                <el-table :data="companiesList" v-loading="loading" @row-click="handleRowClickMaterial22">
                   <el-table-column label="公司名称" align="center" prop="companiesName" />
                   <el-table-column label="公司代码" align="center" prop="companiesCode" />
                 </el-table>
@@ -394,8 +329,7 @@
               </el-dialog>
               </template>
         </el-table-column>
-
-        <el-table-column label="基本计算单位" prop="meteringUnit">
+        <el-table-column label="基本计算单位" prop="meteringUnit" width="150">
           <template slot-scope="scope">
           <el-select v-model="scope.row.meteringUnit" placeholder="请选择基本计算单位" >
             <el-option
@@ -407,7 +341,6 @@
           </el-select>
           </template>
         </el-table-column>
-
           <el-table-column label="来源系统" prop="sourceSystem" width="150">
             <template slot-scope="scope">
               <el-input v-model="scope.row.sourceSystem" placeholder="请输入来源系统" />
@@ -418,15 +351,11 @@
               <el-input v-model="scope.row.assignPurchaser" placeholder="请输入分配采购人" />
             </template>
           </el-table-column>
-
         </el-table>
-
-
-
       </el-form>
       <div slot="footer">
         <el-button @click="cancelBatchAdd">取消</el-button>
-        <el-button type="primary" @click="doBatchAdd">确定</el-button>
+        <el-button type="primary" @click="submitForm1">确定</el-button>
       </div>
     </el-dialog>
 
@@ -434,7 +363,7 @@
 </template>
 
 <script>
-import { listCategory, getCategory, delCategory, addCategory, updateCategory ,listAccount,listCategory1,listCompanies} from "@/api/mast/category";
+import { listCategory, getCategory, delCategory, addCategory, updateCategory ,listAccount,listCategory1,listCompanies,batchCategory} from "@/api/mast/category";
 
 export default {
   name: "Category",
@@ -461,6 +390,7 @@ export default {
       categoryList1:[],
       companiesList:[],
       categoryList5:[],//批量新增
+      CategoryIndex:0,//批量下标
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -480,18 +410,6 @@ export default {
         pageSize: 10,
 
       },
-      forms:{
-        categoryCode1:'',
-        categoryName1:'',
-        categoryEnable:'',
-        categoryIsNo:'',
-        categoryCreatTime:'',
-        categoryUpdated:'',
-        categoryUpdateTime:'',
-        categorySystem:'',
-        categoryRequirements:'',
-        categoryPurchaser:'',
-      },
       // 表单参数
       form: {},
       // 表单校验
@@ -506,6 +424,22 @@ export default {
 
       checkedCategorys: null,
 
+      // forms:{
+      //   categoryid: null,
+      //   categoryCode: null,
+      //   categoryName: null,
+      //   enable: null,
+      //   isNo: null,
+      //   superiorCategory: null,
+      //   creationTime: null,
+      //   lUpdated: null,
+      //   lUpdateTime: null,
+      //   company: null,
+      //   meteringUnit: null,
+      //   sourceSystem: null,
+      //   introductionRequirements: null,
+      //   assignPurchaser: null
+      // },
     };
   },
   created() {
@@ -515,22 +449,7 @@ export default {
     this.getList3();
   },
 
-  computed: {
-    totalDemand() {
-      let sum = 0;
-      this.categoryList5.forEach(item => {
-        if (item.requireNumber !== '') {
-          sum += parseFloat(item.requireNumber);
-        }
-      });
-      const total = isNaN(sum) ? 0.00 : sum.toFixed(2);
-      this.form.totalDemand = total; // 将计算得到的总价赋值给 form.totalDemand
-      return total;
-    },
-    isSelfPickupSelected() {
-      return this.form.isSelfPickup === 1; // 根据选择的值判断是否自提被选中
-    }
-  },
+  computed: {},
 
   methods: {
     /** 查询品类列表 */
@@ -584,31 +503,30 @@ export default {
       this.batchAddDialogVisible = false;
     },
 
-    // 执行批量新增
-    doBatchAdd() {
-      if (this.checkedCategorys.length === 0) {
-        this.$message.warning('请至少选择一条记录');
-        return;
-      }
-      // 对选中的行数据进行修改
-      this.checkedCategorys.forEach(row => {
-        row.categoryCode = this.forms.categoryCode;
-        row.requireNumber = this.forms.batchRequireNumber;
-        row.consignee = this.forms.batchConsignee;
-        row.receivingAddress = this.forms.batchReceivingAddress;
-        row.receivingPhone = this.forms.batchReceivingPhone;
-      });
-      // console.log(this.checkedCategorys)
-      // 清空批量修改的值
-      this.categoryCode = '';
-      this.batchRequireNumber = '';
-      this.batchConsignee = '';
-      this.batchReceivingAddress = '';
-      this.batchReceivingPhone = '';
-      //this.$refs.orderMaterial.clearSelection(); // 清空选中的行数据
-      this.$message.success('批量修改成功');
-      this.batchAddDialogVisible = false;
-    },
+    // // 执行批量新增
+    // doBatchAdd() {
+    //   if (this.checkedCategorys.length === 0) {
+    //     this.$message.warning('请至少选择一条记录');
+    //     return;
+    //   }
+    //   // 对选中的行数据进行修改
+    //   this.checkedCategorys.forEach(row => {
+    //     row.categoryCode = this.forms.categoryCode;
+    //     row.requireNumber = this.forms.batchRequireNumber;
+    //     row.consignee = this.forms.batchConsignee;
+    //     row.receivingAddress = this.forms.batchReceivingAddress;
+    //     row.receivingPhone = this.forms.batchReceivingPhone;
+    //   });
+    //   // console.log(this.checkedCategorys)
+    //   // 清空批量修改的值
+    //   this.categoryCode1 = '';
+    //   this.batchRequireNumber = '';
+    //   this.batchConsignee = '';
+    //   this.batchReceivingAddress = '';
+    //   this.batchReceivingPhone = '';
+    //   this.$message.success('批量修改成功');
+    //   this.batchAddDialogVisible = false;
+    // },
 
 
     showMaterial1() {
@@ -618,6 +536,12 @@ export default {
     showMaterial2() {
       this.dialogMaterial2 = true;
       this.getList3();
+    },
+
+    //批量  序号
+    rowCategoryIndex({ row, rowIndex }) {
+      row.index = rowIndex + 1;
+      row.lineNumber = row.index
     },
 
     // 取消按钮
@@ -697,6 +621,12 @@ export default {
       this.form.superiorCategory = row.categoryCode;
       this.dialogMaterial1 = false; // 关闭对话框
     },
+    handleRowClickMaterial11(row) {
+      // 修改数据的属性值
+      console.log(row.categoryCode);
+      this.categoryList5[this.CategoryIndex].superiorCategory=row.categoryCode;
+      this.dialogMaterial1 = false; // 关闭对话框
+    },
 
     handleRowClickMaterial2(row) {
       // 修改数据的属性值
@@ -704,17 +634,15 @@ export default {
       this.form.company = row.companiesId;
       this.dialogMaterial2 = false; // 关闭对话框
     },
-
-    //     /** 修改按钮操作 */
-    //     handleUpdate(row) {
-    //   this.reset();
-    //   const categoryid = row.categoryid || this.ids
-    //   getCategory(categoryid).then(response => {
-    //     this.form = response.data;
-    //     this.open = true;
-    //     this.title = "修改品类";
-    //   });
-    // },
+    handleRowClickMaterial22(row) {
+      // 修改数据的属性值
+      this.categoryList5[this.CategoryIndex].companiesName = row.companiesName;
+      this.categoryList5[this.CategoryIndex].company = row.companiesId;
+      this.dialogMaterial2 = false; // 关闭对话框
+    },
+    clickRowCategory(row, event, column) {
+      this.CategoryIndex = this.categoryList5.indexOf(row); // 获取点击的行索引
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -749,6 +677,47 @@ export default {
             addCategory(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
+              this.getList();
+            });
+          }
+        }
+      });
+    },
+    /**批量提交 */
+    submitForm1() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          if (this.form.categoryid != null) {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
+            if(this.form.isNo==true){
+              this.form.isNo=1
+            }else{
+              this.form.isNo=0
+            }
+            updateCategory(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.batchAddDialogVisible = false;
+              this.getList();
+            });
+          } else {
+            if(this.form.enable==true){
+              this.form.enable=1
+            }else{
+              this.form.enable=0
+            }
+            if(this.form.isNo==true){
+              this.form.isNo=1
+            }else{
+              this.form.isNo=0
+            }
+            let data = JSON.stringify(this.categoryList5);
+            batchCategory(data).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.batchAddDialogVisible = false;
               this.getList();
             });
           }
@@ -808,7 +777,7 @@ export default {
       }, `category_${new Date().getTime()}.xlsx`)
     }
   }
-};
+}
 </script>
 
 <style>

@@ -6,15 +6,15 @@ import java.util.List;
 
 /**
  * 品类Service接口
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
-public interface ICategoryService 
+public interface ICategoryService
 {
     /**
      * 查询品类
-     * 
+     *
      * @param categoryid 品类主键
      * @return 品类
      */
@@ -22,7 +22,7 @@ public interface ICategoryService
 
     /**
      * 查询品类列表
-     * 
+     *
      * @param category 品类
      * @return 品类集合
      */
@@ -30,7 +30,7 @@ public interface ICategoryService
 
     /**
      * 新增品类
-     * 
+     *
      * @param category 品类
      * @return 结果
      */
@@ -38,7 +38,7 @@ public interface ICategoryService
 
     /**
      * 修改品类
-     * 
+     *
      * @param category 品类
      * @return 结果
      */
@@ -46,7 +46,7 @@ public interface ICategoryService
 
     /**
      * 批量删除品类
-     * 
+     *
      * @param categoryids 需要删除的品类主键集合
      * @return 结果
      */
@@ -54,9 +54,12 @@ public interface ICategoryService
 
     /**
      * 删除品类信息
-     * 
+     *
      * @param categoryid 品类主键
      * @return 结果
      */
     public int deleteCategoryByCategoryid(Long categoryid);
+
+    /**批量新增*/
+    public int batchCategory(List<Category> categoryList);
 }

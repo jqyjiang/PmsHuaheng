@@ -259,13 +259,13 @@ public class OrderExecutionDetails extends BaseEntity {
     private Date stockInDate;
 
     /**业务对账状态*/
-    private Long reconciliationStatus;
+    private String reconciliationStatus;
 
-    public Long getReconciliationStatus() {
+    public String getReconciliationStatus() {
         return reconciliationStatus;
     }
 
-    public void setReconciliationStatus(Long reconciliationStatus) {
+    public void setReconciliationStatus(String reconciliationStatus) {
         this.reconciliationStatus = reconciliationStatus;
     }
 

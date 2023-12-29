@@ -165,7 +165,7 @@ public class MaterialController extends BaseController
     @GetMapping("/selTreatNum")
     public Long selTreatNum()
     {
-        System.out.println("待收货订单"+materialService.selTreatNum());
+//        System.out.println("待收货订单"+materialService.selTreatNum());
         return materialService.selTreatNum();
     }
     //待收货金额
@@ -173,7 +173,7 @@ public class MaterialController extends BaseController
     @GetMapping("/selTreatMoney")
     public Long selTreatMoney()
     {
-        System.out.println("待收货金额"+materialService.selTreatMoney());
+//        System.out.println("待收货金额"+materialService.selTreatMoney());
         return materialService.selTreatMoney();
     }
     //已完成订单
@@ -181,7 +181,7 @@ public class MaterialController extends BaseController
     @GetMapping("/selStopNum")
     public Long selStopNum()
     {
-        System.out.println("已完成订单"+materialService.selStopNum());
+//        System.out.println("已完成订单"+materialService.selStopNum());
         return materialService.selStopNum();
     }
     //已完成金额
@@ -189,7 +189,71 @@ public class MaterialController extends BaseController
     @GetMapping("/selCompleteMoney")
     public Long selCompleteMoney()
     {
-        System.out.println("已完成金额"+materialService.selCompleteMoney());
+//        System.out.println("已完成金额"+materialService.selCompleteMoney());
         return materialService.selCompleteMoney();
     }
+    //需求申请数
+    @RequiresPermissions("mast:material:selApplyNum")
+    @GetMapping("/selApplyNum")
+    public Long selApplyNum()
+    {
+        return materialService.selApplyNum();
+    }
+    //对账结算申请数
+    @RequiresPermissions("mast:material:selReconciliationNum")
+    @GetMapping("/selReconciliationNum")
+    public Long selReconciliationNum()
+    {
+        return materialService.selReconciliationNum();
+    }
+    //对账结算拒绝数
+    @RequiresPermissions("mast:material:selReconciliationRefuseNum")
+    @GetMapping("/selReconciliationRefuseNum")
+    public Long selReconciliationRefuseNum()
+    {
+        return materialService.selReconciliationRefuseNum();
+    }
+    //总订单数
+    @RequiresPermissions("mast:material:selOrderTotal")
+    @GetMapping("/selOrderTotal")
+    public Long selOrderTotal()
+    {
+        return materialService.selOrderTotal();
+    }
+    //总收货订单金额
+    @RequiresPermissions("mast:material:selOrderTotalAmount")
+    @GetMapping("/selOrderTotalAmount")
+    public Long selOrderTotalAmount()
+    {
+        return materialService.selOrderTotalAmount();
+    }
+    //总合同数
+    @RequiresPermissions("mast:material:selMentNum")
+    @GetMapping("/selMentNum")
+    public Long selMentNum()
+    {
+        return materialService.selMentNum();
+    }
+    //合同未激活数
+    @RequiresPermissions("mast:material:selMentNumNo")
+    @GetMapping("/selMentNumNo")
+    public Long selMentNumNo()
+    {
+        return materialService.selMentNumNo();
+    }
+    //质检总数
+    @RequiresPermissions("mast:material:selInspectTotal")
+    @GetMapping("/selInspectTotal")
+    public Long selInspectTotal()
+    {
+        return materialService.selInspectTotal();
+    }
+    //质检未执行数
+    @RequiresPermissions("mast:material:selInspectTotalNo")
+    @GetMapping("/selInspectTotalNo")
+    public Long selInspectTotalNo()
+    {
+        return materialService.selInspectTotalNo();
+    }
+
 }

@@ -4,7 +4,7 @@
       <el-form label-width="40px">
       <el-col  :span="1.3" :inline="true" size="small">
         <el-form-item>
-          <el-link :class="{ 'selected': selectedRoute === 1 }" type="primary"
+          <el-link :class="{ 'selected': selectedRoute === 1}" type="primary"
             @click="selectRoute(1)">
             待生成对账单
           </el-link>
@@ -34,12 +34,22 @@
           </el-link>
         </el-form-item>
       </el-col>
+      <el-col  :span="1.3" :inline="true" size="small">
+        <el-form-item>
+          <el-link :class="{ 'selected': selectedRoute === 5 }" type="primary"
+            @click="selectRoute(5)">
+            供方已拒绝
+          </el-link>
+        </el-form-item>
+      </el-col>
       </el-form>
+
 
       <el-button v-if="this.queryParams.reconciliationStatus == 1"
       style="float: right;background-color: #1890ff;color: white;"
       type="success"
       plain
+      :disabled="single"
       @click="handleUpdate"
       v-hasPermi="['pms:orderDetail:edit']"
       >生成对账单</el-button>
@@ -53,6 +63,16 @@
       style="float: right;margin-right: 10px;background-color: #1890ff;color: white;"
       @click="handleConfirm"
       v-hasPermi="['pms:orderDetail:edit']">确认</el-button>
+
+      <el-button v-if="this.queryParams.reconciliationStatus == 3"
+      style="float: right;margin-right: 10px;background-color: #1890ff;color: white;"
+      @click="handleConfirm3"
+      v-hasPermi="['pms:orderDetail:edita']">拒绝</el-button>
+      <el-button v-if="this.queryParams.reconciliationStatus == 3"
+      style="float: right;margin-right: 10px;background-color: #1890ff;color: white;"
+      @click="handleConfirm2"
+      v-hasPermi="['pms:orderDetail:edita']">确认</el-button>
+
 
     </div>
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
@@ -195,12 +215,13 @@
     />
 
     <!-- 添加或修改mingxi对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="订单编号" prop="orderCode">
+
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
+      <el-form class="custom-form" ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="订单编号" prop="orderCode" >
           <el-input v-model="form.orderCode" placeholder="请输入订单编号" />
         </el-form-item>
-        <el-form-item label="订单状态" prop="orderStatus">
+        <el-form-item label="订单状态" prop="orderStatus" >
           <el-radio-group v-model="form.orderStatus">
             <el-radio
               v-for="dict in dict.type.om_state"
@@ -332,10 +353,11 @@
       </div>
     </el-dialog>
   </div>
+
 </template>
 
 <script>
-import { listReconciliation,getOrderDetail,updateOrderDetail,updateReconciliation1,updateReconciliation2,updateReconciliation3  } from "@/api/reconciliation/reconciliation";
+import { listReconciliation,getOrderDetail,updateOrderDetail,updateReconciliation1,updateReconciliation2,updateReconciliation3,updateReconciliation4,updateReconciliation5  } from "@/api/reconciliation/reconciliation";
 
 export default {
   name: "OrderDetail",
@@ -416,6 +438,7 @@ export default {
     };
   },
   created() {
+    // this.queryParams.orderQuanlity=2;
     this.queryParams.reconciliationStatus = 1;
     //this.getList();
      this.selectRoute();
@@ -447,22 +470,44 @@ handleConfirm1(row) {
     this.$message.success('退回成功');
   }).catch(() => {});
 },
+handleConfirm2(row) {
+  const ids = row.id || this.ids;
+  if (!ids.length) {
+    this.$message.warning('请先选择需要确认的订单');
+    return;
+  }
+  this.$modal.confirm('是否确认所选订单？').then(() => {
+    return updateReconciliation4(ids);
+  }).then(() => {
+    this.getList();
+    this.$message.success('订单已确认');
+  }).catch(() => {});
+},
+handleConfirm3(row) {
+  const ids = row.id || this.ids;
+  if (!ids.length) {
+    this.$message.warning('请先选择需要确认的订单');
+    return;
+  }
+  this.$modal.confirm('是否拒绝所选订单？').then(() => {
+    return updateReconciliation5(ids);
+  }).then(() => {
+    this.getList();
+    this.$message.success('订单已成功被拒绝');
+  }).catch(() => {});
+},
     selectRoute(route){
     // this.selectRoute=route;
     if (route === 1) {
-        // 设置查询参数，根据状态1获取对应的数据列表
         this.queryParams.reconciliationStatus = 1;
-        // console.log(route);
       } else if (route === 2) {
-        // 设置查询参数，根据状态2获取对应的数据列表
         this.queryParams.reconciliationStatus = 2;
-        // console.log(route);
       } else if (route === 3) {
-        // 设置查询参数，根据状态3获取对应的数据列表
         this.queryParams.reconciliationStatus = 3;
       } else if (route === 4) {
-        // 设置查询参数，根据状态4获取对应的数据列表
         this.queryParams.reconciliationStatus = 4;
+      }else if (route === 5) {
+        this.queryParams.reconciliationStatus = 5;
       }
       this.getList();
     },
@@ -478,6 +523,8 @@ handleConfirm1(row) {
           return 'info';
         }else if(reconciliationStatus==3){
           return 'warning';
+        }else if(reconciliationStatus==5){
+          return 'stop';
         }else{
           return 'danger';
         }
@@ -489,7 +536,9 @@ handleConfirm1(row) {
         return 'custom-info';
       } else if (reconciliationStatus == 3) {
         return 'custom-warning';
-      } else {
+      } else if (reconciliationStatus == 5) {
+        return 'custom-stop';
+      }else {
         return 'custom-danger';
       }
     },
@@ -645,7 +694,7 @@ handleConfirm1(row) {
   outline: none;
   background-color: white;
   font-size: 12px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .custom-success {
   font-size: 12px;
@@ -667,11 +716,20 @@ handleConfirm1(row) {
   background-color: orange;
   color: white;
 }
-
+.custom-stop {
+  font-size: 12px;
+  border-radius: 20px;
+  background-color: rgb(150, 148, 143);
+  color: rgb(18, 5, 5);
+}
 .custom-danger {
   font-size: 12px;
   border-radius: 20px;
   background-color: #aeefbf;
   color: #45ba64;
+}
+.custom-form .el-form-item {
+  width: 480px;
+  float: left;
 }
 </style>

@@ -11,15 +11,15 @@ import java.util.List;
 
 /**
  * 物料维护Service接口
- * 
+ *
  * @author ruoyi
  * @date 2023-11-29
  */
-public interface IMaterialService 
+public interface IMaterialService
 {
     /**
      * 查询物料维护
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 物料维护
      */
@@ -27,7 +27,7 @@ public interface IMaterialService
 
     /**
      * 查询物料维护列表
-     * 
+     *
      * @param material 物料维护
      * @return 物料维护集合
      */
@@ -35,7 +35,7 @@ public interface IMaterialService
 
     /**
      * 新增物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -43,7 +43,7 @@ public interface IMaterialService
 
     /**
      * 修改物料维护
-     * 
+     *
      * @param material 物料维护
      * @return 结果
      */
@@ -51,7 +51,7 @@ public interface IMaterialService
 
     /**
      * 批量删除物料维护
-     * 
+     *
      * @param materialIds 需要删除的物料维护主键集合
      * @return 结果
      */
@@ -59,7 +59,7 @@ public interface IMaterialService
 
     /**
      * 删除物料维护信息
-     * 
+     *
      * @param materialId 物料维护主键
      * @return 结果
      */
@@ -83,5 +83,23 @@ public interface IMaterialService
     Long selStopNum();
     //已完成金额
     Long selCompleteMoney();
+    //需求申请数
+    Long selApplyNum();
+    //对账结算申请数
+    Long selReconciliationRefuseNum();
+    //对账结算拒绝数
+    Long selReconciliationNum();
+    //总订单数
+    Long selOrderTotal();
+    //总收货金额
+    Long selOrderTotalAmount();
+    //总合同数
+    Long selMentNum();
+    //合同未激活数
+    Long selMentNumNo();
+    //质检总数
+    Long selInspectTotal();
+    //质检未执行数
+    Long selInspectTotalNo();
 
 }

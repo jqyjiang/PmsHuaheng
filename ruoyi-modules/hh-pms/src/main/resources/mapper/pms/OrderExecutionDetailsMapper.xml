@@ -46,6 +46,7 @@
         <result property="stockInPerson" column="stockInPerson"/>
         <result property="stockInDate" column="stockInDate"/>
         <result property="createTime" column="create_time"/>
+        <result property="reconciliationStatus" column="reconciliation_status"/>
         <association property="orderManager" javaType="OrderManager">
             <id property="orderId" column="order_id"/>
             <result property="materialId" column="material_id"/>
@@ -235,6 +236,7 @@
             <if test="orderHandle != null ">and order_handle = #{orderHandle}</if>
             <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
             and order_handle ='2'
+
         </where>
     </select>
     <select id="selectOrderDelivery" resultType="com.ruoyi.system.api.domain.OrderExecutionDetails"
@@ -493,9 +495,23 @@
             <if test="supplier != null  and supplier != ''">and supplier = #{supplier}</if>
             <if test="receiptNoteNo != null  and receiptNoteNo != ''">and receiptNoteNo = #{receiptNoteNo}</if>
             <if test="receiver != null  and receiver != ''">and receiver = #{receiver}</if>
-            <if test="reconciliationStatus != null  and reconciliationStatus != ''">and reconciliation_status =
-                #{reconciliationStatus}
-            </if>
+            <choose>
+                <when test="reconciliationStatus == 1">
+                    AND (reconciliation_status = 1 OR reconciliation_status = 5)
+                </when>
+                <when test="reconciliationStatus == 2">
+                    AND reconciliation_status = 2
+                </when>
+                <when test="reconciliationStatus == 3">
+                    AND reconciliation_status = 3
+                </when>
+                <when test="reconciliationStatus == 4">
+                    AND reconciliation_status = 4
+                </when>
+                <when test="reconciliationStatus == 5">
+                    AND reconciliation_status = 5
+                </when>
+            </choose>
             AND order_quanlity=2
         </where>
     </select>
@@ -512,6 +528,8 @@
             and order_quanlity !=''
         </where>
     </select>
+
+
 
     <update id="updateReconciliation1" parameterType="OrderExecutionDetails">
         update order_execution_details
@@ -564,6 +582,20 @@
     </update>
     <update id="updateReconciliation3">
         update order_execution_details set reconciliation_status = 1
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateReconciliation4">
+        update order_execution_details set reconciliation_status = 4
+        where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateReconciliation5">
+        update order_execution_details set reconciliation_status = 5
         where id in
         <foreach item="id" collection="list" open="(" separator="," close=")">
             #{id}

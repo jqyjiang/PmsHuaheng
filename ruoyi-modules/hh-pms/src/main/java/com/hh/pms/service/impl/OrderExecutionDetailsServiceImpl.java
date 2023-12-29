@@ -238,6 +238,16 @@ public class OrderExecutionDetailsServiceImpl implements IOrderExecutionDetailsS
         return orderExecutionDetailsMapper.selectOrderStockInList(orderExecutionDetails);
     }
 
+    @Override
+    public int updateReconciliation4(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation4(ids);
+    }
+
+    @Override
+    public int updateReconciliation5(List<Long> ids) {
+        return orderExecutionDetailsMapper.updateReconciliation5(ids);
+    }
+
 
     /**
      * 删除mingxi信息

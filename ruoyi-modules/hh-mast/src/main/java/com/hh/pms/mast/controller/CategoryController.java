@@ -5,14 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.system.api.domain.Category;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.log.annotation.Log;
 import com.ruoyi.common.log.enums.BusinessType;
 import com.ruoyi.common.security.annotation.RequiresPermissions;
@@ -119,4 +112,16 @@ public class CategoryController extends BaseController
     {
         return toAjax(categoryService.deleteCategoryByCategoryids(categoryids));
     }
+
+    /**
+     * 批量新增
+     */
+    @RequiresPermissions("mast:category:batchCategory")
+    @Log(title = "品类", businessType = BusinessType.INSERT)
+    @PostMapping("/batchCategory")
+    public AjaxResult batchCategory(@RequestBody List<Category> categoryList) // 添加 @RequestBody 注解
+    {
+        return toAjax(categoryService.batchCategory(categoryList));
+    }
+
 }

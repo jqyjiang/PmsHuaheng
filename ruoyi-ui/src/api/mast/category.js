@@ -69,3 +69,17 @@ export function delCategory(categoryid) {
     method: 'delete'
   })
 }
+
+// 批量新增
+export function batchCategory(data) {
+  return request({
+    url: '/mast/category/batchCategory',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json' // 添加请求头部信息
+    },
+    data: data // 直接传递数组列表作为参数
+  })
+}
+
+
