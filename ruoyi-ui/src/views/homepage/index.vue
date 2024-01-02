@@ -16,7 +16,7 @@
        style="width:40px ;height: 40px;margin: 0px 5px;float: left;"></router-link></li>
         <li><router-link to="/procure/requirement"><img src="./../../assets/images/a2.jpg"
        style="width:40px ;height: 40px;margin: 0px 5px;float: left;"></router-link></li>
-       <li><router-link to="/procure/management"><img src="./../../assets/images/a3.jpg"
+       <li><router-link to="/supplierpms/details"><img src="./../../assets/images/a3.jpg"
        style="width:40px ;height: 40px;margin: 0px 5px;float: left;"></router-link></li>
         <li><router-link to="/pms/manager"><img src="./../../assets/images/a4.jpg"
        style="width:40px ;height: 40px;margin: 0px 5px;float: left;"></router-link></li>
@@ -154,18 +154,18 @@ Vue.use(Router)
     routes: [
     {
       path: '/procure/pool',
-      name: 'PMSManager',
+      name: 'ProcurePool',
       component: () => import('@/views/procure/pool/index.vue')
     },
     {
       path: '/procure/requirement',
-      name: 'PMSManager',
+      name: 'ProcureRequirement',
       component: () => import('@/views/procure/requirement/index.vue')
     },
     {
-      path: '/procure/management',
-      name: 'PMSManager',
-      component: () => import('@/views/procure/management/index.vue')
+      path: '/supplierpms/details',
+      name: 'Supplierpms',
+      component: () => import('@/views/supplierpms/details/index.vue')
     },
     {
       path: '/pms/manager',
