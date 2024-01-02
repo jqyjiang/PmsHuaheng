@@ -136,6 +136,7 @@
             and task_status != 4
         </where>
         group by requirement_code
+        order by task_id desc
     </select>
 
     <select id="selectProcurementTaskByStatus" resultMap="ProcurementTaskResult">

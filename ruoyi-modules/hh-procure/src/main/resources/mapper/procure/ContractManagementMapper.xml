@@ -202,7 +202,7 @@
             <if test="purchasingList != null  and purchasingList != ''"> and purchasing_list = #{purchasingList}</if>
             <if test="purchaseOrderCode != null  and purchaseOrderCode != ''"> and purchase_order_code = #{purchaseOrderCode}</if>
         </where>
-        order by application_date
+        order by application_date desc
     </select>
 
     <select id="selectContractManagementByContractManagementId" parameterType="Long" resultMap="ContractManagementResult">

@@ -106,6 +106,7 @@
             <if test="requirementCode != null  and requirementCode != ''"> and requirement_code = #{requirementCode}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
+        order by m.mi_id desc
     </select>
 
     <select id="selectMaterialInformationByMiId" parameterType="Integer" resultMap="MaterialInformationMaterialResult">
