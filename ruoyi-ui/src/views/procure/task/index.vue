@@ -213,9 +213,6 @@
           <el-col :span="1.5">
             <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteOrderMaterial">删除</el-button>
           </el-col>
-<!--          <el-col :span="1.5">-->
-<!--            <el-button type="primary" @click="showBatchAddDialog">批量维护</el-button>-->
-<!--          </el-col>-->
         </el-row>
         <el-table :data="orderMaterialList" :row-class-name="rowOrderMaterialIndex"
                   @selection-change="handleOrderMaterialSelectionChange" ref="orderMaterial" @row-click="clickRowMaterial">
@@ -375,31 +372,6 @@
         <el-button @click="cancelTransfer">取 消</el-button>
       </div>
     </el-dialog>
-    <!-- 批量新增对话框 -->
-<!--    <el-dialog :visible.sync="batchAddDialogVisible" title="批量维护">-->
-<!--      <el-form :model="forms" ref="forms">-->
-<!--        <el-form-item label="需求日期" prop="batchRequireTime">-->
-<!--          <el-date-picker v-model="forms.batchRequireTime" type="date" value-format="yyyy-MM-dd"-->
-<!--                          placeholder="请选择需求日期"></el-date-picker>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="需求数量" prop="batchRequireNumber">-->
-<!--          <el-input v-model="forms.batchRequireNumber" placeholder="请输入需求数量"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="收货人" prop="batchConsignee">-->
-<!--          <el-input v-model="forms.batchConsignee" placeholder="请输入收货人"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="收货地址" prop="batchReceivingAddress">-->
-<!--          <el-input v-model="forms.batchReceivingAddress" placeholder="请输入收货地址"></el-input>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item label="收货电话" prop="batchReceivingPhone">-->
-<!--          <el-input v-model="forms.batchReceivingPhone" placeholder="请输入收货电话"></el-input>-->
-<!--        </el-form-item>-->
-<!--      </el-form>-->
-<!--      <div slot="footer">-->
-<!--        <el-button @click="cancelBatchAdd">取消</el-button>-->
-<!--        <el-button type="primary" @click="doBatchAdd">确定</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
 
     <!-- 转办对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" id="dialog_box" append-to-body>
@@ -452,8 +424,12 @@ export default {
       taskList: [],
       // 弹出层标题
       title: "",
-      // 是否显示弹出层(转办)
+      // 是否显示弹出层转办)
       open: false,
+      status:0,
+      occupied:0,
+      totalss:0,
+      accepted:0,
       // 受理
       openTransfer:false,
       // 查询参数
@@ -641,6 +617,7 @@ export default {
       /** 查询我的需求任务列表 */
       getList() {
         this.loading = true;
+        console.log(this.queryParams);
         listTask(this.queryParams).then(response => {
           this.taskList = response.rows;
           console.log(this.taskList)
@@ -692,9 +669,14 @@ export default {
       },
       // 多选框选中数据
       handleSelectionChange(selection) {
+        console.log(selection)
         this.ids = selection.map(item => item.taskId)
         this.single = selection.length !== 1
         this.multiple = !selection.length
+        this.status = selection.map(item => item.taskStatus)
+        this.accepted = selection.map(item => item.taskAccepted)
+        this.occupied = selection.map(item => item.taskOccupied)
+        this.numbers = selection.map(item => item.taskNumber)
       },
       /** 新增按钮操作 */
       handleAdd() {
@@ -704,27 +686,38 @@ export default {
       },
       /** 受理按钮操作 */
       handleTransfer(row) {
-        this.reset();
-        const taskId = row.taskId || this.ids
-        console.log(taskId)
-        getTask(taskId).then(response => {
-          this.form = response.data;
-          console.log(response.data)
-          this.orderMaterialList=[]
-          for (let i=0;i<this.materialList.length;i++){
-            const innerElement = this.materialList[i];
-            if (innerElement.orderCode === response.data.purchasingList) {
-              this.orderMaterialList.push(innerElement)
+        const zt=this.status
+        console.log(zt)
+        if (zt==2||this.zt=='2'){
+          this.$notify({
+            title: '警告',
+            message: '已受理，请重新选择',
+            type: 'warning'
+          });
+        }else {
+          this.reset();
+          const taskId = row.taskId || this.ids
+          console.log(taskId)
+          getTask(taskId).then(response => {
+            this.form = response.data;
+            console.log(response.data)
+            this.orderMaterialList=[]
+            for (let i=0;i<this.materialList.length;i++){
+              const innerElement = this.materialList[i];
+              if (innerElement.orderCode === response.data.purchasingList) {
+                this.orderMaterialList.push(innerElement)
+              }
             }
-          }
-          this.openTransfer = true;
-          this.title = "受理";
-          this.form.orderSource='采购需求';
-          this.form.orderType=2;
-          this.form.companiesId=response.data.companies.companiesName;
-          this.form.purchaser=response.data.purchaser;
-          this.form.company=response.data.companiesId;
-        });
+            this.openTransfer = true;
+            this.title = "受理";
+            this.form.orderSource='采购需求';
+            this.form.orderType=2;
+            this.form.companiesId=response.data.companies.companiesName;
+            this.form.purchaser=response.data.purchaser;
+            this.form.company=response.data.companiesId;
+          });
+        }
+
       },
       /** 转办按钮操作 */
       handleUpdatePurchaser(row) {
@@ -739,33 +732,24 @@ export default {
       /** 受理提交按钮 */
       submitFormOrder() {
         this.$refs["form"].validate(valid => {
-          // console.log(this.form.orderId)
-          for (let i = 0; i < this.requireList.length; i++) {
-            const selectedTask = this.requireList[i];
-            console.log(selectedTask)
-            if (selectedTask.taskAccepted === 0.00 || selectedTask.taskAccepted === null || selectedTask.taskAccepted === '') {
-              // 说明该条需求订单已经没有可改为采购申请单的必要了
-              // 给出提示，重新选择
-              this.$notify({
-                title: '警告',
-                message: '存在代理数量为0的任务，请重新选择',
-                type: 'warning'
-              });
-            }
-          }
           if (valid) {
-            // 任务总数量    占用任务数量=待受理数量-已受理数量   待受理数量=总数量-已受理数量   已受理数量=待受理数量-需求数量
+            // 任务总数量    占用任务数量=需求数量   待受理数量=总数量-已受理数量   已受理数量=待受理数量-需求数量
             const taskId = this.ids
-            const taskAccepted=this.form.taskAccepted // 待受理数量
-            const number=this.forms.batchRequireNumber  // 需求数量
-            const occupied= this.form.taskOccupied // 占用任务数量
-            const total=this.form.taskTotal // 总数量
+            const taskAccepted=this.accepted // 待受理数量
+            const number=this.form.totalDemand  // 需求数量
+            console.log("1:"+number)
+            const occupied= this.occupied // 占用任务数量
+            const total= this.numbers // 总数量
+            //console.log(total-taskAccepted)
             // 已受理数量
             const acceptedQuantity= Number(taskAccepted)-Number(number)
+            console.log("2:"+acceptedQuantity)
             const allNumber=Number(total)-Number(acceptedQuantity)
+            console.log("3:"+allNumber)
               editOrAdd(number,acceptedQuantity,allNumber,taskId);
               addOrderManger(this.form).then(response => {
                 this.$modal.msgSuccess("生成采购订单成功");
+                this.queryParams.purchaser = null;
                 this.getList();
                 this.openTransfer = false;
               });

@@ -59,9 +59,9 @@ export function addOrderManger(data){
     data:data
   })
 }
-export function editOrAdd(acceptedQuantity,taskAccepted,taskId){
+export function editOrAdd(taskOccupied,acceptedQuantity,taskAccepted,taskId){
   return request({
-    url:'/procure/task/sl1/'+acceptedQuantity+'/'+taskAccepted+'/'+taskId,
+    url:'/procure/task/sl1/'+taskOccupied+'/'+acceptedQuantity+'/'+taskAccepted+'/'+taskId,
     method:'put'
   })
 }
