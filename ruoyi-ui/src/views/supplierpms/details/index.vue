@@ -29,23 +29,23 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['supplierpms:supplier:add']">新增</el-button>
+          v-hasPermi="['supplierpms:details:add']">新增</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['supplierpms:supplier:edit']">修改</el-button>
+          v-hasPermi="['supplierpms:details:edit']">修改</el-button>
       </el-col> -->
       <el-col :span="1.5">
         <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
+          v-hasPermi="['supplierpms:details:remove']">删除</el-button>
       </el-col>
       <!-- <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-s-check" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['supplierpms:supplier:edit']">审核</el-button>
+          v-hasPermi="['supplierpms:details:edit']">审核</el-button>
       </el-col> -->
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['supplierpms:supplier:export']">导出</el-button>
+          v-hasPermi="['supplierpms:details:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -79,11 +79,13 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-if="scope.row.sdStatus === '0'" size="mini" type="text" @click="authentication(scope.row)"
-            icon="el-icon-coordinate" v-hasPermi="['supplierpms:supplier:remove']">企业认证</el-button>
-          <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check"
-            @click="authentication(scope.row)" v-hasPermi="['supplierpms:details:edit']">审核</el-button>
+            icon="el-icon-coordinate" v-hasPermi="['supplierpms:details:certification']">企业认证</el-button>
+          <div v-hasPermi="['supplierpms:details:examine']">
+            <el-button v-if="scope.row.sdStatus === '1'" type="text" size="mini" icon="el-icon-s-check"
+              @click="authentication(scope.row)" >审核</el-button>
+          </div>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['supplierpms:supplier:remove']">删除</el-button>
+            v-hasPermi="['supplierpms:details:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -265,7 +267,8 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="authentications" v-if="form.sdStatus == '0'">提交认证</el-button>
-            <el-button type="primary" @click="InterviewReview" v-if="form.sdStatus == '1'">审核</el-button>
+            <el-button type="primary" @click="InterviewReview" v-if="form.sdStatus == '1'"
+              v-hasPermi="['supplierpms:details:examine']">审核</el-button>
 
           </el-form-item>
           <!-- @click="handleUpdate" -->
@@ -561,7 +564,7 @@ export default {
       this.dialogVisible = false;
       console.log(this.form);
       this.form.lifecycleId = 1;
-      this.form.slStatus=1;
+      this.form.slStatus = 1;
       if (determine) {
         //this.form.evaluationState = 3
         this.form.sdStatus = "2";
