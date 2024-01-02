@@ -151,7 +151,7 @@
                application_date, department, companies, related_projects,is_main_contract, related_main_contract,
                budget_related_contracts, cost_center, head, signing_date,payment_proportion, contractstatus_id,
                c.sd_id, total_project_budget, project_available_budget, contract_type, dense, begin_time, end_time,
-               contract_price,capitalization, stamp_duty_amount, contract_description, purchasing_list, s.sd_id,sd_time,
+               contract_price,capitalization, stamp_duty_amount, contract_description, purchasing_list,sd_time,
                sd_code,sbi_name,sd_uscc,sbi_abbreviation,sbi_serve,sd_industry,sd_en,sd_rt,sd_head,sd_head_phone,sd_pcn,
                sd_pce,sd_pcp,sd_pcg,sd_mct,sd_country,sd_region,sd_class,sd_website,sd_brief,sd_legal,sd_ri,sd_br,sd_rc,
                sd_status,sd_phone,sd_email,sd_fax,sd_save,sd_city,sd_county,sd_sm,sd_bank,sd_currency,sd_account,id_code,
@@ -173,7 +173,7 @@
         <include refid="selectContractManagementVo"/>
         <where>
             <if test="contractName != null  and contractName != ''"> and contract_name like concat('%', #{contractName}, '%')</if>
-            <if test="contractCode != null  and contractCode != ''"> and contract_code = #{contractCode}</if>
+            <if test="contractCode != null  and contractCode != ''"> and c.contract_code = #{contractCode}</if>
             <if test="projectRelatedContracts != null  and projectRelatedContracts != ''"> and project_related_contracts = #{projectRelatedContracts}</if>
             <if test="applicant != null  and applicant != ''"> and applicant = #{applicant}</if>
             <if test="applicationDate != null "> and application_date = #{applicationDate}</if>
@@ -188,7 +188,7 @@
             <if test="signingDate != null "> and signing_date = #{signingDate}</if>
             <if test="paymentProportion != null "> and payment_proportion = #{paymentProportion}</if>
             <if test="contractstatusId != null "> and contractstatus_id = #{contractstatusId}</if>
-            <if test="sdId != null "> and sd_id like concat('%', #{sdId}, '%')</if>
+            <if test="sdId != null "> and sd_id = #{sdId}</if>
             <if test="totalProjectBudget != null "> and total_project_budget = #{totalProjectBudget}</if>
             <if test="projectAvailableBudget != null "> and project_available_budget = #{projectAvailableBudget}</if>
             <if test="contractType != null "> and contract_type = #{contractType}</if>

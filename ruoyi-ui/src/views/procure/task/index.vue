@@ -686,9 +686,9 @@ export default {
       },
       /** 受理按钮操作 */
       handleTransfer(row) {
-        const zt=this.status
+        const zt=this.accepted
         console.log(zt)
-        if (zt==2||this.zt=='2'){
+        if (zt === 0.00 || zt === null || zt === ''){
           this.$notify({
             title: '警告',
             message: '已受理，请重新选择',

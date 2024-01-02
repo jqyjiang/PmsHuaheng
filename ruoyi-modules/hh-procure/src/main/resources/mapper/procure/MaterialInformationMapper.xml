@@ -45,8 +45,6 @@
         <result property="taskCode"    column="taskCode"    />
     </resultMap>
 
-
-
     <resultMap type="com.ruoyi.system.api.domain.MaterialPool" id="MaterialResult">
         <result property="materialId"    column="sub_material_id"    />
         <result property="materialCode"    column="sub_material_code"    />
@@ -75,11 +73,14 @@
         <collection property="materialPoolList" notNullColumn="sub_material_id" javaType="java.util.List" resultMap="MaterialResult" />
     </resultMap>
     <sql id="selectMaterialInformationVo">
-        select m.mi_id, material_code, material_name, material_category, material_specification, material_model,material_brand, material_unit, must_number, must_date, currency_name, reference_price, unit_price,
-        tax, rate_value, budget_amount, remarks, m.annex, m.purchaser, m.requirement_code,related_projects,demand_department,description,demander,`status`,task_id
+        select m.mi_id, material_code, material_name, material_category, material_specification, material_model,material_brand,
+        material_unit, must_number, must_date, currency_name, reference_price, unit_price,
+        tax, rate_value, budget_amount, remarks, m.annex, m.purchaser, m.requirement_code,related_projects,demand_department,
+        description,demander,`status`
+--                ,task_id
         from material_information m
         LEFT JOIN  material_requirement  r  ON m.requirement_code=r.requirement_code
-        LEFT JOIN procurement_task p ON m.requirement_code=p.requirement_code
+--         LEFT JOIN procurement_task p ON m.requirement_code=p.requirement_code
     </sql>
 
     <select id="selectMaterialInformationList" parameterType="com.ruoyi.system.api.domain.MaterialInformation" resultMap="MaterialInformationResult">

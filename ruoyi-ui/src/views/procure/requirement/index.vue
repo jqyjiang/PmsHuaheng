@@ -131,7 +131,6 @@
             <el-table v-loading="loading" :data="companiesList" @row-click="handleSelectionChangeCompanies">
               <el-table-column type="selection" width="55" align="center"/>
               <el-table-column label="企业名称" align="center" prop="companiesName"/>
-              <el-table-column label="是否集团" align="center" prop="isgroup"/>
               <el-table-column label="公司编码" align="center" prop="companiesCode"/>
             </el-table>
             <pagination v-show="ctotal > 0" :total="ctotal" :page.sync="comqueryParams.pageNum"
@@ -315,7 +314,6 @@
           </el-table-column>
           <el-table-column label="币种" prop="currencyId" width="150">
             <template slot-scope="scope">
-<!--              <el-input v-model="currencyName2" readonly placeholder="请输入币种"/>-->
               <el-input v-model="scope.row.currencyName" readonly placeholder="请输入币种"/>
               <i class="el-icon-search" id="serachOne1" @click="showDiagCurrency2()"></i>
               <el-dialog :visible.sync="dialogCurrency1" title="币种定义" :modal="false">
@@ -360,7 +358,6 @@
                   <el-table-column label="税种代码" align="center" prop="taxCode"/>
                   <el-table-column label="描述" align="center" prop="describes"/>
                   <el-table-column label="税率" align="center" prop="taxRate"/>
-                  <el-table-column label="是否启用" align="center" prop="enable"></el-table-column>
                 </el-table>
                 <pagination v-show="rtotal > 0" :total="rtotal" :page.sync="rqueryParams.pageNum"
                             :limit.sync="rqueryParams.pageSize" @pagination="getListRate"/>

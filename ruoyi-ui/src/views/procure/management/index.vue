@@ -27,29 +27,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="供应商：" prop="sdId">
-        <el-input
-          v-model="supplierListqueryParams.sbiName"
-          placeholder=""
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-        <i class="el-icon-search" id="serachOne3" @click="showDialogSupplierList()"></i>
-        <el-dialog :visible.sync="dialogSupplierList" title="供应商-浏览框">
-          <!-- 这里是供应商的内容 -->
-          <el-table v-loading="loading" :data="supplierList" @row-click="handleRowClickSupplierList">
-            <el-table-column type="selection" width="55" align="center"/>
-            <el-table-column label="供应商编码" align="center" prop="sdCode"/>
-            <el-table-column label="供应商名称" align="center" prop="sbiName"/>
-          </el-table>
-          <pagination v-show="supplierListTotal > 0" :total="supplierListTotal"
-                      :page.sync="supplierListqueryParams.pageNum"
-                      :limit.sync="supplierListqueryParams.pageSize" @pagination="getListSupplierList"/>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogSupplierList = false">取消</el-button>
-          </div>
-        </el-dialog>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -267,7 +244,6 @@
               <el-table-column label="订单编号" align="center" prop="orderCode"/>
               <el-table-column label="联系人" align="center" prop="contacts"/>
               <el-table-column label="下单日期" align="center" prop="createTime"/>
-              <el-table-column label="产品" align="center" prop="productId"/>
             </el-table>
             <pagination v-show="managerTotal > 0" :total="managerTotal" :page.sync="managerqueryParams.pageNum"
                         :limit.sync="managerqueryParams.pageSize" @pagination="getListManager"/>
@@ -347,7 +323,6 @@
             <el-table v-loading="loading" :data="companiesList" @row-click="handleSelectionChangeCompanies">
               <el-table-column type="selection" width="55" align="center"/>
               <el-table-column label="企业名称" align="center" prop="companiesName"/>
-              <el-table-column label="是否集团" align="center" prop="isgroup"/>
               <el-table-column label="公司编码" align="center" prop="companiesCode"/>
             </el-table>
             <pagination v-show="ctotal > 0" :total="ctotal" :page.sync="comqueryParams.pageNum"
@@ -1028,6 +1003,7 @@ export default {
         this.managementList = response.rows;
         console.log(response.rows)
         this.total = response.total;
+        console.log(response.total)
         this.loading = false;
       });
     },
@@ -1107,6 +1083,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
+      console.log(this.queryParams.sdId)
       this.getList();
     },
     /** 重置按钮操作 */
