@@ -383,9 +383,10 @@
             </template>
           </el-table-column>
           <el-table-column label="附件" prop="annex" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.annex"/>
-            </template>
+            <file-upload v-model="form.annex"/>
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.annex"/>-->
+<!--            </template>-->
           </el-table-column>
           <el-table-column label="采购员" prop="purchaser" width="150">
             <template slot-scope="scope">
@@ -931,12 +932,17 @@ export default {
 #serachOne1 {
   position: absolute;
   right: 15px;
-  top: 21.5px;
+  top: 57.5px;
 }
 
 #serachOne2 {
   position: absolute;;
   right: 613px;
   top: 10px;
+}
+#serachOne3 {
+  position: absolute;
+  right: 15px;
+  top: 21.5px;
 }
 </style>
