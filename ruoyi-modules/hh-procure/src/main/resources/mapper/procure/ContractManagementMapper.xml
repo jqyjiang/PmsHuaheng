@@ -327,4 +327,61 @@
         <include refid="selectContractManagementVo"/>
         where c.contract_management_id = #{contractManagementId}
     </select>
+
+    <insert id="addContractManagementOrder" parameterType="com.ruoyi.system.api.domain.OrderManager" useGeneratedKeys="true" keyProperty="orderId">
+        insert into order_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">order_code,</if>
+            <if test="company != null">company,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderSource != null">order_source,</if>
+            <if test="purOrganization != null">pur_organization,</if>
+            <if test="annex != null">annex,</if>
+            <if test="isSelfPickup != null">is_self_pickup,</if>
+            <if test="licensePlateNumber != null">license_plate_number,</if>
+            <if test="concatInfomation != null">concat_infomation,</if>
+            <if test="contractCode != null">contract_code,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="orderDescription != null">order_description,</if>
+            <if test="totalDemand != null">total_demand,</if>
+            <if test="purchaser != null">purchaser,</if>
+            <if test="orderState != null">order_state,</if>
+            <if test="orId != null">or_id,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="phone != null">phone,</if>
+            <if test="invoiceMethod != null">invoice_method,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="taxTotal !=null">tax_total,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="company != null">#{company},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderSource != null">#{orderSource},</if>
+            <if test="purOrganization != null">#{purOrganization},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="isSelfPickup != null">#{isSelfPickup},</if>
+            <if test="licensePlateNumber != null">#{licensePlateNumber},</if>
+            <if test="concatInfomation != null">#{concatInfomation},</if>
+            <if test="contractCode != null">#{contractCode},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="orderDescription != null">#{orderDescription},</if>
+            <if test="totalDemand != null">#{totalDemand},</if>
+            <if test="purchaser != null">#{purchaser},</if>
+            <if test="orderState != null">#{orderState},</if>
+            <if test="orId != null">#{orId},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="invoiceMethod != null">#{invoiceMethod},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="taxTotal !=null">#{taxTotal},</if>
+        </trim>
+    </insert>
+
 </mapper>

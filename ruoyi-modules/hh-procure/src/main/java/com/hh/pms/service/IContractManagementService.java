@@ -70,4 +70,8 @@ public interface IContractManagementService
      * @return 采购合同管理
      */
     public ContractManagement selectByContractManagementId(@Param("contractManagementId")Long contractManagementId);
+
+    // 合同转订单
+    int addContractManagementOrder(OrderManager orderManager);
+
 }

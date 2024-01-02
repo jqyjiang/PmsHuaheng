@@ -1,6 +1,7 @@
 package com.hh.pms.mapper;
 
 import com.ruoyi.system.api.domain.ContractManagement;
+import com.ruoyi.system.api.domain.OrderManager;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -91,5 +92,8 @@ public interface ContractManagementMapper
      */
     public ContractManagement selectByContractManagementId(@Param("contractManagementId")Long contractManagementId);
 
+
+    // 合同转订单
+    int addContractManagementOrder(OrderManager orderManager);
 
 }

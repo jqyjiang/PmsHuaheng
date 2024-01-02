@@ -1,6 +1,8 @@
 package com.hh.pms.service;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.ProcurementTask;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -66,5 +68,7 @@ public interface IProcurementTaskService
 
     // 转办
     int updateProcurementTaskPurchaser(String purchaser,Integer[] taskId);
-
+    // 受理
+    int addOrderManger(OrderManager orderManager);
+    int updateProcurementTaskNumber(String taskOccupied,String acceptedQuantity,String taskAccepted,Integer[] taskId);
 }

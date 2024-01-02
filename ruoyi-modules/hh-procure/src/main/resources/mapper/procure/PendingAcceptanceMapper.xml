@@ -19,6 +19,7 @@
         <result property="taskOccupied"    column="task_occupied"    />
         <result property="taskAccepted"    column="task_accepted"    />
         <result property="taskStatus"    column="task_status"    />
+        <result property="descriptionName"    column="description_name"    />
         <!--   物料信息      -->
         <result property="miId"    column="mi_id"    />
         <result property="materialCode"    column="material_code"    />
@@ -44,7 +45,7 @@
     <sql id="selectProcurementTaskVo">
         select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser,
                t.currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
-               material_name
+               material_name,description_name
         from procurement_task t
                  LEFT JOIN material_information m ON t.mi_id=m.mi_id
     </sql>

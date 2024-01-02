@@ -25,8 +25,6 @@
         <result property="currencyId"    column="currency_id"    />
         <result property="relatedProjects"    column="related_projects"    />
         <result property="taskCode"    column="task_code"    />
-        <result property="demandTypeNum" column="demandTypeNum"/>
-        <result property="requirementTypeName" column="requirementTypeName"/>
     </resultMap>
 
     <sql id="selectMaterialRequirementVo">
@@ -153,7 +151,7 @@
         <foreach collection="list" item="item" separator=",">
             (#{item.materialCode}, #{item.materialName},  #{item.materialCategory}, #{item.materialSpecification},
             #{item.materialModel}, #{item.materialBrand}, #{item.materialUnit}, #{item.mustNumber},
-            #{item.mustDate}, #{item.currencyName}, #{item.referencePrice}, #{item.unitPrice},
+            #{item.mustDate}, #{item.currencyId}, #{item.referencePrice}, #{item.unitPrice},
             #{item.tax},#{item.rateValue}, #{item.budgetAmount}, #{item.remarks},
             #{item.annex}, #{item.purchaser}, #{item.requirementCode},#{item.status} )
         </foreach>
@@ -163,17 +161,17 @@
         INSERT INTO procurement_task(
         task_code,procurement_strategy,task_total,requirement_id,companies_id,purchaser,
         currency_id,acceptance_strategy,task_number,accepted_quantity,task_occupied,
-        task_accepted,task_status)
+        task_accepted,task_status,description_name)
         VALUES
                 <foreach collection="list" item="item" separator=",">
                      (#{item.taskCode},#{item.procurementStrategy},#{item.taskTotal},#{item.requirementId},
                       #{item.companiesId},#{item.purchaser},#{item.currencyId},#{item.acceptanceStrategy},#{item.taskNumber},
-                      #{item.acceptedQuantity},#{item.taskOccupied},#{item.taskAccepted},#{item.taskStatus})
+                      #{item.acceptedQuantity},#{item.taskOccupied},#{item.taskAccepted},#{item.taskStatus},#{item.descriptionName})
                 </foreach>
 
     </insert>
 
-    <select id="selectDemandType" parameterType="MaterialRequirement" resultMap="MaterialRequirementResult">
+    <select id="selectDemandType" parameterType="com.ruoyi.system.api.domain.MaterialRequirement" resultMap="MaterialRequirementResult">
         SELECT a.requirement_type as requirementTypeName,COUNT(b.requirement_id) as demandTypeNum from requirement_table a
         LEFT JOIN material_requirement b on a.requirement_id=b.requirement_type
         GROUP BY a.requirement_type

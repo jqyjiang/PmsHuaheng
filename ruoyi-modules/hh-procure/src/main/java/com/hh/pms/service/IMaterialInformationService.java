@@ -69,7 +69,7 @@ public interface IMaterialInformationService
 
     // 分配
     public int updateRequirementStatusAllocation(String purchaser,Integer[] miId);
-    public int updateProcurementTask(String purchaser,Integer[] miId);
+    public int updateProcurementTask(String purchaser,String requirementCode);
 
 
 }

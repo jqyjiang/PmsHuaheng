@@ -51,3 +51,17 @@ export function updateTaskPurchaser(purchaser,taskId) {
   })
 }
 
+// 受理
+export function addOrderManger(data){
+  return request({
+    url:'/procure/task/sl2',
+    method:'post',
+    data:data
+  })
+}
+export function editOrAdd(acceptedQuantity,taskAccepted,taskId){
+  return request({
+    url:'/procure/task/sl1/'+acceptedQuantity+'/'+taskAccepted+'/'+taskId,
+    method:'put'
+  })
+}

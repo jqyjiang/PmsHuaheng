@@ -106,7 +106,7 @@
         </el-form-item>
         <el-form-item label="需求标题" prop="requirementTitle"
                       style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.requirementTitle" placeholder="请输入需求标题" style="width: 300px"/>
+          <el-input v-model="form.requirementTitle" readonly placeholder="请输入需求标题" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="需求部门" prop="demandDepartment">
           <el-input v-model="form.demandDepartment" placeholder="请输入需求部门" style="width: 300px"/>
@@ -299,7 +299,8 @@
           </el-table-column>
           <el-table-column label="需求数量" prop="mustNumber" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.mustNumber" placeholder="请输入求数量"/>
+              <el-input-number v-model="scope.row.mustNumber" controls-position="right"
+                               @change="changeInput" :min="0"  readonly></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="需求日期" prop="mustDate" width="150">
@@ -314,7 +315,8 @@
           </el-table-column>
           <el-table-column label="币种" prop="currencyId" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.currencyId" readonly placeholder="请输入币种"/>
+<!--              <el-input v-model="currencyName2" readonly placeholder="请输入币种"/>-->
+              <el-input v-model="scope.row.currencyName" readonly placeholder="请输入币种"/>
               <i class="el-icon-search" id="serachOne1" @click="showDiagCurrency2()"></i>
               <el-dialog :visible.sync="dialogCurrency1" title="币种定义" :modal="false">
                 <el-table v-loading="loading" :data="currencyList" @row-click="handleSelectionChangeCurrency2">
@@ -337,7 +339,8 @@
           </el-table-column>
           <el-table-column label="参考价格" prop="referencePrice" width="150">
             <template slot-scope="scope">
-                <el-input :rules="rules.referencePrice" v-model="scope.row.referencePrice" placeholder=""/>
+              <el-input-number v-model="scope.row.referencePrice" controls-position="right"
+                               @change="changeInput" :min="0" readonly></el-input-number>
             </template>
           </el-table-column>
           <el-table-column label="预算单价(不含税)" prop="unitPrice" width="150">
@@ -350,7 +353,7 @@
               <el-input v-model="scope.row.tax" placeholder="请输入税率"/>
               <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
               <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
-                <!-- 这里是品类的内容 -->
+                <!-- 这里是税率的内容 -->
                 <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
                   <el-table-column type="selection" width="55" align="center"/>
                   <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
@@ -561,6 +564,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
       },
+      currencyName2:null,
     }
   },
   created() {
@@ -699,6 +703,7 @@ export default {
         phone: null,
         annex: null,
         currencyId: null,
+        currencyName: null,
         relatedProjects: null,
         materialId: null,
         requiredMaterials: null,
@@ -748,12 +753,11 @@ export default {
     },
     // 选中币种(物料)
     handleSelectionChangeCurrency2(row) {
-      let index=this.InfomaterialList.length;
-      if (this.InfomaterialList.length===1){
-        this.InfomaterialList[0].currencyId=row.currencyName;
-      }else {
-        this.InfomaterialList[index-1].currencyId=row.currencyName;
-      }
+      console.log("this.materialIndex:"+this.materialIndex)
+      console.log("row:"+row)
+      this.InfomaterialList[this.materialIndex].currencyId =  parseInt(row.currencyId);
+      this.InfomaterialList[this.materialIndex].currencyName = row.currencyName;
+      // this.currencyName2=row.currencyName;
       this.dialogCurrency1 = false; // 关闭对话框
     },
     // 选中公司
@@ -879,15 +883,8 @@ export default {
       this.getListCategory();
     },
     handleRowClickMaterial1(row) {
-      let index = this.InfomaterialList.length;
-      if (this.InfomaterialList.length === 1) {
-        // 修改第一条数据的属性值
-        this.InfomaterialList[0].categoryCode = row.categoryName;
-        this.InfomaterialList[0].materialCategory = row.categoryName;
-      } else {
-        this.InfomaterialList[index - 1].categoryCode = row.categoryName;
-        this.InfomaterialList[index - 1].materialCategory = row.categoryName;
-      }
+      this.InfomaterialList[this.materialIndex].categoryCode = row.categoryName;
+      this.InfomaterialList[this.materialIndex].materialCategory = row.categoryName;
       this.dialogMaterial1 = false; // 关闭对话框
     },
     // 税率
@@ -896,15 +893,8 @@ export default {
       this.getListRate();
     },
     handleRowClickMaterial2(row) {
-      let index = this.InfomaterialList.length;
-      if (this.InfomaterialList.length === 1) {
-        // 修改第一条数据的属性值
-        this.InfomaterialList[0].tax = row.taxCode;
-        this.InfomaterialList[0].rateValue = row.taxRate;
-      } else {
-        this.InfomaterialList[index - 1].tax = row.taxCode;
-        this.InfomaterialList[index - 1].rateValue = row.taxRate;
-      }
+      this.InfomaterialList[this.materialIndex].tax = row.taxCode;
+      this.InfomaterialList[this.materialIndex].rateValue = row.taxRate;
       this.dialogMaterial2 = false; // 关闭对话框
     },
     /** 查询税率对象列表 */
@@ -915,6 +905,21 @@ export default {
         this.rtotal = response.total;
         this.loading = false;
       })
+    },
+    //计算小计并累加到合同金额 输入框改变值是触发事件
+    changeInput(){
+      let total=0
+      for (let i = 0; i < this.InfomaterialList.length; i++) {
+        var materials=this.InfomaterialList[i]
+        // 数量
+        let number=materials.mustNumber === ''||materials.mustNumber+""=== 'undefined' ?0:materials.mustNumber
+        // 单价
+        let price=materials.referencePrice === '' || materials.referencePrice=== null|| materials.referencePrice+""=== 'undefined'?0:materials.referencePrice
+        let num=Number(number)*Number(price)
+        this.InfomaterialList[i].budgetAmount=num
+        total=total+Number(num)
+      }
+      this.form.totalAmount=total // 预估总金额
     },
   },
 }

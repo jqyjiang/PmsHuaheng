@@ -187,11 +187,14 @@
         om.tax_total,
         otr.ort_name,
         sd.sbi_name,
-        y.currency_name
+        y.currency_name,
+        om.product_id,product_name,sd_bank,
+        product_code,specifications,unit,price,tax_rate,number,subtotal,sd_pcn,sd_pcp,sd_account,om.tax_total
         from order_manager om
         left join order_type_running otr on om.or_id = otr.ort_id
         left join supplier_details sd on sd.sd_id = om.supplier
         left join currency y on y.currency_id = om.currency_id
+        LEFT JOIN products p on om.product_id=p.product_id
         <where>
             <if test="orderCode != null  and orderCode != ''">and om.order_code = #{orderCode}</if>
             <if test="orderSource != null  and orderSource != ''">and om.order_source = #{orderSource}</if>

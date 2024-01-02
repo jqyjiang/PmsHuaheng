@@ -80,13 +80,13 @@ public interface MaterialRequirementMapper {
     public int insertRequirementInformations(List<MaterialInformation> materialInformations);
 
 
-    /**
-     * 查询采购需求池列表
-     *
-     * @param materialInformation 采购需求池
-     * @return 采购需求池集合
-     */
-    public List<MaterialInformation> selectMaterialInformationList(MaterialInformation materialInformation);
+//    /**
+//     * 查询采购需求池列表
+//     *
+//     * @param materialInformation 采购需求池
+//     * @return 采购需求池集合
+//     */
+//    public List<MaterialInformation> selectMaterialInformationList(MaterialInformation materialInformation);
 
 
     /**

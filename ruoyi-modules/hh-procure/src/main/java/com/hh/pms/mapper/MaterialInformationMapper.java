@@ -74,7 +74,7 @@ public interface MaterialInformationMapper
 
     // 分配
     public int updateRequirementStatusAllocation(@Param("purchaser")String purchaser,@Param("miId") Integer[] miId);
-    public int updateProcurementTask(@Param("purchaser")String purchaser,@Param("miId") Integer[] miId);
+    public int updateProcurementTask(@Param("purchaser")String purchaser,@Param("requirementCode") String requirementCode);
 
 
 

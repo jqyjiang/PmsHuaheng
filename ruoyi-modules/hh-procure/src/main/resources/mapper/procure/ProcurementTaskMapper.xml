@@ -1,77 +1,144 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hh.pms.mapper.ProcurementTaskMapper">
-    
+
     <resultMap type="com.ruoyi.system.api.domain.ProcurementTask" id="ProcurementTaskResult">
-        <result property="taskId"    column="task_id"    />
-        <result property="taskCode"    column="task_code"    />
-        <result property="procurementStrategy"    column="procurement_strategy"    />
-        <result property="taskTotal"    column="task_total"    />
-        <result property="requirementId"    column="requirement_id"    />
-        <result property="companiesId"    column="companies_id"    />
-        <result property="purchaser"    column="purchaser"    />
-        <result property="currencyId"    column="currency_id"    />
-        <result property="acceptanceStrategy"    column="acceptance_strategy"    />
-        <result property="taskNumber"    column="task_number"    />
-        <result property="acceptedQuantity"    column="accepted_quantity"    />
-        <result property="taskOccupied"    column="task_occupied"    />
-        <result property="taskAccepted"    column="task_accepted"    />
-        <result property="taskStatus"    column="task_status"    />
+        <result property="taskId" column="task_id"/>
+        <result property="taskCode" column="task_code"/>
+        <result property="procurementStrategy" column="procurement_strategy"/>
+        <result property="taskTotal" column="task_total"/>
+        <result property="requirementId" column="requirement_id"/>
+        <result property="companiesId" column="companies_id"/>
+        <result property="purchaser" column="purchaser"/>
+        <result property="currencyId" column="currency_id"/>
+        <result property="acceptanceStrategy" column="acceptance_strategy"/>
+        <result property="taskNumber" column="task_number"/>
+        <result property="acceptedQuantity" column="accepted_quantity"/>
+        <result property="taskOccupied" column="task_occupied"/>
+        <result property="taskAccepted" column="task_accepted"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="descriptionName" column="description_name"/>
         <!--   物料信息      -->
-        <result property="miId"    column="mi_id"    />
-        <result property="materialCode"    column="material_code"    />
-        <result property="materialName"    column="material_name"    />
-        <result property="materialCategory"    column="material_category"    />
-        <result property="materialSpecification"    column="material_specification"    />
-        <result property="materialModel"    column="material_model"    />
-        <result property="materialBrand"    column="material_brand"    />
-        <result property="materialUnit"    column="material_unit"    />
-        <result property="mustNumber"    column="must_number"    />
-        <result property="mustDate"    column="must_date"    />
-        <result property="currencyName"    column="currency_name"    />
-        <result property="referencePrice"    column="reference_price"    />
-        <result property="unitPrice"    column="unit_price"    />
-        <result property="tax"    column="tax"    />
-        <result property="rateValue"    column="rate_value"    />
-        <result property="budgetAmount"    column="budget_amount"    />
-        <result property="remarks"    column="remarks"    />
-        <result property="annex"    column="annex"    />
-        <result property="purchaser"    column="purchaser"    />
+<!--        <collection property="materialInformationList" ofType="com.ruoyi.system.api.domain.MaterialInformation">-->
+            <result property="miId" column="mi_id"/>
+            <result property="materialCode" column="material_code"/>
+            <result property="materialName" column="material_name"/>
+            <result property="materialCategory" column="material_category"/>
+            <result property="materialSpecification" column="material_specification"/>
+            <result property="materialModel" column="material_model"/>
+            <result property="materialBrand" column="material_brand"/>
+            <result property="materialUnit" column="material_unit"/>
+            <result property="mustNumber" column="must_number"/>
+            <result property="mustDate" column="must_date"/>
+            <result property="currencyName" column="currency_name"/>
+            <result property="referencePrice" column="reference_price"/>
+            <result property="unitPrice" column="unit_price"/>
+            <result property="tax" column="tax"/>
+            <result property="rateValue" column="rate_value"/>
+            <result property="budgetAmount" column="budget_amount"/>
+            <result property="remarks" column="remarks"/>
+            <result property="annex" column="annex"/>
+            <result property="purchaser" column="purchaser"/>
+            <result property="requirementCode" column="requirement_code"/>
+            <result property="status" column="status"/>
+<!--        </collection>-->
 
-
+        <association property="orderManager" javaType="com.ruoyi.system.api.domain.OrderManager">
+            <id property="orderId" column="order_id"/>
+            <result property="orderCode" column="order_code"/>
+            <result property="company" column="company"/>
+            <result property="orderType" column="order_type"/>
+            <result property="orderSource" column="order_source"/>
+            <result property="purOrganization" column="pur_organization"/>
+            <result property="annex" column="annex"/>
+            <result property="isSelfPickup" column="is_self_pickup"/>
+            <result property="licensePlateNumber" column="license_plate_number"/>
+            <result property="concatInfomation" column="concat_infomation"/>
+            <result property="contractCode" column="contract_code"/>
+            <result property="contractName" column="contract_name"/>
+            <result property="orderDescription" column="order_description"/>
+            <result property="totalDemand" column="total_demand"/>
+            <result property="purchaser" column="purchaser"/>
+            <result property="orderState" column="order_state"/>
+            <result property="orId" column="or_id"/>
+            <result property="currencyId" column="currency_id"/>
+            <result property="supplier" column="supplier"/>
+            <result property="contacts" column="contacts"/>
+            <result property="phone" column="phone"/>
+            <result property="invoiceMethod" column="invoice_method"/>
+            <result property="createTime" column="create_time"/>
+            <result property="taxTotal" column="tax_total"/>
+            <result property="materialId" column="material_id"/>
+            <result property="productId" column="product_id"/>
+            <result property="taxTotal" column="tax_total"/>
+        </association>
+        <association property="companies" javaType="com.ruoyi.system.api.domain.Companies">
+            <result property="companiesId"    column="companies_id"    />
+            <result property="companiesName"    column="companies_name"    />
+            <result property="creditCode"    column="credit_code"    />
+            <result property="companiesAbbreviation"    column="companies_abbreviation"    />
+            <result property="isgroup"    column="isgroup"    />
+            <result property="companiesCode"    column="companies_code"    />
+            <result property="registrationNumber"    column="registration_number"    />
+            <result property="enterpriseType"    column="enterprise_type"    />
+            <result property="registeredCountry"    column="registered_country"    />
+            <result property="representative"    column="representative"    />
+            <result property="registeredCapital"    column="registered_capital"    />
+            <result property="establishmentDate"    column="establishment_date"    />
+            <result property="operatingPeriod"    column="operating_period"    />
+            <result property="basicDivision"    column="basic_division"    />
+            <result property="businessLicense"    column="business_license"    />
+            <result property="taxpayer"    column="taxpayer"    />
+            <result property="province"    column="province"    />
+            <result property="address"    column="address"    />
+            <result property="currencyId2"    column="currency_id2"    />
+            <result property="dengCode"    column="deng_code"    />
+            <result property="profile"    column="profile"    />
+        </association>
     </resultMap>
 
     <sql id="selectProcurementTaskVo">
-        select task_id, task_code, procurement_strategy, task_total, requirement_id, companies_id, t.purchaser,
-               t.currency_id,acceptance_strategy, task_number, accepted_quantity, task_occupied, task_accepted,task_status,
-               material_name
+        select task_id,task_code,procurement_strategy,task_total,requirement_id,t.companies_id,companies_name,
+               t.currency_id,acceptance_strategy,task_number,accepted_quantity,task_occupied,task_accepted,task_status,
+               material_name,m.mi_id,material_code,material_category,material_specification,material_model,
+               material_brand,material_unit,must_number,must_date,currency_name,reference_price,unit_price,tax,rate_value,
+               budget_amount,remarks,annex,t.purchaser,t.requirement_code,status,description_name
         from procurement_task t
-                 LEFT JOIN material_information m ON t.mi_id=m.mi_id
+                 LEFT JOIN material_information m ON t.requirement_code = m.requirement_code
+                 LEFT JOIN companies c ON t.companies_id=c.companies_id
+
     </sql>
 
-    <select id="selectProcurementTaskList" parameterType="com.ruoyi.system.api.domain.ProcurementTask" resultMap="ProcurementTaskResult">
+    <select id="selectProcurementTaskList" parameterType="com.ruoyi.system.api.domain.ProcurementTask"
+            resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
         <where>
-            <if test="taskId != null  and taskId != ''"> and task_Id = #{taskId}</if>
-            <if test="taskCode != null  and taskCode != ''"> and task_code = #{taskCode}</if>
-            <if test="procurementStrategy != null  and procurementStrategy != ''"> and procurement_strategy = #{procurementStrategy}</if>
-            <if test="taskTotal != null "> and task_total = #{taskTotal}</if>
-            <if test="requirementId != null "> and requirement_id = #{requirementId}</if>
-            <if test="companiesId != null  and companiesId != ''"> and companies_id = #{companiesId}</if>
-            <if test="purchaser != null  and purchaser != ''"> and t.purchaser = #{purchaser}</if>
-            <if test="currencyId != null "> and currency_id = #{currencyId}</if>
-            <if test="acceptanceStrategy != null  and acceptanceStrategy != ''"> and acceptance_strategy = #{acceptanceStrategy}</if>
-            <if test="taskNumber != null "> and task_number = #{taskNumber}</if>
-            <if test="acceptedQuantity != null "> and accepted_quantity = #{acceptedQuantity}</if>
-            <if test="taskOccupied != null "> and task_occupied = #{taskOccupied}</if>
-            <if test="taskAccepted != null "> and task_accepted = #{taskAccepted}</if>
-             and task_status != 4
+            <if test="taskId != null  and taskId != ''">and task_Id = #{taskId}</if>
+            <if test="taskCode != null  and taskCode != ''">and task_code = #{taskCode}</if>
+            <if test="procurementStrategy != null  and procurementStrategy != ''">and procurement_strategy =
+                #{procurementStrategy}
+            </if>
+            <if test="taskTotal != null ">and task_total = #{taskTotal}</if>
+            <if test="requirementId != null ">and requirement_id = #{requirementId}</if>
+            <if test="companiesId != null  and companiesId != ''">and companies_id = #{companiesId}</if>
+            <if test="purchaser != null  and purchaser != ''">and t.purchaser = #{purchaser}</if>
+            <if test="currencyId != null ">and currency_id = #{currencyId}</if>
+            <if test="acceptanceStrategy != null  and acceptanceStrategy != ''">and acceptance_strategy =
+                #{acceptanceStrategy}
+            </if>
+            <if test="taskNumber != null ">and task_number = #{taskNumber}</if>
+            <if test="acceptedQuantity != null ">and accepted_quantity = #{acceptedQuantity}</if>
+            <if test="taskOccupied != null ">and task_occupied = #{taskOccupied}</if>
+            <if test="taskAccepted != null ">and task_accepted = #{taskAccepted}</if>
+            <if test="descriptionName != null ">and description_name = #{descriptionName}</if>
+            and task_status != 4
         </where>
+        group by requirement_code
     </select>
 
-    <select id="selectProcurementTaskByStatus"  resultMap="ProcurementTaskResult">
+    <select id="selectProcurementTaskByStatus" resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
         WHERE task_status != 4
     </select>
@@ -79,13 +146,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProcurementTaskByTaskId" parameterType="Long" resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
         where task_id = #{taskId}
+        limit 1
     </select>
-    <select id="selectProcurementTaskByTaskCode" resultType="com.ruoyi.system.api.domain.ProcurementTask" resultMap="ProcurementTaskResult">
+    <select id="selectProcurementTaskByTaskCode" resultType="com.ruoyi.system.api.domain.ProcurementTask"
+            resultMap="ProcurementTaskResult">
         <include refid="selectProcurementTaskVo"/>
         where task_code = #{taskCode}
     </select>
 
-    <insert id="insertProcurementTask" parameterType="com.ruoyi.system.api.domain.ProcurementTask" useGeneratedKeys="true" keyProperty="taskId">
+    <insert id="insertProcurementTask" parameterType="com.ruoyi.system.api.domain.ProcurementTask"
+            useGeneratedKeys="true" keyProperty="taskId">
         insert into procurement_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="taskCode != null">task_code,</if>
@@ -101,7 +171,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskOccupied != null">task_occupied,</if>
             <if test="taskAccepted != null">task_accepted,</if>
             <if test="taskStatus != null">task_status,</if>
-         </trim>
+            <if test="descriptionName != null">description_name,</if>
+            <if test="requirementCode != null">requirement_code,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="taskCode != null">#{taskCode},</if>
             <if test="procurementStrategy != null">#{procurementStrategy},</if>
@@ -116,7 +188,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskOccupied != null">#{taskOccupied},</if>
             <if test="taskAccepted != null">#{taskAccepted},</if>
             <if test="taskStatus != null">#{taskStatus},</if>
-         </trim>
+            <if test="descriptionName != null">#{descriptionName},</if>
+            <if test="requirementCode != null">#{requirementCode},</if>
+        </trim>
     </insert>
 
     <update id="updateProcurementTask" parameterType="com.ruoyi.system.api.domain.ProcurementTask">
@@ -135,6 +209,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskOccupied != null">task_occupied = #{taskOccupied},</if>
             <if test="taskAccepted != null">task_accepted = #{taskAccepted},</if>
             <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="descriptionName != null">description_name = #{descriptionName},</if>
         </trim>
         where task_id = #{taskId}
     </update>
@@ -153,16 +228,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="taskOccupied != null">task_occupied = #{taskOccupied},</if>
             <if test="taskAccepted != null">task_accepted = #{taskAccepted},</if>
             <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="descriptionName != null">description_name = #{descriptionName},</if>
         </trim>
         where task_Code = #{taskCode}
     </update>
 
     <delete id="deleteProcurementTaskByTaskId" parameterType="Long">
-        delete from procurement_task where task_id = #{taskId}
+        delete
+        from procurement_task
+        where task_id = #{taskId}
     </delete>
 
     <delete id="deleteProcurementTaskByTaskIds" parameterType="String">
-        delete from procurement_task where task_id in 
+        delete from procurement_task where task_id in
         <foreach item="taskId" collection="array" open="(" separator="," close=")">
             #{taskId}
         </foreach>
@@ -171,6 +249,70 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!--     转办       -->
     <update id="updateProcurementTaskPurchaser" parameterType="String">
         UPDATE procurement_task SET purchaser=#{purchaser} WHERE task_id in
+        <foreach collection="taskId" item="taskId" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </update>
+
+    <!--     受理       -->
+    <insert id="addOrderManger" parameterType="com.ruoyi.system.api.domain.OrderManager" useGeneratedKeys="true" keyProperty="orderId">
+        insert into order_manager
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">order_code,</if>
+            <if test="company != null">company,</if>
+            <if test="orderType != null">order_type,</if>
+            <if test="orderSource != null">order_source,</if>
+            <if test="purOrganization != null">pur_organization,</if>
+            <if test="annex != null">annex,</if>
+            <if test="isSelfPickup != null">is_self_pickup,</if>
+            <if test="licensePlateNumber != null">license_plate_number,</if>
+            <if test="concatInfomation != null">concat_infomation,</if>
+            <if test="contractCode != null">contract_code,</if>
+            <if test="contractName != null">contract_name,</if>
+            <if test="orderDescription != null">order_description,</if>
+            <if test="totalDemand != null">total_demand,</if>
+            <if test="purchaser != null">purchaser,</if>
+            <if test="orderState != null">order_state,</if>
+            <if test="orId != null">or_id,</if>
+            <if test="currencyId != null">currency_id,</if>
+            <if test="supplier != null">supplier,</if>
+            <if test="contacts != null">contacts,</if>
+            <if test="phone != null">phone,</if>
+            <if test="invoiceMethod != null">invoice_method,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="taxTotal !=null">tax_total,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderCode != null">#{orderCode},</if>
+            <if test="company != null">#{company},</if>
+            <if test="orderType != null">#{orderType},</if>
+            <if test="orderSource != null">#{orderSource},</if>
+            <if test="purOrganization != null">#{purOrganization},</if>
+            <if test="annex != null">#{annex},</if>
+            <if test="isSelfPickup != null">#{isSelfPickup},</if>
+            <if test="licensePlateNumber != null">#{licensePlateNumber},</if>
+            <if test="concatInfomation != null">#{concatInfomation},</if>
+            <if test="contractCode != null">#{contractCode},</if>
+            <if test="contractName != null">#{contractName},</if>
+            <if test="orderDescription != null">#{orderDescription},</if>
+            <if test="totalDemand != null">#{totalDemand},</if>
+            <if test="purchaser != null">#{purchaser},</if>
+            <if test="orderState != null">#{orderState},</if>
+            <if test="orId != null">#{orId},</if>
+            <if test="currencyId != null">#{currencyId},</if>
+            <if test="supplier != null">#{supplier},</if>
+            <if test="contacts != null">#{contacts},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="invoiceMethod != null">#{invoiceMethod},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="taxTotal !=null">#{taxTotal},</if>
+        </trim>
+    </insert>
+    <update id="updateProcurementTaskNumber" parameterType="String">
+        UPDATE procurement_task SET accepted_quantity=#{acceptedQuantity},task_occupied=#{taskOccupied},task_accepted=#{taskAccepted},task_status=2
+                                WHERE task_id in
         <foreach collection="taskId" item="taskId" open="(" separator="," close=")">
             #{taskId}
         </foreach>

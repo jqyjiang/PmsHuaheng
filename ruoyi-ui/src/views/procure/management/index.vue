@@ -267,6 +267,7 @@
               <el-table-column label="订单编号" align="center" prop="orderCode"/>
               <el-table-column label="联系人" align="center" prop="contacts"/>
               <el-table-column label="下单日期" align="center" prop="createTime"/>
+              <el-table-column label="产品" align="center" prop="productId"/>
             </el-table>
             <pagination v-show="managerTotal > 0" :total="managerTotal" :page.sync="managerqueryParams.pageNum"
                         :limit.sync="managerqueryParams.pageSize" @pagination="getListManager"/>
@@ -465,10 +466,10 @@
     <el-dialog :title="title" :visible.sync="openOrder" width="1000px" append-to-body>
       <el-divider content-position="center">基本信息</el-divider>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="订单号" prop="applicant">
+        <el-form-item label="订单号" prop="orderCode">
           <el-input v-model="form.orderCode" placeholder="" readonly style="width: 300px"/>
         </el-form-item>
-        <el-form-item label="订单类型" prop="orderType" style="float: right;margin-left: 540px;margin-top: -59px">
+        <el-form-item label="订单类型" prop="orderSource" style="float: right;margin-left: 540px;margin-top: -59px">
           <el-input v-model="form.orderSource" placeholder="" style="width: 300px;">
           </el-input>
         </el-form-item>
@@ -843,6 +844,7 @@ import {listProducts} from "@/api/pms/products";
 import {addManager, listManager, updateManager} from "@/api/pms/manager"
 import {listCompanies, listCurrency} from "@/api/procure/requirement";
 import {addStatus, updateStatus} from "@/api/procure/status";
+import {addOrderManger} from "@/api/procure/task";
 
 export default {
   name: "Management",
@@ -1024,6 +1026,7 @@ export default {
       this.loading = true;
       listManagement(this.queryParams).then(response => {
         this.managementList = response.rows;
+        console.log(response.rows)
         this.total = response.total;
         this.loading = false;
       });
@@ -1114,7 +1117,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.contractManagementId)
-      this.bothSides = selection.map(item => item.executionStatus.bothSides)
+      this.bothSides = selection.map(item => item.executionStatuses.bothSides)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -1141,6 +1144,8 @@ export default {
       const bothSides=this.bothSides
       getManagement(contractManagementId,bothSides).then(response => {
         this.form = response.data;
+        console.log("-------")
+        console.log(response.data)
         this.ProductsList=[]  //清空合同标的物信息
         // 多条数据
         for (let i = 0; i < this.productList.length; i++) {
@@ -1149,9 +1154,9 @@ export default {
             this.ProductsList.push(innerElement)
           }
         }
-        this.form.supplierB=response.data.executionStatus.supplierB;
-        this.form.personB=response.data.executionStatus.personB;
-        this.form.phoneB=response.data.executionStatus.phoneB;
+        this.form.supplierB=response.data.supplierDetails.sbiName;
+        this.form.personB=response.data.supplierDetails.sdPcn;
+        this.form.phoneB=response.data.supplierDetails.sdPcp;
         this.form.orderId=response.data.orderManager.orderId;
         this.openOrder = true;
         this.form.orderSource='合同订单';
@@ -1220,6 +1225,13 @@ export default {
     },
     /** 合同转订单提交 */
     submitFormOrder(){
+      let num=0;
+      for (let i = 0; i < this.ProductsList.length; i++) {
+        var products=this.ProductsList[i]
+        // 数量
+        let number=products.number === ''||products.number+""=== 'undefined' ?0:products.number
+        let num=number
+      }
       this.$refs["form"].validate(valid => {
         console.log(this.form.orderId)
         this.form.supplier=this.form.supplierDetails.sdId
@@ -1228,9 +1240,15 @@ export default {
         this.form.orderSource=4
         this.form.taxTotal=this.form.contractPrice
         console.log(this.form.contractPrice)
+        this.form.companies={}
+        this.form.orderMaterialList=this.form.products
+        this.form.products=this.form.products[0]
+        this.form.purchaser=this.form.head
+        this.form.totalDemand=num
+        console.log(this.form)
         if (valid) {
           if (this.form.orderId != null) {
-            addManager(this.form).then(response => {
+            addOrderManger(this.form).then(response => {
               this.$modal.msgSuccess("生成采购订单成功");
               this.openOrder = false;
               this.getList();
@@ -1337,6 +1355,7 @@ export default {
       this.loading = true;
       listManager(this.managerqueryParams).then(response => {
         this.managerList = response.rows;
+        console.log(response.rows)
         this.managerTotal = response.total;
         this.loading = false;
       });
@@ -1348,6 +1367,7 @@ export default {
     },
     // 选中采购清单
     handleSelectionChangeManager(row) {
+      console.log(this.ProductsList)
       this.ProductsList=[]  //清空合同标的物信息
       this.form.orderId = row.orderId;
       for (let i = 0; i < this.managerList.length; i++) {
@@ -1363,6 +1383,17 @@ export default {
           this.ProductsList.push(innerElement)
         }
       }
+      // for (let i = 0; i < this.managerList.length; i++) {
+      //   const innerElement = this.managerList[i];
+      //   if (innerElement.orderId === row.orderId) {
+      //     // this.orderCode = innerElement.orderCode
+      //     for (let i = 0; i < this.productList.length; i++) {
+      //       const product = this.productList[i];
+      //       if (product.orderCode === innerElement.orderCode) {
+      //         this.ProductsList.push(product)
+      //       }
+      //     }
+      //   }
       this.dialogManager = false; // 关闭对话框
       //重新计算’合同金额‘
       this.changeInput()

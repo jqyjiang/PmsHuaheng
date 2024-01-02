@@ -109,10 +109,10 @@ public class MaterialInformationController extends BaseController
         return toAjax(materialInformationService.updateRequirementStatusAllocation(purchaser,miId));
     }
     @RequiresPermissions("procure:information:edit")
-    @PutMapping("dfp/{purchaser}/{miId}")
-    public AjaxResult editStatusProcurementTask(@PathVariable("purchaser") String purchaser,@PathVariable("miId") Integer[] miId)
+    @PutMapping("dfp/{purchaser}/{requirementCode}")
+    public AjaxResult editStatusProcurementTask(@PathVariable("purchaser") String purchaser,@PathVariable("requirementCode") String requirementCode)
     {
-        return toAjax(materialInformationService.updateProcurementTask(purchaser,miId));
+        return toAjax(materialInformationService.updateProcurementTask(purchaser,requirementCode));
     }
 
     /**

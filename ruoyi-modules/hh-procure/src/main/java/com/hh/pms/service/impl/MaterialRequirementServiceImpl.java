@@ -38,6 +38,9 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
     @Autowired
     private OrderMaterialClient orderMaterialClient;
 
+    @Autowired
+    private ProcurementTaskMapper procurementTaskMapper;
+
     /**
      * 查询采购需求申请
      *
@@ -80,6 +83,7 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
         // 任务单号生成
         String task_code=createTaskcode(date);
         materialRequirement.setTaskCode(task_code);
+        materialRequirement.setRequirementTitle("采购需求审批流程"+new Date());
         //保存采购需求申请
         int i1 = materialRequirementMapper.insertMaterialRequirement(materialRequirement);
         // 添加物料基础表   需求池数据
@@ -91,53 +95,56 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
         int i=materialRequirementMapper.insertRequirementInformations(materialInformationsList);
         // 添加物料ID
         StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder1 = new StringBuilder();
+        BigDecimal num=BigDecimal.ZERO;
+        BigDecimal jine=BigDecimal.ZERO;
         for (MaterialInformation item : materialInformationsList){
+            num= item.getMustNumber();
+            num=num.add(item.getMustNumber());
+            jine=item.getReferencePrice();
+            jine=jine.add(item.getReferencePrice());
             if (stringBuilder.length()>0){
                 stringBuilder.append(",");
+                stringBuilder1.append(",");
             }
             stringBuilder.append(item.getMiId());
+            stringBuilder1.append(item.getMaterialName());
         }
         String miIdString=stringBuilder.toString();
         System.out.println(miIdString);
+        String mName=stringBuilder1.toString();
+        ProcurementTask procurementTask = new ProcurementTask();
+        procurementTask.setTaskCode(task_code);
+        procurementTask.setTaskTotal(jine.multiply(num));
+        procurementTask.setProcurementStrategy("待转订单,待询价");// 采购策略
+        procurementTask.setRequirementId(materialRequirement.getRequirementId()); // 需求申请id
+        procurementTask.setCompaniesId(null==materialRequirement.getCompaniesId()?"":materialRequirement.getCompaniesId().toString());
+        procurementTask.setPurchaser(materialInformationsList.get(0).getPurchaser());//采购员
+        procurementTask.setCurrencyId(materialInformationsList.get(0).getCurrencyId());//币种ID
+        procurementTask.setTaskNumber(num);// 任务总数量
+        procurementTask.setAcceptanceStrategy("转订单"); // 受理策略
+        procurementTask.setAcceptedQuantity(BigDecimal.valueOf(0.00));
+        procurementTask.setTaskOccupied(BigDecimal.valueOf(0.00));
+        procurementTask.setTaskAccepted(num);
+        procurementTask.setTaskStatus(Long.valueOf("4"));//定义'状态'类型 待受理1  受理完成2  关闭3   不展示4
+        procurementTask.setDescriptionName(mName);
+        procurementTask.setRequirementCode(requirement_code);
+        int i2 = procurementTaskMapper.insertProcurementTask(procurementTask);
         // 查询采购需求池信息
         //给采购任务表添加数据 每一个需求创建一个 需求任务对象
-        List<ProcurementTask> procurementTaskList=new ArrayList<>();
-        for (MaterialInformation materialInformation : materialInformationsList) {
-            int miId = materialInformationMapper.selectMaxMiId();
-            MaterialInformation materialInformation1 = materialInformationMapper.selectMaterialInformationByMiId(miId);
-            ProcurementTask procurementTask = new ProcurementTask();
-            procurementTask.setTaskCode(task_code);
-            procurementTask.setProcurementStrategy("待转订单,待询价");// 采购策略
-            // 总金额
-            BigDecimal referencePrice = materialInformation.getReferencePrice();
-            Long mustNumber = materialInformation.getMustNumber();
-            BigDecimal multiply = referencePrice.multiply(BigDecimal.valueOf(mustNumber));
-            procurementTask.setTaskTotal(multiply);
-            procurementTask.setRequirementId(materialRequirement.getRequirementId()); // 需求申请id
-            procurementTask.setCompaniesId(null==materialRequirement.getCompaniesId()?"":materialRequirement.getCompaniesId().toString());
-            procurementTask.setPurchaser(materialInformation1.getPurchaser());//采购员
-            procurementTask.setCurrencyId(materialInformation1.getCurrencyName());//币种ID
-            procurementTask.setTaskNumber(BigDecimal.valueOf(materialInformation1.getMustNumber()));// 任务总数量
-            procurementTask.setAcceptanceStrategy("转订单"); // 受理策略
-            procurementTask.setAcceptedQuantity(BigDecimal.valueOf(0.00));
-            procurementTask.setTaskOccupied(BigDecimal.valueOf(0.00));
-            procurementTask.setTaskAccepted(procurementTask.getTaskNumber());
-            procurementTask.setTaskStatus(Long.valueOf("3"));//定义'状态'类型 待受理0  受理完成1  关闭2   不展示3
-            procurementTaskList.add(procurementTask);
-        }
-         int i2 = materialRequirementMapper.insertProcurementTask(procurementTaskList);
-        // 添加order_material表信息
-        OrderMaterial orderMaterial=new OrderMaterial();
         int miId = materialInformationMapper.selectMaxMiId();
         MaterialInformation materialInformation1 = materialInformationMapper.selectMaterialInformationByMiId(miId);
-        System.out.println("materialInformation信息:"+materialInformation1);
+
+
+        // 添加order_material表信息
+        OrderMaterial orderMaterial=new OrderMaterial();
         orderMaterial.setOrCode(materialInformation1.getMaterialCode());
         orderMaterial.setOrName(materialInformation1.getMaterialName());
         orderMaterial.setMaterialCategory(materialInformation1.getMaterialCategory());
         orderMaterial.setMaterialSpecification(materialInformation1.getMaterialSpecification());
         orderMaterial.setMaterialModel(materialInformation1.getMaterialModel());
         orderMaterial.setMaterialUnit(materialInformation1.getMaterialUnit());
-        orderMaterial.setRequireNumber(BigDecimal.valueOf(materialInformation1.getMustNumber()));
+        orderMaterial.setRequireNumber(num);
         orderMaterial.setRequireTime(materialInformation1.getMustDate());
         orderMaterial.setOrderCode(task_code);
         AjaxResult ajaxResult = orderMaterialClient.insertOrderMaterial(orderMaterial);

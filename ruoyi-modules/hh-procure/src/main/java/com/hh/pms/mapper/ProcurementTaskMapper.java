@@ -1,8 +1,11 @@
 package com.hh.pms.mapper;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.ProcurementTask;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,4 +70,16 @@ public interface ProcurementTaskMapper
 
     // 转办
     int updateProcurementTaskPurchaser(@Param("purchaser")String purchaser,@Param("taskId") Integer[] taskId);
+
+    // 受理
+    int addOrderManger(OrderManager orderManager);
+    int updateProcurementTaskNumber(@Param("taskOccupied")String taskOccupied,@Param("acceptedQuantity")String acceptedQuantity,@Param("taskAccepted")String taskAccepted,@Param("taskId") Integer[] taskId);
+    /**
+     * 向订单表中查询是否存在某天
+     * @param orderTime
+     * @return
+     */
+    @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time DESC limit 1")
+    String selectOrderCode(Date orderTime);
+
 }

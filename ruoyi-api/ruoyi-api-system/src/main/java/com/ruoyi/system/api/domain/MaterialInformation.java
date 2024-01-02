@@ -53,7 +53,7 @@ public class MaterialInformation extends BaseEntity
 
     /** 需求数量 */
     @Excel(name = "需求数量")
-    private Long mustNumber;
+    private BigDecimal mustNumber;
 
     /** 需求日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -62,7 +62,7 @@ public class MaterialInformation extends BaseEntity
 
     /** 币种 */
     @Excel(name = "币种")
-    private Long currencyName;
+    private String currencyName;
 
     /** 参考价格 */
     @Excel(name = "参考价格")
@@ -188,12 +188,12 @@ public class MaterialInformation extends BaseEntity
     {
         return materialUnit;
     }
-    public void setMustNumber(Long mustNumber)
+    public void setMustNumber(BigDecimal mustNumber)
     {
         this.mustNumber = mustNumber;
     }
 
-    public Long getMustNumber()
+    public BigDecimal getMustNumber()
     {
         return mustNumber;
     }
@@ -206,12 +206,12 @@ public class MaterialInformation extends BaseEntity
     {
         return mustDate;
     }
-    public void setCurrencyName(Long currencyName)
+    public void setCurrencyName(String currencyName)
     {
         this.currencyName = currencyName;
     }
 
-    public Long getCurrencyName()
+    public String getCurrencyName()
     {
         return currencyName;
     }
@@ -329,7 +329,7 @@ public class MaterialInformation extends BaseEntity
                 .append("annex", getAnnex())
                 .append("purchaser", getPurchaser())
                 .append("requirementCode", getRequirementCode())
-                .append("materialList", getMaterialPoolList())
+                .append("materialPoolList", getMaterialPoolList())
                 .append("status",getStatus())
                 .toString();
     }

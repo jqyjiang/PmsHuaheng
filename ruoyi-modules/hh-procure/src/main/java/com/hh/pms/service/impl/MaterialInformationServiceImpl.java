@@ -108,8 +108,8 @@ public class MaterialInformationServiceImpl implements IMaterialInformationServi
     }
 
     @Override
-    public int updateProcurementTask(String purchaser,Integer[] miId) {
-        return materialInformationMapper.updateProcurementTask(purchaser,miId);
+    public int updateProcurementTask(String purchaser,String requirementCode) {
+        return materialInformationMapper.updateProcurementTask(purchaser,requirementCode);
     }
 
 

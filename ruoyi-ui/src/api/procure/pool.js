@@ -69,9 +69,9 @@ export function editStatusAllocation(purchaser,miId) {
     method: 'put'
   })
 }
-export function editStatusProcurementTask(purchaser,miId) {
+export function editStatusProcurementTask(purchaser,requirementCode) {
   return request({
-    url: '/procure/information/dfp/'+purchaser+'/'+miId,
+    url: '/procure/information/dfp/'+purchaser+'/'+requirementCode,
     method: 'put'
   })
 }

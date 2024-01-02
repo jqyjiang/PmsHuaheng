@@ -118,6 +118,7 @@ public class OrderManagerController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody OrderManager orderManager)
     {
+        System.out.println("--------"+orderManagerService.insertOrderManager(orderManager));
         return success(orderManagerService.insertOrderManager(orderManager));
     }
 

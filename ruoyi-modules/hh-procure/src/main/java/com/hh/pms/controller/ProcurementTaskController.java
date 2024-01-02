@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.ProcurementTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -123,5 +124,24 @@ public class ProcurementTaskController extends BaseController
         System.out.println("fff:"+purchaser);
         return toAjax(procurementTaskService.updateProcurementTaskPurchaser(purchaser,taskId));
     }
+
+
+
+    /**
+     * 受理
+     */
+    @RequiresPermissions("procure:task:edit")
+    @PutMapping("/sl1/{taskOccupied}/{acceptedQuantity}/{taskAccepted}/{taskId}")
+    public AjaxResult editOrAdd(@PathVariable("taskOccupied") String taskOccupied,@PathVariable("acceptedQuantity") String acceptedQuantity,@PathVariable("taskAccepted") String taskAccepted,@PathVariable("taskId") Integer[] taskId)
+    {
+        return toAjax(procurementTaskService.updateProcurementTaskNumber(taskOccupied,acceptedQuantity,taskAccepted,taskId));
+    }
+    @RequiresPermissions("procure:task:add")
+    @PostMapping("/sl2")
+    public AjaxResult addOrderManager(@RequestBody OrderManager orderManager)
+    {
+        return toAjax(procurementTaskService.addOrderManger(orderManager));
+    }
+
 
 }

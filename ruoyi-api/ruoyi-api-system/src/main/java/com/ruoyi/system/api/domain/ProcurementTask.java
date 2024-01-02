@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 我的需求任务对象 procurement_task
@@ -46,9 +47,6 @@ public class ProcurementTask extends BaseEntity
     @Excel(name = "采购员")
     private String purchaser;
 
-    /** 物料ID */
-//    @Excel(name = "物料ID")
-//    private Long materialId;
 
     /** 币种ID */
     @Excel(name = "币种ID")
@@ -74,13 +72,14 @@ public class ProcurementTask extends BaseEntity
     @Excel(name = "待受理数量")
     private BigDecimal taskAccepted;
 
-    /** 是否自动合单 */
-//    @Excel(name = "是否自动合单")
-//    private Long mergeOrders;
 
     /** 状态 */
     @Excel(name = "状态")
     private Long taskStatus;
+    /** 物料名称s */
+    @Excel(name = "物料名称s")
+    private String descriptionName;
+
 
     public void setTaskId(Long taskId) 
     {
@@ -144,14 +143,6 @@ public class ProcurementTask extends BaseEntity
     public void setCompaniesId(String companiesId) {
         this.companiesId = companiesId;
     }
-
-//    public Long getMaterialId() {
-//        return materialId;
-//    }
-//
-//    public void setMaterialId(Long materialId) {
-//        this.materialId = materialId;
-//    }
 
     public Long getCurrencyId() {
         return currencyId;
@@ -236,9 +227,18 @@ public class ProcurementTask extends BaseEntity
                 ", taskStatus=" + taskStatus +
                 '}';
     }
+
+    public String getDescriptionName() {
+        return descriptionName;
+    }
+
+    public void setDescriptionName(String descriptionName) {
+        this.descriptionName = descriptionName;
+    }
+
     // 物料信息
     /** 序号 */
-    private Integer miId;
+    private String miId;
 
     /** 物料编码 */
     @Excel(name = "物料编码")
@@ -318,11 +318,11 @@ public class ProcurementTask extends BaseEntity
     @Excel(name = "状态")
     private Long status;
 
-    public Integer getMiId() {
+    public String getMiId() {
         return miId;
     }
 
-    public void setMiId(Integer miId) {
+    public void setMiId(String miId) {
         this.miId = miId;
     }
 
@@ -481,4 +481,37 @@ public class ProcurementTask extends BaseEntity
 
 
 
+    // 物料信息表
+    private List<MaterialInformation> materialInformationList;
+
+    public List<MaterialInformation> getMaterialInformationList() {
+        return materialInformationList;
+    }
+
+    public void setMaterialInformationList(List<MaterialInformation> materialInformationList) {
+        this.materialInformationList = materialInformationList;
+    }
+
+
+    // 订单表
+    private OrderManager orderManager;
+
+    public OrderManager getOrderManager() {
+        return orderManager;
+    }
+
+    public void setOrderManager(OrderManager orderManager) {
+        this.orderManager = orderManager;
+    }
+
+    // 公司表
+    private Companies companies;
+
+    public Companies getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Companies companies) {
+        this.companies = companies;
+    }
 }

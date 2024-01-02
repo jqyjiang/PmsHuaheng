@@ -8,6 +8,7 @@ import java.util.List;
 import com.hh.pms.mapper.ExecutionStatusMapper;
 import com.hh.pms.mapper.OrderManagerMapper;
 import com.hh.pms.model.OrderMaterialClient;
+import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.common.core.web.domain.AjaxResult;
 import com.ruoyi.system.api.domain.ContractManagement;
 import com.ruoyi.system.api.domain.ExecutionStatus;
@@ -153,6 +154,16 @@ public class ContractManagementServiceImpl implements IContractManagementService
     public ContractManagement selectByContractManagementId(Long contractManagementId) {
         System.out.println("-----"+contractManagementMapper.selectByContractManagementId(contractManagementId));
         return contractManagementMapper.selectByContractManagementId(contractManagementId);
+    }
+
+    @Override
+    public int addContractManagementOrder(OrderManager orderManager) {
+        //先写订单生成
+        orderManager.setCreateTime(DateUtils.getNowDate());
+//        String orderCode = createOrderCode(DateUtils.getNowDate());
+//        orderManager.setOrderCode(orderCode);
+//        orderManager.setOrderState(1l);
+        return 0;
     }
 
 

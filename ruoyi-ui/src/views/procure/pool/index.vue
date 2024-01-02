@@ -149,6 +149,7 @@
 
 <script>
 import { getInformation, delInformation, addInformation, updateInformation,listInformation, editStatus, editStatusCancel, listBuyer,editStatusAllocation, editStatusProcurementTask} from "@/api/procure/pool";
+import item from "@/layout/components/Sidebar/Item.vue";
 
 export default {
   name: "Pool",
@@ -249,6 +250,7 @@ export default {
       this.loading = true;
       listInformation(this.queryParams).then(response => {
         this.informationList = response.rows;
+        console.log(response.rows)
         this.total = response.total;
         this.loading = false;
       });
@@ -328,6 +330,7 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.miId)
       this.status = selection.map(item => item.status)
+      this.requirementCode=selection.map(item=>item.requirementCode)
       this.single = selection.length!==1
       this.multiple = !selection.length
       this.pending=!selection.length
@@ -390,15 +393,20 @@ export default {
     /** 提交按钮（分配） */
     submitForm() {
       const miIds=this.ids;
+      const requirementCode=this.requirementCode;
+      console.log(requirementCode)
       const status=this.status;
       const purchaser=this.loginName;
+      console.log(status)
+      console.log(purchaser)
       if (parseInt(status)===1||parseInt(status)===2){
         this.$modal.confirm('是否确认分配编号为"' + miIds + '"的数据项？').then(function() {
-          return editStatusAllocation(purchaser,miIds);
+         return  editStatusAllocation(purchaser,miIds);
         }).then(() => {
           this.getList();
           this.$modal.msgSuccess("分配成功");
-          return editStatusProcurementTask(purchaser,miIds);
+          this.open=false;
+          return editStatusProcurementTask(purchaser,requirementCode);
         }).catch(() => {});
       }else {
         this.$message.error('存在已分配或已作废的数据,请修改后重试！');
