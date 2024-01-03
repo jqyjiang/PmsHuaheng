@@ -27,6 +27,7 @@
                accuracy,
                enable
         from unit_of_account
+        ORDER BY unit_id DESC
     </sql>
 
     <select id="selectUnitOfAccountList" parameterType="UnitOfAccount" resultMap="UnitOfAccountResult">

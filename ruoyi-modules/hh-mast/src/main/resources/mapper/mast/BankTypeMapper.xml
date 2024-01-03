@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBankTypeVo">
         select bank_type_id, bank_type from bank_type
+        ORDER BY bank_type_id DESC
     </sql>
 
     <select id="selectBankTypeList" parameterType="com.ruoyi.system.api.domain.BankType" resultMap="BankTypeResult">

@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectCalculationUnitTypeVo">
         select unit_type_id, unit_type_code, unit_type_name, enable from calculation_unit_type
+        ORDER BY unit_type_id DESC
     </sql>
 
     <select id="selectCalculationUnitTypeList" parameterType="CalculationUnitType" resultMap="CalculationUnitTypeResult">

@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectIndustryTypeVo">
         select industry_type_id, industry_type_Code, industry_type_name, superior_industry, enable from industry_type
+        ORDER BY industry_type_id DESC
     </sql>
 
     <select id="selectIndustryTypeList" parameterType="IndustryType" resultMap="IndustryTypeResult">

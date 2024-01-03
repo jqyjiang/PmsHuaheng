@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectTaxRateVo">
         select tax_type_id, tax_code, describes, tax_rate, enable from tax_rate
+        ORDER BY tax_type_id DESC
     </sql>
 
     <select id="selectTaxRateList" parameterType="TaxRate" resultMap="TaxRateResult">
