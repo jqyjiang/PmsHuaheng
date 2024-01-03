@@ -318,14 +318,14 @@
                 </el-select>
               </template>
             </el-table-column>
-            <el-table-column label="评分状态" prop="ratingStatus" width="150">
+            <!-- <el-table-column label="评分状态" prop="ratingStatus" width="150">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.ratingStatus" placeholder="请选择评分状态">
                   <el-option v-for="dict in dict.type.rating_status" :key="dict.value" :label="dict.label"
                     :value="dict.value"></el-option>
                 </el-select>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="得分" prop="score" width="150">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.score" placeholder="请输入得分" />
@@ -427,14 +427,14 @@
                 <el-input v-model="scope.row.score" placeholder="请输入得分" />
               </template>
             </el-table-column>
-            <el-table-column label="等级" prop="grade" width="150">
+            <!-- <el-table-column label="等级" prop="grade" width="150">
               <template slot-scope="scope">
                 <el-select v-model="scope.row.grade" placeholder="请选择等级">
                   <el-option v-for="dict in dict.type.grade" :key="dict.value" :label="dict.label"
                     :value="dict.value"></el-option>
                 </el-select>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="考评排名" prop="evaluationRanking" width="150">
               <template slot-scope="scope">
                 <el-input v-model="scope.row.evaluationRanking" placeholder="请输入考评排名" />

@@ -67,7 +67,8 @@ public class Material extends BaseEntity
     /** 主品类 */
     @Excel(name = "主品类")
     private Long mCategory;
-
+    @Excel(name = "品类编码")
+    private String categoryCode;
     //主品类名称
     @Excel(name = "品类名称")
     private String categoryName;
@@ -591,6 +592,14 @@ public class Material extends BaseEntity
     public Long getAvoidInspect()
     {
         return avoidInspect;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     @Override

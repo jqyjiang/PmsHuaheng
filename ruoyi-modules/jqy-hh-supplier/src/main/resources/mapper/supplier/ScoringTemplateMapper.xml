@@ -50,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="scoringTemplateName != null  and scoringTemplateName != ''"> and scoring_template_name like concat('%', #{scoringTemplateName}, '%')</if>
             <if test="templateState != null "> and template_state = #{templateState}</if>
             <if test="templateType != null "> and template_type = #{templateType}</if>
+
         </where>
     </select>
     
@@ -58,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  b.scoring_details_id as sub_scoring_details_id, b.supplier_code as sub_supplier_code, b.supplier_name as sub_supplier_name, b.category_code as sub_category_code, b.category_name as sub_category_name, b.indicator_description as sub_indicator_description, b.indicator_code as sub_indicator_code, b.scoring_criteria as sub_scoring_criteria, b.weight as sub_weight, b.scoring_method as sub_scoring_method, b.rater as sub_rater, b.indicator_type as sub_indicator_type, b.rating_status as sub_rating_status, b.score as sub_score, b.selectivity as sub_selectivity, b.score_from as sub_score_from, b.score_to as sub_score_to, b.feedback as sub_feedback, b.evaluation_id as sub_evaluation_id, b.scoring_template_id as sub_scoring_template_id
         from scoring_template a
         left join scoring_details b on b.scoring_template_id = a.scoring_template_id
-        where a.scoring_template_id = #{scoringTemplateId}
+        where a.scoring_template_id = #{scoringTemplateId} and b.evaluation_id IS NULL
     </select>
         
     <insert id="insertScoringTemplate" parameterType="ScoringTemplate" useGeneratedKeys="true" keyProperty="scoringTemplateId">

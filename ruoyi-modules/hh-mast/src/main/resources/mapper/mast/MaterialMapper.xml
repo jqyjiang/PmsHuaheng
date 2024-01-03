@@ -17,6 +17,7 @@
         <result property="sourceSystem" column="source_system"/>
         <result property="enable" column="enable"/>
         <result property="mCategory" column="m_category"/>
+        <result property="categoryCode" column="category_code"/>
         <result property="categoryName" column="category_name"/>
         <result property="specifications" column="specifications"/>
         <result property="model" column="model"/>
@@ -68,6 +69,7 @@
                a.source_system,
                a.enable,
                a.m_category,
+               b.category_code,
                b.category_name,
                a.specifications,
                a.model,

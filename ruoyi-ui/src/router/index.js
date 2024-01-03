@@ -188,11 +188,7 @@ export const dynamicRoutes = [
         meta: { title: '修改生成配置', activeMenu: '/tool/gen' }
       }
     ]
-  },
-  {
-    path: '/contract/management',
-    redirect: '/procure/management/index'
-  },
+  }
 ]
 
 // 防止连续点击多次路由报错

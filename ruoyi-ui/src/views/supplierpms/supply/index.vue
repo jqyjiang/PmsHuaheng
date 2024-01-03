@@ -290,6 +290,7 @@ export default {
     this.getList();
     this.getCompanies();
     this.getList3();
+    this.userName = this.$store.state.user.name;
   },
   methods: {
     /**查询公司和供应商数据 */
@@ -370,15 +371,16 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加供货管理";
+      this.form.founder = this.userName;
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const supplyId = row.supplyId || this.ids
       getSupply(supplyId).then(response => {
-        console.log(response.data.supplierMaterialList);
         this.supplierMaterialList = response.data.supplierMaterialList;
         this.form = response.data;
+        this.form.lastUpdatedBy = this.userName;
         this.open = true;
         this.title = "修改供货管理";
       });

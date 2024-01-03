@@ -155,9 +155,9 @@
         <el-form-item label="最终得分" prop="finalScore">
           <el-input v-model="form.finalScore" placeholder="请输入最终得分" />
         </el-form-item>
-        <el-form-item label="等级" prop="level">
+        <!-- <el-form-item label="等级" prop="level">
           <el-input v-model="form.level" placeholder="请输入等级" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="综合意见" prop="comprehensiveOpinions">
           <el-input v-model="form.comprehensiveOpinions" placeholder="请输入综合意见" />
         </el-form-item>
@@ -320,6 +320,7 @@ export default {
     this.getList();
     this.getList3();
     this.getCompanies();
+    this.userName = this.$store.state.user.name;
   },
   methods: {
     /**查询公司和供应商数据 */
@@ -431,6 +432,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.form.applicant=this.userName;
       this.title = "添加现场考察";
     },
     /** 查询物料维护列表 */

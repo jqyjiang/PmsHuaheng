@@ -112,6 +112,7 @@
             <if test="slStatus != null "> and sl_status = #{slStatus}</if>
             and data_tatus = 0
         </where>
+        ORDER BY sd_rt DESC
     </select>
 
     <select id="selectSupplierDetailsBySdId" parameterType="Long" resultMap="SupplierDetailsResult">

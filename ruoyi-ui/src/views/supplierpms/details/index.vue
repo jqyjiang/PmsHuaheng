@@ -57,8 +57,8 @@
           <span>{{ parseTime(scope.row.sdTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="供应商名称" align="center" prop="sbiName" />
-      <el-table-column label="工商注册号" align="center" prop="sdUscc" />
+      <el-table-column label="供应商名称" align="center" prop="sbiName" width="150"/>
+      <el-table-column label="工商注册号" align="center" prop="sdUscc" width="180" />
       <el-table-column label="行业" align="center" prop="sdIndustry" />
       <el-table-column label="服务范围" align="center" prop="sbiServe">
         <template slot-scope="scope">
