@@ -1,5 +1,6 @@
 package com.hh.pms.service.impl;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import com.ruoyi.common.core.utils.DateUtils;
 import com.ruoyi.system.api.domain.OrderManager;
 import com.ruoyi.system.api.domain.ProcurementTask;
+import com.ruoyi.system.api.domain.Products;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.hh.pms.mapper.ProcurementTaskMapper;
@@ -120,6 +122,8 @@ public class ProcurementTaskServiceImpl implements IProcurementTaskService
         orderManager.setOrderCode(orderCode);
         orderManager.setOrderState(1l);
         orderManager.setOrId(2L);
+        orderManager.setMaterialId("云服务器,工业润滑剂");
+        orderManager.setTotalDemand(BigDecimal.valueOf(5000));
         return procurementTaskMapper.addOrderManger(orderManager);
     }
 

@@ -442,7 +442,7 @@
       <el-divider content-position="center">基本信息</el-divider>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="订单号" prop="orderCode">
-          <el-input v-model="form.orderCode" placeholder="" readonly style="width: 300px"/>
+          <el-input v-model="form.orderCode" placeholder="自动生成" readonly style="width: 300px"/>
         </el-form-item>
         <el-form-item label="订单类型" prop="orderSource" style="float: right;margin-left: 540px;margin-top: -59px">
           <el-input v-model="form.orderSource" placeholder="" style="width: 300px;">
@@ -1203,6 +1203,7 @@ export default {
     /** 合同转订单提交 */
     submitFormOrder(){
       let num=0;
+      debugger;
       for (let i = 0; i < this.ProductsList.length; i++) {
         var products=this.ProductsList[i]
         // 数量
@@ -1216,13 +1217,11 @@ export default {
         this.form.phone=this.form.phoneB
         this.form.orderSource=4
         this.form.taxTotal=this.form.contractPrice
-        console.log(this.form.contractPrice)
         this.form.companies={}
         this.form.orderMaterialList=this.form.products
         this.form.products=this.form.products[0]
         this.form.purchaser=this.form.head
         this.form.totalDemand=num
-        console.log(this.form)
         if (valid) {
           if (this.form.orderId != null) {
             addOrderManger(this.form).then(response => {

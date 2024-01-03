@@ -96,4 +96,13 @@ public interface ContractManagementMapper
     // 合同转订单
     int addContractManagementOrder(OrderManager orderManager);
 
+
+    /**
+     * 向订单表中查询是否存在某天
+     * @param orderTime
+     * @return
+     */
+    @Select("select order_code from order_manager where to_days(create_time)= to_days(#{orderTime}) group by order_code order by create_time DESC limit 1")
+    String selectOrderCode(Date orderTime);
+
 }
