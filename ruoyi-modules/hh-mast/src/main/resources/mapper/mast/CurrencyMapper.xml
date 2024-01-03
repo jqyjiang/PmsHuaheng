@@ -17,7 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectCurrencyVo">
         select currency_id, currency_code, currency_name, country_region, financial_accuracy, accuracy, currency_symbol, enable from currency
-        ORDER BY currency_id DESC
+
     </sql>
 
     <select id="selectCurrencyList" parameterType="Currency" resultMap="CurrencyResult">
@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="currencyCode != null  and currencyCode != ''"> and currency_code = #{currencyCode}</if>
             <if test="currencyName != null  and currencyName != ''"> and currency_name like concat('%', #{currencyName}, '%')</if>
         </where>
+        ORDER BY currency_id DESC
     </select>
 
     <select id="selectCurrencyByCurrencyId" parameterType="Long" resultMap="CurrencyResult">

@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select a.categoryid, a.category_code, a.category_name, a.enable, a.is_no, a.superior_category, a.creation_time, a.l_updated, a.l_update_time, a.company,b.companies_name, a.metering_unit, a.source_system, a.introduction_requirements, a.assign_purchaser
         from category a left join companies b
         on a.company=b.companies_id
-        ORDER BY a.categoryid DESC
+
     </sql>
 
     <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">
@@ -37,6 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enable != null "> and enable = #{enable}</if>
             <if test="superiorCategory != null "> and superior_category = #{superiorCategory}</if>
         </where>
+        ORDER BY categoryid DESC
     </select>
 
     <select id="selectCategoryByCategoryid" parameterType="Long" resultMap="CategoryResult">

@@ -27,13 +27,14 @@
                accuracy,
                enable
         from unit_of_account
-        ORDER BY unit_id DESC
+
     </sql>
 
     <select id="selectUnitOfAccountList" parameterType="UnitOfAccount" resultMap="UnitOfAccountResult">
         <include refid="selectUnitOfAccountVo"/>
         <where>
         </where>
+        ORDER BY unit_id DESC
     </select>
 
     <select id="selectUnitOfAccountByUnitId" parameterType="Long" resultMap="UnitOfAccountResult">

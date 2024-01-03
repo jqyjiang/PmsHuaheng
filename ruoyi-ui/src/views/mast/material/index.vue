@@ -164,14 +164,14 @@
         <el-form-item label="最后更新人" prop="lUpdated">
           <el-input v-model="form.lUpdated" placeholder="请输入最后更新人" />
         </el-form-item>
-        <el-form-item label="最后更新时间" prop="lUpdateTime">
+        <!-- <el-form-item label="最后更新时间" prop="lUpdateTime">
           <el-date-picker clearable
             v-model="form.lUpdateTime"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择最后更新时间">
           </el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="来源系统" prop="sourceSystem">
           <el-select v-model="form.sourceSystem" placeholder="请输入来源系统" >
             <el-option value="SRM">SRM</el-option>

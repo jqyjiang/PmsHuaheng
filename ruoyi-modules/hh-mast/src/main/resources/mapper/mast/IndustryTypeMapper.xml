@@ -23,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="industryTypeCode != null  and industryTypeCode != ''"> and industry_type_Code = #{industryTypeCode}</if>
             <if test="industryTypeName != null  and industryTypeName != ''"> and industry_type_name like concat('%', #{industryTypeName}, '%')</if>
         </where>
+        ORDER BY industry_type_id DESC
     </select>
 
     <select id="selectIndustryTypeByIndustryTypeId" parameterType="Long" resultMap="IndustryTypeResult">

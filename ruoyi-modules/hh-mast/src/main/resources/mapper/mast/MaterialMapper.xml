@@ -90,7 +90,7 @@
         LEFT JOIN unit_of_account c on a.calculation_unit=c.unit_id
         LEFT JOIN unit_of_account d on a.weight=d.unit_id
         LEFT JOIN unit_of_account e on a.v_unit=e.unit_id
-        ORDER BY a.material_id DESC
+
     </sql>
 
     <select id="selectMaterialList" parameterType="Material" resultMap="MaterialResult">
@@ -102,6 +102,7 @@
             </if>
             <if test="enable != null ">and enable = #{enable}</if>
         </where>
+        ORDER BY material_id DESC
     </select>
 
     <select id="selectMaterialByMaterialId" parameterType="Long" resultMap="MaterialResult">

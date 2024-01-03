@@ -1,5 +1,6 @@
 package com.hh.pms.mast.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.system.api.domain.Category;
@@ -53,6 +54,7 @@ public class CategoryServiceImpl implements ICategoryService
     @Override
     public int insertCategory(Category category)
     {
+        category.setlUpdateTime(new Date());
         return categoryMapper.insertCategory(category);
     }
 
@@ -65,6 +67,7 @@ public class CategoryServiceImpl implements ICategoryService
     @Override
     public int updateCategory(Category category)
     {
+        category.setlUpdateTime(new Date());
         return categoryMapper.updateCategory(category);
     }
 
@@ -94,6 +97,10 @@ public class CategoryServiceImpl implements ICategoryService
 
     @Override
     public int batchCategory(List<Category> categoryList) {
+        Date currentTime = new Date(); // 获取当前时间
+        for (Category category : categoryList) {
+            category.setlUpdateTime(currentTime);
+        }
         return categoryMapper.batchCategory(categoryList);
     }
 }

@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectCompaniesVo">
         select companies_id, companies_name, credit_code, companies_abbreviation, isgroup, companies_code, registration_number, enterprise_type, registered_country, representative, registered_capital, establishment_date, operating_period, basic_division, business_license, taxpayer, province, address, currency_id2, deng_code, profile from companies
-        ORDER BY companies_id DESC
+
     </sql>
 
     <select id="selectCompaniesList" parameterType="Company" resultMap="CompaniesResult">
@@ -57,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="dengCode != null  and dengCode != ''"> and deng_code = #{dengCode}</if>
             <if test="profile != null  and profile != ''"> and profile = #{profile}</if>
         </where>
+        ORDER BY companies_id DESC
     </select>
 
     <select id="selectCompaniesByCompaniesId" parameterType="Long" resultMap="CompaniesResult">

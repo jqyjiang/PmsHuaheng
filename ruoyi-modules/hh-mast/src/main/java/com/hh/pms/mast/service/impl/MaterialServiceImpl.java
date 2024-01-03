@@ -1,5 +1,6 @@
 package com.hh.pms.mast.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.system.api.domain.Material;
@@ -56,6 +57,7 @@ public class MaterialServiceImpl implements IMaterialService
     @Override
     public int insertMaterial(Material material)
     {
+        material.setlUpdateTime(new Date());
         return materialMapper.insertMaterial(material);
     }
 
@@ -68,6 +70,7 @@ public class MaterialServiceImpl implements IMaterialService
     @Override
     public int updateMaterial(Material material)
     {
+        material.setlUpdateTime(new Date());
         return materialMapper.updateMaterial(material);
     }
 
