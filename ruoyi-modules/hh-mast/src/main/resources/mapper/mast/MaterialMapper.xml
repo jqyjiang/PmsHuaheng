@@ -207,7 +207,7 @@
              SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL
              SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12) AS months
                 LEFT JOIN material_information ON EXTRACT(MONTH FROM must_date) = months.Month
-                AND EXTRACT(YEAR FROM must_date) = '2023'
+                AND EXTRACT(YEAR FROM must_date) = '2024'
         GROUP BY months.Month
         ORDER BY months.Month
     </select>

@@ -10,22 +10,22 @@
           <!-- <canvas ref="chartCanvas"></canvas> -->
         </div>
     </div>
-    
+
   </template>
-  
+
   <script>
   import chinaJson from '../../../assets/json/china.json'
   import * as echarts from 'echarts';
 
   import { listDetailsClass,listDetailsLife } from "@/api/chart/supplier";
 
-  
+
   export default {
     name: 'FilmChart2',
    data() {
      return {
       detailsClassList: [],
-      detailsLifeList: [], 
+      detailsLifeList: [],
      };
    },
   mounted() {
@@ -34,7 +34,7 @@
     this.supplierChart();
   },
   methods: {
-    
+
       //区域地图
     chinaEcharts() {
       //1.注册一个地图
@@ -42,7 +42,7 @@
 
       //2.初始化echarts
       let myChart = this.$echarts.init(this.$refs.myEcharts);
-    
+
       // 3.准备数据
       var data = [
         { name: "北京", value: 177 },
@@ -52,7 +52,7 @@
         { name: "内蒙古", value: 47 },
         { name: "辽宁", value: 67 },
         { name: "吉林", value: 82 },
-        { name: "黑龙江", value: 66 },
+        { name: "黑龙江", value: 1000 },
         { name: "上海", value: 24 },
         { name: "江苏", value: 92 },
         { name: "浙江", value: 114 },
@@ -62,9 +62,9 @@
         { name: "山东", value: 119 },
         { name: "河南", value: 137 },
         { name: "湖北", value: 116 },
-        { name: "湖南", value: 114 },
+        { name: "湖南", value: 1000 },
         { name: "重庆", value: 91 },
-        { name: "四川", value: 125 },
+        { name: "四川", value: 1000 },
         { name: "贵州", value: 62 },
         { name: "云南", value: 83 },
         { name: "西藏", value: 9 },
@@ -73,7 +73,7 @@
         { name: "青海", value: 10 },
         { name: "宁夏", value: 18 },
         { name: "新疆", value: 67 },
-        { name: "广东", value: 123 },
+        { name: "广东", value: 1000 },
         { name: "广西", value: 59 },
         { name: "海南", value: 14 }
       ];
@@ -147,8 +147,8 @@
         },
         //1)加上这个就可以实现多种颜色的功能
         visualMap: {
-          min: 0,
-          max: 100,
+          min: 100,
+          max: 1000,
           text: ['High', 'Low'],
           calculable: true,
           seriesIndex: [0],//这个对应的是series的数组下标
@@ -177,7 +177,7 @@
               normal: {
                 show: true,
                 textStyle:{
-                    fontSize: "8px" 
+                    fontSize: "8px"
                 }
               },
               emphasis: {
@@ -191,6 +191,21 @@
             animation: false,
             data: data
           },
+
+          {
+        type: "map",
+        map: 'china',
+        geoIndex: 0,
+        aspectScale: 0.75,
+        showLegendSymbol: false,
+        label: {
+          normal: {
+            show: false
+          },
+        },
+        roam: true,
+        animation: false
+      }
         ]
       };
       myChart.setOption(option);
@@ -279,7 +294,7 @@
           bottom:0,
           // x: 'left',
           data: this.detailsClassList.map(item => item.classDescribe), // 获取数据中的名称作为图例
-          
+
         },
         series: [
           {
@@ -308,7 +323,7 @@
           },
         ],
       };
-      
+
       // 渲染图表
       pieChart.setOption(option);
     },
