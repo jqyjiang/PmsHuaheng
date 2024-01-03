@@ -1196,11 +1196,11 @@ requireList:[]
           message: '请至少选择一项任务',
           type: 'warning'
         });
-      } 
+      }
     },
     /**
      * 需求转订单里面的确定按钮
-     * @param {} 
+     * @param {}
      */
     transferToOrder() {
       for (let i = 0; i < this.requireList.length; i++) {
@@ -1213,7 +1213,7 @@ requireList:[]
               message: '存在代理数量为0的任务，请重新选择',
               type: 'warning'
             });
-          } 
+          }
         }
       this.open = true;
       this.title = "需求订单转采购订单";
@@ -1692,7 +1692,7 @@ requireList:[]
   }
 };
 </script>
-<style>
+<style scoped>
 .even-row {
   background-color: #f2f2f2;
 }

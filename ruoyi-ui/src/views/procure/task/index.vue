@@ -98,7 +98,7 @@
       <el-divider content-position="center">基本信息</el-divider>
       <el-form ref="form" :model="form" :rules="rules" label-width="130px">
         <el-form-item label="订单号" prop="applicant">
-          <el-input v-model="form.orderCode" placeholder="" readonly style="width: 300px"/>
+          <el-input v-model="form.orderCode" placeholder="自动生成" disabled style="width: 300px"/>
         </el-form-item>
         <el-form-item label="订单来源" prop="orderSource" style="float: right;margin-left: 540px;margin-top: -59px">
           <el-input v-model="form.orderSource" placeholder="" style="width: 300px;"/>
@@ -300,7 +300,7 @@
           </el-table-column>
           <el-table-column label="最新价格" prop="newPrice" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.newPrice" placeholder="请输入最新价格" />
+              <el-input v-model="scope.row.newPrice" placeholder="请输入最新价格" @change="changeInput"/>
             </template>
           </el-table-column>
           <el-table-column label="不含税单价" prop="noTaxPrice" width="150">
@@ -313,10 +313,9 @@
               <el-input v-model="scope.row.taxCode" readonly placeholder="请输入税率代码" />
               <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
               <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
-                <!-- 这里是品类的内容 -->
+                <!-- 这里是税种的内容 -->
                 <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
                   <el-table-column type="selection" width="55" align="center" />
-                  <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
                   <el-table-column label="税种代码" align="center" prop="taxCode" />
                   <el-table-column label="描述" align="center" prop="describes" />
                   <el-table-column label="税率" align="center" prop="taxRate" :formatter="formatTaxRate" />
@@ -332,7 +331,7 @@
           </el-table-column>
           <el-table-column label="税率" readonly prop="tax" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.tax" placeholder="请输入税率" />
+              <el-input v-model="scope.row.tax" placeholder="请输入税率"  @change="changeInput"/>
             </template>
           </el-table-column>
           <el-table-column label="含税单价" prop="taxPrice" width="150">
@@ -987,6 +986,28 @@ export default {
         this.orderMaterialList[this.materialIndex].materialModel = row.model;
         this.orderMaterialList[this.materialIndex].materialUnit = row.metering_unit;
         this.dialogMaterial = false; // 关闭对话框
+      },
+      //计算小计并累加到合同金额 输入框改变值是触发事件
+      changeInput(){
+        let total=0;
+        for (let i = 0; i < this.orderMaterialList.length; i++) {
+          var materials=this.orderMaterialList[i]
+          let taxValue=materials.tax
+          // 数量
+          let number=materials.requireNumber === ''||materials.requireNumber+""=== 'undefined' ?0:materials.requireNumber
+          // 单价
+          let price=materials.newPrice === '' || materials.newPrice=== null|| materials.newPrice+""=== 'undefined'?0:materials.newPrice
+          console.log(taxValue)
+          let num=Number(number)*Number(price)
+          let rateValue=Number(price)*Number(1+taxValue)
+          // 行含税金额
+          let colHaveTax=Number(num)*Number(1+taxValue);
+          this.orderMaterialList[i].noTaxPrice=price // 不含税单价
+          this.orderMaterialList[i].taxPrice=rateValue // 含税单价
+          this.orderMaterialList[i].lineTaxAmount=colHaveTax // 含税单价
+          total=total+Number(num)
+        }
+        this.form.totalAmount=total // 预估总金额
       },
     }
 };

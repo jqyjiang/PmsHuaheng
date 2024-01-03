@@ -2,6 +2,9 @@ package com.hh.pms.service.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -83,7 +86,8 @@ public class MaterialRequirementServiceImpl implements IMaterialRequirementServi
         // 任务单号生成
         String task_code=createTaskcode(date);
         materialRequirement.setTaskCode(task_code);
-        materialRequirement.setRequirementTitle("采购需求审批流程"+new Date());
+        long nowTime = System.currentTimeMillis();
+        materialRequirement.setRequirementTitle("采购需求审批流程"+nowTime);
         //保存采购需求申请
         int i1 = materialRequirementMapper.insertMaterialRequirement(materialRequirement);
         // 添加物料基础表   需求池数据

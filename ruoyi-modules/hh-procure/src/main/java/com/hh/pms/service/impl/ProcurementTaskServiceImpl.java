@@ -119,6 +119,7 @@ public class ProcurementTaskServiceImpl implements IProcurementTaskService
         String orderCode = createOrderCode(DateUtils.getNowDate());
         orderManager.setOrderCode(orderCode);
         orderManager.setOrderState(1l);
+        orderManager.setOrId(2L);
         return procurementTaskMapper.addOrderManger(orderManager);
     }
 

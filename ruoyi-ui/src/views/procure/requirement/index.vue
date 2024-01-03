@@ -102,26 +102,26 @@
     <el-dialog :title="title" :visible.sync="open" width="1050px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-form-item label="需求创建人" prop="requirementCreator">
-          <el-input v-model="form.requirementCreator" placeholder="请输入需求创建人" style="width: 300px"/>
+          <el-input v-model="form.requirementCreator" placeholder="需求创建人" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="需求标题" prop="requirementTitle"
                       style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.requirementTitle" readonly placeholder="请输入需求标题" style="width: 300px"/>
+          <el-input v-model="form.requirementTitle" readonly placeholder="自动生成" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="需求部门" prop="demandDepartment">
-          <el-input v-model="form.demandDepartment" placeholder="请输入需求部门" style="width: 300px"/>
+          <el-input v-model="form.demandDepartment" placeholder="需求部门" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="需求人" prop="demander" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.demander" placeholder="请输入需求人" style="width: 300px"/>
+          <el-input v-model="form.demander" placeholder="需求人" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="公司" prop="companiesId">
-          <el-input v-model="companiesName" readonly placeholder="请输入公司" style="width: 300px"/>
+          <el-input v-model="companiesName" readonly placeholder="公司" style="width: 300px"/>
           <i class="el-icon-search" id="serachOne2" @click="showCompanies"></i>
           <el-dialog :visible.sync="dialogCompanies" title="公司" :modal="false">
             <el-form :model="queryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
                      label-width="68px">
               <el-form-item label="企业名称" prop="currencyCode">
-                <el-input v-model="comqueryParams.companiesName" placeholder="请输入企业名称" clearable
+                <el-input v-model="comqueryParams.companiesName" placeholder="企业名称" clearable
                           @keyup.enter.native="handleQuery3"/>
               </el-form-item>
               <el-form-item>
@@ -141,32 +141,32 @@
           </el-dialog>
         </el-form-item>
         <el-form-item label="需求类型" prop="requirementType" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-select v-model="form.requirementType" placeholder="请输入需求类型" style="width: 300px">
+          <el-select v-model="form.requirementType" placeholder="需求类型" style="width: 300px">
             <el-option v-for="dict in dict.type.requirement_table" :key="dict.value" :label="dict.label"
                        :value="parseInt(dict.value)"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="预估总金额" prop="totalAmount">
-          <el-input v-model="form.totalAmount" placeholder="请输入预估总金额" style="width: 300px"/>
+          <el-input v-model="form.totalAmount" placeholder="预估总金额" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="收货联系人" prop="contactPerson" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.contactPerson" placeholder="请输入收货联系人" style="width: 300px"/>
+          <el-input v-model="form.contactPerson" placeholder="收货联系人" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="创建部门" prop="createDepartment">
-          <el-input v-model="form.createDepartment" placeholder="请输入创建部门" style="width: 300px"/>
+          <el-input v-model="form.createDepartment" placeholder="创建部门" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="费用部门" prop="expenseDepartment"
                       style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.expenseDepartment" placeholder="请输入费用部门" style="width: 300px"/>
+          <el-input v-model="form.expenseDepartment" placeholder="费用部门" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="主要用途及说明" prop="description">
-          <el-input v-model="form.description" placeholder="请输入主要用途及说明" style="width: 300px"/>
+          <el-input v-model="form.description" placeholder="主要用途及说明" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="地址" prop="address" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="form.address" placeholder="请输入地址" style="width: 300px"/>
+          <el-input v-model="form.address" placeholder="地址" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="联系方式" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入联系方式" style="width: 300px"/>
+          <el-input v-model="form.phone" placeholder="联系方式" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="附件" prop="annex">
           <file-upload v-model="form.annex"/>
@@ -175,17 +175,17 @@
           <el-input v-model="form.relatedProjects" style="width: 300px"/>
         </el-form-item>
         <el-form-item label="币种" prop="currencyId" style="float: right;margin-left: 540px;margin-top: -59px">
-          <el-input v-model="currencyName" readonly placeholder="请输入币种" style="width: 300px"/>
+          <el-input v-model="currencyName" readonly placeholder="币种" style="width: 300px"/>
           <i class="el-icon-search" id="serachOne" @click="showDiagCurrency"></i>
           <el-dialog :visible.sync="dialogCurrency" title="币种定义" :modal="false">
             <el-form :model="cqueryParams" ref="cqueryForm" size="small" :inline="true" v-show="showSearch"
                      label-width="68px">
               <el-form-item label="币种编码" prop="currencyCode">
-                <el-input v-model="cqueryParams.currencyCode" placeholder="请输入币种编码" clearable
+                <el-input v-model="cqueryParams.currencyCode" placeholder="币种编码" clearable
                           @keyup.enter.native="handleQuery2"/>
               </el-form-item>
               <el-form-item label="币种名称" prop="currencyName">
-                <el-input v-model="cqueryParams.currencyName" placeholder="请输入币种名称" clearable
+                <el-input v-model="cqueryParams.currencyName" placeholder="币种名称" clearable
                           @keyup.enter.native="handleQuery2"/>
               </el-form-item>
               <el-form-item>
@@ -226,7 +226,7 @@
           <el-table-column label="序号" align="center" prop="index" width="50"/>
           <el-table-column label="物料编码" prop="materialCode" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialCode" placeholder="请输入物料编码"/>
+              <el-input v-model="scope.row.materialCode" placeholder="物料编码"/>
               <i class="el-icon-search" id="serachOne1" @click="showMaterial()"></i>
               <el-dialog :visible.sync="dialogMaterial" title="物料管理-浏览框" :modal="false">
                 <!-- 这里是物料管理的内容 -->
@@ -246,7 +246,7 @@
           </el-table-column>
           <el-table-column label="物料名称" prop="materialName" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialName" placeholder="请输入物料名称"/>
+              <el-input v-model="scope.row.materialName" placeholder="物料名称"/>
             </template>
           </el-table-column>
 
@@ -273,27 +273,27 @@
 
           <el-table-column label="物料品类名称" prop="materialCategory" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialCategory" placeholder="请输入品类名称"/>
+              <el-input v-model="scope.row.materialCategory" placeholder="品类名称"/>
             </template>
           </el-table-column>
           <el-table-column label="物料规格" prop="materialSpecification" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialSpecification" placeholder="请输入规格"/>
+              <el-input v-model="scope.row.materialSpecification" placeholder="规格"/>
             </template>
           </el-table-column>
           <el-table-column label="物料型号" prop="materialModel" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialModel" placeholder="请输入型号"/>
+              <el-input v-model="scope.row.materialModel" placeholder="型号"/>
             </template>
           </el-table-column>
           <el-table-column label="品牌" prop="materialBrand" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialBrand" placeholder="请输入品牌"/>
+              <el-input v-model="scope.row.materialBrand" placeholder="品牌"/>
             </template>
           </el-table-column>
           <el-table-column label="物料单位" prop="materialUnit" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.materialUnit" placeholder="请输入基本计算单位"/>
+              <el-input v-model="scope.row.materialUnit" placeholder="物料单位"/>
             </template>
           </el-table-column>
           <el-table-column label="需求数量" prop="mustNumber" width="150">
@@ -314,7 +314,7 @@
           </el-table-column>
           <el-table-column label="币种" prop="currencyId" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.currencyName" readonly placeholder="请输入币种"/>
+              <el-input v-model="scope.row.currencyName" readonly placeholder="币种"/>
               <i class="el-icon-search" id="serachOne1" @click="showDiagCurrency2()"></i>
               <el-dialog :visible.sync="dialogCurrency1" title="币种定义" :modal="false">
                 <el-table v-loading="loading" :data="currencyList" @row-click="handleSelectionChangeCurrency2">
@@ -343,18 +343,17 @@
           </el-table-column>
           <el-table-column label="预算单价(不含税)" prop="unitPrice" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.unitPrice" placeholder=""/>
+              <el-input v-model="scope.row.unitPrice" readonly placeholder=""/>
             </template>
           </el-table-column>
           <el-table-column label="税率" prop="tax" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.tax" placeholder="请输入税率"/>
+              <el-input v-model="scope.row.tax" readonly placeholder="税率"  @change="changeInput"/>
               <i class="el-icon-search" id="serachOne1" @click="showMaterial2()"></i>
               <el-dialog :visible.sync="dialogMaterial2" title="税率-浏览框" :modal="false">
                 <!-- 这里是税率的内容 -->
                 <el-table :data="rateList" v-loading="loading" @row-click="handleRowClickMaterial2">
                   <el-table-column type="selection" width="55" align="center"/>
-                  <!-- <el-table-column label="税种序号" align="center" prop="taxTypeId" /> -->
                   <el-table-column label="税种代码" align="center" prop="taxCode"/>
                   <el-table-column label="描述" align="center" prop="describes"/>
                   <el-table-column label="税率" align="center" prop="taxRate"/>
@@ -369,12 +368,12 @@
           </el-table-column>
           <el-table-column label="税率值" prop="rateValue" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.rateValue" placeholder="请输入税率值"/>
+              <el-input v-model="scope.row.rateValue" readonly placeholder="税率值"/>
             </template>
           </el-table-column>
           <el-table-column label="行预算金额" prop="budgetAmount" width="150">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.budgetAmount" placeholder=""/>
+              <el-input v-model="scope.row.budgetAmount" readonly placeholder=""/>
             </template>
           </el-table-column>
           <el-table-column label="备注" prop="remarks" width="150">
@@ -384,9 +383,6 @@
           </el-table-column>
           <el-table-column label="附件" prop="annex" width="150">
             <file-upload v-model="form.annex"/>
-<!--            <template slot-scope="scope">-->
-<!--              <el-input v-model="scope.row.annex"/>-->
-<!--            </template>-->
           </el-table-column>
           <el-table-column label="采购员" prop="purchaser" width="150">
             <template slot-scope="scope">
@@ -913,8 +909,13 @@ export default {
         let number=materials.mustNumber === ''||materials.mustNumber+""=== 'undefined' ?0:materials.mustNumber
         // 单价
         let price=materials.referencePrice === '' || materials.referencePrice=== null|| materials.referencePrice+""=== 'undefined'?0:materials.referencePrice
+        let tax=materials.rateValue=== ''||materials.rateValue+""=== 'undefined' ?0:materials.rateValue
+        console.log(tax)
         let num=Number(number)*Number(price)
-        this.InfomaterialList[i].budgetAmount=num
+        let noRateValue=Number(num)*Number(1+tax)
+        console.log(noRateValue)
+        this.InfomaterialList[i].unitPrice=num // 预算单价(不含税)
+        this.InfomaterialList[i].budgetAmount=noRateValue // 行预算金额
         total=total+Number(num)
       }
       this.form.totalAmount=total // 预估总金额
