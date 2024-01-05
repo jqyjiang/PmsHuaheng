@@ -37,7 +37,7 @@
         <span class="h6">采购需求申请</span>
         <div style="background-color: white;height: 1px;width: 100%;float: left;margin:5px 0px;"></div>
         <div class="h5"><span>申请总数:</span><br><div style="margin-top: 18px;">{{ applyNum }}</div></div>
-        <div class="h5"><span>未执行:</span><br><div style="margin-top: 18px;">{{  }}</div></div>
+        <div class="h5"><span>未执行:</span><br><div style="margin-top: 18px;">5</div></div>
       </div></li>
       <li><div class="he2">
         <div class="shu">2</div>

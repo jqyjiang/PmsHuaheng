@@ -112,12 +112,12 @@
         <el-form-item label="考评负责人" prop="evaluationHead">
           <el-input v-model="form.evaluationHead" placeholder="请输入考评负责人" readonly />
         </el-form-item>
-        <el-form-item label="分部" prop="branch">
+        <!-- <el-form-item label="分部" prop="branch">
           <el-input v-model="form.branch" placeholder="请输入分部" />
         </el-form-item>
         <el-form-item label="部门" prop="contactsDepartment">
           <el-input v-model="form.contactsDepartment" placeholder="请输入部门" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="考评周期" prop="evaluationCycle">
           <el-select v-model="form.evaluationCycle" placeholder="请选择考评周期">
             <el-option v-for="dict in dict.type.cycle" :key="dict.value" :label="dict.label"

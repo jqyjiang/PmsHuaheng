@@ -432,7 +432,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.form.applicant=this.userName;
+      this.form.applicant = this.userName;
       this.title = "添加现场考察";
     },
     /** 查询物料维护列表 */

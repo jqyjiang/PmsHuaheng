@@ -112,7 +112,7 @@
             <if test="slStatus != null "> and sl_status = #{slStatus}</if>
             and data_tatus = 0
         </where>
-        ORDER BY sd_rt DESC
+        ORDER BY sd_id DESC
     </select>
 
     <select id="selectSupplierDetailsBySdId" parameterType="Long" resultMap="SupplierDetailsResult">
@@ -122,7 +122,7 @@
 
     <select id="selectCanSupplier" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
-        where sd_status = 2 and data_tatus = 0
+        where sd_status = 2 and data_tatus = 0 ORDER BY sd_id DESC
     </select>
     <select id="selectSupplierLifeStage" parameterType="SupplierDetails" resultMap="SupplierDetailsResult">
         <include refid="selectSupplierDetailsVo"/>
@@ -171,6 +171,7 @@
             <if test="slStatus != null "> and sl_status = #{slStatus}</if>
             and data_tatus = 0 and sd_status = 2
         </where>
+        ORDER BY sd_id DESC
     </select>
     <insert id="insertSupplierDetails" parameterType="SupplierDetails" useGeneratedKeys="true" keyProperty="sdId">
         insert into supplier_details
